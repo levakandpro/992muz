@@ -1625,12 +1625,12 @@ const snap = await getDocs(q);
     lastVisibleDoc = snap.docs[snap.docs.length - 1] || lastVisibleDoc;
     noMoreArtists = snap.size < ARTISTS_PAGE_SIZE;
     artistsVisibleCount += ARTISTS_PAGE_SIZE;
-    applyFiltersAndRender();
   } catch(e) {
     console.warn('loadMoreArtists error', e);
   } finally {
     isLoadingMore = false;
   }
+  applyFiltersAndRender();
 }
 const DEMO_ARTISTS = [
   {
