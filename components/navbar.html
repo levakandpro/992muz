@@ -12,17 +12,17 @@
           <span>МЕНЮ</span>
         </div>
         <ul class="mobile-nav">
-          <li><a href="index.html"><img src="assets/icons/site.png" alt="">Главная</a></li>
-          <li><a href="artists.html"><img src="assets/icons/profile.png" alt="">Артисты</a></li>
-          <li><a href="videos.html"><img src="assets/icons/video.png" alt="">Видео</a></li>
-          <li><a href="playlists.html"><img src="assets/icons/music.png" alt="">Плейлисты</a></li>
-          <li><a href="studios.html"><img src="assets/icons/rec.png" alt="">Студии</a></li>
-          <li><a href="masterskaya.html"><img src="assets/icons/sstar.png" alt="">Мастерская</a></li>
+        <li><a href="/"><img src="assets/icons/site.png" alt="">Главная</a></li>
+          <li><a href="/artists"><img src="assets/icons/profile.png" alt="">Артисты</a></li>
+         <li><a href="/videos"><img src="assets/icons/video.png" alt="">Видео</a></li>
+        <li><a href="/playlists"><img src="assets/icons/music.png" alt="">Плейлисты</a></li>
+         <li><a href="/studios"><img src="assets/icons/rec.png" alt="">Студии</a></li>
+         <li><a href="/masterskaya"><img src="assets/icons/sstar.png" alt="">Мастерская</a></li>
           <li><a href="https://bloggers-992muz.web.app" target="_blank"><img src="assets/icons/profile.png" alt="">Блогеры</a></li>
           <li><button class="mobile-nav-soon-btn" id="mobileSoonBtn" type="button"><img src="assets/icons/announcement.png" alt="">СКОРО</button></li>
         </ul>
         <div class="mobile-menu-actions">
-          <a href="login.html" class="btn-login" id="mobileLoginBtn">
+          <a href="/login" class="btn-login" id="mobileLoginBtn">
             <img src="assets/icons/profile.png" alt="" loading="lazy"> Войти
           </a>
           <a href="artist-profile.html" class="btn-login" id="mobileProfileBtn" style="display:none">
@@ -38,22 +38,22 @@
           <a href="https://www.youtube.com/@992MUZ" target="_blank"><img src="assets/icons/youtube.png" alt=""></a>
         </div>
       </div>
-      <a href="index.html" class="navbar-logo" style="display:flex;flex-direction:row;align-items:center;gap:8px;">
+     <a href="/" class="navbar-logo" style="display:flex;flex-direction:row;align-items:center;gap:8px;">
         <img src="assets/png/red.png" alt="992MUZ" style="height:110px;width:auto;object-fit:contain;display:block;">
         <span style="font-weight:300;font-size:9px;letter-spacing:.2px;opacity:.6;white-space:nowrap;line-height:1.2;">платформа таджикской<br>хип-хоп индустрии</span>
       </a>
-      <ul class="navbar-nav">
-        <li><a href="index.html">Главная</a></li>
-        <li><a href="artists.html">Артисты</a></li>
-        <li><a href="videos.html">Видео</a></li>
-        <li><a href="playlists.html">Плейлисты</a></li>
-        <li><a href="studios.html">Студии</a></li>
-        <li><a href="masterskaya.html">Мастерская</a></li>
+<ul class="navbar-nav">
+        <li><a href="/">Главная</a></li>
+        <li><a href="/artists">Артисты</a></li>
+        <li><a href="/videos">Видео</a></li>
+        <li><a href="/playlists">Плейлисты</a></li>
+        <li><a href="/studios">Студии</a></li>
+        <li><a href="/masterskaya">Мастерская</a></li>
         <li><a href="https://bloggers-992muz.web.app">Блогеры</a></li>
         <li><button class="nav-soon-btn" id="navSoonBtn" type="button">СКОРО</button></li>
       </ul>
       <div class="navbar-actions navbar-actions--desktop">
-        <a href="login.html" class="btn-login" id="navLoginBtn">
+        <a href="/login" class="btn-login" id="navLoginBtn">
           <img src="assets/icons/profile.png" alt="" loading="lazy">
           Войти
         </a>
@@ -130,9 +130,12 @@
   })();
 
 (function(){
-    var page = location.pathname.split('/').pop() || 'index.html';
+    var path = location.pathname.replace(/\/$/, '') || '/';
     document.querySelectorAll('.navbar-nav a, .mobile-nav a').forEach(function(a){
-      if (a.getAttribute('href') === page) a.classList.add('active');
+      var href = a.getAttribute('href');
+      if (!href) return;
+      var normalizedHref = href.replace(/\.html$/, '').replace(/\/$/, '') || '/';
+      if (normalizedHref === path) a.classList.add('active');
     });
   })();
 </script>
