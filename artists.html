@@ -2201,6 +2201,8 @@ function setupStoriesRealtime() {
 function applyFiltersAndRender() {
   let list = ALL_ARTISTS.slice();
 
+  list = list.filter(a => !a.newBlood);
+
   if (searchQuery) {
     const q = searchQuery.toLowerCase();
     list = list.filter(a => (a.name || '').toLowerCase().includes(q));
