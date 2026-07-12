@@ -18,7 +18,7 @@
         <li><a href="/playlists"><img src="assets/icons/music.png" alt="">Плейлисты</a></li>
          <li><a href="/studios"><img src="assets/icons/rec.png" alt="">Студии</a></li>
          <li><a href="/masterskaya"><img src="assets/icons/sstar.png" alt="">Мастерская</a></li>
-          <li><a href="https://bloggers-992muz.web.app" target="_blank"><img src="assets/icons/profile.png" alt="">Блогеры</a></li>
+        <li><a href="#" class="bloggers-soon-trigger"><img src="assets/icons/profile.png" alt="">Блогеры</a></li>
           <li><button class="mobile-nav-soon-btn" id="mobileSoonBtn" type="button"><img src="assets/icons/announcement.png" alt="">СКОРО</button></li>
         </ul>
         <div class="mobile-menu-actions">
@@ -49,7 +49,7 @@
         <li><a href="/playlists">Плейлисты</a></li>
         <li><a href="/studios">Студии</a></li>
         <li><a href="/masterskaya">Мастерская</a></li>
-        <li><a href="https://bloggers-992muz.web.app">Блогеры</a></li>
+       <li><a href="#" class="bloggers-soon-trigger">Блогеры</a></li>
         <li><button class="nav-soon-btn" id="navSoonBtn" type="button">СКОРО</button></li>
       </ul>
       <div class="navbar-actions navbar-actions--desktop">
@@ -427,8 +427,132 @@
     overlay.addEventListener('click', function(e){
       if (e.target === overlay) closeSoon();
     });
+    
     document.addEventListener('keydown', function(e){
       if (e.key === 'Escape' && overlay.classList.contains('open')) closeSoon();
+    });
+  })();
+</script>
+<!-- ПЛАШКА "БЛОГЕРЫ СКОРО" -->
+<style>
+  .bloggers-soon-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:999999;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(20,20,20,0.5);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+  }
+  .bloggers-soon-overlay.open{ display:flex; }
+  .bloggers-soon-box{
+    position:relative;
+    width:100%;
+    max-width:380px;
+    background:#ffffff;
+    border-radius:22px;
+    padding:36px 28px 30px;
+    text-align:center;
+    box-shadow:0 24px 64px rgba(0,0,0,0.28), 0 4px 16px rgba(0,0,0,0.1);
+    animation:bloggersSoonIn .3s cubic-bezier(.2,.9,.3,1);
+  }
+  @keyframes bloggersSoonIn{
+    from{ opacity:0; transform:translateY(16px) scale(.96); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+  .bloggers-soon-close{
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:#f0f0f2;
+    border:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    color:#666;
+    font-size:14px;
+    transition:background .2s, color .2s;
+  }
+  .bloggers-soon-close:hover{ background:#e5e5e8; color:#111; }
+  .bloggers-soon-icon{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:var(--accent-light);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    margin:0 auto 16px;
+  }
+  .bloggers-soon-badge{
+    display:inline-block;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--accent);
+    background:var(--accent-light);
+    padding:5px 14px;
+    border-radius:100px;
+    margin-bottom:12px;
+  }
+  .bloggers-soon-title{
+    font-family:'Rem', sans-serif;
+    font-size:22px;
+    font-weight:700;
+    color:#111;
+    margin-bottom:10px;
+  }
+  .bloggers-soon-text{
+    font-size:13.5px;
+    color:#888;
+    line-height:1.65;
+  }
+</style>
+
+<div class="bloggers-soon-overlay" id="bloggersSoonOverlay">
+  <div class="bloggers-soon-box">
+    <button class="bloggers-soon-close" id="bloggersSoonClose">✕</button>
+    <div class="bloggers-soon-icon">🎬</div>
+    <span class="bloggers-soon-badge">992MUZ · Блогеры</span>
+    <div class="bloggers-soon-title">Совсем скоро</div>
+    <div class="bloggers-soon-text">Раздел для блогеров уже почти готов — мы на финишной прямой. Обзоры, коллаборации и продвижение контента появятся на платформе в ближайшее время.</div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    var overlay = document.getElementById('bloggersSoonOverlay');
+    var closeBtn = document.getElementById('bloggersSoonClose');
+    if (!overlay) return;
+
+    function openIt(e){
+      if (e) e.preventDefault();
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeIt(){
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.bloggers-soon-trigger').forEach(function(btn){
+      btn.addEventListener('click', openIt);
+    });
+    if (closeBtn) closeBtn.addEventListener('click', closeIt);
+    overlay.addEventListener('click', function(e){
+      if (e.target === overlay) closeIt();
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeIt();
     });
   })();
 </script>
