@@ -1580,8 +1580,8 @@ const snap = await getDocs(q);
       const targetArtistId = urlParams.get('artist');
       let target = null;
 
-      if (pathSlug) {
-        target = ALL_ARTISTS.find(a => a.slug === pathSlug);
+if (pathSlug) {
+        target = ALL_ARTISTS.find(a => a.slug === pathSlug || slugify(a.name) === pathSlug);
         if (!target) {
           const slugSnap = await getDocs(query(collection(db, 'artistApplications'), where('slug', '==', pathSlug), limit(1)));
           if (!slugSnap.empty) target = mapArtistDoc(slugSnap.docs[0]);
