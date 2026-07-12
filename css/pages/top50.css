@@ -1,0 +1,341 @@
+/* ── TOP 50 PAGE ── */
+
+/* HERO */
+.top50-hero {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 36px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.top50-hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url('../../assets/icons/mountain.png') no-repeat right center;
+  background-size: 30%;
+  opacity: 0.03;
+  filter: invert(1);
+  pointer-events: none;
+}
+.top50-back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg2);
+  color: var(--text2);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 14px;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+.top50-back-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateX(-2px);
+}
+.top50-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  position: relative;
+}
+.top50-hero-crown img {
+  width: 64px;
+  height: 64px;
+  filter: invert(1) brightness(2);
+  opacity: 0.9;
+}
+.top50-hero-title {
+  font-size: 48px;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.top50-hero-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.45);
+  max-width: 340px;
+}
+.top50-hero-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 20px;
+  flex-shrink: 0;
+  position: relative;
+}
+.top50-play-all {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Rem', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a2e;
+  background: #fff;
+  padding: 14px 28px;
+  border-radius: 100px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+}
+.top50-play-all img {
+  width: 18px;
+  height: 18px;
+}
+.top50-play-all:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+}
+.top50-hero-stats {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.top50-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.top50-stat-num {
+  font-family: 'Rem', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+.top50-stat-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.top50-stat-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255,255,255,0.12);
+}
+
+/* ФИЛЬТРЫ */
+.top50-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.top50-filter {
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  padding: 6px 16px;
+  border-radius: 100px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: var(--bg2);
+  color: var(--text3);
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: none;
+}
+.top50-filter:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.top50-filter.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(139,26,47,0.2);
+}
+
+/* КОЛОНКИ ЗАГОЛОВКИ */
+.top50-col-headers {
+  display: grid;
+  grid-template-columns: 44px 54px 1fr 140px 70px 80px;
+  gap: 0 12px;
+  padding: 0 16px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+
+/* СТРОКА ТРЕКА — расширяем стандартный .track-row */
+#top50-list .track-row {
+  display: grid;
+  grid-template-columns: 44px 54px 1fr 140px 70px 80px;
+  align-items: center;
+  gap: 0 12px;
+  gap: 0 12px;
+  align-items: center;
+  padding: 10px 16px;
+}
+
+/* Номер топ-3 */
+.track-num.gold { color: var(--gold); font-weight: 700; font-size: 15px; }
+.track-num.silver { color: #a0a0b0; font-weight: 700; font-size: 15px; }
+.track-num.bronze { color: #cd7f32; font-weight: 700; font-size: 15px; }
+
+/* Прослушивания */
+.track-plays {
+  font-size: 12px;
+  color: var(--text2);
+  font-weight: 500;
+}
+
+/* Тренд */
+.track-trend {
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.track-trend.up { color: #16a34a; }
+.track-trend.down { color: #dc2626; }
+.track-trend.eq { color: var(--text3); }
+
+/* Жанр бейдж в треке */
+.track-genre-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 100px;
+  background: var(--bg3);
+  color: var(--text2);
+}
+
+/* Сейчас играет */
+.track-row.playing {
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+}
+.track-row.playing .track-name {
+  color: var(--accent);
+}
+.track-row.playing .track-num {
+  color: var(--accent);
+}
+
+/* Адаптив */
+@media (max-width: 1024px) {
+  .top50-col-headers,
+  #top50-list .track-row {
+    grid-template-columns: 36px 48px 1fr 70px 60px;
+  }
+  .col-plays, .track-plays { display: none; }
+}
+@media (max-width: 768px) {
+  .top50-hero { flex-direction: column; padding: 28px 24px; }
+  .top50-hero-right { align-items: flex-start; }
+  .top50-hero-title { font-size: 36px; }
+  .top50-col-headers {
+    padding: 0 10px 8px;
+    gap: 0 8px;
+  }
+  .top50-col-headers,
+  #top50-list .track-row {
+    grid-template-columns: 26px 40px 1fr 40px 44px;
+  }
+  #top50-list .track-row {
+    padding: 8px 10px;
+    gap: 0 8px;
+  }
+  .col-genre, .track-genre-badge, .col-trend, .track-trend { display: none; }
+  .col-plays { font-size: 0; }
+  .track-plays {
+    display: block;
+    text-align: right;
+    font-size: 11px;
+    color: var(--text3);
+  }
+  .track-num { font-size: 12px; }
+  .track-cover { width: 36px; height: 36px; }
+  .track-name { font-size: 13px; }
+  .track-artist { font-size: 11px; }
+  .track-btns { gap: 4px; }
+  .track-btn-count { display: none; }
+}
+/* Бегущая строка для длинных названий (моб.) — переиспользует @keyframes marquee-scroll из main.css */
+.track-name.marquee {
+  display: flex;
+  gap: 24px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.track-name.marquee span {
+  animation: marquee-scroll 6s linear infinite;
+  white-space: nowrap;
+}
+.track-cover { position: relative; }
+.track-cover-play {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.15s;
+  border-radius: var(--radius-xs);
+}
+.track-cover-play img { width: 16px; height: 16px; filter: invert(1); }
+.track-row:hover .track-cover-play { opacity: 1; }
+
+.track-like-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: none;
+}
+.track-like-btn img { width: 16px; height: 16px; }
+.track-like-btn.liked img { content: url('assets/icons/like.png'); }
+
+.track-share-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: none;
+}
+.track-share-btn img { width: 16px; height: 16px; filter: invert(0.6); }
+.track-btns {
+  display: flex; align-items: center; gap: 8px; justify-content: flex-end;
+}
+.track-btn-count {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 500;
+  margin-left: 3px;
+}
+.track-like-btn:hover .track-btn-count,
+.track-share-btn:hover .track-btn-count {
+  color: var(--accent);
+}
+.top50-info-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.6);
+  font-size: 10px; font-weight: 700;
+  cursor: pointer; margin-left: 6px;
+  transition: all 0.15s;
+}
+.top50-info-btn:hover { background: rgba(255,255,255,0.3); color: #fff; }
+
+.top50-info-modal {
+  display: none;
+  position: absolute;
+  top: 30px; left: 0;
+  background: #fff;
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  padding: 14px 18px;
+  font-size: 13px;
+  line-height: 1.6;
+  max-width: 280px;
+  z-index: 10;
+}
+.top50-info-modal.open { display: block; }

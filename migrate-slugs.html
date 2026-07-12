@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Миграция slug — 992MUZ</title>
+</head>
+<body style="font-family:sans-serif;padding:24px;">
+  <h2>Миграция slug для артистов</h2>
+  <p>Проставляет поле <code>slug</code> всем артистам, у которых его ещё нет. После успешного завершения — удали этот файл с хостинга.</p>
+  <button id="runBtn" style="padding:10px 20px;font-size:14px;cursor:pointer;">Запустить миграцию</button>
+  <pre id="log" style="margin-top:20px;background:#111;color:#0f0;padding:16px;border-radius:8px;max-height:500px;overflow:auto;"></pre>
+
+  <script type="module">
+    import { db } from './js/config/firebase.js';
+    import { collection, getDocs, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+    import { slugify } from './js/social/share.js';
+
+    const logEl = document.getElementById('log');
+    function log(msg) {
+      logEl.textContent += msg + '\n';
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    document.getElementById('runBtn').addEventListener('click', async () => {
+      document.getElementById('runBtn').disabled = true;
+      log('Загружаю список артистов...');
+      try {
+        const snap = await getDocs(collection(db, 'artistApplications'));
+        const usedSlugs = new Set();
+        snap.forEach(d => {
+          const s = d.data().slug;
+          if (s) usedSlugs.add(s);
+        });
+
+        let updated = 0, skipped = 0;
+        for (const d of snap.docs) {
+          const data = d.data();
+          if (data.slug) { skipped++; continue; }
+          const name = data.nickname || data.displayName || d.id;
+          const base = slugify(name) || d.id;
+          let candidate = base;
+          let n = 2;
+          while (usedSlugs.has(candidate)) {
+            candidate = base + '-' + n;
+            n++;
+          }
+          usedSlugs.add(candidate);
+          await updateDoc(doc(db, 'artistApplications', d.id), { slug: candidate });
+          updated++;
+          log(`✓ ${name} → ${candidate}`);
+        }
+        log(`\nГотово. Обновлено: ${updated}, уже было: ${skipped}.`);
+      } catch (e) {
+        log('Ошибка: ' + e.message);
+        console.error(e);
+      }
+      document.getElementById('runBtn').disabled = false;
+    });
+  </script>
+</body>
+</html>

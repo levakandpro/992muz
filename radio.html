@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>992MUZ ЭФИР</title>
+  <link rel="icon" href="assets/icons/logo.png">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/pages/home.css">
+  <style>
+    .radio-page {
+      min-height: 100vh;
+      padding-bottom: 100px;
+    }
+
+    /* HERO */
+    .radio-hero {
+      background: linear-gradient(135deg, #3d0a14 0%, #8B1A2F 50%, #2a0810 100%);
+      border-radius: var(--radius);
+      padding: 32px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      margin: 24px 0 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .radio-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url('assets/icons/mountain.png') no-repeat center;
+      background-size: 50%;
+      opacity: 0.04;
+      filter: invert(1);
+      pointer-events: none;
+    }
+    .radio-hero-cover {
+      width: 120px; height: 120px;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.1);
+      position: relative;
+      z-index: 1;
+    }
+    .radio-hero-cover img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .radio-hero-info {
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+    .radio-hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+      margin-bottom: 10px;
+    }
+    .radio-hero-badge .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 8px #4ade80;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .radio-hero-title {
+      font-family: 'Rem', sans-serif;
+      font-size: 22px; font-weight: 800;
+      color: #fff; margin-bottom: 4px;
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; max-width: 400px;
+    }
+    .radio-hero-artist {
+      font-size: 14px; color: rgba(255,255,255,0.65);
+      margin-bottom: 16px;
+    }
+    .radio-hero-playlist {
+      font-size: 11px; color: rgba(255,255,255,0.4);
+      margin-bottom: 18px;
+    }
+
+    /* PROGRESS */
+    .radio-progress-wrap {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px;
+    }
+    .radio-progress-bar {
+      flex: 1; height: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 100px;
+      cursor: pointer;
+      position: relative;
+    }
+    .radio-progress-fill {
+      height: 100%; width: 0%;
+      background: #fff;
+      border-radius: 100px;
+      transition: width 0.1s linear;
+    }
+    .radio-progress-time {
+      font-size: 11px; color: rgba(255,255,255,0.5);
+      min-width: 36px; white-space: nowrap;
+    }
+
+    /* CONTROLS */
+    .radio-controls {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .radio-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.1);
+      border: none; cursor: pointer;
+      transition: all 0.15s; color: #fff;
+    }
+    .radio-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.08); }
+    .radio-btn img { width: 18px; height: 18px; filter: invert(1); }
+    .radio-btn-play {
+      width: 52px; height: 52px;
+      background: #fff;
+    }
+    .radio-btn-play img { filter: none; width: 22px; height: 22px; }
+    .radio-btn-play:hover { background: #f0f0f0; }
+
+    .radio-volume-wrap {
+      display: flex; align-items: center; gap: 8px;
+      margin-left: auto;
+    }
+    .radio-volume-wrap img { width: 18px; height: 18px; filter: invert(1); opacity: 0.6; cursor: pointer; }
+    .radio-volume-bar {
+      width: 80px; height: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 100px; cursor: pointer;
+    }
+    .radio-volume-fill {
+      height: 100%; width: 70%;
+      background: rgba(255,255,255,0.7);
+      border-radius: 100px;
+    }
+
+    /* PLAYLISTS TABS */
+    .radio-tabs {
+      display: flex; gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .radio-tab {
+      padding: 8px 18px;
+      border-radius: 100px;
+      border: 1px solid var(--bg3);
+      background: var(--bg2);
+      font-size: 13px; font-weight: 600;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: var(--shadow-sm);
+    }
+    .radio-tab:hover { color: var(--text); border-color: var(--accent); }
+    .radio-tab.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* TRACK LIST */
+    .radio-tracks {
+      background: var(--bg2);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .radio-track-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .radio-track-row:last-child { border-bottom: none; }
+    .radio-track-row:hover { background: var(--bg); }
+    .radio-track-row.playing { background: var(--accent-light); }
+    .radio-track-num {
+      width: 22px; text-align: center;
+      font-size: 12px; color: var(--text3);
+      flex-shrink: 0;
+    }
+    .radio-track-row.playing .radio-track-num { color: var(--accent); }
+    .radio-track-cover {
+      width: 42px; height: 42px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg3);
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .radio-track-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .radio-track-info { flex: 1; min-width: 0; }
+    .radio-track-name {
+      font-size: 14px; font-weight: 500;
+      color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .radio-track-row.playing .radio-track-name { color: var(--accent); font-weight: 700; }
+    .radio-track-artist { font-size: 12px; color: var(--text3); }
+    .radio-track-dur { font-size: 12px; color: var(--text3); flex-shrink: 0; }
+    .radio-track-play-icon {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--accent);
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .radio-track-row:hover .radio-track-play-icon { opacity: 1; }
+    .radio-track-row.playing .radio-track-play-icon { opacity: 1; }
+    .radio-track-play-icon img { width: 12px; height: 12px; filter: invert(1); }
+
+    .radio-empty {
+      text-align: center;
+      padding: 40px;
+      color: var(--text3);
+      font-size: 13px;
+    }
+    .radio-loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text3);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="wrap">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">
+        <img src="assets/icons/logo.png" alt="logo">
+        <span class="navbar-logo-text">992<span>MUZ</span></span>
+      </a>
+      <ul class="navbar-nav">
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="artists.html">Артисты</a></li>
+        <li><a href="videos.html">Видео</a></li>
+        <li><a href="playlists.html">Плейлисты</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <a href="login.html" class="btn-login" id="navLoginBtn">
+          <img src="assets/icons/profile.png" alt="">
+          Войти
+        </a>
+        <a href="artist-profile.html" class="btn-login" id="navProfileBtn" style="display:none">
+          <img src="assets/icons/profile.png" alt="">
+          Профиль
+        </a>
+        <button class="btn-login" id="navLogoutBtn" style="display:none;background:none;border:none;cursor:pointer;color:inherit;">
+          Выйти
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap radio-page">
+
+  <!-- HERO PLAYER -->
+  <div class="radio-hero">
+    <div class="radio-hero-cover">
+      <img src="assets/icons/mountain.png" alt="" id="heroCover" style="padding:16px;filter:invert(1);opacity:0.6;">
+    </div>
+    <div class="radio-hero-info">
+      <div class="radio-hero-badge">
+        <span class="dot"></span>
+        Онлайн радио
+      </div>
+      <div class="radio-hero-title" id="heroTitle">Выберите трек</div>
+      <div class="radio-hero-artist" id="heroArtist">992MUZ Radio</div>
+      <div class="radio-hero-playlist" id="heroPlaylist"></div>
+
+      <div class="radio-progress-wrap">
+        <span class="radio-progress-time" id="heroTime">0:00</span>
+        <div class="radio-progress-bar" id="heroProgressBar">
+          <div class="radio-progress-fill" id="heroProgressFill"></div>
+        </div>
+        <span class="radio-progress-time" id="heroDur">0:00</span>
+      </div>
+
+      <div class="radio-controls">
+        <button class="radio-btn" id="btnPrev" title="Предыдущий">
+          <img src="assets/icons/play.png" alt="" style="transform:scaleX(-1);">
+        </button>
+        <button class="radio-btn radio-btn-play" id="btnPlay" title="Играть">
+          <img src="assets/icons/play.png" alt="" id="playIcon">
+        </button>
+        <button class="radio-btn" id="btnNext" title="Следующий">
+          <img src="assets/icons/play.png" alt="">
+        </button>
+
+        <div class="radio-volume-wrap">
+          <img src="assets/icons/volume.png" alt="" id="volIcon">
+          <div class="radio-volume-bar" id="volBar">
+            <div class="radio-volume-fill" id="volFill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYLIST TABS -->
+  <div class="radio-tabs" id="radioTabs"></div>
+
+  <!-- TRACK LIST -->
+  <div class="radio-tracks" id="radioTracks">
+    <div class="radio-loading">Загрузка...</div>
+  </div>
+
+</div>
+
+<script src="js/auth/session.js" type="module"></script>
+<script src="js/components/navbar.js" type="module"></script>
+
+<script type="module">
+import { db } from './js/config/firebase.js';
+import {
+  collection, query, orderBy, getDocs, getDoc, doc
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const RADIO_PLS_META = {
+  radio_lirika:      { label: '🎶 Лирика' },
+  radio_underground: { label: '🔥 Андерграунд' },
+  radio_night:       { label: '🌙 На ночь' },
+  radio_club:        { label: '🎧 Клубные' },
+  radio_fity:        { label: '🤝 Фиты' },
+  radio_hooks:       { label: '💥 Мощные припевы' },
+  radio_aralash:     { label: '🎲 Аралаш' },
+  radio_hits:        { label: '⭐ Хиты' },
+  radio_charts:      { label: '👑 Чарты' },
+};
+const RADIO_SOURCE_MAP = {
+  radio_lirika:      { type: 'block',    keys: ['lirika'] },
+  radio_underground: { type: 'playlist', keys: ['andergrand'] },
+  radio_club:        { type: 'playlist', keys: ['klubnye'] },
+  radio_fity:        { type: 'playlist', keys: ['fity'] },
+  radio_night:       { type: 'playlist', keys: ['pered-snom'] },
+  radio_hooks:       { type: 'playlist', keys: ['pripevy'] },
+  radio_aralash:     { type: 'mixed',    keys: [] },
+  radio_hits:        { type: 'manual',   keys: [] },
+  radio_charts:      { type: 'block',    keys: ['top50'] },
+};
+function mulberry32(seed) {
+  return function() {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+// Разносит подряд идущие треки одного артиста дальше друг от друга — эфир звучит вразброс
+function deClumpByArtist(arr) {
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i].artist && arr[i].artist === arr[i-1].artist) {
+      for (let j = i + 1; j < arr.length; j++) {
+        if (arr[j].artist !== arr[i-1].artist && arr[j].artist !== arr[i].artist) {
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+          break;
+        }
+      }
+    }
+  }
+  return arr;
+}
+function shuffleRadio(arr, seedKey) {
+  const daySeed = Math.floor(Date.now() / 86400000);
+  let strSeed = 0;
+  for (let i = 0; i < (seedKey||'').length; i++) strSeed += (seedKey||'').charCodeAt(i);
+  const rand = mulberry32(daySeed + strSeed);
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return deClumpByArtist(a);
+}
+let RADIO_PLS = Object.keys(RADIO_PLS_META);
+let allPlaylists = {}; // { pl: [tracks] }
+let currentPl = null;
+let currentIdx = -1;
+let audio = new Audio();
+audio.volume = 0.7;
+
+// Загружаем порядок плейлистов и убираем выключенные
+async function loadOrder() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'radioPlOrder'));
+    if (snap.exists() && snap.data().order) {
+      RADIO_PLS = snap.data().order;
+    }
+  } catch(e) {}
+  // Добавляем недостающие плейлисты (например "Хиты"), которых нет в сохранённом порядке
+  const missing = Object.keys(RADIO_PLS_META).filter(pl => !RADIO_PLS.includes(pl));
+  if (missing.length) RADIO_PLS = [...RADIO_PLS, ...missing];
+  try {
+    const enSnap = await getDoc(doc(db, 'settings', 'radioPlEnabled'));
+    const enabledMap = enSnap.exists() ? (enSnap.data() || {}) : {};
+    RADIO_PLS = RADIO_PLS.filter(pl => enabledMap[pl] !== false);
+  } catch(e) {}
+}
+// Загружаем все плейлисты
+async function loadAll() {
+  await loadOrder();
+
+ const tracksSnap = await getDocs(collection(db, 'tracks'));
+  const allTracks = tracksSnap.docs.map(d => ({ _id: d.id, ...d.data() })).filter(t => t.trackUrl)
+    .sort((a, b) => a._id.localeCompare(b._id));
+  let excluded = {};
+  try {
+    const exSnap = await getDoc(doc(db, 'settings', 'radioExcluded'));
+    excluded = exSnap.exists() ? (exSnap.data() || {}) : {};
+  } catch(e) {}
+  let manualLists = {};
+  try {
+    const manSnap = await getDoc(doc(db, 'settings', 'radioManualLists'));
+    manualLists = manSnap.exists() ? (manSnap.data() || {}) : {};
+  } catch(e) {}
+
+  for (const pl of RADIO_PLS) {
+    const src = RADIO_SOURCE_MAP[pl] || { type: 'mixed', keys: [] };
+    let list;
+    if (src.type === 'manual') {
+      const ids = manualLists[pl] || [];
+      list = ids.map(id => allTracks.find(t => t._id === id)).filter(Boolean);
+    } else {
+      const hidden = new Set(excluded[pl] || []);
+      if (src.type === 'block') list = allTracks.filter(t => (t.blocks||[]).some(b => src.keys.includes(b)));
+      else if (src.type === 'playlist') list = allTracks.filter(t => (t.playlists||[]).some(p => src.keys.includes(p)));
+      else list = allTracks;
+      list = list.filter(t => !hidden.has(t._id));
+    }
+    allPlaylists[pl] = shuffleRadio(list, pl);
+  }
+  renderTabs();
+  const first = RADIO_PLS.find(pl => allPlaylists[pl]?.length > 0);
+  if (first) switchPl(first);
+  else document.getElementById('radioTracks').innerHTML = '<div class="radio-empty">Плейлисты пусты. Добавьте треки в плейлисты/блоки на сайте.</div>';
+}
+function renderTabs() {
+  const tabs = document.getElementById('radioTabs');
+  tabs.innerHTML = RADIO_PLS.map(pl => `
+    <button class="radio-tab" data-pl="${pl}" onclick="switchPl('${pl}')">
+      ${RADIO_PLS_META[pl]?.label || pl}
+    </button>
+  `).join('');
+}
+
+window.switchPl = function(pl) {
+  currentPl = pl;
+  // Подсветка таба
+  document.querySelectorAll('.radio-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.pl === pl);
+  });
+  renderTrackList(pl);
+};
+
+function renderTrackList(pl) {
+  const tracks = allPlaylists[pl] || [];
+  const box = document.getElementById('radioTracks');
+  if (!tracks.length) {
+    box.innerHTML = '<div class="radio-empty">В этом плейлисте пока нет треков</div>';
+    return;
+  }
+  box.innerHTML = tracks.map((t, i) => {
+    const isPlaying = currentPl === pl && currentIdx === i && !audio.paused;
+    return `
+      <div class="radio-track-row ${isPlaying ? 'playing' : ''}" data-pl="${pl}" data-idx="${i}" onclick="playTrack('${pl}', ${i})">
+        <span class="radio-track-num">${isPlaying ? '▶' : i + 1}</span>
+        <div class="radio-track-cover">
+          <img src="${t.coverUrl || 'assets/icons/mountain.png'}" alt=""
+            ${!t.coverUrl ? 'style="padding:8px;filter:invert(0.7);"' : ''}
+            onerror="this.src='assets/icons/mountain.png';this.style='padding:8px;filter:invert(0.7);'">
+        </div>
+        <div class="radio-track-info">
+          <div class="radio-track-name">${t.title || 'Без названия'}</div>
+          <div class="radio-track-artist">${t.artist || 'Артист'}</div>
+        </div>
+        <span class="radio-track-dur">${formatDur(t.duration || 0)}</span>
+        <div class="radio-track-play-icon">
+          <img src="assets/icons/${isPlaying ? 'pause' : 'play'}.png" alt="">
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+window.playTrack = function(pl, idx) {
+  const tracks = allPlaylists[pl];
+  if (!tracks || !tracks[idx]) return;
+
+  // Если тот же трек — пауза/плей
+  if (currentPl === pl && currentIdx === idx) {
+    if (audio.paused) { audio.play(); }
+    else { audio.pause(); }
+    updateHero();
+    renderTrackList(pl);
+    return;
+  }
+
+  // Новый трек
+  const t = tracks[idx];
+  if (!t.trackUrl) {
+    alert('У этого трека нет аудио файла');
+    return;
+  }
+  audio.pause();
+  audio.src = t.trackUrl;
+  currentPl = pl;
+  currentIdx = idx;
+  audio.play();
+  updateHero();
+  renderTrackList(pl);
+};
+
+function updateHero() {
+  const tracks = allPlaylists[currentPl];
+  if (!tracks || currentIdx < 0) return;
+  const t = tracks[currentIdx];
+
+  // Обложка
+  const coverEl = document.getElementById('herocover') || document.querySelector('.radio-hero-cover img');
+  if (t.coverUrl) {
+    coverEl.src = t.coverUrl;
+    coverEl.style = '';
+  } else {
+    coverEl.src = 'assets/icons/mountain.png';
+    coverEl.style = 'padding:16px;filter:invert(1);opacity:0.6;';
+  }
+
+  document.getElementById('heroTitle').textContent = t.title || 'Без названия';
+  document.getElementById('heroArtist').textContent = t.artist || 'Артист';
+  document.getElementById('heroPlaylist').textContent = RADIO_PLS_META[currentPl]?.label || '';
+  document.getElementById('playIcon').src = audio.paused ? 'assets/icons/play.png' : 'assets/icons/pause.png';
+}
+
+// Прогресс
+audio.addEventListener('timeupdate', () => {
+  if (!audio.duration) return;
+  const pct = (audio.currentTime / audio.duration) * 100;
+  document.getElementById('heroProgressFill').style.width = pct + '%';
+  document.getElementById('heroTime').textContent = formatDur(audio.currentTime);
+  document.getElementById('heroDur').textContent = formatDur(audio.duration);
+});
+
+audio.addEventListener('ended', () => {
+  // Автоследующий
+  const tracks = allPlaylists[currentPl];
+  if (tracks && currentIdx + 1 < tracks.length) {
+    playTrack(currentPl, currentIdx + 1);
+  } else {
+    document.getElementById('playIcon').src = 'assets/icons/play.png';
+    renderTrackList(currentPl);
+  }
+});
+
+audio.addEventListener('play', () => {
+  document.getElementById('playIcon').src = 'assets/icons/pause.png';
+  renderTrackList(currentPl);
+});
+audio.addEventListener('pause', () => {
+  document.getElementById('playIcon').src = 'assets/icons/play.png';
+  renderTrackList(currentPl);
+});
+
+// Кнопки управления
+document.getElementById('btnPlay').addEventListener('click', () => {
+  if (currentIdx < 0) {
+    const first = RADIO_PLS.find(pl => allPlaylists[pl]?.length > 0);
+    if (first) playTrack(first, 0);
+    return;
+  }
+  if (audio.paused) audio.play();
+  else audio.pause();
+});
+
+document.getElementById('btnNext').addEventListener('click', () => {
+  if (currentIdx < 0) return;
+  const tracks = allPlaylists[currentPl];
+  if (tracks && currentIdx + 1 < tracks.length) playTrack(currentPl, currentIdx + 1);
+});
+
+document.getElementById('btnPrev').addEventListener('click', () => {
+  if (currentIdx <= 0) return;
+  playTrack(currentPl, currentIdx - 1);
+});
+
+// Прогресс бар — клик
+document.getElementById('heroProgressBar').addEventListener('click', e => {
+  if (!audio.duration) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+});
+
+// Громкость
+const volBar = document.getElementById('volBar');
+const volFill = document.getElementById('volFill');
+volFill.style.width = (audio.volume * 100) + '%';
+volBar.addEventListener('click', e => {
+  const rect = volBar.getBoundingClientRect();
+  const vol = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  audio.volume = vol;
+  volFill.style.width = (vol * 100) + '%';
+});
+
+function formatDur(sec) {
+  if (!sec || isNaN(sec)) return '0:00';
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60).toString().padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+loadAll();
+</script>
+
+</body>
+</html>

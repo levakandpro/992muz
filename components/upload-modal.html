@@ -1,0 +1,226 @@
+<!-- components/upload-modal.html -->
+<!-- Подключи этот модал на страницах где нужна загрузка треков -->
+
+<div id="uploadModal" class="upload-modal hidden">
+  <div class="upload-modal__backdrop"></div>
+  <div class="upload-modal__box">
+    <button class="upload-modal__close" id="closeUploadModal">✕</button>
+    <h2 class="upload-modal__title">Загрузить трек</h2>
+
+    <!-- Шаг 1: Выбор файлов -->
+    <div class="upload-step" id="stepFiles">
+
+      <div class="upload-dropzone" id="audioDropzone">
+        <input type="file" id="audioInput" accept=".mp3,.wav,.flac,.ogg" hidden>
+        <div class="upload-dropzone__icon">🎵</div>
+        <div class="upload-dropzone__text">Перетащи MP3 или нажми</div>
+        <div class="upload-dropzone__hint">до 50 МБ · MP3, WAV, FLAC, OGG</div>
+        <div class="upload-dropzone__filename" id="audioFileName"></div>
+      </div>
+
+      <div class="upload-dropzone upload-dropzone--cover" id="coverDropzone">
+        <input type="file" id="coverInput" accept="image/jpeg,image/png,image/webp" hidden>
+        <img id="coverPreview" class="hidden" alt="обложка">
+        <div class="upload-dropzone__icon">🖼</div>
+        <div class="upload-dropzone__text">Обложка (необязательно)</div>
+        <div class="upload-dropzone__hint">JPG, PNG, WebP</div>
+      </div>
+
+      <!-- Мета-данные -->
+      <div class="upload-meta">
+        <input type="text" id="trackTitle" placeholder="Название трека" class="upload-input">
+        <input type="text" id="trackArtist" placeholder="Исполнитель" class="upload-input">
+        <input type="text" id="trackAlbum" placeholder="Альбом (необязательно)" class="upload-input">
+        <select id="trackGenre" class="upload-input">
+          <option value="">Жанр</option>
+          <option value="folk">Народная / Folk</option>
+          <option value="pop">Поп</option>
+          <option value="rock">Рок</option>
+          <option value="classical">Классика</option>
+          <option value="electronic">Электронная</option>
+          <option value="other">Другое</option>
+        </select>
+      </div>
+
+      <button class="upload-btn" id="startUploadBtn" disabled>Загрузить</button>
+    </div>
+
+    <!-- Шаг 2: Прогресс -->
+    <div class="upload-step hidden" id="stepProgress">
+      <div class="upload-progress-wrap">
+        <div class="upload-progress-label" id="progressLabel">Загрузка обложки...</div>
+        <div class="upload-progress-bar">
+          <div class="upload-progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div class="upload-progress-percent" id="progressPercent">0%</div>
+      </div>
+    </div>
+
+    <!-- Шаг 3: Успех -->
+    <div class="upload-step hidden" id="stepSuccess">
+      <div class="upload-success">
+        <div class="upload-success__icon">✅</div>
+        <div class="upload-success__text">Трек успешно загружен!</div>
+        <button class="upload-btn" id="uploadAnotherBtn">Загрузить ещё</button>
+      </div>
+    </div>
+
+    <!-- Ошибка -->
+    <div class="upload-error hidden" id="uploadError"></div>
+  </div>
+</div>
+
+<style>
+.upload-modal { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; }
+.upload-modal.hidden { display: none; }
+.upload-modal__backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.7); }
+.upload-modal__box { position: relative; background: #1a1a2e; border: 1px solid #333; border-radius: 16px; padding: 32px; width: 100%; max-width: 480px; z-index: 1; }
+.upload-modal__close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: #aaa; font-size: 20px; cursor: pointer; }
+.upload-modal__title { color: #fff; font-size: 22px; margin-bottom: 24px; }
+.upload-dropzone { border: 2px dashed #444; border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; margin-bottom: 12px; transition: border-color .2s; }
+.upload-dropzone:hover, .upload-dropzone.drag-over { border-color: #7c6fcd; }
+.upload-dropzone--cover { padding: 16px; }
+.upload-dropzone__icon { font-size: 32px; margin-bottom: 8px; }
+.upload-dropzone__text { color: #ccc; font-size: 14px; }
+.upload-dropzone__hint { color: #666; font-size: 12px; margin-top: 4px; }
+.upload-dropzone__filename { color: #7c6fcd; font-size: 13px; margin-top: 6px; word-break: break-all; }
+#coverPreview { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; margin: 0 auto 8px; display: block; }
+.upload-meta { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+.upload-input { background: #111; border: 1px solid #333; border-radius: 8px; padding: 10px 14px; color: #fff; font-size: 14px; outline: none; transition: border-color .2s; }
+.upload-input:focus { border-color: #7c6fcd; }
+.upload-btn { width: 100%; padding: 12px; background: #7c6fcd; color: #fff; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; margin-top: 8px; transition: opacity .2s; }
+.upload-btn:disabled { opacity: .4; cursor: not-allowed; }
+.upload-btn:not(:disabled):hover { opacity: .85; }
+.upload-progress-wrap { padding: 16px 0; }
+.upload-progress-label { color: #ccc; font-size: 14px; margin-bottom: 12px; }
+.upload-progress-bar { background: #333; border-radius: 100px; height: 8px; overflow: hidden; }
+.upload-progress-fill { height: 100%; background: linear-gradient(90deg, #7c6fcd, #a89de8); border-radius: 100px; transition: width .3s ease; }
+.upload-progress-percent { color: #7c6fcd; font-size: 20px; font-weight: 700; text-align: center; margin-top: 12px; }
+.upload-success { text-align: center; padding: 24px 0; }
+.upload-success__icon { font-size: 48px; margin-bottom: 16px; }
+.upload-success__text { color: #fff; font-size: 18px; margin-bottom: 20px; }
+.upload-error { background: #2d1515; border: 1px solid #c0392b; color: #e74c3c; border-radius: 8px; padding: 12px 16px; font-size: 14px; margin-top: 12px; }
+.upload-step.hidden { display: none; }
+</style>
+
+<script type="module">
+import { uploadTrack } from '../js/upload/track-upload.js';
+// import { db } from '../js/config/firebase.js'; // раскомментируй когда подключишь Firebase
+// import { collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.x.x/firebase-firestore.js';
+
+let audioFile = null;
+let coverFile = null;
+
+// --- Drag & Drop для аудио ---
+const audioDropzone = document.getElementById('audioDropzone');
+const audioInput = document.getElementById('audioInput');
+
+audioDropzone.addEventListener('click', () => audioInput.click());
+audioDropzone.addEventListener('dragover', (e) => { e.preventDefault(); audioDropzone.classList.add('drag-over'); });
+audioDropzone.addEventListener('dragleave', () => audioDropzone.classList.remove('drag-over'));
+audioDropzone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  audioDropzone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) setAudioFile(file);
+});
+audioInput.addEventListener('change', (e) => { if (e.target.files[0]) setAudioFile(e.target.files[0]); });
+
+function setAudioFile(file) {
+  audioFile = file;
+  document.getElementById('audioFileName').textContent = file.name;
+  // Авто-заполнение названия из имени файла
+  const nameWithoutExt = file.name.replace(/\.[^/.]+$/, '');
+  if (!document.getElementById('trackTitle').value) {
+    document.getElementById('trackTitle').value = nameWithoutExt;
+  }
+  checkCanUpload();
+}
+
+// --- Обложка ---
+const coverDropzone = document.getElementById('coverDropzone');
+const coverInput = document.getElementById('coverInput');
+
+coverDropzone.addEventListener('click', () => coverInput.click());
+coverInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  coverFile = file;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const preview = document.getElementById('coverPreview');
+    preview.src = ev.target.result;
+    preview.classList.remove('hidden');
+    coverDropzone.querySelector('.upload-dropzone__icon').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+});
+
+function checkCanUpload() {
+  document.getElementById('startUploadBtn').disabled = !audioFile;
+}
+
+// --- Загрузка ---
+document.getElementById('startUploadBtn').addEventListener('click', async () => {
+  if (!audioFile) return;
+
+  const meta = {
+    title: document.getElementById('trackTitle').value.trim(),
+    artist: document.getElementById('trackArtist').value.trim(),
+    album: document.getElementById('trackAlbum').value.trim(),
+    genre: document.getElementById('trackGenre').value,
+  };
+
+  // Показываем прогресс
+  document.getElementById('stepFiles').classList.add('hidden');
+  document.getElementById('stepProgress').classList.remove('hidden');
+  document.getElementById('uploadError').classList.add('hidden');
+
+  try {
+    const result = await uploadTrack(audioFile, coverFile, meta, (percent, type) => {
+      document.getElementById('progressLabel').textContent =
+        type === 'cover' ? 'Загрузка обложки...' : 'Загрузка трека...';
+      document.getElementById('progressFill').style.width = percent + '%';
+      document.getElementById('progressPercent').textContent = percent + '%';
+    });
+
+    // TODO: Сохранить result.firestoreData в Firebase Firestore
+    // await addDoc(collection(db, 'tracks'), result.firestoreData);
+    console.log('Загружено:', result.firestoreData);
+
+    // Успех
+    document.getElementById('stepProgress').classList.add('hidden');
+    document.getElementById('stepSuccess').classList.remove('hidden');
+
+  } catch (err) {
+    document.getElementById('stepProgress').classList.add('hidden');
+    document.getElementById('stepFiles').classList.remove('hidden');
+    const errEl = document.getElementById('uploadError');
+    errEl.textContent = '⚠️ ' + err.message;
+    errEl.classList.remove('hidden');
+  }
+});
+
+// --- Загрузить ещё ---
+document.getElementById('uploadAnotherBtn').addEventListener('click', () => {
+  audioFile = null;
+  coverFile = null;
+  audioInput.value = '';
+  coverInput.value = '';
+  document.getElementById('audioFileName').textContent = '';
+  document.getElementById('trackTitle').value = '';
+  document.getElementById('trackArtist').value = '';
+  document.getElementById('trackAlbum').value = '';
+  document.getElementById('trackGenre').value = '';
+  document.getElementById('coverPreview').classList.add('hidden');
+  document.getElementById('stepSuccess').classList.add('hidden');
+  document.getElementById('stepFiles').classList.remove('hidden');
+  checkCanUpload();
+});
+
+document.getElementById('closeUploadModal').addEventListener('click', () => {
+  document.getElementById('uploadModal').classList.add('hidden');
+});
+
+// Открыть модал: document.getElementById('uploadModal').classList.remove('hidden');
+</script>

@@ -1,0 +1,3511 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Профиль - 992MUZ</title>
+<link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/pages/home.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#eb5a5a">
+  <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+    /* ========== ТЕМЫ ========== */
+    [data-theme="light"] {
+      --pr-bg: #f0f2f5;
+      --pr-bg2: #ffffff;
+      --pr-bg3: #e8eaed;
+      --pr-text: #1a1a1a;
+      --pr-text2: #666;
+      --pr-text3: #999;
+      --pr-border: rgba(0,0,0,0.08);
+      --pr-card: #ffffff;
+      --pr-accent: #8B1A2F;
+      --pr-input-bg: #f5f5f5;
+      --pr-input-border: #e0e0e0;
+      --pr-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      --pr-tab-bg: #f0f2f5;
+      --pr-tab-active: #ffffff;
+      --pr-admin-bg: #fff8f9;
+      --pr-admin-border: rgba(139,26,47,0.2);
+    }
+    [data-theme="dark"] {
+      --pr-bg: #0d0d0d;
+      --pr-bg2: #1a1a1a;
+      --pr-bg3: #252525;
+      --pr-text: #ffffff;
+      --pr-text2: #aaaaaa;
+      --pr-text3: #666666;
+      --pr-border: rgba(255,255,255,0.08);
+      --pr-card: #1a1a1a;
+      --pr-accent: #8B1A2F;
+      --pr-input-bg: #252525;
+      --pr-input-border: #333;
+      --pr-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      --pr-tab-bg: #141414;
+      --pr-tab-active: #1a1a1a;
+      --pr-admin-bg: rgba(139,26,47,0.1);
+      --pr-admin-border: rgba(139,26,47,0.3);
+    }
+    [data-theme="red"] {
+      --pr-bg: #1a0608;
+      --pr-bg2: #2a0a0e;
+      --pr-bg3: #3a0f14;
+      --pr-text: #ffffff;
+      --pr-text2: #ffb3be;
+      --pr-text3: #cc6677;
+      --pr-border: rgba(255,100,120,0.15);
+      --pr-card: #2a0a0e;
+      --pr-accent: #e0243d;
+      --pr-input-bg: #3a0f14;
+      --pr-input-border: rgba(255,100,120,0.2);
+      --pr-shadow: 0 4px 20px rgba(139,26,47,0.4);
+      --pr-tab-bg: #1a0608;
+      --pr-tab-active: #2a0a0e;
+      --pr-admin-bg: rgba(224,36,61,0.1);
+      --pr-admin-border: rgba(224,36,61,0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--pr-bg);
+      color: var(--pr-text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      transition: background .3s, color .3s;
+      padding-bottom: 100px;
+    }
+
+    h1,h2,h3,h4 { font-family: 'Rem', 'Inter', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
+.profile-content-wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+    /* ========== ШАПКА ПРОФИЛЯ ========== */
+    .profile-header {
+      position: relative;
+      margin-bottom: 0;
+    }
+
+.profile-banner {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      background: var(--pr-bg3);
+      max-height: 180px;
+    }
+    .profile-banner-edit {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 7px 12px;
+      color: #fff;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      backdrop-filter: blur(4px);
+      transition: background .2s;
+    }
+    .profile-banner-edit:hover { background: rgba(0,0,0,0.7); }
+    .profile-banner-edit svg { width: 14px; height: 14px; }
+
+    .profile-info-row {
+      background: var(--pr-bg2);
+      padding: 0 24px 20px;
+      transition: background .3s;
+    }
+
+.profile-avatar-wrap {
+      position: relative;
+      display: inline-block;
+      margin-top: -48px;
+      margin-bottom: 12px;
+      z-index: 1;
+    }
+    .profile-avatar {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      border: 3px solid var(--pr-bg2);
+      object-fit: cover;
+      background: var(--pr-bg3);
+      display: block;
+      transition: border-color .3s;
+    }
+    .profile-avatar-edit {
+      position: absolute;
+      bottom: 2px; right: 2px;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--pr-accent);
+      border: 2px solid var(--pr-bg2);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: transform .2s;
+    }
+    .profile-avatar-edit:hover { transform: scale(1.1); }
+    .profile-avatar-edit svg { width: 13px; height: 13px; color: #fff; }
+
+    .profile-name-block { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+    .profile-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--pr-text);
+      line-height: 1.2;
+    }
+    .profile-username {
+      font-size: 13px;
+      color: var(--pr-text3);
+      margin-top: 2px;
+    }
+    .profile-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+.badge-free { background: var(--pr-bg3); color: var(--pr-text2); }
+    .badge-premium { background: linear-gradient(135deg, #d4a843, #f0c060); color: #5a3a00; }
+
+    /* ========== ДОСТИЖЕНИЯ ========== */
+    .achievements-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .achievement {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 11px; font-weight: 600;
+      border: 1px solid transparent;
+      cursor: default;
+      position: relative;
+    }
+    .achievement[data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%; transform: translateX(-50%);
+      background: #1a1a1a; color: #fff;
+      font-size: 11px; padding: 5px 9px;
+      border-radius: 7px; white-space: nowrap;
+      z-index: 99; pointer-events: none;
+    }
+    .achievement-bronze { background: rgba(180,100,40,0.1); color: #b46428; border-color: rgba(180,100,40,0.2); }
+    .achievement-silver { background: rgba(150,150,160,0.12); color: #7a7a8a; border-color: rgba(150,150,160,0.25); }
+    .achievement-gold { background: rgba(212,168,67,0.12); color: #a07820; border-color: rgba(212,168,67,0.3); }
+    .achievement-accent { background: rgba(139,26,47,0.1); color: var(--pr-accent); border-color: rgba(139,26,47,0.2); }
+
+    .profile-stats { display: flex; gap: 20px; margin-top: 12px; }
+    .profile-stat { text-align: center; position: relative; cursor: default; }
+    .profile-stat[data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 11px;
+      line-height: 1.5;
+      padding: 7px 11px;
+      border-radius: 8px;
+      white-space: nowrap;
+      max-width: 200px;
+      white-space: normal;
+      text-align: center;
+      width: max-content;
+      max-width: 180px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 99;
+      pointer-events: none;
+    }
+    .profile-stat[data-tip]:hover::before {
+      content: '';
+      position: absolute;
+      bottom: calc(100% + 2px);
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: #1a1a1a;
+      z-index: 99;
+    }
+    .profile-stat-num { font-size: 18px; font-weight: 700; color: var(--pr-text); }
+    .profile-stat-label { font-size: 11px; color: var(--pr-text3); }
+
+    /* ========== ТЕМА ========== */
+    .theme-switcher {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .theme-btn {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform .2s, border-color .2s;
+      position: relative;
+    }
+    .theme-btn:hover { transform: scale(1.1); }
+    .theme-btn.active { border-color: var(--pr-accent); }
+    .theme-btn[data-t="light"] { background: #f0f2f5; border-color: #ccc; }
+    .theme-btn[data-t="dark"] { background: #1a1a1a; }
+    .theme-btn[data-t="red"] { background: linear-gradient(135deg, #8B1A2F, #e0243d); }
+    .theme-label { font-size: 11px; color: var(--pr-text3); }
+
+    /* ========== PREMIUM CTA ========== */
+    .premium-cta {
+      margin: 16px 0;
+      background: linear-gradient(135deg, #2a0a0e 0%, #8B1A2F 50%, #d4a843 100%);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      transition: opacity .2s;
+      text-decoration: none;
+    }
+    .premium-cta:hover { opacity: 0.9; }
+    .premium-cta-text h3 { color: #fff; font-size: 15px; }
+    .premium-cta-text p { color: rgba(255,255,255,0.7); font-size: 12px; margin-top: 2px; }
+    .premium-cta-btn {
+      background: #d4a843;
+      color: #5a3a00;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ========== ADMIN MESSAGES ========== */
+    .admin-messages {
+      background: var(--pr-admin-bg);
+      border: 1px solid var(--pr-admin-border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .admin-messages-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 600;
+      color: var(--pr-accent);
+      margin-bottom: 10px;
+    }
+    .admin-messages-title svg { width: 16px; height: 16px; }
+    .admin-msg {
+      padding: 10px 12px;
+      background: var(--pr-card);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      border-left: 3px solid var(--pr-accent);
+    }
+    .admin-msg:last-child { margin-bottom: 0; }
+    .admin-msg-text { font-size: 13px; color: var(--pr-text); }
+    .admin-msg-date { font-size: 11px; color: var(--pr-text3); margin-top: 3px; }
+
+    /* ========== ТАБЫ ========== */
+    .profile-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--pr-tab-bg);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 16px;
+      transition: background .3s;
+    }
+    .profile-tab {
+      flex: 1;
+      display: flex; align-items: center; justify-content: center;
+      gap: 7px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--pr-text3);
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .profile-tab img { width: 16px; height: 16px; opacity: 0.5; filter: var(--icon-filter, none); }
+    .profile-tab.active {
+      background: var(--pr-tab-active);
+      color: var(--pr-text);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .profile-tab.active img { opacity: 1; }
+
+    /* ========== ДОБАВИТЬ КНОПКА ========== */
+    .add-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 20px;
+      background: var(--pr-accent);
+      color: #fff;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: opacity .2s;
+      margin-bottom: 16px;
+    }
+    .add-btn:hover { opacity: 0.85; }
+    .add-btn img { width: 18px; height: 18px; filter: invert(1); }
+
+    /* ========== ВАЖНО АРТИСТАМ ========== */
+.rules-block {
+      background: var(--pr-card);
+      border: 1px solid var(--pr-border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+@keyframes rulesHighlight {
+  0%, 100% { background: var(--pr-card); border-color: var(--pr-border); }
+  50% { background: rgba(139,26,47,0.08); border-color: var(--pr-accent); }
+}
+.rules-block.new-rules {
+  animation: rulesHighlight 1s ease-in-out infinite;
+}
+    .rules-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 700;
+      color: var(--pr-accent);
+      margin-bottom: 8px;
+    }
+    .rules-title svg { width: 16px; height: 16px; }
+    .rules-text { font-size: 12px; color: var(--pr-text3); line-height: 1.7; }
+
+    /* ========== ТРЕКИ СПИСОК ========== */
+    .tracks-empty, .videos-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--pr-text3);
+    }
+    .tracks-empty svg, .videos-empty svg { width: 40px; height: 40px; margin: 0 auto 12px; opacity: 0.3; }
+    .tracks-empty p, .videos-empty p { font-size: 14px; }
+
+    .track-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      transition: background .2s;
+      border-bottom: 1px solid var(--pr-border);
+    }
+    .track-row:last-child { border-bottom: none; }
+    .track-row:hover { background: var(--pr-bg3); }
+    .track-num { width: 20px; text-align: center; color: var(--pr-text3); font-size: 13px; flex-shrink: 0; }
+    .track-cover { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; background: var(--pr-bg3); flex-shrink: 0; }
+    .track-info { flex: 1; min-width: 0; }
+    .track-name { font-size: 14px; font-weight: 500; color: var(--pr-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track-artist-name { font-size: 12px; color: var(--pr-text3); }
+    .track-duration { font-size: 12px; color: var(--pr-text3); flex-shrink: 0; }
+
+    /* ========== ТРЕК КАРТОЧКА РАСШИРЕННАЯ ========== */
+    .track-row { flex-wrap: wrap; }
+    .track-cover-wrap { position: relative; flex-shrink: 0; cursor: pointer; }
+    .track-cover-wrap:hover .track-play-overlay { opacity: 1; }
+    .track-play-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.45);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .2s;
+    }
+    .track-play-overlay img { width: 18px; height: 18px; filter: invert(1); }
+.track-progress-wrap {
+      width: 100%;
+      padding: 4px 14px 6px 14px;
+      display: flex; align-items: center; gap: 8px;
+      box-sizing: border-box;
+    }
+    .track-progress-bar {
+      flex: 1; height: 3px; background: var(--pr-border);
+      border-radius: 100px; overflow: hidden; cursor: pointer;
+      position: relative;
+    }
+    .track-progress-bar {
+      flex: 1; height: 3px; background: var(--pr-border);
+      border-radius: 100px; overflow: hidden; cursor: pointer;
+    }
+    .track-progress-fill { height: 100%; background: var(--pr-accent); width: 0%; transition: width .3s; border-radius: 100px; }
+    .track-progress-time { font-size: 10px; color: var(--pr-text3); white-space: nowrap; }
+    .track-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; overflow: visible; position: relative; }
+    .track-action-btn {
+      display: flex; align-items: center; gap: 4px;
+      background: none; border: none; cursor: pointer;
+      font-size: 11px; color: var(--pr-text3);
+      transition: color .2s;
+      padding: 0;
+    }
+    .track-action-btn:hover { color: var(--pr-accent); }
+    .track-action-btn img { width: 16px; height: 16px; opacity: 0.6; transition: opacity .2s; }
+    .track-action-btn:hover img { opacity: 1; }
+    .track-action-btn.liked img { filter: none; opacity: 1; }
+
+    /* ========== ЛИМИТ ТРЕКОВ ========== */
+    .track-limit {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--pr-bg3);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: var(--pr-text2);
+    }
+    .track-limit-bar {
+      width: 100px; height: 4px;
+      background: var(--pr-border);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .track-limit-fill {
+      height: 100%;
+      background: var(--pr-accent);
+      border-radius: 100px;
+      transition: width .3s;
+    }
+
+    /* ========== НАСТРОЙКИ ПРОФИЛЯ ========== */
+    .settings-section {
+      background: var(--pr-card);
+      border: 1px solid var(--pr-border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: background .3s, border-color .3s;
+    }
+    .settings-section h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--pr-text);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--pr-border);
+    }
+    .settings-field { margin-bottom: 14px; }
+    .settings-field:last-child { margin-bottom: 0; }
+    .settings-field label {
+      display: block;
+      font-size: 12px;
+      color: var(--pr-text3);
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    .settings-field input {
+      width: 100%;
+      background: var(--pr-input-bg);
+      border: 1px solid var(--pr-input-border);
+      border-radius: 9px;
+      padding: 10px 12px;
+      color: var(--pr-text);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color .2s, background .3s;
+    }
+    .settings-field input:focus { border-color: var(--pr-accent); }
+.settings-field input:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .settings-field input[type="file"] {
+      padding: 8px 10px;
+      background: var(--pr-input-bg);
+      border: 1px solid var(--pr-input-border);
+      border-radius: 9px;
+      color: var(--pr-text);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      width: 100%;
+    }
+    .settings-field input[type="file"]::file-selector-button {
+      background: var(--pr-accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: opacity .2s;
+    }
+    .settings-field input[type="file"]::file-selector-button:hover {
+      opacity: 0.85;
+    }
+    .settings-field-hint {
+      font-size: 11px;
+      color: var(--pr-text3);
+      margin-top: 4px;
+    }
+    .settings-field-hint.error { color: #e74c3c; }
+    .settings-field-hint.success { color: #27ae60; }
+
+    .settings-save-btn {
+      width: 100%;
+      padding: 11px;
+      background: var(--pr-accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .2s;
+      margin-top: 4px;
+    }
+    .settings-save-btn:hover { opacity: 0.85; }
+    .settings-save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ========== ПОМОЩЬ ========== */
+    .help-block {
+      background: var(--pr-card);
+      border: 1px solid var(--pr-border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-top: 8px;
+      text-align: center;
+    }
+    .help-block p { font-size: 13px; color: var(--pr-text2); margin-bottom: 12px; }
+    .help-links { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .help-link {
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 16px;
+      border: 1px solid var(--pr-border);
+      border-radius: 10px;
+      font-size: 13px;
+      color: var(--pr-text);
+      transition: border-color .2s, background .2s;
+      text-decoration: none;
+    }
+    .help-link:hover { border-color: var(--pr-accent); background: var(--pr-admin-bg); }
+    .help-link img { width: 18px; height: 18px; }
+
+    /* ========== LOGOUT ========== */
+    .logout-btn {
+      width: 100%;
+      padding: 11px;
+      background: transparent;
+      color: #e74c3c;
+      border: 1px solid rgba(231,76,60,0.3);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .2s;
+      margin-top: 8px;
+    }
+    .logout-btn:hover { background: rgba(231,76,60,0.08); }
+
+    /* ========== TOAST ========== */
+    .toast {
+      position: fixed;
+      bottom: 90px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1a1a1a;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 100px;
+      font-size: 13px;
+      opacity: 0;
+      transition: opacity .3s, transform .3s;
+      z-index: 999;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success { background: #27ae60; }
+    .toast.error { background: #e74c3c; }
+
+    /* ========== INPUT FILE HIDDEN ========== */
+    input[type="file"] { display: none; }
+    .pn-tip-wrap { position: relative; display: inline-flex; }
+.pn-tip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 9px;
+  border-radius: 7px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s;
+  z-index: 99;
+}
+.pn-tip::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-bottom-color: #1a1a1a;
+}
+.pn-tip-wrap:hover .pn-tip { opacity: 1; }
+
+    /* ========== СТРИК ФАНАТА ========== */
+    .fan-streak-card {
+      background: var(--pr-card);
+      border: 1px solid var(--pr-border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .fan-streak-card::before {
+      content: '';
+      position: absolute;
+      top: -40%; right: -20%;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(52,120,246,0.15), transparent 70%);
+      pointer-events: none;
+    }
+    .fan-streak-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 10px; }
+    .fan-streak-title { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--pr-text); }
+ .fan-streak-title img { width: 20px; height: 20px; border-radius: 50%; }
+    .fan-streak-days { font-size: 13px; font-weight: 700; color: #3478f6; white-space: nowrap; }
+    .fan-streak-bar-bg { width: 100%; height: 8px; background: var(--pr-bg3); border-radius: 100px; overflow: hidden; }
+    .fan-streak-bar-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg,#1e5ab4,#3478f6,#6ba6ff); transition: width .5s ease; position: relative; overflow: hidden; }
+    .fan-streak-bar-fill::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+      animation: fanShine 2s infinite;
+    }
+    @keyframes fanShine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+    .fan-streak-hint { font-size: 11px; color: var(--pr-text3); margin-top: 8px; line-height: 1.5; }
+    .fan-verified-badge {
+      display: flex; align-items: center; gap: 10px;
+      padding: 6px 4px;
+      border-radius: 12px;
+    }
+.fan-verified-badge img { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; }
+    .fan-verified-badge-text { font-size: 12px; color: var(--pr-text2); line-height: 1.5; }
+    .fan-verified-badge-text strong { color: #3478f6; font-size: 13px; }
+.hidden { display: none !important; }
+    model-viewer { --progress-bar-height: 0px; --progress-bar-color: transparent; }
+  </style>
+</head>
+<body>
+
+<div id="navbarPlaceholder"></div>
+<script>
+  fetch('components/navbar.html')
+    .then(r => r.text())
+    .then(html => {
+      const temp = document.createElement('div');
+      temp.innerHTML = html;
+      const placeholder = document.getElementById('navbarPlaceholder');
+      // вставляем всё, кроме script-тегов, обычным способом
+      Array.from(temp.childNodes).forEach(node => {
+        if (node.tagName === 'SCRIPT') return;
+        placeholder.parentNode.insertBefore(node, placeholder);
+      });
+      // а script-теги пересоздаём вручную, чтобы браузер их выполнил
+      const scripts = temp.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        if (oldScript.src) {
+          newScript.src = oldScript.src;
+        } else {
+          newScript.textContent = oldScript.textContent;
+        }
+        document.body.appendChild(newScript);
+      });
+      placeholder.remove();
+    })
+    .then(() => document.dispatchEvent(new Event('navbarLoaded')));
+</script>
+
+<!-- ШАПКА -->
+<div class="profile-header">
+  <div style="max-width:1000px;margin:0 auto;position:relative;">
+    <div class="profile-banner" style="background:linear-gradient(120deg,#1a0608 0%,#8B1A2F 55%,#d4a843 100%);border-radius:0 0 16px 16px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <div style="position:absolute;inset:0;opacity:0.12;background-image:radial-gradient(circle at 20% 30%, #fff 1px, transparent 1px),radial-gradient(circle at 70% 60%, #fff 1px, transparent 1px),radial-gradient(circle at 90% 20%, #fff 1px, transparent 1px);background-size:60px 60px,80px 80px,100px 100px;"></div>
+      <img src="assets/png/red.png" alt="992MUZ" style="height:56px;width:auto;object-fit:contain;position:relative;z-index:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.4));">
+    </div>
+  </div>
+</div>
+
+<div class="profile-content-wrap">
+
+  <!-- ИНФО ПОЛЬЗОВАТЕЛЯ -->
+  <div class="profile-info-row">
+<div class="profile-avatar-wrap">
+      <div id="profileStoryRing" style="display:inline-block;padding:3px;border-radius:50%;background:#e0e0e0;cursor:default;position:relative;z-index:1;">
+        <img id="profileAvatar" class="profile-avatar" src="assets/images/ava.jpg" alt="avatar" style="border:2px solid #fff;border-radius:50%;">
+      </div>
+      <div class="profile-avatar-edit" id="avatarEditBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <input type="file" id="avatarInput" accept="image/jpeg,image/png,image/webp">
+    </div>
+
+    <div class="profile-name-block">
+      <div>
+<div class="profile-name" id="displayName" style="display:flex;align-items:center;gap:8px;"><span id="displayNameText">Загрузка...</span><img id="kingIcon" src="assets/icons/king.png" style="width:26px;height:26px;display:none;" title="Официальный артист 992MUZ"><img id="fanBadgeIcon" src="assets/icons/992anim.gif" style="width:24px;height:24px;display:none;" title="Официальный фанат 992MUZ"></div>
+<div class="profile-username" id="displayUsername">@username</div>
+<span class="profile-badge badge-free" id="planBadge">FREE</span>
+       
+        <div class="achievements-wrap" id="achievementsWrap"></div>
+<div class="profile-stats" id="profileStatsRow" style="display:none;">
+          <div class="profile-stat">
+            <div class="profile-stat-num" id="tracksCount">0</div>
+            <div class="profile-stat-label">треков</div>
+          </div>
+<div class="profile-stat">
+            <div class="profile-stat-num" id="videosCount">0</div>
+            <div class="profile-stat-label">клипов</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<!-- GREF CTA -->
+  <a href="#" class="premium-cta" id="grefCta">
+    <div class="premium-cta-text">
+     <h3 style="display:flex;align-items:center;gap:8px;"><img src="assets/icons/premium.png" alt="" style="width:22px;height:22px;">Твой первый GREF в подарок 🎁</h3>
+      <p>Золотой анимированный GREF - дарим каждому за регистрацию</p>
+    </div>
+    <div class="premium-cta-btn">Забрать GREF</div>
+  </a>
+
+  <!-- ПОЛКА GREF -->
+  <div id="grefShelfCard" style="display:none;margin-bottom:16px;background:var(--pr-card);border:1px solid var(--pr-border);border-radius:14px;padding:16px 20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <div style="font-size:14px;font-weight:700;color:var(--pr-text);display:flex;align-items:center;gap:6px;"><img src="assets/icons/mutual-aid.png" style="width:16px;height:16px;"> Твоя полка GREF</div>
+      <div style="font-size:13px;font-weight:700;color:#d4a843;" id="grefShelfCount">0</div>
+    </div>
+<div id="grefShelfViewer" style="display:flex;align-items:center;justify-content:center;min-height:130px;"></div>
+<div style="display:flex;align-items:center;justify-content:center;gap:8px;margin:4px 0 6px;">
+      <button id="grefItemsPrev" style="width:26px;height:26px;flex-shrink:0;border-radius:50%;border:1px solid var(--pr-border);background:var(--pr-bg3);color:var(--pr-text);cursor:pointer;font-size:14px;">‹</button>
+      <div id="grefItemsStrip" style="display:flex;gap:8px;overflow-x:auto;scroll-behavior:smooth;max-width:220px;padding:2px;scrollbar-width:none;"></div>
+      <button id="grefItemsNext" style="width:26px;height:26px;flex-shrink:0;border-radius:50%;border:1px solid var(--pr-border);background:var(--pr-bg3);color:var(--pr-text);cursor:pointer;font-size:14px;">›</button>
+    </div>
+    <div id="grefCountsText" style="text-align:center;font-size:12px;color:var(--pr-text2);margin-bottom:10px;"></div>
+<div style="display:flex;gap:8px;margin-top:12px;">
+<button id="grefBuyMoreBtn" style="flex:1;padding:11px;background:linear-gradient(90deg,#8B1A2F,#d4a843);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">Купить ещё GREF</button>
+      <button id="grefInfoBtn" style="width:42px;flex-shrink:0;border-radius:10px;background:var(--pr-bg3);border:1px solid var(--pr-border);color:var(--pr-text2);font-size:14px;font-weight:700;cursor:pointer;">?</button>
+    </div>
+  </div>
+
+  <!-- МОИ ОБЪЯВЛЕНИЯ GREF (просмотры рекламы) -->
+  <div id="myAdViewsCard" style="display:none;margin-bottom:16px;background:var(--pr-card);border:1px solid var(--pr-border);border-radius:14px;padding:16px 20px;">
+    <div style="font-size:14px;font-weight:700;color:var(--pr-text);display:flex;align-items:center;gap:6px;margin-bottom:12px;">
+      <img src="assets/models/analitic.gif" style="width:20px;height:20px;"> Мои объявления GREF
+    </div>
+    <div id="myAdViewsList" style="display:flex;flex-direction:column;gap:8px;"></div>
+  </div>
+
+  <!-- ЗАРАБОТОК АРТИСТА (только для артиста) -->
+  <div id="artistEarningsCard" style="display:none;margin-bottom:16px;background:var(--pr-card);border:1px solid var(--pr-border);border-radius:14px;padding:16px 20px;">
+    <div style="font-size:14px;font-weight:700;color:var(--pr-text);display:flex;align-items:center;gap:6px;margin-bottom:14px;">
+      <img src="assets/models/Dividends.gif" style="width:20px;height:20px;"> Заработок артиста
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:14px;">
+      <div style="flex:1;background:var(--pr-bg3);border-radius:10px;padding:12px;text-align:center;">
+        <div style="font-size:11px;color:var(--pr-text2);margin-bottom:4px;">В этом месяце</div>
+        <div id="earningsMonthValue" style="font-size:16px;font-weight:800;color:#27ae60;">0 TJS</div>
+      </div>
+      <div style="flex:1;background:var(--pr-bg3);border-radius:10px;padding:12px;text-align:center;">
+        <div style="font-size:11px;color:var(--pr-text2);margin-bottom:4px;">К выплате</div>
+        <div id="earningsBalanceValue" style="font-size:16px;font-weight:800;color:var(--pr-accent);">0 TJS</div>
+      </div>
+    </div>
+  <div id="earningsStatusText" style="font-size:11.5px;color:var(--pr-text2);line-height:1.6;margin-bottom:12px;"></div>
+    <button id="earningsDownloadBtn" disabled style="width:100%;padding:11px;border-radius:10px;background:var(--pr-bg3);border:none;color:var(--pr-text2);font-size:13px;font-weight:700;cursor:not-allowed;margin-bottom:8px;">Скачать отчёт для выплаты</button>
+  <button id="earningsCardBtn" style="width:100%;padding:10px;border-radius:10px;background:transparent;border:1px solid var(--pr-border);color:var(--pr-text2);font-size:12px;font-weight:600;cursor:pointer;">Указать реквизиты для выплаты</button>
+   <div id="earningsCardValue" style="font-size:11px;color:var(--pr-text3);margin-top:6px;text-align:center;"></div>
+
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--pr-border);display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-size:11.5px;color:var(--pr-text3);">👁 Просмотров рекламы фанатов на моей карточке</span>
+      <span id="earningsCardViewsValue" style="font-size:13px;font-weight:700;color:var(--pr-text);">0</span>
+    </div>
+
+    <div style="margin-top:12px;">
+      <div style="font-size:11px;color:var(--pr-text3);line-height:1.7;">
+        💡 Один GREF стоит <strong style="color:var(--pr-text2);">10 TJS</strong> для покупателя. Вы получаете <strong style="color:#27ae60;">5 TJS</strong>, платформа удерживает <strong style="color:var(--pr-text2);">5 TJS</strong> за обслуживание платежей и рекламу. Эта информация видна только вам.
+      </div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <div style="font-size:12px;font-weight:700;color:var(--pr-text);margin-bottom:8px;">История заработка по месяцам</div>
+      <div id="earningsHistoryList" style="display:flex;flex-direction:column;gap:6px;"></div>
+    </div>
+  </div>
+  <!-- КАРТОЧКА АРТИСТА CTA -->
+  <div id="artistCardBlock" style="margin-bottom:16px;background:var(--pr-card);border:1px solid var(--pr-border);border-radius:14px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+    <div>
+      <div style="font-size:14px;font-weight:700;color:var(--pr-text);display:flex;align-items:center;gap:8px;">
+        <img src="assets/icons/verification.png" style="width:18px;height:18px;"> Карточка артиста
+      </div>
+<div id="artistCardStatus" style="font-size:12px;color:var(--pr-text3);margin-top:4px;">Создай свою страницу в каталоге артистов - 300 TJS</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-shrink:0;">
+    <button id="artistCardViewBtn" style="display:none;padding:9px 14px;background:none;border:1px solid var(--pr-border);color:var(--pr-text);border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;align-items:center;">👁 Карточка</button>
+     <button id="artistCardBtn" disabled style="padding:9px 18px;background:var(--pr-accent);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;opacity:0.5;">Подать заявку</button>
+    </div>
+  </div>
+
+<!-- СООБЩЕНИЯ ОТ АДМИНИСТРАЦИИ -->
+  <div class="admin-messages">
+    <div class="admin-messages-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Сообщения от администрации
+      <span id="unreadBadge" style="display:none;background:#e74c3c;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;margin-left:4px;">0</span>
+    </div>
+<div class="admin-msg">
+<div class="admin-msg-text" id="staticAdminMsgText" style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;line-height:1.6;"></div>
+      <div class="admin-msg-date">Сегодня</div>
+    </div>
+  </div>
+
+<!-- СТАТУС ФАНАТА 992MUZ -->
+  <div class="fan-streak-card" id="fanStreakCard">
+    <div class="fan-streak-top">
+      <div class="fan-streak-title">
+        <img src="assets/icons/992anim.gif" alt="">
+        Статус Официального Фаната
+      </div>
+      <div class="fan-streak-days" id="fanStreakDaysText">0 / 30 дней</div>
+    </div>
+    <div class="fan-streak-bar-bg">
+      <div class="fan-streak-bar-fill" id="fanStreakBarFill" style="width:0%"></div>
+    </div>
+    <div class="fan-streak-hint" id="fanStreakHint">Заходи каждый день 30 дней подряд - получишь анимированную галочку верификации и особый статус в чате и на радио</div>
+  </div>
+
+  <!-- ТАБЫ -->
+<div class="profile-tabs">
+    <div class="profile-tab active" data-tab="tracks" id="tracksTabBtn" style="display:none;">
+      <img src="assets/icons/play.png" alt="">
+      Треки
+    </div>
+<div class="profile-tab" data-tab="videos" id="videosTabBtn" style="display:none;">
+      <img src="assets/icons/video.png" alt="">
+      Видео
+    </div>
+    <div class="profile-tab" data-tab="playlists">
+      <img src="assets/icons/music.png" alt="">
+      Плейлисты
+    </div>
+    <div class="profile-tab" data-tab="settings">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Настройки
+    </div>
+  </div>
+
+  <!-- ТАБ: ТРЕКИ -->
+  <div id="tab-tracks">
+    <button class="add-btn" id="addTrackBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Добавить трек
+    </button>
+
+    <div class="track-limit">
+      <span id="trackLimitText">0 / 10 треков (FREE)</span>
+      <div class="track-limit-bar">
+        <div class="track-limit-fill" id="trackLimitFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div style="background: var(--pr-card); border: 1px solid var(--pr-border); border-radius: 14px; overflow: visible;" id="tracksList">
+      <div class="tracks-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <p>Треков пока нет<br><span style="font-size:12px">Нажми «Добавить трек» чтобы загрузить первый</span></p>
+      </div>
+    </div>
+
+    <!-- ВАЖНО АРТИСТАМ -->
+    <div class="rules-block" style="margin-top:16px;">
+      <div class="rules-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        ВАЖНО АРТИСТАМ
+      </div>
+      <div class="rules-text">
+        Правила загрузки треков и условия использования платформы будут опубликованы здесь.
+        Следите за обновлениями.
+      </div>
+    </div>
+  </div>
+
+  <!-- ТАБ: ВИДЕО -->
+  <div id="tab-videos" style="display:none;">
+    <button class="add-btn" id="addVideoBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Добавить клип
+    </button>
+
+    <div style="background: var(--pr-card); border: 1px solid var(--pr-border); border-radius: 14px; overflow: hidden;" id="videosList">
+      <div class="videos-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2.18"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M17 7h5M2 17h5M17 17h5"/></svg>
+        <p>Клипов пока нет<br><span style="font-size:12px">Добавляй клипы по ссылке с YouTube</span></p>
+      </div>
+    </div>
+
+<div class="rules-block" style="margin-top:16px;">
+      <div class="rules-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        ВАЖНО АРТИСТАМ
+      </div>
+      <div class="rules-text">
+        Правила добавления клипов и видеоматериалов будут опубликованы здесь.
+        Клипы добавляются только по ссылке с YouTube.
+      </div>
+    </div>
+  </div>
+
+  <!-- ТАБ: ПЛЕЙЛИСТЫ -->
+  <div id="tab-playlists" style="display:none;">
+    <div id="likedPlaylistsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;">
+      <div class="tracks-empty" style="grid-column:1/-1;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <p>Пока нет сохранённых плейлистов<br><span style="font-size:12px">Лайкни плейлист на странице «Плейлисты», и он появится здесь</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ТАБ: НАСТРОЙКИ -->
+  <div id="tab-settings" style="display:none;">
+
+    <!-- Имя -->
+    <div class="settings-section">
+      <h3>Имя профиля</h3>
+      <div class="settings-field">
+        <label>Отображаемое имя (рус/англ, макс. 10 символов, только буквы . _ -)</label>
+        <input type="text" id="nameInput" maxlength="10" placeholder="Твоё имя">
+        <div class="settings-field-hint" id="nameHint">Можно менять неограниченно</div>
+      </div>
+      <button class="settings-save-btn" id="saveNameBtn">Сохранить имя</button>
+    </div>
+
+    <!-- Юзернейм -->
+    <div class="settings-section">
+      <h3>Имя пользователя (@username)</h3>
+      <div class="settings-field">
+       <label>Только латинские буквы, цифры, . _ - (макс. 30 символов)</label>
+        <input type="text" id="usernameInput" maxlength="30" placeholder="username">
+        <div class="settings-field-hint" id="usernameHint">Можно изменить только 1 раз</div>
+      </div>
+      <button class="settings-save-btn" id="saveUsernameBtn">Сохранить username</button>
+    </div>
+
+    <!-- Тема -->
+    <div class="settings-section">
+      <h3>Тема оформления</h3>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="theme-btn" data-t="light" style="width:40px;height:40px;" title="Светлая"></button>
+        <button class="theme-btn" data-t="dark" style="width:40px;height:40px;" title="Тёмная"></button>
+        <button class="theme-btn" data-t="red" style="width:40px;height:40px;" title="Красная"></button>
+      </div>
+      <div class="settings-field-hint" style="margin-top:8px;">Тема сохраняется в профиле</div>
+    </div>
+<!-- Город -->
+    <div class="settings-section">
+      <h3>Регион</h3>
+      <div class="settings-field">
+        <label>Район / город</label>
+<select id="cityInput" style="width:100%;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:10px 12px;color:var(--pr-text);font-size:13px;font-family:'Inter',sans-serif;outline:none;appearance:none;cursor:pointer;">
+          <option value="">- Выбери район -</option>
+          <optgroup label="🇹🇯 ГБАО">
+            <option>Хорог</option>
+            <option>Шугнанский район</option>
+            <option>Рушанский район</option>
+            <option>Ишкашимский район</option>
+            <option>Ваханский район</option>
+            <option>Мургабский район</option>
+            <option>Дарвазский район</option>
+            <option>Язгулямский район</option>
+            <option>Рошткалинский район</option>
+          </optgroup>
+          <optgroup label="🌍 Диаспора">
+            <option>Душанбе</option>
+            <option>Москва</option>
+            <option>Санкт-Петербург</option>
+            <option>Другой город</option>
+          </optgroup>
+        </select>
+      </div>
+      <button class="settings-save-btn" id="saveCityBtn">Сохранить регион</button>
+    </div>
+<!-- Выход -->
+    <div class="settings-section">
+      <h3>Аккаунт</h3>
+      <button class="logout-btn" id="logoutBtn">Выйти из аккаунта</button>
+    </div>
+  </div>
+
+  <!-- ПОМОЩЬ -->
+  <div class="help-block">
+    <p>Есть вопросы или нужна помощь?</p>
+    <div class="help-links">
+      <a href="https://t.me/producer992muz" target="_blank" class="help-link">
+        <img src="assets/icons/telegram.png" alt="Telegram">
+        Написать в Telegram
+      </a>
+      <a href="mailto:levakandproduction@gmail.com" class="help-link">
+        <img src="assets/icons/gmail.png" alt="Gmail">
+        levakandproduction@gmail.com
+      </a>
+    </div>
+  </div>
+
+</div>
+<!-- МОДАЛ ВЫБОРА БЕЙДЖА -->
+<div id="pinModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:18px;padding:24px;width:100%;max-width:360px;position:relative;">
+    <button onclick="document.getElementById('pinModal').classList.add('hidden')" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--pr-text3);font-size:20px;cursor:pointer;">✕</button>
+    <h3 style="margin-bottom:6px;">Закрепить трек</h3>
+    <p style="font-size:13px;color:var(--pr-text3);margin-bottom:20px;">Выбери бейдж - он покажется у фанатов</p>
+    <div style="display:flex;flex-direction:column;gap:10px;" id="pinBadgeList">
+<button class="pin-badge-opt" data-badge="ХИТ"        data-icon="assets/icons/hit.png"     style="padding:12px 16px;border-radius:12px;border:1px solid var(--pr-border);background:var(--pr-bg3);color:var(--pr-accent);font-size:14px;font-weight:700;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;"><img src="assets/icons/hit.png" style="width:18px;height:18px;"> ХИТ</button>
+      <button class="pin-badge-opt" data-badge="ПРЕМЬЕРА"   data-icon="assets/icons/premiere.png" style="padding:12px 16px;border-radius:12px;border:1px solid var(--pr-border);background:var(--pr-bg3);color:var(--pr-accent);font-size:14px;font-weight:700;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;"><img src="assets/icons/premiere.png" style="width:18px;height:18px;"> ПРЕМЬЕРА</button>
+      <button class="pin-badge-opt" data-badge="НОВИНКА"    data-icon="assets/icons/new.png"      style="padding:12px 16px;border-radius:12px;border:1px solid var(--pr-border);background:var(--pr-bg3);color:var(--pr-accent);font-size:14px;font-weight:700;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;"><img src="assets/icons/new.png" style="width:18px;height:18px;"> НОВИНКА</button>
+      <button class="pin-badge-opt" data-badge="РЕКОМЕНДУЮ" data-icon="assets/icons/rec.png"      style="padding:12px 16px;border-radius:12px;border:1px solid var(--pr-border);background:var(--pr-bg3);color:var(--pr-accent);font-size:14px;font-weight:700;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;"><img src="assets/icons/rec.png" style="width:18px;height:18px;"> РЕКОМЕНДУЮ</button>
+    </div>
+  </div>
+</div>
+<div style="height:80px;"></div>
+<!-- МОДАЛ РЕДАКТИРОВАНИЯ ВИДЕО -->
+<div id="editVideoModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:16px;padding:24px;width:100%;max-width:400px;position:relative;">
+    <button onclick="document.getElementById('editVideoModal').classList.add('hidden')" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--pr-text3);font-size:20px;cursor:pointer;">✕</button>
+    <h3 style="margin-bottom:16px;">Редактировать название</h3>
+    <div class="settings-field">
+      <label>Новое название</label>
+      <input type="text" id="editVideoInput" maxlength="100" placeholder="Название клипа">
+    </div>
+    <button class="settings-save-btn" id="editVideoSaveBtn">Сохранить</button>
+  </div>
+</div>
+
+<!-- МОДАЛ УДАЛЕНИЯ ВИДЕО -->
+<div id="deleteVideoModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:16px;padding:24px;width:100%;max-width:400px;text-align:center;position:relative;">
+    <button onclick="document.getElementById('deleteVideoModal').classList.add('hidden')" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--pr-text3);font-size:20px;cursor:pointer;">✕</button>
+    <img src="assets/icons/delete.png" alt="" style="width:48px;height:48px;margin:0 auto 12px;display:block;">
+    <h3 style="margin-bottom:8px;">Удалить клип?</h3>
+   <p style="color:var(--pr-text2);font-size:13px;margin-bottom:20px;">Это действие НЕЛЬЗЯ отменить. Все просмотры и лайки будут стёрты безвозвратно, восстановить клип будет невозможно. Вы уверены?</p>
+    <button id="deleteVideoConfirmBtn" style="width:100%;padding:12px;background:#e74c3c;border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:8px;">Удалить</button>
+    <button onclick="document.getElementById('deleteVideoModal').classList.add('hidden')" style="width:100%;padding:11px;background:none;border:1px solid var(--pr-border);border-radius:12px;color:var(--pr-text2);font-size:14px;cursor:pointer;">Отмена</button>
+  </div>
+</div>
+<!-- МОДАЛ ВЫБОРА ФРАГМЕНТА ДЛЯ СТОРИС -->
+<div id="videoStoryTrimModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:250;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:16px;padding:20px;width:100%;max-width:420px;position:relative;">
+    <button onclick="closeVideoStoryTrim()" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--pr-text3);font-size:20px;cursor:pointer;">✕</button>
+    <h3 id="trimModalTitle" style="margin-bottom:6px;">Выбери фрагмент для сторис</h3>
+    <p id="trimModalSubtitle" style="font-size:12px;color:var(--pr-text3);margin-bottom:14px;">Перетащи окно по шкале - выбери любую минуту ролика</p>
+    <div id="trimVideoPreviewWrap" style="position:relative;padding-bottom:56.25%;height:0;border-radius:10px;overflow:hidden;background:#000;margin-bottom:14px;">
+      <div id="trimYtPlayer" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
+    </div>
+    <div id="trimAudioPreviewWrap" style="display:none;align-items:center;gap:14px;background:var(--pr-bg3);border-radius:10px;padding:14px;margin-bottom:14px;">
+      <img id="trimAudioCover" src="" style="width:56px;height:56px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+      <div style="flex:1;min-width:0;">
+        <div id="trimAudioTitle" style="font-size:13px;font-weight:600;color:var(--pr-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+        <div style="font-size:11px;color:var(--pr-text3);margin-top:2px;">Фрагмент трека - жми «Проверить фрагмент», чтобы прослушать</div>
+      </div>
+      <audio id="trimAudioEl" preload="metadata" style="display:none;"></audio>
+    </div>
+
+    <div id="trimTrackWrap" style="margin-bottom:10px;">
+      <div id="trimTrack" style="position:relative;width:100%;height:44px;background:var(--pr-bg3);border-radius:8px;overflow:hidden;cursor:pointer;touch-action:none;">
+        <div id="trimWindow" style="position:absolute;top:0;left:0;height:100%;width:0px;background:rgba(139,26,47,0.35);border:2px solid var(--pr-accent);border-radius:6px;box-sizing:border-box;cursor:grab;">
+          <div style="position:absolute;left:-1px;top:0;bottom:0;width:6px;background:var(--pr-accent);border-radius:4px 0 0 4px;"></div>
+          <div style="position:absolute;right:-1px;top:0;bottom:0;width:6px;background:var(--pr-accent);border-radius:0 4px 4px 0;"></div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--pr-text3);margin-top:4px;">
+        <span>0:00</span>
+        <span id="trimTotalDuration">-:--</span>
+      </div>
+    </div>
+
+    <div id="trimSelectedInfo" style="font-size:12px;color:var(--pr-text2);margin-bottom:14px;text-align:center;font-weight:600;">Загрузка видео...</div>
+    <button id="trimPreviewBtn" style="width:100%;padding:11px;background:var(--pr-bg3);border:none;border-radius:10px;color:var(--pr-text);font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px;">▶ Проверить фрагмент</button>
+    <button id="trimPublishBtn" style="width:100%;padding:12px;background:var(--pr-accent);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;opacity:0.5;" disabled>Опубликовать сторис</button>
+  </div>
+</div>
+
+<!-- МОДАЛ ПРЕМИУМ -->
+<div id="premiumModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:20px;padding:32px 24px;width:100%;max-width:400px;text-align:center;position:relative;">
+    <button id="closePremiumModal" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--pr-text3);font-size:20px;cursor:pointer;">✕</button>
+   <img src="assets/icons/premium.png" alt="" style="width:64px;height:64px;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto;">
+    <h3 style="font-size:20px;margin-bottom:8px;">Лимит достигнут</h3>
+    <p style="color:var(--pr-text2);font-size:14px;margin-bottom:20px;">Бесплатный план позволяет добавить до 10 треков и клипов. Подключи Premium и загружай до 50+</p>
+    <div style="background:linear-gradient(135deg,#2a0a0e,#8B1A2F,#d4a843);border-radius:14px;padding:16px;margin-bottom:20px;">
+      <div style="color:#fff;font-size:15px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px;justify-content:center;"><img src="assets/icons/premium.png" alt="" style="width:20px;height:20px;"> PREMIUM</div>
+      <div style="color:rgba(255,255,255,0.8);font-size:12px;">До 50+ треков · Клипы · Приоритет в поиске · Верификация</div>
+    </div>
+    <button onclick="window.location.href='mailto:levakandproduction@gmail.com?subject=Хочу Premium'" style="width:100%;padding:13px;background:#d4a843;border:none;border-radius:12px;color:#5a3a00;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;">Подключить Premium</button>
+    <button id="closePremiumModal2" style="width:100%;padding:11px;background:none;border:1px solid var(--pr-border);border-radius:12px;color:var(--pr-text2);font-size:14px;cursor:pointer;">Позже</button>
+  </div>
+</div>
+<!-- МОДАЛ "ОТПРАВЬТЕ ТРЕК НАМ" -->
+<div id="sendTrackTelegramModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:16px;padding:28px 24px;width:100%;max-width:380px;text-align:center;position:relative;">
+    <button onclick="document.getElementById('sendTrackTelegramModal').classList.add('hidden')" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--pr-text3);font-size:20px;cursor:pointer;">✕</button>
+    <img src="assets/icons/telegram.png" alt="" style="width:48px;height:48px;margin:0 auto 14px;display:block;">
+    <h3 style="margin-bottom:10px;font-size:16px;">Отправьте трек нам</h3>
+    <p style="font-size:13.5px;color:var(--pr-text2);line-height:1.7;margin-bottom:22px;">Пришлите трек в Telegram - мы опубликуем его в вашей карточке артиста.</p>
+    <a href="https://t.me/producer992muz" target="_blank" style="display:block;width:100%;padding:12px;background:var(--pr-accent);color:#fff;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;">Написать в Telegram</a>
+  </div>
+</div>
+
+<!-- МОДАЛ ЗАГРУЗКИ ТРЕКА -->
+<div id="uploadModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:16px;padding:24px;width:100%;max-width:440px;position:relative;">
+    <button id="closeModalBtn" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--pr-text3);font-size:20px;cursor:pointer;">✕</button>
+    <h3 style="margin-bottom:16px;">Загрузить трек</h3>
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <span style="font-size:13px;font-weight:600;color:var(--pr-text);">Загрузка трека</span>
+      <button id="rulesBtn" style="width:22px;height:22px;border-radius:50%;background:var(--pr-bg3);border:1px solid var(--pr-border);color:var(--pr-text2);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;">?</button>
+    </div>
+    <div class="settings-field">
+      <label>Название трека *</label>
+      <input type="text" id="trackTitle" placeholder="Название" maxlength="100">
+    </div>
+    <div class="settings-field">
+      <label>Артист</label>
+      <input type="text" id="trackArtist" placeholder="Имя артиста" maxlength="100">
+    </div>
+
+    <div class="settings-field">
+      <label>Аудио файл (MP3, WAV, макс. 50 МБ) *</label>
+     <input type="file" id="trackFileInput" accept="audio/mpeg,.mp3" style="display:block!important;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:10px;color:var(--pr-text);width:100%;cursor:pointer;">
+    </div>
+<div class="settings-field">
+      <label>Обложка (необязательно) - только JPEG</label>
+      <input type="file" id="coverFileInput" accept="image/jpeg,.jpg,.jpeg" style="display:block!important;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:10px;color:var(--pr-text);width:100%;cursor:pointer;">
+    </div>
+<!-- МОДАЛ КРОППЕРА -->
+    <div id="cropModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:300;align-items:center;justify-content:center;padding:16px;">
+      <div style="background:var(--pr-card);border-radius:16px;padding:20px;width:100%;max-width:420px;position:relative;">
+        <div style="font-size:14px;font-weight:600;margin-bottom:12px;color:var(--pr-text);">✂️ Выберите область обложки (1:1)</div>
+        <div style="width:100%;max-height:380px;overflow:hidden;border-radius:10px;background:#000;">
+          <img id="cropImage" style="display:block;max-width:100%;">
+        </div>
+        <div style="font-size:11px;color:var(--pr-text3);margin-top:8px;text-align:center;">Перетащите и масштабируйте область</div>
+        <div style="display:flex;gap:10px;margin-top:12px;">
+          <button id="cropCancelBtn" style="flex:1;padding:10px;background:var(--pr-bg3);border:none;border-radius:9px;color:var(--pr-text);cursor:pointer;font-size:13px;">Отмена</button>
+          <button id="cropConfirmBtn" style="flex:1;padding:10px;background:var(--pr-accent);border:none;border-radius:9px;color:#fff;font-weight:600;cursor:pointer;font-size:13px;">Выбрать</button>
+        </div>
+      </div>
+    </div>
+<!-- ПРЕВЬЮ ПЕРЕД ЗАГРУЗКОЙ -->
+    <div id="trackPreview" style="display:none;background:var(--pr-bg3);border-radius:12px;padding:12px;margin-bottom:14px;display:none;align-items:center;gap:12px;">
+      <img id="previewCover" style="width:52px;height:52px;border-radius:8px;object-fit:cover;background:var(--pr-bg2);" src="" alt="">
+      <div style="flex:1;min-width:0;">
+        <div id="previewTitle" style="font-size:14px;font-weight:600;color:var(--pr-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">-</div>
+        <div id="previewArtist" style="font-size:12px;color:var(--pr-text3);margin-top:2px;">-</div>
+        <audio id="previewAudio" controls style="width:100%;height:28px;margin-top:6px;accent-color:var(--pr-accent);"></audio>
+      </div>
+    </div>
+    <div id="uploadProgress" style="display:none;margin-bottom:12px;">
+      <div style="font-size:12px;color:var(--pr-text3);margin-bottom:6px;" id="uploadProgressText">Загружаем...</div>
+      <div style="height:4px;background:var(--pr-border);border-radius:100px;overflow:hidden;">
+        <div id="uploadProgressFill" style="height:100%;background:var(--pr-accent);width:0%;transition:width .3s;border-radius:100px;"></div>
+      </div>
+    </div>
+
+    <button class="settings-save-btn" id="uploadTrackBtn">Загрузить</button>
+  </div>
+</div>
+<!-- МОДАЛ ПОДТВЕРЖДЕНИЯ ЗАГРУЗКИ -->
+<div id="confirmUploadModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:250;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:16px;padding:24px;width:100%;max-width:420px;position:relative;">
+    <h3 style="margin-bottom:8px;display:flex;align-items:center;gap:8px;"><img src="assets/icons/warning.png" style="width:22px;height:22px;">Проверьте релиз</h3>
+    <p style="font-size:13px;color:var(--pr-text2);margin-bottom:16px;line-height:1.6;">После загрузки <strong style="color:var(--pr-text);">редактировать и удалять трек будет невозможно</strong>. Убедитесь что всё верно:</p>
+    <div id="confirmPreview" style="background:var(--pr-bg3);border-radius:12px;padding:12px;display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <img id="confirmCover" style="width:56px;height:56px;border-radius:8px;object-fit:cover;" src="" alt="">
+      <div>
+        <div id="confirmTitle" style="font-size:14px;font-weight:600;color:var(--pr-text);"></div>
+        <div id="confirmArtist" style="font-size:12px;color:var(--pr-text3);margin-top:2px;"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button id="confirmBackBtn" style="flex:1;padding:11px;background:var(--pr-bg3);border:none;border-radius:10px;color:var(--pr-text);font-size:14px;cursor:pointer;">← Вернуться</button>
+      <button id="confirmProceedBtn" style="flex:1;padding:11px;background:var(--pr-accent);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">Загрузить</button>
+    </div>
+  </div>
+</div>
+<!-- МОДАЛ ИНФО GREF -->
+<div id="grefInfoModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:16px;padding:24px;width:100%;max-width:440px;position:relative;max-height:85vh;overflow-y:auto;">
+    <button id="closeGrefInfoBtn" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--pr-text3);font-size:20px;cursor:pointer;">✕</button>
+    <h3 style="margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--pr-accent);"><img src="assets/icons/game-coin.png" style="width:20px;height:20px;"> Что такое GREF</h3>
+    <div style="font-size:13px;color:var(--pr-text2);line-height:1.8;">
+      <p>GREF - подарок, который можно дарить любимым артистам на их странице. Первый GREF ты получаешь бесплатно за регистрацию.</p>
+      <br>
+     <p style="font-weight:700;color:var(--pr-text);display:flex;align-items:center;gap:6px;"><img src="assets/models/cash.gif" style="width:18px;height:18px;"> Цены на покупку</p>
+      <p>10 GREF — 100 TJS</p>
+      <p>20 GREF — 170 TJS</p>
+      <p>30 GREF — 250 TJS</p>
+      <br>
+      <p style="font-weight:700;color:var(--pr-text);display:flex;align-items:center;gap:6px;"><img src="assets/models/shop.gif" style="width:18px;height:18px;"> Как купить</p>
+      <p>1. Жми «Купить ещё GREF» — откроется наш Telegram</p>
+      <p>2. Напиши «Хочу купить GREF» и укажи нужный пакет</p>
+      <p>3. Мы пришлём QR-код для оплаты (Душанбе Сити)</p>
+      <p>4. После оплаты GREF зачислятся тебе на счёт</p>
+      <br>
+     <p style="font-weight:700;color:var(--pr-text);display:flex;align-items:center;gap:6px;"><img src="assets/models/za.gif" style="width:18px;height:18px;"> Зачем они нужны</p>
+     <p>Дари GREF артистам, которых поддерживаешь - это попадёт в их витрину подарков и покажет, кто их самый активный фанат.</p>
+      <p style="margin-top:8px;">За GREF можно купить рекламу на неделю в карточке артиста - отрекламируй свой Instagram или клип на YouTube, и его увидят все фанаты этого артиста.</p>
+    </div>
+  </div>
+</div>
+
+<!-- МОДАЛ ПРАВИЛ -->
+<div id="rulesModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:16px;padding:24px;width:100%;max-width:440px;position:relative;">
+    <button id="closeRulesBtn" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--pr-text3);font-size:20px;cursor:pointer;">✕</button>
+    <h3 style="margin-bottom:16px;color:var(--pr-accent);">📋 Правила загрузки треков</h3>
+    <div style="font-size:13px;color:var(--pr-text2);line-height:1.8;">
+      <p>✅ Только ваша собственная музыка или с разрешения правообладателя</p>
+      <p>✅ Только формат MP3, максимум 50 МБ</p>
+      <p>✅ Обложка только JPEG, квадратная</p>
+      <br>
+      <p>❌ Запрещено: интимный, сексуальный контент</p>
+      <p>❌ Запрещено: религиозные и политические темы</p>
+      <p>❌ Запрещено: пропаганда насилия, ненависти, дискриминации</p>
+      <p>❌ Запрещено: нецензурная лексика без пометки 18+</p>
+      <p>❌ Запрещено: чужая музыка без прав</p>
+      <br>
+      <p style="font-size:11px;color:var(--pr-text3);">Нарушение правил ведёт к удалению трека и блокировке аккаунта.</p>
+    </div>
+  </div>
+</div>
+<!-- МОДАЛ ДОБАВЛЕНИЯ КЛИПА -->
+<div id="videoModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:16px;padding:24px;width:100%;max-width:440px;position:relative;">
+    <button id="closeVideoModalBtn" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--pr-text3);font-size:20px;cursor:pointer;">✕</button>
+    <h3 style="margin-bottom:16px;">Добавить клип</h3>
+    <div class="settings-field">
+      <label>Ссылка на YouTube *</label>
+      <input type="text" id="videoUrl" placeholder="https://youtube.com/watch?v=...">
+    </div>
+    <div class="settings-field">
+      <label>Название клипа *</label>
+      <input type="text" id="videoTitle" placeholder="Название" maxlength="100">
+    </div>
+    <button class="settings-save-btn" id="saveVideoBtn">Добавить</button>
+  </div>
+</div>
+
+<!-- МОДАЛ КАРТОЧКИ АРТИСТА -->
+<div id="artistCardFormModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:16px;padding:24px;width:100%;max-width:480px;position:relative;max-height:90vh;overflow-y:auto;">
+    <button onclick="document.getElementById('artistCardFormModal').classList.add('hidden')" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--pr-text3);font-size:20px;cursor:pointer;">✕</button>
+<h3 style="margin-bottom:16px;display:flex;align-items:center;gap:8px;"><img src="assets/icons/verification.png" style="width:20px;height:20px;"> Карточка артиста</h3>
+<div class="settings-field">
+      <label>Псевдоним (имя в каталоге)</label>
+      <input type="text" id="cardNickname" maxlength="40" placeholder="Твой псевдоним">
+      <div class="settings-field-hint" id="cardNicknameHint" style="display:none;">🔒 Псевдоним можно установить только один раз - изменить его больше нельзя</div>
+    </div>
+<div class="settings-field">
+      <label>Фото артиста (вертикальное 3:4)</label>
+      <div id="cardPhotoWrap" onclick="document.getElementById('cardPhotoInput').click()" style="width:120px;height:160px;border-radius:12px;border:2px dashed var(--pr-input-border);background:var(--pr-input-bg);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;position:relative;">
+        <img id="cardPhotoPreview" style="width:100%;height:100%;object-fit:cover;display:none;">
+        <span id="cardPhotoLabel" style="font-size:12px;color:var(--pr-text3);text-align:center;padding:8px;">📷<br>Добавить фото</span>
+      </div>
+      <input type="file" id="cardPhotoInput" accept="image/*" style="display:none;" onchange="previewCardPhoto(this)">
+    </div>
+
+<div class="settings-field">
+      <label>О себе (bio)</label>
+      <textarea id="cardBio" maxlength="300" placeholder="Расскажи о себе..." style="width:100%;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:10px 12px;color:var(--pr-text);font-size:13px;font-family:'Inter',sans-serif;outline:none;resize:none;height:90px;"></textarea>
+    </div>
+    <div class="settings-field">
+      <label>Соцсети</label>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;gap:8px;"><img src="assets/icons/instagram.png" style="width:18px;height:18px;"><input type="text" id="cardInstagram" placeholder="Instagram (https://...)" style="flex:1;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:8px 12px;color:var(--pr-text);font-size:13px;outline:none;"></div>
+        <div style="display:flex;align-items:center;gap:8px;"><img src="assets/icons/tiktok.png" style="width:18px;height:18px;"><input type="text" id="cardTiktok" placeholder="TikTok (https://...)" style="flex:1;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:8px 12px;color:var(--pr-text);font-size:13px;outline:none;"></div>
+        <div style="display:flex;align-items:center;gap:8px;"><img src="assets/icons/telegram.png" style="width:18px;height:18px;"><input type="text" id="cardTelegram" placeholder="Telegram (https://...)" style="flex:1;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:8px 12px;color:var(--pr-text);font-size:13px;outline:none;"></div>
+        <div style="display:flex;align-items:center;gap:8px;"><img src="assets/icons/youtube.png" style="width:18px;height:18px;"><input type="text" id="cardYoutube" placeholder="YouTube (https://...)" style="flex:1;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:8px 12px;color:var(--pr-text);font-size:13px;outline:none;"></div>
+<div style="display:flex;align-items:center;gap:8px;"><img src="assets/icons/vk.png" style="width:18px;height:18px;"><input type="text" id="cardVk" placeholder="VK (https://...)" style="flex:1;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:8px 12px;color:var(--pr-text);font-size:13px;outline:none;"></div>
+        <div style="display:flex;align-items:center;gap:8px;"><img src="assets/icons/facebook.png" style="width:18px;height:18px;"><input type="text" id="cardFacebook" placeholder="Facebook (https://...)" style="flex:1;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:8px 12px;color:var(--pr-text);font-size:13px;outline:none;"></div>
+        <div style="display:flex;align-items:center;gap:8px;"><img src="assets/icons/x.png" style="width:18px;height:18px;"><input type="text" id="cardX" placeholder="X (https://...)" style="flex:1;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:8px 12px;color:var(--pr-text);font-size:13px;outline:none;"></div>
+        <div style="display:flex;align-items:center;gap:8px;"><img src="assets/icons/spotify.png" style="width:18px;height:18px;"><input type="text" id="cardSpotify" placeholder="Spotify (https://...)" style="flex:1;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:8px 12px;color:var(--pr-text);font-size:13px;outline:none;"></div>
+        <div style="display:flex;align-items:center;gap:8px;"><img src="assets/icons/applemusic.png" style="width:18px;height:18px;"><input type="text" id="cardApple" placeholder="Apple Music (https://...)" style="flex:1;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:8px 12px;color:var(--pr-text);font-size:13px;outline:none;"></div>
+        <div style="display:flex;align-items:center;gap:8px;"><img src="assets/icons/yandexmusic.png" style="width:18px;height:18px;"><input type="text" id="cardYandex" placeholder="Яндекс Музыка (https://...)" style="flex:1;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:8px 12px;color:var(--pr-text);font-size:13px;outline:none;"></div>
+        <div style="display:flex;align-items:center;gap:8px;"><img src="assets/icons/site.png" style="width:18px;height:18px;"><input type="text" id="cardSite" placeholder="Сайт (https://...)" style="flex:1;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:8px 12px;color:var(--pr-text);font-size:13px;outline:none;"></div>
+      </div>
+    </div>
+    <button class="settings-save-btn" id="saveArtistCardBtn">Сохранить карточку</button>
+  </div>
+</div>
+<!-- МОДАЛ ПОДТВЕРЖДЕНИЯ (общий, стилизованный вместо confirm()) -->
+<div id="customConfirmModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:16px;padding:24px;width:100%;max-width:400px;text-align:center;position:relative;">
+    <img src="assets/icons/delete.png" alt="" style="width:44px;height:44px;margin:0 auto 12px;display:block;opacity:0.85;">
+    <h3 id="customConfirmTitle" style="margin-bottom:8px;font-size:16px;">Удалить?</h3>
+    <p id="customConfirmText" style="color:var(--pr-text2);font-size:13px;margin-bottom:20px;line-height:1.6;"></p>
+    <button id="customConfirmOkBtn" style="width:100%;padding:12px;background:#e74c3c;border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:8px;">Да, удалить</button>
+    <button id="customConfirmCancelBtn" style="width:100%;padding:11px;background:none;border:1px solid var(--pr-border);border-radius:12px;color:var(--pr-text2);font-size:14px;cursor:pointer;">Отмена</button>
+  </div>
+</div>
+
+<!-- МОДАЛ УКАЗАНИЯ РЕКВИЗИТОВ ВЫПЛАТЫ (номер D CITY / QR) -->
+<div id="payoutInfoModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:300;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:18px;padding:24px;width:100%;max-width:420px;position:relative;max-height:90vh;overflow-y:auto;">
+    <button onclick="document.getElementById('payoutInfoModal').classList.add('hidden')" style="position:absolute;top:12px;right:12px;background:none;border:none;color:var(--pr-text3);font-size:20px;cursor:pointer;">✕</button>
+    <h3 style="margin-bottom:6px;">Реквизиты для выплаты</h3>
+    <p style="font-size:12.5px;color:var(--pr-text3);margin-bottom:16px;line-height:1.6;">Укажи номер D CITY (без +992) или загрузи QR-код для перевода.</p>
+
+    <div style="display:flex;gap:8px;margin-bottom:14px;background:var(--pr-bg3);border-radius:10px;padding:4px;">
+      <button class="payout-method-btn" data-method="phone" style="flex:1;padding:9px;border-radius:8px;border:none;background:var(--pr-accent);color:#fff;font-size:12.5px;font-weight:700;cursor:pointer;">Номер D CITY</button>
+      <button class="payout-method-btn" data-method="qr" style="flex:1;padding:9px;border-radius:8px;border:none;background:transparent;color:var(--pr-text2);font-size:12.5px;font-weight:700;cursor:pointer;">QR-код</button>
+    </div>
+
+    <div id="payoutPhoneBlock" class="settings-field">
+      <label>Номер D CITY (9 цифр, без +992)</label>
+      <input type="text" id="payoutPhoneInput" maxlength="9" placeholder="907123456" style="width:100%;background:var(--pr-input-bg);border:1px solid var(--pr-input-border);border-radius:9px;padding:10px 12px;color:var(--pr-text);font-size:14px;outline:none;">
+    </div>
+
+    <div id="payoutQrBlock" class="settings-field hidden">
+      <label>QR-код для перевода (изображение)</label>
+      <div onclick="document.getElementById('payoutQrInput').click()" style="width:140px;height:140px;border-radius:12px;border:2px dashed var(--pr-input-border);background:var(--pr-input-bg);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;margin:0 auto;">
+        <img id="payoutQrPreview" style="width:100%;height:100%;object-fit:contain;display:none;">
+        <span id="payoutQrLabel" style="font-size:12px;color:var(--pr-text3);text-align:center;padding:8px;">📷<br>Загрузить QR</span>
+      </div>
+      <input type="file" id="payoutQrInput" accept="image/*" style="display:none;">
+    </div>
+
+    <div style="background:var(--pr-admin-bg);border:1px solid var(--pr-admin-border);border-radius:10px;padding:12px 14px;margin:14px 0;font-size:11.5px;color:var(--pr-text2);line-height:1.7;">
+      ⚠️ Проверь номер/QR перед сохранением. <strong>992MUZ не несёт ответственности</strong>, если указан неверный номер, устаревший QR или деньги ушли не туда из-за ошибки в реквизитах. Комиссию банка/платёжной системы за перевод оплачивает <strong>артист</strong>.
+    </div>
+
+    <button class="settings-save-btn" id="payoutInfoSaveBtn">Сохранить реквизиты</button>
+  </div>
+</div>
+
+<!-- МОДАЛ ПОДТВЕРЖДЕНИЯ ПОЛУЧЕНИЯ ВЫПЛАТЫ -->
+<div id="payoutConfirmModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:310;display:flex;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:var(--pr-card);border-radius:18px;padding:28px 24px;width:100%;max-width:400px;text-align:center;position:relative;">
+    <img src="assets/models/Dividends.gif" style="width:64px;height:64px;margin:0 auto 14px;display:block;">
+    <h3 style="margin-bottom:8px;">Проверьте поступление платежа</h3>
+    <p id="payoutConfirmText" style="font-size:13.5px;color:var(--pr-text2);line-height:1.7;margin-bottom:6px;"></p>
+    <p style="font-size:11.5px;color:var(--pr-text3);line-height:1.6;margin-bottom:20px;">Если платёж не поступил - сообщи об этом, мы проверим. Подтверждай получение только если деньги реально пришли - после подтверждения баланс обнулится и вернуть его будет нельзя.</p>
+    <button id="payoutConfirmYesBtn" style="width:100%;padding:12px;background:#27ae60;border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;">✅ Да, деньги получил(а)</button>
+    <button id="payoutConfirmNoBtn" style="width:100%;padding:11px;background:none;border:1px solid var(--pr-border);border-radius:12px;color:var(--pr-text2);font-size:13px;cursor:pointer;">❌ Деньги не поступили</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+<script type="module">
+import { auth, db } from './js/config/firebase.js';
+import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { doc, getDoc, updateDoc, setDoc, addDoc, deleteDoc, collection, query, where, getDocs, serverTimestamp, orderBy, onSnapshot, limit, increment }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { uploadAvatar, uploadToCloudinary } from './js/upload/track-upload.js';
+import { CLOUDINARY_CONFIG } from './js/config/cloudinary.js';
+
+let currentUser = null;
+let userProfile = null;
+let isEditingCard = false;
+let myCardRef = null;
+let myCardData = null;
+let hasActiveArtistCard = false;
+
+// Стилизованный аналог confirm() — возвращает Promise<boolean>
+function showConfirm(text, title = 'Подтвердите действие') {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('customConfirmModal');
+    document.getElementById('customConfirmTitle').textContent = title;
+    document.getElementById('customConfirmText').textContent = text;
+    modal.classList.remove('hidden');
+    const okBtn = document.getElementById('customConfirmOkBtn');
+    const cancelBtn = document.getElementById('customConfirmCancelBtn');
+    const cleanup = (result) => {
+      modal.classList.add('hidden');
+      okBtn.removeEventListener('click', onOk);
+      cancelBtn.removeEventListener('click', onCancel);
+      resolve(result);
+    };
+    const onOk = () => cleanup(true);
+    const onCancel = () => cleanup(false);
+    okBtn.addEventListener('click', onOk);
+    cancelBtn.addEventListener('click', onCancel);
+  });
+}
+
+// ========== AUTH ==========
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = 'login.html'; return; }
+  currentUser = user;
+
+  // Если вошёл через Google — сохранить профиль если нет
+  const ref = doc(db, 'users', user.uid);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) {
+    await setDoc(ref, {
+      uid: user.uid,
+      displayName: user.displayName || 'Пользователь',
+      email: user.email,
+      avatarUrl: user.photoURL || null,
+      bio: '',
+      role: 'user',
+      createdAt: serverTimestamp(),
+      tracksCount: 0,
+      followersCount: 0,
+      followingCount: 0,
+    });
+  }
+
+  await loadProfile(user.uid, user);
+  requestNotificationPermission();
+});
+
+// ========== ЗАГРУЗИТЬ ПРОФИЛЬ ==========
+async function loadProfile(uid) {
+// Сразу показать из кэша
+  const cached = localStorage.getItem('pn_profile_' + uid);
+  if (cached) {
+    const c = JSON.parse(cached);
+    if (c.avatarUrl) document.getElementById('profileAvatar').src = c.avatarUrl;
+  }
+  const ref = doc(db, 'users', uid);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return;
+userProfile = snap.data();
+  localStorage.setItem('pn_profile_' + uid, JSON.stringify({
+    avatarUrl: userProfile.avatarUrl || null,
+  }));
+  document.getElementById('displayNameText').textContent = userProfile.displayName || 'Без имени';
+  const uname = userProfile.username || (userProfile.email || '').split('@')[0].toLowerCase().replace(/[^a-z0-9._-]/g, '').slice(0, 10);
+document.getElementById('displayUsername').textContent = '@' + uname;
+document.getElementById('tracksCount').textContent = userProfile.tracksCount || 0;
+  document.getElementById('videosCount').textContent = userProfile.videosCount || 0;
+// Аватар
+const avatar = document.getElementById('profileAvatar');
+  avatar.src = userProfile.avatarUrl || currentUser.photoURL || 'assets/images/ava.jpg';
+  avatar.style.opacity = '1';
+  // План
+  const isPremium = userProfile.plan === 'premium';
+  const badge = document.getElementById('planBadge');
+  badge.textContent = isPremium ? '⭐ PREMIUM' : 'FREE';
+  badge.className = 'profile-badge ' + (isPremium ? 'badge-premium' : 'badge-free');
+renderGrefShelf(uid, userProfile);
+  renderMyAdViews(uid);
+
+  // Поля настроек
+ 
+document.getElementById('nameInput').value = userProfile.displayName || '';
+  document.getElementById('usernameInput').value = userProfile.username || '';
+if (userProfile.city) document.getElementById('cityInput').value = userProfile.city;
+
+  // Если username уже менялся — заблокировать
+  if (userProfile.usernameChanged) {
+    document.getElementById('usernameInput').disabled = true;
+    document.getElementById('usernameHint').textContent = 'Username можно изменить только 1 раз';
+    document.getElementById('saveUsernameBtn').disabled = true;
+  }
+
+  // Тема
+  const theme = userProfile.theme || 'light';
+  setTheme(theme);
+
+ // Лимит треков
+  const limit = isPremium ? 50 : 10;
+  const count = userProfile.tracksCount || 0;
+  document.getElementById('trackLimitText').textContent = `${count} / ${limit} треков (${isPremium ? 'PREMIUM' : 'FREE'})`;
+  document.getElementById('trackLimitFill').style.width = Math.min(100, (count / limit) * 100) + '%';
+
+// Источник истины — активная карточка в artistApplications (привязана вручную админом ИЛИ оформлена самим артистом)
+await loadArtistCardStatus();
+  renderStaticAdminMsg(hasActiveArtistCard);
+  if (!myCardData) {
+    document.getElementById('artistCardBtn').disabled = false;
+    document.getElementById('artistCardBtn').style.opacity = '1';
+  }
+document.getElementById('addTrackBtn').style.display = hasActiveArtistCard ? 'flex' : 'none';
+  document.querySelector('.track-limit').style.display = 'none';
+  document.getElementById('addVideoBtn').style.display = hasActiveArtistCard ? 'flex' : 'none';
+  document.getElementById('profileStatsRow').style.display = hasActiveArtistCard ? 'flex' : 'none';
+  document.getElementById('tracksTabBtn').style.display = hasActiveArtistCard ? 'flex' : 'none';
+  document.getElementById('videosTabBtn').style.display = hasActiveArtistCard ? 'flex' : 'none';
+  if (!hasActiveArtistCard) {
+    document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+    document.querySelector('.profile-tab[data-tab="playlists"]').classList.add('active');
+    ['tracks','videos','playlists','settings'].forEach(name => {
+      document.getElementById('tab-' + name).style.display = name === 'playlists' ? '' : 'none';
+    });
+  }
+  if (hasActiveArtistCard) renderArtistEarnings(uid, userProfile);
+
+// Достижения
+checkAchievements(userProfile);
+  checkKingStatus(userProfile);
+  checkFanStreak(uid, userProfile);
+
+// Загрузить треки, клипы и сохранённые плейлисты
+  loadTracks(uid);
+  loadVideos(uid);
+  loadLikedPlaylists(uid);
+  // Правила из Firestore
+  try {
+    const rulesSnap = await getDoc(doc(db, 'settings', 'rules'));
+    if (rulesSnap.exists()) {
+      const r = rulesSnap.data();
+const rulesText = r.tracksText || r.videosText || '';
+      if (rulesText) {
+        document.querySelectorAll('.rules-text').forEach(el => el.textContent = rulesText);
+        // Проверяем новые ли правила (меньше минуты)
+        const rulesUpdatedAt = r.updatedAt?.seconds ? r.updatedAt.seconds * 1000 : 0;
+        const isNew = rulesUpdatedAt && (Date.now() - rulesUpdatedAt) < 60000;
+        if (isNew) {
+          document.querySelectorAll('.rules-block').forEach(el => el.classList.add('new-rules'));
+          setTimeout(() => {
+            document.querySelectorAll('.rules-block').forEach(el => el.classList.remove('new-rules'));
+          }, 60000 - (Date.now() - rulesUpdatedAt));
+        }
+      }
+    }
+  } catch(e) {}
+  // кольцо сториса на аватарке
+  try {
+    const storySnap = await getDocs(query(collection(db, 'stories'), where('userId', '==', uid), limit(1)));
+    const ring = document.getElementById('profileStoryRing');
+    if (!storySnap.empty) {
+      const s = storySnap.docs[0].data();
+      if ((s.expiresAt?.seconds ? s.expiresAt.seconds * 1000 : s.expiresAt) > Date.now()) {
+        ring.style.background = 'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)';
+        ring.style.cursor = 'pointer';
+ring.onclick = (e) => { e.stopPropagation(); window.open('artists.html','_blank'); };
+      }
+    }
+  } catch(e) {}
+loadAdminMessages(uid);
+  startMessagesListener(uid);
+  listenForPayoutRequests(uid);
+}
+// ========== ЗАГРУЗИТЬ КЛИПЫ ==========
+async function loadVideos(uid) {
+  const q = query(collection(db, 'videos'), where('userId', '==', uid));
+  const snap = await getDocs(q);
+  const list = document.getElementById('videosList');
+  console.log('TRACKS SNAP SIZE:', snap.size);
+  if (snap.empty) return;
+  list.style.background = 'none';
+  list.style.border = 'none';
+  list.style.borderRadius = '0';
+  list.style.overflow = 'visible';
+list.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <span style="font-size:13px;color:var(--pr-text3);">Клипов: ${snap.size}</span>
+      <div style="display:flex;gap:6px;">
+        <button id="videoPrev" style="width:32px;height:32px;border-radius:50%;border:1px solid var(--pr-border);background:var(--pr-card);color:var(--pr-text);cursor:pointer;font-size:16px;">‹</button>
+        <button id="videoNext" style="width:32px;height:32px;border-radius:50%;border:1px solid var(--pr-border);background:var(--pr-card);color:var(--pr-text);cursor:pointer;font-size:16px;">›</button>
+      </div>
+    </div>
+    <div id="videoCarousel" style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-behavior:smooth;"></div>`;
+  setTimeout(() => {
+    const c = document.getElementById('videoCarousel');
+    document.getElementById('videoPrev')?.addEventListener('click', () => c.scrollBy({left:-292,behavior:'smooth'}));
+    document.getElementById('videoNext')?.addEventListener('click', () => c.scrollBy({left:292,behavior:'smooth'}));
+  }, 0);
+const carousel = document.getElementById('videoCarousel');
+  const sortedDocs = snap.docs.slice().sort((a, b) => (b.data().pinned ? 1 : 0) - (a.data().pinned ? 1 : 0));
+  sortedDocs.forEach(d => {
+    const v = d.data();
+    let videoId = '';
+    try {
+      videoId = v.url.includes('youtu.be')
+        ? v.url.split('youtu.be/')[1]?.split('?')[0]
+        : new URL(v.url).searchParams.get('v');
+    } catch(e) {}
+    const card = document.createElement('div');
+    card.style.cssText = 'flex:0 0 280px;scroll-snap-align:start;background:var(--pr-card);border:1px solid var(--pr-border);border-radius:12px;overflow:hidden;position:relative;';
+card.innerHTML = `
+      ${v.pinned ? `<div style="position:absolute;top:8px;left:8px;z-index:5;display:flex;align-items:center;gap:4px;padding:4px 9px;border-radius:100px;background:linear-gradient(135deg,#8B1A2F,#e0243d);color:#fff;font-size:10px;font-weight:700;letter-spacing:.05em;box-shadow:0 2px 8px rgba(0,0,0,0.3);"><img src="assets/icons/premiere.png" style="width:11px;height:11px;filter:invert(1);"> ПРЕМЬЕРА</div>` : ''}
+      <iframe width="280" height="157" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen style="display:block;"></iframe>
+      <div style="padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <div id="vtitle-${d.id}" style="font-size:13px;font-weight:500;color:var(--pr-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">${v.title}</div>
+        <div style="display:flex;gap:4px;flex-shrink:0;">
+<button onclick="toggleVideoPin('${d.id}')" style="background:none;border:1px solid ${v.pinned ? 'var(--pr-accent)' : 'var(--pr-border)'};border-radius:6px;padding:4px 6px;cursor:pointer;" title="Закрепить как премьеру"><img src="assets/icons/zak.png" style="width:14px;height:14px;display:block;opacity:${v.pinned ? '1' : '0.5'};"></button>
+<button onclick="editVideo('${d.id}','${v.title.replace(/'/g,"\\'")}',this)" style="background:none;border:1px solid var(--pr-border);border-radius:6px;padding:4px 6px;cursor:pointer;"><img src="assets/icons/edit.png" style="width:14px;height:14px;display:block;"></button>
+          <button onclick="sendVideoToStory('${d.id}','${v.title.replace(/'/g,"\\'")}','${videoId}')" style="background:none;border:1px solid var(--pr-border);border-radius:6px;padding:4px 6px;cursor:pointer;" title="В сторис фрагмент до 1 мин"><img src="assets/icons/24.png" style="width:14px;height:14px;display:block;"></button>
+          <button onclick="deleteVideo('${d.id}')" style="background:none;border:1px solid rgba(231,76,60,0.3);border-radius:6px;padding:4px 6px;cursor:pointer;"><img src="assets/icons/delete.png" style="width:14px;height:14px;display:block;"></button>
+        </div>
+      </div>`;
+    carousel.appendChild(card);
+  });
+}
+// ========== ЗАГРУЗИТЬ ТРЕКИ ==========
+let currentAudio = null;
+let currentPlayBtn = null;
+
+async function loadTracks(uid) {
+  const q = query(collection(db, 'tracks'), where('userId', '==', uid));
+  const snap = await getDocs(q);
+  const list = document.getElementById('tracksList');
+  if (snap.empty) return;
+
+const hasCard = hasActiveArtistCard;
+list.innerHTML = '';
+  const docs = snap.docs.sort((a, b) => {
+    if (hasCard) return (a.data().order ?? 999999) - (b.data().order ?? 999999);
+    if (a.data().pinned && !b.data().pinned) return -1;
+    if (!a.data().pinned && b.data().pinned) return 1;
+    return (b.data().likes || 0) - (a.data().likes || 0);
+  });
+  let i = 1;
+  docs.forEach(d => {
+    const t = d.data();
+    const trackId = d.id;
+    console.log('TRACK DATA:', t);
+    console.log('trackUrl:', t.trackUrl);
+    const cover = t.coverUrl || 'assets/icons/mountain2.png';
+    const row = document.createElement('div');
+    row.className = 'track-row';
+    row.dataset.trackId = trackId;
+if (t.pinned) row.style.borderLeft = '3px solid var(--pr-accent)';
+    row.innerHTML = `
+      ${t.pinned ? `<div style="width:100%;padding-bottom:4px;font-size:10px;font-weight:700;color:var(--pr-accent);letter-spacing:.05em;display:flex;align-items:center;gap:4px;"><img src="${t.pinnedIcon || 'assets/icons/hit.png'}" style="width:11px;height:11px;"> ${t.pinnedBadge || 'ХИТ'}</div>` : ''}
+      <span class="track-num">${i++}</span>
+      <div class="track-cover-wrap" data-audio="${t.trackUrl|| ''}">
+        <img class="track-cover" src="${cover}" alt="">
+        <div class="track-play-overlay">
+          <img class="play-icon" src="assets/icons/play.png" alt="">
+        </div>
+      </div>
+      <div class="track-info">
+        <div class="track-name">${t.title}</div>
+        <div class="track-artist-name">${t.artist || ''}</div>
+      </div>
+<div class="track-actions">
+        <span class="track-duration">${formatDuration(t.duration || 0)}</span>
+        <button class="track-action-btn like-btn" data-id="${trackId}" data-likes="${t.likes || 0}">
+          <img src="assets/icons/like2.png" alt="like">
+          <span class="like-count">${t.likes || 0}</span>
+        </button>
+        <button class="track-action-btn share-btn" data-url="${t.trackUrl || ''}">
+          <img src="assets/icons/share.png" alt="share">
+        </button>
+   <span style="font-size:11px;color:var(--pr-text3);display:flex;align-items:center;gap:3px;">
+          <img src="assets/icons/play.png" style="width:12px;height:12px;opacity:0.4;"> ${t.plays || 0}
+        </span>
+        ${hasCard ? `
+        <div style="display:inline-flex;flex-direction:column;gap:1px;">
+          <button class="track-action-btn order-up-btn" data-id="${trackId}" style="padding:0;line-height:1;">▲</button>
+          <button class="track-action-btn order-down-btn" data-id="${trackId}" style="padding:0;line-height:1;">▼</button>
+        </div>` : ''}
+<div style="position:relative;display:inline-flex;" class="pn-tip-wrap">
+          <button class="track-action-btn pin-btn" data-id="${trackId}" data-pinned="${t.pinned || ''}" style="${t.pinned ? 'color:var(--pr-accent);' : ''}">
+            <img src="assets/icons/zak.png" style="width:14px;height:14px;opacity:${t.pinned ? '1' : '0.4'};">
+          </button>
+          <span class="pn-tip">Закрепить трек</span>
+        </div>
+${hasCard ? '' : `
+        <div style="position:relative;display:inline-flex;" class="pn-tip-wrap">
+          <button class="track-action-btn newrelease-btn" data-id="${trackId}">
+            <img src="assets/icons/new.png" style="width:14px;height:14px;opacity:0.5;">
+          </button>
+          <span class="pn-tip">Отправить в новинки</span>
+        </div>`}
+<div style="position:relative;display:inline-flex;" class="pn-tip-wrap">
+<button class="track-action-btn story-btn" data-id="${trackId}" data-type="track">
+            <img src="assets/icons/24.png" style="width:16px;height:16px;opacity:0.5;">
+          </button>
+          <span class="pn-tip">В сторис фрагмент до 1 мин</span>
+        </div>
+        <div style="position:relative;display:inline-flex;" class="pn-tip-wrap">
+          <button class="track-action-btn delete-track-btn" data-id="${trackId}">
+            <img src="assets/icons/delete.png" style="width:14px;height:14px;opacity:0.5;">
+          </button>
+          <span class="pn-tip">Удалить трек</span>
+        </div>
+      </div>`;
+
+    // прогресс бар
+    const progressWrap = document.createElement('div');
+    progressWrap.className = 'track-progress-wrap';
+    progressWrap.style.display = 'none';
+    progressWrap.innerHTML = `
+      <div class="track-progress-bar">
+        <div class="track-progress-fill"></div>
+      </div>
+      <span class="track-progress-time">0:00</span>`;
+    row.appendChild(progressWrap);
+    list.appendChild(row);
+
+    // плей/пауза
+    const coverWrap = row.querySelector('.track-cover-wrap');
+    const playIcon = row.querySelector('.play-icon');
+    const fill = row.querySelector('.track-progress-fill');
+    const timeEl = row.querySelector('.track-progress-time');
+
+    coverWrap.addEventListener('click', async () => {
+const url = t.trackUrl;
+      if (!url) return;
+
+      // если уже играет этот трек — пауза
+      if (currentAudio && currentPlayBtn === coverWrap && !currentAudio.paused) {
+        currentAudio.pause();
+        playIcon.src = 'assets/icons/play.png';
+        return;
+      }
+      // стоп предыдущий
+      if (currentAudio) {
+        currentAudio.pause();
+        if (currentPlayBtn) currentPlayBtn.querySelector('.play-icon').src = 'assets/icons/play.png';
+        currentPlayBtn.closest('.track-row').querySelector('.track-progress-wrap').style.display = 'none';
+      }
+
+      currentAudio = new Audio(url);
+      currentPlayBtn = coverWrap;
+      progressWrap.style.display = 'flex';
+      playIcon.src = 'assets/icons/pause.png';
+
+      currentAudio.addEventListener('timeupdate', () => {
+        if (!currentAudio.duration) return;
+        const pct = (currentAudio.currentTime / currentAudio.duration) * 100;
+        fill.style.width = pct + '%';
+        timeEl.textContent = formatDuration(currentAudio.currentTime) + ' / ' + formatDuration(currentAudio.duration);
+      });
+      currentAudio.addEventListener('ended', () => {
+        playIcon.src = 'assets/icons/play.png';
+        fill.style.width = '0%';
+        progressWrap.style.display = 'none';
+      });
+
+      currentAudio.play();
+
+      // считаем прослушивание
+      await updateDoc(doc(db, 'tracks', trackId), { plays: (t.plays || 0) + 1 });
+    });
+
+    // прогресс клик (перемотка)
+row.querySelector('.track-progress-bar').addEventListener('click', (e) => {
+      if (!currentAudio || currentPlayBtn !== coverWrap) return;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const pct = (e.clientX - rect.left) / rect.width;
+      if (currentAudio.duration) currentAudio.currentTime = pct * currentAudio.duration;
+    });
+
+    // лайк
+    row.querySelector('.like-btn').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      const cur = parseInt(btn.dataset.likes) || 0;
+      const isLiked = btn.classList.contains('liked');
+      const newVal = isLiked ? cur - 1 : cur + 1;
+      btn.dataset.likes = newVal;
+      btn.querySelector('.like-count').textContent = newVal;
+      btn.querySelector('img').src = isLiked ? 'assets/icons/like2.png' : 'assets/icons/like.png';
+      btn.classList.toggle('liked');
+      await updateDoc(doc(db, 'tracks', trackId), { likes: newVal });
+    });
+// закрепить
+    row.querySelector('.pin-btn').addEventListener('click', () => {
+      const isAlreadyPinned = t.pinned;
+      if (isAlreadyPinned) {
+        // снять закреп
+        updateDoc(doc(db, 'tracks', trackId), { pinned: false, pinnedBadge: '' });
+        showToast('Закреп снят', 'success');
+        loadTracks(currentUser.uid);
+        return;
+      }
+      // показать выбор бейджа
+      document.getElementById('pinModal').classList.remove('hidden');
+      document.getElementById('pinModal').dataset.trackId = trackId;
+    });
+// поделиться
+row.querySelector('.share-btn').addEventListener('click', () => {
+      const url = t.trackUrl;
+      if (!url) return;
+      if (navigator.share) {
+        navigator.share({ title: t.title, text: t.artist || '', url });
+      } else {
+        navigator.clipboard.writeText(url);
+        showToast('Ссылка скопирована ✓', 'success');
+      }
+    });
+// сторис — выбор фрагмента до 1 минуты, как у видео
+row.querySelector('.story-btn').addEventListener('click', () => {
+      sendTrackToStory(trackId, t.title, t.trackUrl || '', t.coverUrl || '');
+    });
+    // новинки
+  row.querySelector('.newrelease-btn')?.addEventListener('click', async () => {
+      const now = Date.now();
+      const lastKey = 'pn_newrelease_last_' + currentUser.uid;
+      const last = parseInt(localStorage.getItem(lastKey) || '0');
+      if (now - last < 86400000) {
+        const hrs = Math.ceil((86400000 - (now - last)) / 3600000);
+        return showToast('Подождите ещё ' + hrs + ' ч.', 'error');
+      }
+      const existing = await getDocs(query(collection(db, 'newReleases'), where('trackId', '==', trackId)));
+      if (!existing.empty) return showToast('Этот трек уже есть в новинках', 'error');
+      await addDoc(collection(db, 'newReleases'), {
+        trackId,
+        title: t.title,
+        artist: t.artist || userProfile.displayName,
+        coverUrl: t.coverUrl || null,
+        trackUrl: t.trackUrl,
+        duration: t.duration || 0,
+        userId: currentUser.uid,
+        likes: 0,
+        plays: t.plays || 0,
+        addedAt: serverTimestamp(),
+      });
+localStorage.setItem(lastKey, now.toString());
+      row.querySelector('.newrelease-btn img').style.opacity = '1';
+      showToast('Трек отправлен в новинки ✓', 'success');
+    });
+    // удалить трек (только свой, безопасно скоуплено по trackId из своего списка)
+    row.querySelector('.delete-track-btn').addEventListener('click', async () => {
+    const ok = await showConfirm('Файл, все прослушивания и лайки будут стёрты безвозвратно, восстановить трек будет невозможно. Вы уверены?', 'Удалить трек «' + t.title + '»?');
+      if (!ok) return;
+      if (t.blockDocIds) {
+        for (const [block, docId] of Object.entries(t.blockDocIds)) {
+          await deleteDoc(doc(db, block, docId)).catch(() => {});
+        }
+      }
+await deleteDoc(doc(db, 'tracks', trackId));
+      const newCount = Math.max(0, (userProfile.tracksCount || 1) - 1);
+      await updateDoc(doc(db, 'users', currentUser.uid), { tracksCount: newCount });
+      userProfile.tracksCount = newCount;
+      showToast('Трек удалён', 'success');
+      loadTracks(currentUser.uid);
+    });
+    // сортировка (только для артистов с карточкой)
+    row.querySelector('.order-up-btn')?.addEventListener('click', async () => {
+      const idx = docs.findIndex(x => x.id === trackId);
+      if (idx <= 0) return;
+      const prevDoc = docs[idx - 1];
+      const curOrder = t.order ?? idx;
+      const prevOrder = prevDoc.data().order ?? (idx - 1);
+      await updateDoc(doc(db, 'tracks', trackId), { order: prevOrder });
+      await updateDoc(doc(db, 'tracks', prevDoc.id), { order: curOrder });
+      loadTracks(currentUser.uid);
+    });
+    row.querySelector('.order-down-btn')?.addEventListener('click', async () => {
+      const idx = docs.findIndex(x => x.id === trackId);
+      if (idx === -1 || idx >= docs.length - 1) return;
+      const nextDoc = docs[idx + 1];
+      const curOrder = t.order ?? idx;
+      const nextOrder = nextDoc.data().order ?? (idx + 1);
+      await updateDoc(doc(db, 'tracks', trackId), { order: nextOrder });
+      await updateDoc(doc(db, 'tracks', nextDoc.id), { order: curOrder });
+      loadTracks(currentUser.uid);
+    });
+  });
+  
+}
+// ========== СОХРАНЁННЫЕ ПЛЕЙЛИСТЫ ==========
+function loadLikedPlaylists(uid) {
+  const grid = document.getElementById('likedPlaylistsGrid');
+  if (!grid) return;
+  onSnapshot(query(collection(db, 'playlistLikes'), where('uid', '==', uid)), (snap) => {
+    if (snap.empty) {
+      grid.innerHTML = `<div class="tracks-empty" style="grid-column:1/-1;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <p>Пока нет сохранённых плейлистов<br><span style="font-size:12px">Лайкни плейлист на странице «Плейлисты», и он появится здесь</span></p>
+      </div>`;
+      return;
+    }
+    const items = snap.docs.map(d => d.data()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    grid.innerHTML = items.map(pl => `
+      <a href="playlists.html" style="display:block;text-decoration:none;border-radius:12px;overflow:hidden;background:var(--pr-card);border:1px solid var(--pr-border);transition:transform .15s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="position:relative;aspect-ratio:1;overflow:hidden;">
+          <img src="${pl.cover}" alt="${pl.title}" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <div style="position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;">
+            <img src="assets/icons/like.png" style="width:11px;height:11px;">
+          </div>
+        </div>
+        <div style="padding:8px 10px;">
+          <div style="font-size:12px;font-weight:600;color:var(--pr-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${pl.title}</div>
+          ${pl.tag ? `<div style="font-size:10px;color:var(--pr-text3);margin-top:2px;">${pl.tag}</div>` : ''}
+        </div>
+      </a>`).join('');
+  });
+}
+// ========== ДОСТИЖЕНИЯ ==========
+function renderStaticAdminMsg(hasCard) {
+  const el = document.getElementById('staticAdminMsgText');
+  if (!el) return;
+  if (hasCard) {
+    el.innerHTML = `<img src="assets/icons/smile.png" style="width:16px;height:16px;flex-shrink:0;"> <span>Уважаемые артисты! Просим вас <strong>заполнить карточку полностью</strong> - все соцсети, фото и био. Это поможет карточке быстрее попасть в <strong>топ чарты</strong> и привлечь больше фанатов.</span>`;
+  } else {
+    el.innerHTML = `<img src="assets/icons/smile.png" style="width:16px;height:16px;flex-shrink:0;"> <span>Если вы фанат таджикского рэпа - можете игнорировать это сообщение. Если вы <strong>артист</strong> - советуем подать заявку на создание карточки артиста, чтобы ваши треки услышала вся республика.</span>`;
+  }
+}
+
+function checkAchievements(profile) {
+  const wrap = document.getElementById('achievementsWrap');
+  wrap.innerHTML = '';
+
+  const tracks = profile.tracksCount || 0;
+  const likes = profile.totalLikes || 0;
+  const followers = profile.followersCount || 0;
+  const videos = profile.videosCount || 0;
+
+const all = [];
+  const earned = all.filter(a => a.cond);
+  if (earned.length === 0) return;
+
+  earned.forEach(a => {
+    const el = document.createElement('div');
+    el.className = 'achievement ' + a.cls;
+    el.setAttribute('data-tip', a.tip);
+    el.innerHTML = `<span>${a.icon}</span><span>${a.text}</span>`;
+    wrap.appendChild(el);
+  });
+}
+function formatDuration(sec) {
+  const m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+  return `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+// ========== ТАБЫ ==========
+document.querySelectorAll('.profile-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+   ['tracks','videos','playlists','settings'].forEach(name => {
+      document.getElementById('tab-' + name).style.display = tab.dataset.tab === name ? '' : 'none';
+    });
+  });
+});
+
+// ========== ТЕМА ==========
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.t === t);
+  });
+}
+
+document.querySelectorAll('.theme-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    setTheme(btn.dataset.t);
+    if (currentUser) {
+      await updateDoc(doc(db, 'users', currentUser.uid), { theme: btn.dataset.t });
+    }
+  });
+});
+// ========== ПРОСМОТРЫ МОЕЙ РЕКЛАМЫ ==========
+async function renderMyAdViews(uid) {
+  const card = document.getElementById('myAdViewsCard');
+  const list = document.getElementById('myAdViewsList');
+  try {
+    const snap = await getDocs(query(collection(db, 'fanAdViews'), where('fromUid', '==', uid)));
+    if (snap.empty) { card.style.display = 'none'; return; }
+    card.style.display = 'block';
+    list.innerHTML = snap.docs.map(d => {
+      const v = d.data();
+      return `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--pr-bg3);border-radius:10px;padding:10px 12px;">
+        <div style="font-size:12.5px;font-weight:600;color:var(--pr-text);">Реклама у ${v.artistName || 'артиста'}</div>
+        <div style="font-size:12.5px;font-weight:700;color:var(--pr-accent);">${v.views || 0} 👁</div>
+      </div>`;
+    }).join('');
+  } catch (e) {
+    console.warn('ad views load error', e);
+    card.style.display = 'none';
+  }
+}
+
+// ========== ЗАРАБОТОК АРТИСТА ==========
+const GREF_ARTIST_SHARE = 5; // TJS за один GREF — сколько получает артист
+const GREF_PRICE_TJS = 10;   // TJS — полная цена одного GREF для покупателя
+const PAYOUT_THRESHOLD = 100; // TJS
+
+async function renderArtistEarnings(uid, profile) {
+  const card = document.getElementById('artistEarningsCard');
+  card.style.display = 'block';
+  try {
+    const snap = await getDocs(query(collection(db, 'artistGifts'), where('artistId', '==', uid)));
+    const now = new Date();
+    const monthKey = `${now.getFullYear()}-${now.getMonth()}`;
+    const lastPayoutMs = profile.lastPayoutAt?.seconds ? profile.lastPayoutAt.seconds * 1000 : 0;
+
+let monthCount = 0, balanceCount = 0;
+    const monthlyMap = {}; // 'YYYY-M' -> количество GREF
+    snap.docs.forEach(d => {
+      const g = d.data();
+const ms = g.giftedAt?.seconds ? g.giftedAt.seconds * 1000 : Date.now();
+      const gd = new Date(ms);
+      const key = `${gd.getFullYear()}-${gd.getMonth()}`;
+      monthlyMap[key] = (monthlyMap[key] || 0) + 1;
+      if (key === monthKey) monthCount++;
+      if (ms > lastPayoutMs) balanceCount++;
+    });
+
+    const monthEarned = monthCount * GREF_ARTIST_SHARE;
+    const balance = balanceCount * GREF_ARTIST_SHARE;
+    document.getElementById('earningsMonthValue').textContent = `${monthEarned} TJS`;
+    document.getElementById('earningsBalanceValue').textContent = `${balance} TJS`;
+
+    // История по месяцам (последние 6, без текущего)
+    const historyList = document.getElementById('earningsHistoryList');
+    const monthKeys = Object.keys(monthlyMap)
+      .filter(k => k !== monthKey)
+      .sort((a, b) => {
+        const [ay, am] = a.split('-').map(Number);
+        const [by, bm] = b.split('-').map(Number);
+        return (by * 12 + bm) - (ay * 12 + am);
+      })
+      .slice(0, 6);
+    if (monthKeys.length === 0) {
+      historyList.innerHTML = `<div style="font-size:11px;color:var(--pr-text3);">Пока нет данных за прошлые месяцы</div>`;
+    } else {
+      historyList.innerHTML = monthKeys.map(k => {
+        const [y, m] = k.split('-').map(Number);
+        const monthName = new Date(y, m, 1).toLocaleDateString('ru', { month: 'long', year: 'numeric' });
+        const earned = monthlyMap[k] * GREF_ARTIST_SHARE;
+        return `<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--pr-text2);background:var(--pr-bg3);border-radius:8px;padding:8px 10px;">
+          <span style="text-transform:capitalize;">${monthName}</span>
+          <span style="font-weight:700;color:var(--pr-text);">${earned} TJS</span>
+        </div>`;
+      }).join('');
+    }
+
+    // Всего просмотров рекламы фанатов на моей карточке (видно только артисту)
+    try {
+      const adViewsSnap = await getDocs(query(collection(db, 'fanAdViews'), where('artistId', '==', uid)));
+      const totalCardViews = adViewsSnap.docs.reduce((sum, d) => sum + (d.data().views || 0), 0);
+      const cardViewsEl = document.getElementById('earningsCardViewsValue');
+      if (cardViewsEl) cardViewsEl.textContent = totalCardViews;
+    } catch (e) {}
+
+    const statusEl = document.getElementById('earningsStatusText');
+    const btn = document.getElementById('earningsDownloadBtn');
+    if (balance >= PAYOUT_THRESHOLD) {
+      statusEl.innerHTML = `Баланс достиг ${PAYOUT_THRESHOLD} TJS - можно запросить выплату. Скачай отчёт, укажи номер карты D CITY и пришли администрации в <a href="https://t.me/producer992muz" target="_blank" style="color:var(--pr-accent);">Telegram</a>.`;
+      btn.disabled = false;
+      btn.style.cursor = 'pointer';
+      btn.style.background = 'linear-gradient(90deg,#8B1A2F,#d4a843)';
+      btn.style.color = '#fff';
+    } else {
+      statusEl.textContent = `Выплата производится, когда баланс достигает ${PAYOUT_THRESHOLD} TJS. Не набрал в этом месяце - сумма переходит на следующий.`;
+      btn.disabled = true;
+      btn.style.cursor = 'not-allowed';
+      btn.style.background = 'var(--pr-bg3)';
+      btn.style.color = 'var(--pr-text2)';
+    }
+
+    btn.onclick = () => {
+      if (btn.disabled) return;
+      downloadEarningsReport(profile, monthEarned, balance);
+    };
+const cardValueEl = document.getElementById('earningsCardValue');
+    renderPayoutInfoValue(cardValueEl, profile);
+    document.getElementById('earningsCardBtn').onclick = () => openPayoutInfoModal();
+  } catch (e) {
+    console.warn('earnings load error', e);
+  }
+}
+
+function renderPayoutInfoValue(el, profile) {
+  if (!el) return;
+  if (profile.payoutMethod === 'qr' && profile.payoutQrUrl) {
+    el.textContent = 'Реквизиты: QR-код загружен ✓';
+  } else if (profile.payoutMethod === 'phone' && profile.payoutPhone) {
+    el.textContent = `Реквизиты: ${profile.payoutPhone} (D CITY)`;
+  } else {
+    el.textContent = 'Реквизиты пока не указаны';
+  }
+}
+
+let selectedPayoutMethod = 'phone';
+let payoutQrFile = null;
+
+function setPayoutMethodTab(method) {
+  selectedPayoutMethod = method;
+  document.querySelectorAll('.payout-method-btn').forEach(btn => {
+    const active = btn.dataset.method === method;
+    btn.style.background = active ? 'var(--pr-accent)' : 'transparent';
+    btn.style.color = active ? '#fff' : 'var(--pr-text2)';
+  });
+  document.getElementById('payoutPhoneBlock').classList.toggle('hidden', method !== 'phone');
+  document.getElementById('payoutQrBlock').classList.toggle('hidden', method !== 'qr');
+}
+
+document.querySelectorAll('.payout-method-btn').forEach(btn => {
+  btn.onclick = () => setPayoutMethodTab(btn.dataset.method);
+});
+
+document.getElementById('payoutQrInput').onchange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  payoutQrFile = file;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const preview = document.getElementById('payoutQrPreview');
+    preview.src = ev.target.result;
+    preview.style.display = 'block';
+    document.getElementById('payoutQrLabel').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+};
+
+function openPayoutInfoModal() {
+  const method = userProfile.payoutMethod || 'phone';
+  setPayoutMethodTab(method);
+  document.getElementById('payoutPhoneInput').value = userProfile.payoutPhone || '';
+  const preview = document.getElementById('payoutQrPreview');
+  const label = document.getElementById('payoutQrLabel');
+  if (userProfile.payoutQrUrl) {
+    preview.src = userProfile.payoutQrUrl;
+    preview.style.display = 'block';
+    label.style.display = 'none';
+  } else {
+    preview.style.display = 'none';
+    label.style.display = 'block';
+    preview.removeAttribute('src');
+  }
+  payoutQrFile = null;
+  document.getElementById('payoutInfoModal').classList.remove('hidden');
+}
+
+document.getElementById('payoutInfoSaveBtn').onclick = async () => {
+  if (!currentUser) return;
+  const btn = document.getElementById('payoutInfoSaveBtn');
+  const originalText = btn.textContent;
+  try {
+    const update = { payoutMethod: selectedPayoutMethod };
+    if (selectedPayoutMethod === 'phone') {
+      const phone = document.getElementById('payoutPhoneInput').value.trim();
+      if (!/^\d{9}$/.test(phone)) { showToast('Введи корректный номер D CITY (9 цифр, без +992)', 'error'); return; }
+      update.payoutPhone = phone;
+    } else {
+      if (!payoutQrFile && !userProfile.payoutQrUrl) { showToast('Загрузи QR-код', 'error'); return; }
+      if (payoutQrFile) {
+        btn.disabled = true;
+        btn.textContent = 'Загружаем QR...';
+        const data = await uploadToCloudinary(payoutQrFile, 'pamir-music/payout-qr');
+        update.payoutQrUrl = `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/q_auto,f_auto/${data.public_id}`;
+      }
+    }
+    await updateDoc(doc(db, 'users', currentUser.uid), update);
+    Object.assign(userProfile, update);
+    payoutQrFile = null;
+    renderPayoutInfoValue(document.getElementById('earningsCardValue'), userProfile);
+    document.getElementById('payoutInfoModal').classList.add('hidden');
+    showToast('Реквизиты сохранены ✓', 'success');
+  } catch (err) {
+    showToast('Ошибка: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+};
+
+function listenForPayoutRequests(uid) {
+  const q = query(collection(db, 'payoutRequests'), where('userId', '==', uid), where('status', '==', 'pending'));
+  onSnapshot(q, (snap) => {
+    if (snap.empty) return;
+    const sorted = snap.docs.slice().sort((a, b) => (b.data().createdAt?.seconds || 0) - (a.data().createdAt?.seconds || 0));
+    const docSnap = sorted[0];
+    const req = docSnap.data();
+    document.getElementById('payoutConfirmText').textContent = `Мы отправили тебе ${req.amount} TJS на указанные реквизиты. Проверь, поступил ли платёж.`;
+    document.getElementById('payoutConfirmModal').classList.remove('hidden');
+
+    document.getElementById('payoutConfirmYesBtn').onclick = async () => {
+      await updateDoc(doc(db, 'payoutRequests', docSnap.id), { status: 'confirmed', respondedAt: serverTimestamp() });
+      await updateDoc(doc(db, 'users', uid), { lastPayoutAt: serverTimestamp(), totalPaid: increment(req.amount) });
+      document.getElementById('payoutConfirmModal').classList.add('hidden');
+      showToast('Спасибо! Выплата подтверждена ✓', 'success');
+      userProfile.lastPayoutAt = { seconds: Math.floor(Date.now() / 1000) };
+      renderArtistEarnings(uid, userProfile);
+    };
+
+    document.getElementById('payoutConfirmNoBtn').onclick = async () => {
+      await updateDoc(doc(db, 'payoutRequests', docSnap.id), { status: 'denied', respondedAt: serverTimestamp() });
+      document.getElementById('payoutConfirmModal').classList.add('hidden');
+      showToast('Мы получили сообщение - напиши в Telegram администрации для проверки платежа', 'error');
+    };
+  });
+}
+function downloadEarningsReport(profile, monthEarned, balance) {
+  const w = window.open('', '_blank');
+  const now = new Date().toLocaleDateString('ru');
+  w.document.write(`
+    <html><head><title>Отчёт о заработке</title></head>
+    <body style="font-family:Arial,sans-serif;padding:30px;">
+      <h2>Отчёт о заработке - 992MUZ.RU</h2>
+      <p>Артист: <b>${profile.displayName || ''}</b></p>
+      <p>Дата отчёта: ${now}</p>
+      <p>Заработано в этом месяце: <b>${monthEarned} TJS</b></p>
+      <p>Итого к выплате: <b>${balance} TJS</b></p>
+      <p>Номер карты D CITY: <b>${profile.payoutCard || 'не указан'}</b></p>
+      <hr>
+      <p>Отправьте этот файл (сохранённый как PDF) и номер карты администрации: 
+      <a href="https://t.me/producer992muz">t.me/producer992muz</a></p>
+<script>window.print();<\/script>
+    <\/body><\/html>
+  `);
+  w.document.close();
+}
+// ========== GREF ==========
+function renderGrefShelf(uid, profile) {
+  const cta = document.getElementById('grefCta');
+  const shelf = document.getElementById('grefShelfCard');
+  if (!cta || !shelf) return;
+
+// миграция со старого поля grefBalance, если новых счётчиков ещё нет
+  const legacyBalance = profile.grefBalance || 0;
+  const nickel = profile.grefNickelCount ?? (legacyBalance > 0 ? legacyBalance : 0);
+  const gold = profile.grefGoldCount || 0;
+  const total = nickel + gold;
+  const claimed = !!profile.grefClaimed;
+
+  if (claimed) {
+    cta.style.display = 'none';
+    shelf.style.display = 'block';
+    document.getElementById('grefShelfCount').textContent = total;
+    const viewer = document.getElementById('grefShelfViewer');
+if (total === 0) {
+      viewer.innerHTML = `<div style="font-size:12px;color:var(--pr-text3);">Пока пусто</div>`;
+      const countsTextEmpty = document.getElementById('grefCountsText');
+      if (countsTextEmpty) countsTextEmpty.textContent = '';
+      const stripEmpty = document.getElementById('grefItemsStrip');
+      if (stripEmpty) stripEmpty.innerHTML = '';
+    } else {
+      const model = gold > 0 ? 'assets/models/logo.glb' : 'assets/models/metal.glb';
+viewer.innerHTML = `<model-viewer src="${model}" auto-rotate camera-controls autoplay disable-zoom rotation-per-second="90deg" style="width:130px;height:130px;background:transparent;"></model-viewer>`;
+      const countsText = document.getElementById('grefCountsText');
+      if (countsText) countsText.textContent = `${nickel} серебряных · ${gold} золотых`;
+      const strip = document.getElementById('grefItemsStrip');
+      if (strip) {
+        let itemsHtml = '';
+        for (let i = 0; i < gold; i++) {
+          itemsHtml += `<div style="flex-shrink:0;width:38px;height:38px;border-radius:10px;background:var(--pr-bg3);border:1px solid rgba(212,168,67,0.4);display:flex;align-items:center;justify-content:center;"><img src="assets/icons/game-coin.png" style="width:20px;height:20px;"></div>`;
+        }
+        for (let i = 0; i < nickel; i++) {
+          itemsHtml += `<div style="flex-shrink:0;width:38px;height:38px;border-radius:10px;background:var(--pr-bg3);border:1px solid var(--pr-border);display:flex;align-items:center;justify-content:center;"><img src="assets/icons/silver-badge.png" style="width:20px;height:20px;"></div>`;
+        }
+        strip.innerHTML = itemsHtml;
+      }
+    }
+  } else {
+    cta.style.display = 'flex';
+    shelf.style.display = 'none';
+  }
+}
+async function claimFirstGref(uid) {
+  const cta = document.getElementById('grefCta');
+  if (cta) cta.style.pointerEvents = 'none';
+  try {
+// сам предмет GREF — отдельная запись в коллекции
+    await addDoc(collection(db, 'grefItems'), {
+      ownerId: uid,
+      source: 'free_signup',
+      modelType: 'nickel',
+      obtainedAt: serverTimestamp(),
+      status: 'owned'
+    });
+    // быстрые счётчики в профиле по типам, чтобы не считать коллекцию каждый раз
+await updateDoc(doc(db, 'users', uid), { grefNickelCount: increment(1), grefClaimed: true });
+    userProfile.grefNickelCount = (userProfile.grefNickelCount || 0) + 1;
+    userProfile.grefClaimed = true;
+    showGrefPopup();
+    renderGrefShelf(uid, userProfile);
+  } catch (err) {
+    console.error('Ошибка получения GREF:', err);
+    alert('Не удалось получить GREF, попробуй ещё раз чуть позже');
+  } finally {
+    if (cta) cta.style.pointerEvents = 'auto';
+  }
+}
+
+function showGrefPopup() {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:999;display:flex;align-items:center;justify-content:center;padding:16px;animation:kingFadeIn .4s ease;';
+  overlay.innerHTML = `
+    <div style="background:var(--pr-card);border-radius:24px;padding:40px 28px;max-width:360px;width:100%;text-align:center;position:relative;">
+     <model-viewer src="assets/models/metal.glb" auto-rotate autoplay disable-zoom rotation-per-second="90deg" interaction-prompt="none" style="width:150px;height:150px;margin:0 auto 16px;display:block;"></model-viewer>
+      <h2 style="font-size:22px;font-weight:700;color:var(--pr-text);margin-bottom:10px;">🎉 Твой первый GREF у тебя!</h2>
+      <p style="font-size:14px;color:var(--pr-text2);line-height:1.7;margin-bottom:20px;">Дари GREF любимым артистам на их странице. Хочешь больше - можно купить.</p>
+      <button onclick="this.closest('div').parentElement.remove()" style="width:100%;padding:13px;background:var(--pr-accent);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;">Класс! 🔥</button>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function showGrefPurchasePopup(m) {
+  const typeLabel = m.grefType === 'gold' ? 'золотых' : 'серебряных';
+  const qty = m.qty || 0;
+  const amount = m.amount || 0;
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:999;display:flex;align-items:center;justify-content:center;padding:16px;animation:kingFadeIn .4s ease;';
+  overlay.innerHTML = `
+    <div style="background:var(--pr-card);border-radius:24px;padding:36px 28px;max-width:380px;width:100%;text-align:center;position:relative;">
+      <img src="assets/models/happy.gif" alt="" style="width:110px;height:110px;margin:0 auto 16px;display:block;">
+      <h2 style="font-size:21px;font-weight:700;color:var(--pr-text);margin-bottom:10px;">Поздравляем!</h2>
+      <p style="font-size:14px;color:var(--pr-text2);line-height:1.7;margin-bottom:6px;">Вы приобрели <strong style="color:var(--pr-accent);">${qty} ${typeLabel} GREF</strong>${amount ? ` за ${amount} TJS` : ''}.</p>
+      <p style="font-size:13px;color:var(--pr-text3);line-height:1.7;margin-bottom:22px;">Теперь вы можете дарить их артистам и рекламировать своё видео с YouTube или аккаунт в Instagram.</p>
+      <div style="display:flex;gap:8px;">
+        <button id="grefPopupInfoBtn" style="width:44px;flex-shrink:0;border-radius:12px;background:var(--pr-bg3);border:1px solid var(--pr-border);color:var(--pr-text2);font-size:15px;font-weight:700;cursor:pointer;">?</button>
+        <a href="artists.html" style="flex:1;padding:13px;background:var(--pr-accent);color:#fff;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;">Подарить артисту</a>
+      </div>
+      <div id="grefPopupInfoTip" style="display:none;text-align:left;margin-top:14px;background:#fff8f0;border:1px solid #ffe0b2;border-radius:10px;padding:12px 14px;font-size:11.5px;color:#8a5a00;line-height:1.7;">
+        Указывайте строго ссылку на YouTube-видео или ник Instagram (например, <b>@992muz</b>). Реклама аккаунтов с запрещённым, оскорбительным или немузыкальным содержанием будет удалена, а ваш профиль на <b>992MUZ.RU</b> - заблокирован навсегда, без возврата средств и восстановления. Реклама показывается в карточке артиста 30 дней, после чего перестаёт быть на видном месте, но остаётся в разделе «Фанаты» - оттуда она не удаляется.
+      </div>
+      <button onclick="this.closest('div').parentElement.remove()" style="width:100%;padding:11px;background:none;border:1px solid var(--pr-border);border-radius:12px;color:var(--pr-text2);font-size:13px;cursor:pointer;margin-top:14px;">Закрыть</button>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector('#grefPopupInfoBtn').addEventListener('click', () => {
+    const tip = overlay.querySelector('#grefPopupInfoTip');
+    tip.style.display = tip.style.display === 'none' ? 'block' : 'none';
+  });
+}
+document.getElementById('grefCta').addEventListener('click', (e) => {
+  e.preventDefault();
+  if (currentUser) claimFirstGref(currentUser.uid);
+});
+
+document.getElementById('grefBuyMoreBtn').addEventListener('click', () => {
+  window.open('https://t.me/producer992muz', '_blank');
+});
+document.getElementById('grefInfoBtn').addEventListener('click', () => {
+  document.getElementById('grefInfoModal').classList.remove('hidden');
+});
+document.getElementById('closeGrefInfoBtn').addEventListener('click', () => {
+  document.getElementById('grefInfoModal').classList.add('hidden');
+});
+document.getElementById('grefItemsPrev').addEventListener('click', () => {
+  document.getElementById('grefItemsStrip').scrollBy({ left: -120, behavior: 'smooth' });
+});
+document.getElementById('grefItemsNext').addEventListener('click', () => {
+  document.getElementById('grefItemsStrip').scrollBy({ left: 120, behavior: 'smooth' });
+});
+// ========== АВАТАР ==========
+document.getElementById('avatarEditBtn').addEventListener('click', () => {
+  document.getElementById('avatarInput').click();
+});
+document.getElementById('avatarInput').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    showToast('Загружаем аватар...', '');
+    const result = await uploadAvatar(file);
+    document.getElementById('profileAvatar').src = result.url;
+    await updateDoc(doc(db, 'users', currentUser.uid), {
+      avatarUrl: result.url,
+      avatarPublicId: result.publicId
+    });
+    showToast('Аватар обновлён ✓', 'success');
+  } catch(err) { showToast(err.message, 'error'); }
+});
+
+
+
+// ========== СОХРАНИТЬ ИМЯ ==========
+document.getElementById('saveNameBtn').addEventListener('click', async () => {
+  const val = document.getElementById('nameInput').value.trim();
+  const hint = document.getElementById('nameHint');
+  const valid = /^[а-яёА-ЯЁa-zA-Z.\-_]{1,10}$/.test(val);
+  if (!valid) {
+    hint.textContent = 'Только буквы рус/англ, . _ - и максимум 30 символов';
+    hint.className = 'settings-field-hint error';
+    return;
+  }
+  await updateDoc(doc(db, 'users', currentUser.uid), { displayName: val });
+  document.getElementById('displayName').textContent = val;
+  hint.textContent = 'Сохранено ✓';
+  hint.className = 'settings-field-hint success';
+  showToast('Имя обновлено ✓', 'success');
+  setTimeout(() => { hint.textContent = 'Можно менять неограниченно'; hint.className = 'settings-field-hint'; }, 3000);
+});
+
+// ========== СОХРАНИТЬ USERNAME ==========
+document.getElementById('saveUsernameBtn').addEventListener('click', async () => {
+  const val = document.getElementById('usernameInput').value.trim().toLowerCase();
+  const hint = document.getElementById('usernameHint');
+  const valid = /^[a-z0-9._]{1,30}$/.test(val);
+  if (!valid) {
+    hint.textContent = 'Только лат. буквы, цифры, . _ - и макс. 10 символов';
+    hint.className = 'settings-field-hint error';
+    return;
+  }
+  // Проверить занятость
+  hint.textContent = 'Проверяем...';
+  const q = query(collection(db, 'users'), where('username', '==', val));
+  const snap = await getDocs(q);
+  const taken = snap.docs.some(d => d.id !== currentUser.uid);
+  if (taken) {
+    hint.textContent = 'Этот username уже занят';
+    hint.className = 'settings-field-hint error';
+    return;
+  }
+  await updateDoc(doc(db, 'users', currentUser.uid), {
+    username: val,
+    usernameChanged: true
+  });
+  document.getElementById('displayUsername').textContent = '@' + val;
+  document.getElementById('usernameInput').disabled = true;
+  document.getElementById('saveUsernameBtn').disabled = true;
+  hint.textContent = 'Username установлен. Изменить больше нельзя.';
+  hint.className = 'settings-field-hint success';
+  showToast('Username сохранён ✓', 'success');
+});
+
+// ========== ВЫХОД ==========
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  await signOut(auth);
+  window.location.href = 'index.html';
+});
+
+document.getElementById('artistCardViewBtn').addEventListener('click', () => {
+  if (!currentUser) return showToast('Подождите...', 'error');
+  window.open('artists.html?artist=' + currentUser.uid, '_blank');
+});
+
+// ========== ДОБАВИТЬ ТРЕК (открыть модал) ==========
+document.getElementById('addTrackBtn').addEventListener('click', async () => {
+  if (!hasActiveArtistCard) {
+    showToast('Загрузка треков доступна только с активной карточкой артиста', 'error');
+    return;
+  }
+  document.getElementById('sendTrackTelegramModal').classList.remove('hidden');
+});
+document.getElementById('closeModalBtn').addEventListener('click', () => {
+  document.getElementById('uploadModal').classList.add('hidden');
+});
+document.getElementById('addVideoBtn').addEventListener('click', async () => {
+  if (!hasActiveArtistCard) {
+    showToast('Загрузка клипов доступна только с активной карточкой артиста', 'error');
+    return;
+  }
+  document.getElementById('videoModal').classList.remove('hidden');
+});
+document.getElementById('closePremiumModal').addEventListener('click', () => {
+  document.getElementById('premiumModal').classList.add('hidden');
+});
+document.getElementById('closePremiumModal2').addEventListener('click', () => {
+  document.getElementById('premiumModal').classList.add('hidden');
+});
+document.getElementById('closeVideoModalBtn').addEventListener('click', () => {
+  document.getElementById('videoModal').classList.add('hidden');
+});
+document.getElementById('trackFileInput').addEventListener('change', () => updateTrackPreview());
+document.getElementById('trackTitle').addEventListener('input', () => updateTrackPreview());
+document.getElementById('trackArtist').addEventListener('input', () => updateTrackPreview());
+// ========== ПОДТВЕРЖДЕНИЕ ЗАГРУЗКИ ==========
+document.getElementById('uploadTrackBtn').addEventListener('click', () => {
+  const audioFile = document.getElementById('trackFileInput').files[0];
+  const title = document.getElementById('trackTitle').value.trim();
+  const artist = document.getElementById('trackArtist').value.trim();
+  if (!audioFile) return showToast('Выбери аудио файл', 'error');
+  if (!title) return showToast('Введи название трека', 'error');
+
+  // заполняем превью в модалке
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmArtist').textContent = artist || 'Артист не указан';
+  document.getElementById('confirmCover').src = croppedCoverBlob
+    ? URL.createObjectURL(croppedCoverBlob)
+    : 'assets/icons/mountain2.png';
+  document.getElementById('confirmUploadModal').classList.remove('hidden');
+});
+
+document.getElementById('confirmBackBtn').addEventListener('click', () => {
+  document.getElementById('confirmUploadModal').classList.add('hidden');
+});
+
+document.getElementById('confirmProceedBtn').addEventListener('click', async () => {
+  document.getElementById('confirmUploadModal').classList.add('hidden');
+  const audioFile = document.getElementById('trackFileInput').files[0];
+  const coverFile = croppedCoverBlob ? new File([croppedCoverBlob], 'cover.jpg', {type:'image/jpeg'}) : document.getElementById('coverFileInput').files[0];
+  const title = document.getElementById('trackTitle').value.trim();
+  const artist = document.getElementById('trackArtist').value.trim();
+
+  if (!audioFile) return showToast('Выбери аудио файл', 'error');
+  if (!title) return showToast('Введи название трека', 'error');
+  const progressEl = document.getElementById('uploadProgress');
+  const progressFill = document.getElementById('uploadProgressFill');
+  const progressText = document.getElementById('uploadProgressText');
+  progressEl.style.display = 'block';
+  try {
+    const { uploadTrack } = await import('./js/upload/track-upload.js');
+   const result = await uploadTrack(audioFile, coverFile, { title, artist }, (p, stage) => {
+      progressFill.style.width = p + '%';
+      progressText.textContent = stage === 'cover' ? `Обложка: ${p}%` : `Трек: ${p}%`;
+    });
+    await addDoc(collection(db, 'tracks'), {
+      ...result.firestoreData,
+      userId: currentUser.uid,
+      displayName: userProfile.displayName,
+      uploadedAt: serverTimestamp(),
+      plays: 0,
+      likes: 0,
+    });
+const newTrackCount = (userProfile.tracksCount || 0) + 1;
+    await updateDoc(doc(db, 'users', currentUser.uid), {
+      tracksCount: newTrackCount
+    });
+    userProfile.tracksCount = newTrackCount;
+    document.getElementById('uploadModal').classList.add('hidden');
+    showToast('Трек загружен ✓', 'success');
+    loadTracks(currentUser.uid);
+  } catch(err) {
+    showToast(err.message, 'error');
+  } finally {
+    progressEl.style.display = 'none';
+    progressFill.style.width = '0%';
+  }
+});
+document.getElementById('saveVideoBtn').addEventListener('click', async () => {
+  const url = document.getElementById('videoUrl').value.trim();
+  const title = document.getElementById('videoTitle').value.trim();
+  if (!url || !title) return showToast('Заполни все поля', 'error');
+  if (!url.includes('youtube.com') && !url.includes('youtu.be')) return showToast('Только YouTube ссылки', 'error');
+await addDoc(collection(db, 'videos'), {
+    userId: currentUser.uid,
+    displayName: userProfile.displayName,
+    url, title,
+    uploadedAt: serverTimestamp(),
+  });
+  const newCount = (userProfile.videosCount || 0) + 1;
+  await updateDoc(doc(db, 'users', currentUser.uid), {
+    videosCount: newCount
+  });
+  userProfile.videosCount = newCount;
+  document.getElementById('videoModal').classList.add('hidden');
+  showToast('Клип добавлен ✓', 'success');
+  loadVideos(currentUser.uid);
+});
+window.previewCardPhoto = (inp) => {
+  const file = inp.files[0]; if (!file) return;
+  const preview = document.getElementById('cardPhotoPreview');
+  const label = document.getElementById('cardPhotoLabel');
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = 'block';
+  label.style.display = 'none';
+};
+// ========== СОХРАНИТЬ КАРТОЧКУ АРТИСТА ==========
+document.getElementById('saveArtistCardBtn').addEventListener('click', async () => {
+  const nickname = document.getElementById('cardNickname').value.trim();
+const photoFile = document.getElementById('cardPhotoInput')?.files[0];
+  let cardPhotoUrl = userProfile.avatarUrl || null;
+  if (photoFile) {
+    showToast('Загружаем фото...', '');
+    const data = await uploadToCloudinary(photoFile, '992-music/artist-cards');
+    cardPhotoUrl = `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_400,h_533,c_fill,q_auto,f_auto/${data.public_id}`;
+  }
+ const genre = '';
+  const bio = document.getElementById('cardBio').value.trim();
+  if (!nickname) return showToast('Введи псевдоним', 'error');
+const socials = {};
+  const g = (id) => document.getElementById(id)?.value.trim() || '';
+  if (g('cardInstagram')) socials.instagram = g('cardInstagram');
+  if (g('cardTiktok')) socials.tiktok = g('cardTiktok');
+  if (g('cardTelegram')) socials.telegram = g('cardTelegram');
+  if (g('cardYoutube')) socials.youtube = g('cardYoutube');
+  if (g('cardVk')) socials.vk = g('cardVk');
+  if (g('cardFacebook')) socials.facebook = g('cardFacebook');
+  if (g('cardX')) socials.x = g('cardX');
+  if (g('cardSpotify')) socials.spotify = g('cardSpotify');
+  if (g('cardApple')) socials.apple = g('cardApple');
+  if (g('cardYandex')) socials.yandex = g('cardYandex');
+  if (g('cardSite')) socials.site = g('cardSite');
+await updateDoc(myCardRef || doc(db, 'artistApplications', currentUser.uid), {
+    nickname,
+    cardBio: bio,
+    socials,
+    status: 'active',
+    avatarUrl: cardPhotoUrl,
+    city: userProfile.city || '',
+    nicknameLocked: true,
+  });
+  await updateDoc(doc(db, 'users', currentUser.uid), { hasArtistCard: true });
+document.getElementById('artistCardFormModal').classList.add('hidden');
+  if (!isEditingCard) {
+    document.getElementById('artistCardBlock').style.display = 'none';
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:16px;';
+    overlay.innerHTML = `
+      <div style="background:var(--pr-card);border-radius:24px;padding:36px 28px;max-width:380px;width:100%;text-align:center;">
+        <img src="assets/images/ura.png" style="width:80px;height:80px;margin:0 auto 16px;display:block;">
+        <h2 style="font-size:20px;font-weight:700;color:var(--pr-text);margin-bottom:10px;">Карточка создана!</h2>
+        <p style="font-size:14px;color:var(--pr-text2);line-height:1.7;margin-bottom:24px;">Ваша официальная карточка артиста теперь на платформе. Перейдите на страницу <strong style="color:var(--pr-accent);">Артисты</strong> и найдите себя в каталоге!</p>
+        <a href="artists.html" style="display:block;width:100%;padding:13px;background:var(--pr-accent);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;margin-bottom:10px;">Перейти к Артистам</a>
+        <button onclick="this.closest('div').parentElement.remove()" style="width:100%;padding:11px;background:none;border:1px solid var(--pr-border);border-radius:12px;color:var(--pr-text2);font-size:14px;cursor:pointer;">Закрыть</button>
+      </div>`;
+    document.body.appendChild(overlay);
+  } else {
+    showToast('Карточка обновлена ✓', 'success');
+  }
+  isEditingCard = false;
+  loadArtistCardStatus();
+});
+// ========== ПРАВИЛА ==========
+document.getElementById('rulesBtn').addEventListener('click', () => {
+  document.getElementById('rulesModal').classList.remove('hidden');
+});
+document.getElementById('closeRulesBtn').addEventListener('click', () => {
+  document.getElementById('rulesModal').classList.add('hidden');
+});
+
+// ========== КРОППЕР ОБЛОЖКИ ==========
+let croppedCoverBlob = null;
+let cropperInstance = null;
+
+document.getElementById('coverFileInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const modal = document.getElementById('cropModal');
+    const img = document.getElementById('cropImage');
+    // уничтожить старый если был
+    if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+    img.src = ev.target.result;
+    modal.style.display = 'flex';
+    // ждём загрузки картинки потом инициализируем
+    img.onload = () => {
+      cropperInstance = new Cropper(img, {
+        aspectRatio: 1,
+        viewMode: 1,
+        dragMode: 'move',
+        autoCropArea: 0.9,
+        restore: false,
+        guides: true,
+        center: true,
+        highlight: false,
+        cropBoxMovable: true,
+        cropBoxResizable: true,
+        toggleDragModeOnDblclick: false,
+      });
+    };
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('cropCancelBtn').addEventListener('click', () => {
+  if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+  document.getElementById('cropModal').style.display = 'none';
+  document.getElementById('coverFileInput').value = '';
+  croppedCoverBlob = null;
+});
+
+document.getElementById('cropConfirmBtn').addEventListener('click', () => {
+  if (!cropperInstance) return;
+  cropperInstance.getCroppedCanvas({ width: 600, height: 600 }).toBlob((blob) => {
+    croppedCoverBlob = blob;
+    cropperInstance.destroy(); cropperInstance = null;
+    document.getElementById('cropModal').style.display = 'none';
+    showToast('Обложка готова ✓', 'success');
+    updateTrackPreview();
+  }, 'image/jpeg', 0.9);
+});
+
+function updateTrackPreview() {
+  const title = document.getElementById('trackTitle').value.trim();
+  const artist = document.getElementById('trackArtist').value.trim();
+  const audioFile = document.getElementById('trackFileInput').files[0];
+  const preview = document.getElementById('trackPreview');
+
+  if (!audioFile && !croppedCoverBlob) return;
+
+  preview.style.display = 'flex';
+
+  document.getElementById('previewTitle').textContent = title || 'Без названия';
+  document.getElementById('previewArtist').textContent = artist || 'Артист не указан';
+
+  if (croppedCoverBlob) {
+    document.getElementById('previewCover').src = URL.createObjectURL(croppedCoverBlob);
+  }
+  if (audioFile) {
+    document.getElementById('previewAudio').src = URL.createObjectURL(audioFile);
+  }
+}
+// ========== СОЦСЕТИ ==========
+// ========== КАРТОЧКА АРТИСТА ==========
+async function loadArtistCardStatus() {
+  let ref = doc(db, 'artistApplications', currentUser.uid);
+  let snap = await getDoc(ref);
+  if (!snap.exists()) {
+    // карточка могла быть создана и привязана администратором - у неё другой ID документа
+    const boundSnap = await getDocs(query(collection(db, 'artistApplications'), where('uid', '==', currentUser.uid)));
+    if (!boundSnap.empty) {
+      ref = doc(db, 'artistApplications', boundSnap.docs[0].id);
+      snap = boundSnap.docs[0];
+    }
+  }
+ myCardRef = ref;
+  const btn = document.getElementById('artistCardBtn');
+  const status = document.getElementById('artistCardStatus');
+  const viewBtn = document.getElementById('artistCardViewBtn');
+  if (!snap.exists()) {
+    myCardData = null;
+    hasActiveArtistCard = false;
+    if (viewBtn) viewBtn.style.display = 'none';
+    return;
+  }
+  const data = snap.data();
+  myCardData = data;
+  hasActiveArtistCard = data.status === 'active';
+  if (viewBtn) viewBtn.style.display = data.status === 'active' ? 'inline-flex' : 'none';
+  if (data.status === 'pending') {
+    btn.textContent = 'Заявка подана';
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    btn.style.cursor = 'default';
+    status.textContent = 'Ждите одобрения администратора';
+    status.style.color = 'var(--pr-accent)';
+  } else if (data.status === 'approved') {
+    btn.textContent = 'Заполнить карточку';
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+ status.textContent = '✅ Заявка одобрена - заполните карточку артиста';
+    status.style.color = '#27ae60';
+    btn.onclick = () => {
+      const nicknameInput = document.getElementById('cardNickname');
+      nicknameInput.value = '';
+      nicknameInput.disabled = false;
+      document.getElementById('cardNicknameHint').style.display = 'none';
+      document.getElementById('artistCardFormModal').classList.remove('hidden');
+    };
+} else if (data.status === 'active') {
+    btn.textContent = 'Редактировать карточку';
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    status.textContent = '✅ Карточка активна - можно изменить фото, bio и соцсети';
+    status.style.color = '#27ae60';
+    btn.onclick = () => { isEditingCard = true; openArtistCardEdit(data); };
+  }
+}
+
+function openArtistCardEdit(data) {
+  const nicknameInput = document.getElementById('cardNickname');
+  const nicknameHint = document.getElementById('cardNicknameHint');
+  nicknameInput.value = data.nickname || '';
+if (data.nicknameLocked || data.nickname) {
+    nicknameInput.disabled = true;
+    nicknameHint.style.display = 'block';
+  } else {
+    nicknameInput.disabled = false;
+    nicknameHint.style.display = 'none';
+  }
+  document.getElementById('cardBio').value = data.cardBio || '';
+  const cardPreview = document.getElementById('cardPhotoPreview');
+  const cardLabel = document.getElementById('cardPhotoLabel');
+  if (data.avatarUrl) {
+    cardPreview.src = data.avatarUrl;
+    cardPreview.style.display = 'block';
+    cardLabel.style.display = 'none';
+  } else {
+    cardPreview.style.display = 'none';
+    cardLabel.style.display = 'block';
+  }
+  const s = data.socials || {};
+  document.getElementById('cardInstagram').value = s.instagram || '';
+  document.getElementById('cardTiktok').value = s.tiktok || '';
+  document.getElementById('cardTelegram').value = s.telegram || '';
+  document.getElementById('cardYoutube').value = s.youtube || '';
+  document.getElementById('cardVk').value = s.vk || '';
+  document.getElementById('cardFacebook').value = s.facebook || '';
+  document.getElementById('cardX').value = s.x || '';
+  document.getElementById('cardSpotify').value = s.spotify || '';
+  document.getElementById('cardApple').value = s.apple || '';
+  document.getElementById('cardYandex').value = s.yandex || '';
+  document.getElementById('cardSite').value = s.site || '';
+  document.getElementById('artistCardFormModal').classList.remove('hidden');
+}
+
+document.getElementById('artistCardBtn').addEventListener('click', async () => {
+if (myCardData) return;
+  if (!currentUser) {
+    showToast('Подождите, страница ещё загружается...', 'error');
+    return;
+  }
+  try {
+    const ref = doc(db, 'artistApplications', currentUser.uid);
+    await setDoc(ref, {
+      uid: currentUser.uid,
+      displayName: userProfile.displayName,
+      avatarUrl: userProfile.avatarUrl || null,
+      email: userProfile.email || '',
+      status: 'pending',
+      createdAt: serverTimestamp(),
+    });
+    document.getElementById('artistCardBtn').textContent = 'Заявка подана';
+    document.getElementById('artistCardBtn').disabled = true;
+    document.getElementById('artistCardBtn').style.opacity = '0.5';
+    document.getElementById('artistCardStatus').textContent = 'Ждите одобрения администратора';
+    document.getElementById('artistCardStatus').style.color = 'var(--pr-accent)';
+    showToast('Заявка отправлена ✓', 'success');
+  } catch (err) {
+    console.error('Ошибка подачи заявки:', err);
+    showToast('Ошибка: ' + err.message, 'error');
+  }
+});
+// ========== ГОРОД ==========
+document.getElementById('saveCityBtn').addEventListener('click', async () => {
+  const city = document.getElementById('cityInput').value;
+  if (!city) return showToast('Выбери регион', 'error');
+  await updateDoc(doc(db, 'users', currentUser.uid), { city });
+  showToast('Регион сохранён ✓', 'success');
+});
+// ========== РЕДАКТИРОВАТЬ / УДАЛИТЬ ВИДЕО ==========
+let trimYtPlayer = null;
+let trimVideoId = null;
+let trimVideoTitle = '';
+let trimFullDuration = 0;
+let trimStartSeconds = 0;
+const TRIM_CLIP_LEN = 60;
+let trimDragging = false;
+let trimDragOffsetX = 0;
+let trimMode = 'video'; // 'video' | 'track'
+let trimTrackId = null;
+let trimTrackTitle = '';
+let trimTrackUrl = '';
+let trimTrackCover = '';
+let trimPreviewTimer = null;
+
+function loadYouTubeAPIOnce() {
+  return new Promise((resolve) => {
+    if (window.YT && window.YT.Player) return resolve();
+    if (!document.getElementById('ytIframeApiScript')) {
+      const tag = document.createElement('script');
+      tag.id = 'ytIframeApiScript';
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(tag);
+    }
+    const prevCb = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => { if (prevCb) prevCb(); resolve(); };
+  });
+}
+
+function formatTrimTime(sec) {
+  const m = Math.floor(sec / 60), s = Math.floor(sec % 60).toString().padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+function trimClipLen() {
+  return Math.min(TRIM_CLIP_LEN, trimFullDuration || TRIM_CLIP_LEN);
+}
+
+function updateTrimWindowUI() {
+  const track = document.getElementById('trimTrack');
+  const win = document.getElementById('trimWindow');
+  if (!track || !trimFullDuration) return;
+  const trackW = track.clientWidth;
+  const clipLen = trimClipLen();
+  const winW = Math.max(24, (clipLen / trimFullDuration) * trackW);
+  const maxLeft = trackW - winW;
+  const left = Math.min(maxLeft, Math.max(0, (trimStartSeconds / trimFullDuration) * trackW));
+  win.style.width = winW + 'px';
+  win.style.left = left + 'px';
+  const endSeconds = Math.min(trimFullDuration, trimStartSeconds + clipLen);
+  document.getElementById('trimSelectedInfo').textContent = `Фрагмент: ${formatTrimTime(trimStartSeconds)} - ${formatTrimTime(endSeconds)}`;
+  const publishBtn = document.getElementById('trimPublishBtn');
+  publishBtn.disabled = false;
+  publishBtn.style.opacity = '1';
+}
+
+function trimPosToStart(clientX) {
+  const track = document.getElementById('trimTrack');
+  const win = document.getElementById('trimWindow');
+  const trackRect = track.getBoundingClientRect();
+  const winW = win.offsetWidth;
+  let left = clientX - trackRect.left - trimDragOffsetX;
+  left = Math.max(0, Math.min(trackRect.width - winW, left));
+  const denom = (trackRect.width - winW) || 1;
+  const pct = left / denom;
+  const clipLen = trimClipLen();
+  trimStartSeconds = Math.round(pct * (trimFullDuration - clipLen));
+  if (trimStartSeconds < 0) trimStartSeconds = 0;
+  updateTrimWindowUI();
+}
+
+function setupTrimDrag() {
+  const track = document.getElementById('trimTrack');
+  const win = document.getElementById('trimWindow');
+
+  win.onpointerdown = (e) => {
+    trimDragging = true;
+    win.setPointerCapture(e.pointerId);
+    const winRect = win.getBoundingClientRect();
+    trimDragOffsetX = e.clientX - winRect.left;
+    win.style.cursor = 'grabbing';
+  };
+  win.onpointermove = (e) => {
+    if (!trimDragging) return;
+    trimPosToStart(e.clientX);
+  };
+  win.onpointerup = () => { trimDragging = false; win.style.cursor = 'grab'; };
+  win.onpointercancel = () => { trimDragging = false; win.style.cursor = 'grab'; };
+
+  track.onpointerdown = (e) => {
+    if (e.target === win || win.contains(e.target)) return;
+    trimDragOffsetX = win.offsetWidth / 2;
+    trimPosToStart(e.clientX);
+  };
+}
+
+window.sendVideoToStory = async function(videoDocId, title, ytId) {
+  const storyKey = 'pn_story_video_last_' + currentUser.uid;
+  const now = Date.now();
+  const last = parseInt(localStorage.getItem(storyKey) || '0');
+  if (now - last < 86400000) {
+    const hrs = Math.ceil((86400000 - (now - last)) / 3600000);
+    return showToast('Следующий сторис через ' + hrs + ' ч.', 'error');
+  }
+  trimMode = 'video';
+  trimVideoId = ytId;
+  trimVideoTitle = title;
+  trimFullDuration = 0;
+  trimStartSeconds = 0;
+  document.getElementById('trimModalTitle').textContent = 'Выбери фрагмент для сторис';
+  document.getElementById('trimModalSubtitle').textContent = 'Перетащи окно по шкале - выбери любую минуту ролика';
+  document.getElementById('trimVideoPreviewWrap').style.display = 'block';
+  document.getElementById('trimAudioPreviewWrap').style.display = 'none';
+  document.getElementById('trimSelectedInfo').textContent = 'Загрузка видео...';
+  document.getElementById('trimTotalDuration').textContent = '-:--';
+  document.getElementById('trimWindow').style.width = '0px';
+  const publishBtn = document.getElementById('trimPublishBtn');
+  publishBtn.disabled = true;
+  publishBtn.style.opacity = '0.5';
+  document.getElementById('videoStoryTrimModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+
+  await loadYouTubeAPIOnce();
+  const container = document.getElementById('trimYtPlayer');
+  container.innerHTML = '';
+  trimYtPlayer = new YT.Player('trimYtPlayer', {
+    videoId: ytId,
+    playerVars: { rel: 0, playsinline: 1 },
+    events: {
+      onReady: (e) => {
+        trimFullDuration = e.target.getDuration() || 0;
+        document.getElementById('trimTotalDuration').textContent = formatTrimTime(trimFullDuration);
+        setupTrimDrag();
+        updateTrimWindowUI();
+      }
+    }
+  });
+};
+
+window.sendTrackToStory = async function(trackDocId, title, trackUrl, coverUrl) {
+  if (!trackUrl) return showToast('У трека нет аудиофайла', 'error');
+  const storyKey = 'pn_story_track_last_' + currentUser.uid;
+  const now = Date.now();
+  const last = parseInt(localStorage.getItem(storyKey) || '0');
+  if (now - last < 86400000) {
+    const hrs = Math.ceil((86400000 - (now - last)) / 3600000);
+    return showToast('Следующий сторис через ' + hrs + ' ч.', 'error');
+  }
+  trimMode = 'track';
+  trimTrackId = trackDocId;
+  trimTrackTitle = title;
+  trimTrackUrl = trackUrl;
+  trimTrackCover = coverUrl || '';
+  trimFullDuration = 0;
+  trimStartSeconds = 0;
+
+  document.getElementById('trimModalTitle').textContent = 'Выбери фрагмент для сторис';
+  document.getElementById('trimModalSubtitle').textContent = 'Перетащи окно по шкале - выбери любую минуту трека';
+  document.getElementById('trimVideoPreviewWrap').style.display = 'none';
+  document.getElementById('trimAudioPreviewWrap').style.display = 'flex';
+  document.getElementById('trimAudioCover').src = coverUrl || 'assets/icons/mountain2.png';
+  document.getElementById('trimAudioTitle').textContent = title;
+  document.getElementById('trimSelectedInfo').textContent = 'Загрузка трека...';
+  document.getElementById('trimTotalDuration').textContent = '-:--';
+  document.getElementById('trimWindow').style.width = '0px';
+  const publishBtn = document.getElementById('trimPublishBtn');
+  publishBtn.disabled = true;
+  publishBtn.style.opacity = '0.5';
+  document.getElementById('videoStoryTrimModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+
+  const audio = document.getElementById('trimAudioEl');
+  audio.pause();
+  audio.src = trackUrl;
+  audio.onloadedmetadata = () => {
+    trimFullDuration = audio.duration || 0;
+    document.getElementById('trimTotalDuration').textContent = formatTrimTime(trimFullDuration);
+    setupTrimDrag();
+    updateTrimWindowUI();
+  };
+  audio.load();
+};
+window.closeVideoStoryTrim = function() {
+  document.getElementById('videoStoryTrimModal').classList.add('hidden');
+  document.body.style.overflow = '';
+  if (trimYtPlayer && trimYtPlayer.destroy) trimYtPlayer.destroy();
+  trimYtPlayer = null;
+  const audio = document.getElementById('trimAudioEl');
+  if (audio) { audio.pause(); audio.src = ''; }
+  clearTimeout(trimPreviewTimer);
+};
+document.getElementById('trimPreviewBtn').addEventListener('click', () => {
+  const clipLen = trimClipLen();
+  if (trimMode === 'track') {
+    const audio = document.getElementById('trimAudioEl');
+    if (!audio) return;
+    audio.currentTime = trimStartSeconds;
+    audio.play();
+    clearTimeout(trimPreviewTimer);
+    trimPreviewTimer = setTimeout(() => audio.pause(), clipLen * 1000);
+    return;
+  }
+  if (!trimYtPlayer || !trimYtPlayer.seekTo) return;
+  trimYtPlayer.seekTo(trimStartSeconds, true);
+  trimYtPlayer.playVideo();
+  clearTimeout(window._trimPreviewTimer);
+  window._trimPreviewTimer = setTimeout(() => {
+    if (trimYtPlayer && trimYtPlayer.pauseVideo) trimYtPlayer.pauseVideo();
+  }, clipLen * 1000);
+});
+
+document.getElementById('trimPublishBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('trimPublishBtn');
+  btn.disabled = true;
+  btn.textContent = 'Публикуем...';
+  try {
+    const clipLen = trimClipLen();
+    const endSeconds = trimFullDuration ? Math.min(trimStartSeconds + clipLen, Math.floor(trimFullDuration)) : trimStartSeconds + clipLen;
+
+    if (trimMode === 'track') {
+      const oldSnap = await getDocs(query(collection(db, 'stories'), where('userId', '==', currentUser.uid), where('type', '==', 'track')));
+      await Promise.all(oldSnap.docs.map(d => deleteDoc(doc(db, 'stories', d.id))));
+
+      await addDoc(collection(db, 'stories'), {
+        userId: currentUser.uid,
+        type: 'track',
+        trackId: trimTrackId,
+        trackTitle: trimTrackTitle,
+        trackUrl: trimTrackUrl,
+        coverUrl: trimTrackCover,
+        artistName: userProfile.displayName,
+        avatarUrl: userProfile.avatarUrl || '',
+        createdAt: serverTimestamp(),
+        expiresAt: Date.now() + 86400000,
+        views: 0,
+        reactions: {},
+        clipStart: trimStartSeconds,
+        clipEnd: endSeconds,
+      });
+      localStorage.setItem('pn_story_track_last_' + currentUser.uid, Date.now().toString());
+    } else {
+      const oldSnap = await getDocs(query(collection(db, 'stories'), where('userId', '==', currentUser.uid), where('type', '==', 'video')));
+      await Promise.all(oldSnap.docs.map(d => deleteDoc(doc(db, 'stories', d.id))));
+
+      await addDoc(collection(db, 'stories'), {
+        userId: currentUser.uid,
+        type: 'video',
+        ytId: trimVideoId,
+        trackTitle: trimVideoTitle,
+        artistName: userProfile.displayName,
+        avatarUrl: userProfile.avatarUrl || '',
+        createdAt: serverTimestamp(),
+        expiresAt: Date.now() + 86400000,
+        views: 0,
+        reactions: {},
+        clipStart: trimStartSeconds,
+        clipEnd: endSeconds,
+      });
+      localStorage.setItem('pn_story_video_last_' + currentUser.uid, Date.now().toString());
+    }
+    showToast('Сторис с фрагментом опубликован на 24ч ✓', 'success');
+    closeVideoStoryTrim();
+  } catch (e) {
+    console.error(e);
+    showToast('Не удалось опубликовать сторис', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Опубликовать сторис';
+  }
+});
+window.editVideo = (id, currentTitle) => {
+  document.getElementById('editVideoModal').classList.remove('hidden');
+  document.getElementById('editVideoInput').value = currentTitle;
+  document.getElementById('editVideoSaveBtn').onclick = async () => {
+    const newTitle = document.getElementById('editVideoInput').value.trim();
+    if (!newTitle) return;
+    await updateDoc(doc(db, 'videos', id), { title: newTitle });
+    document.getElementById('vtitle-' + id).textContent = newTitle;
+    document.getElementById('editVideoModal').classList.add('hidden');
+    showToast('Название обновлено ✓', 'success');
+  };
+};
+
+window.deleteVideo = (id) => {
+  document.getElementById('deleteVideoModal').classList.remove('hidden');
+  document.getElementById('deleteVideoConfirmBtn').onclick = async () => {
+    await deleteDoc(doc(db, 'videos', id));
+    document.getElementById('deleteVideoModal').classList.add('hidden');
+    showToast('Клип удалён', 'success');
+    loadVideos(currentUser.uid);
+  };
+};
+
+window.toggleVideoPin = async function(videoId) {
+  const q = query(collection(db, 'videos'), where('userId', '==', currentUser.uid));
+  const snap = await getDocs(q);
+  const target = snap.docs.find(d => d.id === videoId);
+  const alreadyPinned = target?.data().pinned;
+  const batch = [];
+  snap.forEach(d => {
+    if (d.data().pinned) batch.push(updateDoc(doc(db, 'videos', d.id), { pinned: false, pinnedBadge: '' }));
+  });
+  await Promise.all(batch);
+  if (!alreadyPinned) {
+    await updateDoc(doc(db, 'videos', videoId), { pinned: true, pinnedBadge: 'ПРЕМЬЕРА' });
+    showToast('Видео закреплено как премьера ✓', 'success');
+  } else {
+    showToast('Закреп снят', 'success');
+  }
+  loadVideos(currentUser.uid);
+};
+// ========== TOAST ==========
+function checkKingStatus(profile) {
+  const tracks = profile.tracksCount || 0;
+  const videos = profile.videosCount || 0;
+  const isKing = tracks >= 10 && videos >= 10;
+  const kingIcon = document.getElementById('kingIcon');
+  if (isKing) {
+    kingIcon.style.display = 'inline-block';
+  }
+  // Попап — показать 1 раз
+  const kingShown = localStorage.getItem('pn_king_shown_' + currentUser.uid);
+  if (isKing && !kingShown) {
+    localStorage.setItem('pn_king_shown_' + currentUser.uid, '1');
+    showKingPopup();
+  }
+}
+
+function showKingPopup() {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:999;display:flex;align-items:center;justify-content:center;padding:16px;animation:kingFadeIn .4s ease;';
+  overlay.innerHTML = `
+    <style>@keyframes kingFadeIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}</style>
+    <div style="background:var(--pr-card);border-radius:24px;padding:40px 28px;max-width:360px;width:100%;text-align:center;position:relative;">
+      <img src="assets/icons/king.png" style="width:72px;height:72px;margin:0 auto 16px;display:block;">
+      <h2 style="font-size:22px;font-weight:700;color:var(--pr-text);margin-bottom:10px;">🎉 Поздравляем!</h2>
+      <p style="font-size:14px;color:var(--pr-text2);line-height:1.7;margin-bottom:24px;">Ты загрузил 10 треков и 10 клипов - теперь ты <strong style="color:var(--pr-accent);">Официальный Артист 992MUZ</strong>! Иконка 👑 навсегда рядом с твоим именем.</p>
+<button onclick="this.closest('div').parentElement.remove()" style="width:100%;padding:13px;background:var(--pr-accent);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;">Спасибо! 🔥</button>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+// ========== СТРИК ФАНАТА (ежедневный вход 30 дней) ==========
+function getLocalDateStr(d = new Date()) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+async function checkFanStreak(uid, profile) {
+  const card = document.getElementById('fanStreakCard');
+  if (!card) return;
+
+  const todayStr = getLocalDateStr();
+  const y = new Date();
+  y.setDate(y.getDate() - 1);
+  const yesterdayStr = getLocalDateStr(y);
+
+  let streak = profile.fanStreak || 0;
+  let lastCheckIn = profile.lastCheckInDate || null;
+  let fanVerified = !!profile.fanVerified;
+
+  if (!fanVerified) {
+    if (lastCheckIn === todayStr) {
+      // уже отмечался сегодня
+    } else if (lastCheckIn === yesterdayStr) {
+      streak += 1;
+    } else {
+      streak = 1;
+    }
+
+ const updates = { fanStreak: streak, lastCheckInDate: todayStr };
+    if (streak >= 30) {
+      fanVerified = true;
+      updates.fanVerified = true;
+      updates.fanVerifiedAt = serverTimestamp();
+    }
+    try {
+      await updateDoc(doc(db, 'users', uid), updates);
+      profile.fanStreak = streak;
+      profile.fanVerified = fanVerified;
+    } catch (err) {
+      console.error('Ошибка сохранения стрика фаната:', err);
+    }
+  }
+
+  renderFanStreakUI(uid, streak, fanVerified);
+}
+
+function renderFanStreakUI(uid, streak, fanVerified) {
+  const card = document.getElementById('fanStreakCard');
+  const fanBadgeIcon = document.getElementById('fanBadgeIcon');
+  if (!card) return;
+
+  if (fanVerified) {
+    if (fanBadgeIcon) fanBadgeIcon.style.display = 'inline-block';
+    card.innerHTML = `
+      <div class="fan-verified-badge">
+        <img src="assets/icons/992anim.gif" alt="">
+        <div class="fan-verified-badge-text"><strong>Официальный Фанат 992MUZ</strong><br>Особый статус в чате и на радио активирован</div>
+      </div>`;
+    const shown = localStorage.getItem('pn_fan_shown_' + uid);
+    if (!shown) {
+      localStorage.setItem('pn_fan_shown_' + uid, '1');
+      showFanPopup();
+    }
+    return;
+  }
+
+  const pct = Math.min(100, (streak / 30) * 100);
+  const daysText = document.getElementById('fanStreakDaysText');
+  const barFill = document.getElementById('fanStreakBarFill');
+  if (daysText) daysText.textContent = `${streak} / 30 дней`;
+  if (barFill) barFill.style.width = pct + '%';
+}
+
+function showFanPopup() {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:999;display:flex;align-items:center;justify-content:center;padding:16px;animation:kingFadeIn .4s ease;';
+  overlay.innerHTML = `
+    <style>@keyframes kingFadeIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}</style>
+    <div style="background:var(--pr-card);border-radius:24px;padding:40px 28px;max-width:360px;width:100%;text-align:center;position:relative;">
+      <img src="assets/icons/992anim.gif" style="width:72px;height:72px;margin:0 auto 16px;display:block;">
+      <h2 style="font-size:22px;font-weight:700;color:var(--pr-text);margin-bottom:10px;">🎉 Поздравляем!</h2>
+      <p style="font-size:14px;color:var(--pr-text2);line-height:1.7;margin-bottom:16px;">Ты заходил на 992MUZ каждый день 30 дней подряд - теперь ты <strong style="color:#3478f6;">Официальный Фанат 992MUZ</strong>! Анимированная галочка верификации навсегда рядом с твоим именем, а в чате и на радио тебя видно по-особенному.</p>
+      <p style="font-size:12px;color:var(--pr-text3);margin-bottom:20px;">С уважением, команда 992MUZ</p>
+      <button onclick="this.closest('div').parentElement.remove()" style="width:100%;padding:13px;background:#3478f6;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;">Спасибо! 🔥</button>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+// ========== ПИН БЕЙДЖ ==========
+document.querySelectorAll('.pin-badge-opt').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const trackId = document.getElementById('pinModal').dataset.trackId;
+    const badge = btn.dataset.badge;
+    // снять закреп со всех треков сначала
+    const q = query(collection(db, 'tracks'), where('userId', '==', currentUser.uid));
+    const snap = await getDocs(q);
+    const batch = [];
+    snap.forEach(d => {
+      if (d.data().pinned) batch.push(updateDoc(doc(db, 'tracks', d.id), { pinned: false, pinnedBadge: '' }));
+    });
+    await Promise.all(batch);
+    // закрепить выбранный
+    const iconMap = { 'ХИТ': 'assets/icons/hit.png', 'ПРЕМЬЕРА': 'assets/icons/premiere.png', 'НОВИНКА': 'assets/icons/new.png', 'РЕКОМЕНДУЮ': 'assets/icons/rec.png' };
+    await updateDoc(doc(db, 'tracks', trackId), { pinned: true, pinnedBadge: badge, pinnedIcon: iconMap[badge] });
+    document.getElementById('pinModal').classList.add('hidden');
+    showToast('Трек закреплён ✓', 'success');
+    loadTracks(currentUser.uid);
+  });
+});
+const PROFILE_MSG_TYPES = {
+  announcement: { icon: 'assets/icons/announcement.png', color: 'rgba(30,90,180,0.12)', border: '#1e5ab4' },
+  promotion:    { icon: 'assets/icons/promotion.png',    color: 'rgba(40,160,40,0.10)',  border: '#28a028' },
+  warning:      { icon: 'assets/icons/warning2.png',     color: 'rgba(220,160,0,0.10)',  border: '#dca000' },
+  urgently:     { icon: 'assets/icons/urgently.png',     color: 'rgba(220,40,40,0.10)',  border: '#dc2828' },
+  gref_purchase:{ icon: 'assets/models/happy.gif',       color: 'rgba(212,168,67,0.12)', border: '#d4a843' },
+};
+async function loadAdminMessages(uid) {
+  const wrap = document.querySelector('.admin-messages');
+  if (!wrap) return;
+
+  const globalSnap = await getDocs(query(collection(db, 'adminMessages'), orderBy('createdAt', 'desc')));
+  const personalSnap = await getDocs(query(collection(db, 'users', uid, 'adminMessages'), orderBy('createdAt', 'desc')));
+
+  const allMsgs = [];
+  const hiddenGlobal = JSON.parse(localStorage.getItem('pn_hidden_msgs') || '[]');
+
+  globalSnap.forEach(d => {
+    if (!hiddenGlobal.includes(d.id))
+      allMsgs.push({ ...d.data(), _id: d.id, _personal: false });
+  });
+  personalSnap.forEach(d => allMsgs.push({ ...d.data(), _id: d.id, _personal: true }));
+
+  allMsgs.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
+  // Бейдж непрочитанных
+  const unread = allMsgs.filter(m => m._personal && m.read === false).length;
+  const badge = document.getElementById('unreadBadge');
+  if (badge) {
+    if (unread > 0) { badge.style.display = 'inline-block'; badge.textContent = unread; }
+    else badge.style.display = 'none';
+  }
+
+if (allMsgs.length === 0) return;
+
+// Пуш если есть новые непрочитанные личные
+  const newPersonal = allMsgs.filter(m => m._personal && m.read === false);
+  const grefPurchaseMsg = newPersonal.find(m => m.type === 'gref_purchase');
+  if (grefPurchaseMsg) {
+    showGrefPurchasePopup(grefPurchaseMsg);
+  } else if (newPersonal.length > 0) {
+    const m = newPersonal[0];
+    const t = PROFILE_MSG_TYPES[m.type] || PROFILE_MSG_TYPES.announcement;
+    showPushNotification(
+      '📬 Сообщение от администрации',
+      m.text.slice(0, 80),
+      t.icon
+    );
+  }
+  window._allAdminMsgs = allMsgs;
+  window._adminUid = uid;
+
+  wrap.querySelectorAll('.admin-msg-dynamic').forEach(el => el.remove());
+  renderAdminMsgs(allMsgs.slice(0, 3), wrap, uid, allMsgs.length);
+}
+
+function renderAdminMsgs(msgs, wrap, uid, total) {
+  wrap.querySelectorAll('.admin-msg-dynamic').forEach(el => el.remove());
+
+  msgs.forEach(m => {
+    const t = PROFILE_MSG_TYPES[m.type] || PROFILE_MSG_TYPES.announcement;
+    const date = m.createdAt?.seconds
+      ? new Date(m.createdAt.seconds * 1000).toLocaleDateString('ru')
+      : 'Сегодня';
+    const el = document.createElement('div');
+    el.className = 'admin-msg admin-msg-dynamic';
+    el.style.cssText = `animation:fadeInMsg .4s ease;background:${t.color};border-left:3px solid ${t.border};position:relative;margin-bottom:8px;`;
+    el.innerHTML = `
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+        <div style="display:flex;align-items:flex-start;gap:8px;flex:1;">
+          <img src="${t.icon}" style="width:20px;height:20px;flex-shrink:0;margin-top:1px;">
+          <div>
+            <div class="admin-msg-text">${m.text}</div>
+            <div class="admin-msg-date">${date}${m._personal ? ' · 👤 Лично вам' : ''}</div>
+          </div>
+        </div>
+        <button onclick="dismissAdminMsg('${m._id}','${m._personal}')" style="background:none;border:none;color:var(--pr-text3);font-size:18px;cursor:pointer;line-height:1;flex-shrink:0;padding:0 2px;opacity:0.5;" title="Скрыть">×</button>
+      </div>`;
+
+    // Отметить личное как прочитанное
+    if (m._personal && m.read === false) {
+      updateDoc(doc(db, 'users', uid, 'adminMessages', m._id), { read: true });
+      const b = document.getElementById('unreadBadge');
+      if (b) {
+        const cur = parseInt(b.textContent) - 1;
+        if (cur <= 0) b.style.display = 'none'; else b.textContent = cur;
+      }
+    }
+
+    // Счётчик просмотров глобального
+    if (!m._personal) {
+      updateDoc(doc(db, 'adminMessages', m._id), { views: (m.views || 0) + 1 });
+    }
+
+    wrap.appendChild(el);
+  });
+
+  if (total > 3 && msgs.length <= 3) {
+    const btn = document.createElement('div');
+    btn.className = 'admin-msg-dynamic';
+    btn.style.cssText = 'text-align:center;padding:8px 0 2px;';
+    btn.innerHTML = `<button onclick="expandAdminMsgs()" style="background:none;border:none;color:var(--pr-accent);font-size:12px;cursor:pointer;font-weight:600;">Показать все (${total}) ▾</button>`;
+    wrap.appendChild(btn);
+  }
+}
+
+window.expandAdminMsgs = function() {
+  const wrap = document.querySelector('.admin-messages');
+  renderAdminMsgs(window._allAdminMsgs, wrap, window._adminUid, window._allAdminMsgs.length);
+};
+
+window.dismissAdminMsg = async (id, isPersonal) => {
+  const wrap = document.querySelector('.admin-messages');
+  wrap.querySelectorAll('.admin-msg-dynamic').forEach(el => {
+    if (el.querySelector(`button[onclick*="${id}"]`)) el.remove();
+  });
+  if (isPersonal === 'true') {
+    await deleteDoc(doc(db, 'users', window._adminUid, 'adminMessages', id));
+    window._allAdminMsgs = window._allAdminMsgs.filter(m => m._id !== id);
+  } else {
+    const hidden = JSON.parse(localStorage.getItem('pn_hidden_msgs') || '[]');
+    hidden.push(id);
+    localStorage.setItem('pn_hidden_msgs', JSON.stringify(hidden));
+    window._allAdminMsgs = window._allAdminMsgs.filter(m => m._id !== id);
+  }
+};
+
+// ========== REALTIME MESSAGES LISTENER ==========
+function startMessagesListener(uid) {
+  const personalRef = collection(db, 'users', uid, 'adminMessages');
+onSnapshot(personalRef, (snap) => {
+    snap.docChanges().forEach(change => {
+      if (change.type === 'added') {
+        const m = change.doc.data();
+        if (m.read === false) {
+          if (m.type === 'gref_purchase') {
+            showGrefPurchasePopup(m);
+          } else {
+            const t = PROFILE_MSG_TYPES[m.type] || PROFILE_MSG_TYPES.announcement;
+            showPushNotification('📬 Новое сообщение от администрации', m.text.slice(0, 80), t.icon);
+          }
+          loadAdminMessages(uid);
+        }
+      }
+    });
+  });
+  const globalRef = collection(db, 'adminMessages');
+  onSnapshot(query(globalRef, orderBy('createdAt', 'desc')), (snap) => {
+    snap.docChanges().forEach(change => {
+      if (change.type === 'added' && !snap.metadata.hasPendingWrites) {
+        const m = change.doc.data();
+        const t = PROFILE_MSG_TYPES[m.type] || PROFILE_MSG_TYPES.announcement;
+        showPushNotification('📢 Объявление от администрации', m.text.slice(0, 80), t.icon);
+        loadAdminMessages(uid);
+      }
+    });
+  });
+}
+
+// ========== BROWSER NOTIFICATIONS ==========
+async function requestNotificationPermission() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'default') {
+    await Notification.requestPermission();
+  }
+}
+
+function showPushNotification(title, body, icon) {
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'granted') return;
+  const n = new Notification(title, {
+    body,
+    icon: icon || 'assets/icons/logo.png',
+    badge: 'assets/icons/logo.png',
+    vibrate: [200, 100, 200],
+  });
+  n.onclick = () => { window.focus(); n.close(); };
+  setTimeout(() => n.close(), 6000);
+}
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  setTimeout(() => t.className = 'toast', 3000);
+}
+</script>
+<script src="js/auth/session.js" type="module"></script>
+<script src="js/components/navbar.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /login.html
+Disallow: /register.html
+
+Sitemap: https://992muz.ru/sitemap.xml

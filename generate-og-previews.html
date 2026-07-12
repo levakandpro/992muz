@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Генератор og-превью — 992MUZ</title>
+</head>
+<body style="font-family:sans-serif;padding:24px;max-width:640px;margin:0 auto;">
+  <h2>Генератор превью для шаринга артистов</h2>
+  <p>
+    Создаёт для каждого артиста статический файл <code>artist/&lt;slug&gt;.html</code> —
+    копию текущего <code>artists.html</code>, но с подставленными <code>og:title</code> /
+    <code>og:image</code> / <code>og:description</code> под конкретного артиста.
+    Скачивает всё одним zip-архивом.
+  </p>
+  <p style="color:#a00;">
+    После скачивания: распакуй архив в корень проекта (появится/пополнится папка <code>artist/</code>)
+    и сделай <code>firebase deploy --only hosting</code>.
+    Перезапускай генератор каждый раз, когда добавляешь артиста или меняешь его имя/фото/описание.
+  </p>
+  <button id="runBtn" style="padding:10px 20px;font-size:14px;cursor:pointer;">Сгенерировать и скачать zip</button>
+  <pre id="log" style="margin-top:20px;background:#111;color:#0f0;padding:16px;border-radius:8px;max-height:500px;overflow:auto;"></pre>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script type="module">
+    import { db } from './js/config/firebase.js';
+    import { collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+    import { slugify } from './js/social/share.js';
+
+    const logEl = document.getElementById('log');
+    function log(msg) {
+      logEl.textContent += msg + '\n';
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function escapeAttr(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    // Вставляет/заменяет og-блок и <title> в шаблоне artists.html под конкретного артиста
+    function buildArtistHtml(template, artist, origin) {
+      const name = artist.name || 'Артист';
+      const desc = (artist.bio || `Слушай ${name} на 992MUZ`).slice(0, 200);
+      const image = artist.photo && /^https?:\/\//.test(artist.photo)
+        ? artist.photo
+        : origin + '/' + (artist.photo || 'assets/images/kartochki/vert.jpg').replace(/^\//, '');
+      const url = origin + '/artist/' + encodeURIComponent(artist.slug);
+
+      const ogBlock =
+`<!-- OG:START -->
+<meta property="og:type" content="profile">
+<meta property="og:title" content="${escapeAttr(name)} — 992MUZ">
+<meta property="og:description" content="${escapeAttr(desc)}">
+<meta property="og:image" content="${escapeAttr(image)}">
+<meta property="og:url" content="${escapeAttr(url)}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escapeAttr(name)} — 992MUZ">
+<meta name="twitter:image" content="${escapeAttr(image)}">
+<!-- OG:END -->`;
+
+      let html = template;
+
+      // убираем og-блок, если уже был вставлен раньше (перегенерация)
+      html = html.replace(/<!-- OG:START -->[\s\S]*?<!-- OG:END -->\n?/, '');
+
+      // меняем <title>
+      html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeAttr(name)} — 992MUZ</title>`);
+
+      // вставляем og-блок сразу после <base href="/">
+      if (html.includes('<base href="/">')) {
+        html = html.replace('<base href="/">', '<base href="/">\n' + ogBlock);
+      } else {
+        // на случай если Патч №1 ещё не применён — вставляем после <meta charset>
+        html = html.replace(/<meta charset="UTF-8">/, `<meta charset="UTF-8">\n${ogBlock}`);
+      }
+
+      return html;
+    }
+
+    document.getElementById('runBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('runBtn');
+      btn.disabled = true;
+      log('Загружаю шаблон artists.html...');
+      try {
+        const origin = location.origin;
+        const templateResp = await fetch('/artists.html');
+        if (!templateResp.ok) throw new Error('Не удалось загрузить /artists.html: ' + templateResp.status);
+        const template = await templateResp.text();
+
+        log('Загружаю список активных артистов...');
+        const snap = await getDocs(query(collection(db, 'artistApplications'), where('status', '==', 'active')));
+
+        const zip = new JSZip();
+        const folder = zip.folder('artist');
+        let count = 0, skippedNoSlug = 0;
+
+        snap.forEach(d => {
+          const data = d.data();
+          const name = data.nickname || data.displayName || d.id;
+          const slug = data.slug || slugify(name) || d.id;
+          if (!slug) { skippedNoSlug++; return; }
+
+          const artist = {
+            name,
+            bio: data.cardBio || '',
+            photo: data.avatarUrl || '',
+            slug,
+          };
+
+          const html = buildArtistHtml(template, artist, origin);
+          folder.file(slug + '.html', html);
+          count++;
+          log(`✓ ${name} → artist/${slug}.html`);
+        });
+
+        log(`\nГотово. Файлов создано: ${count}. Пропущено (нет slug): ${skippedNoSlug}.`);
+        log('Собираю zip...');
+
+        const blob = await zip.generateAsync({ type: 'blob' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'artist-og-previews.zip';
+        a.click();
+
+        log('Zip скачан. Распакуй в корень проекта и сделай firebase deploy --only hosting.');
+      } catch (e) {
+        log('Ошибка: ' + e.message);
+        console.error(e);
+      }
+      btn.disabled = false;
+    });
+  </script>
+</body>
+</html>

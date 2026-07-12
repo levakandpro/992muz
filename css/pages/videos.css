@@ -1,0 +1,848 @@
+/* ── VIDEOS PAGE ── */
+
+/* ── SECTION HEADER ── */
+.vid-section {
+  margin-bottom: 60px;
+}
+
+.vid-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.vid-section-title {
+  font-size: 26px;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+.vid-see-all {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+.vid-see-all:hover { opacity: 1; }
+
+/* ══════════════════════════════════════
+   БЛОК 1 — ТОПОВЫЕ КЛИПЫ (hero + sidebar)
+══════════════════════════════════════ */
+.vid-hero-wrap {
+  display: grid;
+grid-template-columns: 1fr 380px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Главное видео */
+.vid-hero-main {
+  background: #000;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+
+.vid-hero-main iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: block;
+  border: none;
+}
+
+/* Боковой список */
+.vid-hero-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  height: 0;
+  min-height: 100%;
+  max-height: calc(380px * 9 / 16);
+  align-self: stretch;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg3) transparent;
+  border-radius: var(--radius);
+  background: var(--bg2);
+  box-shadow: var(--shadow);
+}
+
+.vid-hero-sidebar::-webkit-scrollbar { width: 4px; }
+.vid-hero-sidebar::-webkit-scrollbar-track { background: transparent; }
+.vid-hero-sidebar::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
+
+.vid-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid var(--bg3);
+  position: relative;
+}
+
+.vid-sidebar-item:last-child { border-bottom: none; }
+.vid-sidebar-item:hover { background: var(--bg3); }
+.vid-sidebar-item.active { background: var(--accent-light); }
+.vid-sidebar-item.active::left { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--accent); border-radius:0 2px 2px 0; }
+
+.vid-sidebar-thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 88px;
+  height: 52px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+}
+
+.vid-sidebar-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vid-sidebar-thumb-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.35);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.vid-sidebar-item:hover .vid-sidebar-thumb-play { opacity: 1; }
+.vid-sidebar-item.active .vid-sidebar-thumb-play { opacity: 1; }
+
+.vid-sidebar-info { flex: 1; min-width: 0; }
+
+.vid-sidebar-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 3px;
+}
+
+.vid-sidebar-meta {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.vid-sidebar-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  flex-shrink: 0;
+  width: 18px;
+  text-align: right;
+}
+
+.vid-sidebar-item.active .vid-sidebar-num { color: var(--accent); }
+
+/* ══════════════════════════════════════
+   БЛОК 2 — ШОРТСЫ (вертикальные 9:16)
+══════════════════════════════════════ */
+.vid-shorts-row {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  padding-top: 12px;
+  padding-left: 4px;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg3) transparent;
+}
+.vid-shorts-row::-webkit-scrollbar { height: 4px; }
+.vid-shorts-row::-webkit-scrollbar-track { background: transparent; }
+.vid-shorts-row::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
+
+.vid-short-card {
+  flex-shrink: 0;
+  width: 160px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vid-short-card:hover {
+  transform: scale(1.04);
+  box-shadow: var(--shadow-lg);
+}
+.vid-short-frame {
+  position: relative;
+  aspect-ratio: 9/16;
+  overflow: hidden;
+}
+
+.vid-short-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: none;
+}
+
+.vid-short-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 12px 10px;
+  transition: opacity 0.2s;
+}
+
+.vid-short-card:hover .vid-short-overlay { opacity: 0; }
+
+.vid-short-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.vid-short-play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.4);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.vid-short-card:hover .vid-short-play-overlay { opacity: 1; }
+
+.vid-short-play-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+/* ══════════════════════════════════════
+   БЛОК 3 — ЛЕГЕНДАРНЫЕ РАБОТЫ (кинематограф)
+══════════════════════════════════════ */
+.vid-legend-row {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  padding-top: 12px;
+  margin-top: -12px;
+  scrollbar-width: none;
+}
+.vid-legend-row::-webkit-scrollbar { display: none; }
+
+.vid-legend-card {
+  flex-shrink: 0;
+  width: 380px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #0d0205;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vid-legend-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 16px 60px rgba(0,0,0,0.28);
+}
+
+.vid-legend-video {
+  position: relative;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+
+.vid-legend-video iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: none;
+}
+
+.vid-legend-grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,2,5,0.92) 0%, rgba(10,2,5,0.2) 60%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Золотая рамка */
+.vid-legend-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  border: 1px solid rgba(212,168,67,0.25);
+  pointer-events: none;
+  z-index: 5;
+  transition: border-color 0.3s;
+}
+
+.vid-legend-card:hover::before {
+  border-color: rgba(212,168,67,0.55);
+}
+
+.vid-legend-info {
+  padding: 16px 18px 18px;
+  background: #0d0205;
+  position: relative;
+}
+
+.vid-legend-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.vid-legend-title {
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.vid-legend-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+}
+
+.vid-legend-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(139,26,47,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.25s;
+  box-shadow: 0 4px 24px rgba(139,26,47,0.6);
+  z-index: 4;
+}
+
+.vid-legend-card:hover .vid-legend-play {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* Scroll arrows */
+.vid-scroll-wrap {
+  position: relative;
+  padding-top: 12px;
+  margin-top: -12px;
+}
+.vid-scroll-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg2);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  border: none;
+  color: var(--text);
+  transition: all 0.15s;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vid-scroll-wrap:hover .vid-scroll-arrow {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.vid-scroll-arrow:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.vid-scroll-arrow-left { left: -16px; }
+.vid-scroll-arrow-right { right: -16px; }
+
+/* ══════════════════════════════════════
+   БЛОК 4 — КЛИПЫ МЕСЯЦА (с голосованием)
+══════════════════════════════════════ */
+.vid-month-row {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  padding-top: 12px;
+  margin-top: -12px;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg3) transparent;
+}
+.vid-month-row::-webkit-scrollbar { height: 4px; }
+.vid-month-row::-webkit-scrollbar-track { background: transparent; }
+.vid-month-row::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
+
+.vid-month-card {
+  flex-shrink: 0;
+  width: 280px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg2);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vid-month-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.vid-month-video {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: #000;
+  overflow: hidden;
+}
+
+.vid-month-video iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: none;
+}
+
+.vid-month-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.vid-month-card:hover .vid-month-overlay { background: rgba(0,0,0,0.35); }
+
+.vid-month-play {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 4px 16px rgba(139,26,47,0.5);
+}
+
+.vid-month-card:hover .vid-month-play {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.vid-month-rank {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: auto;
+  height: 22px;
+  border-radius: 100px;
+  padding: 0 8px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.vid-month-rank.top3 {
+  background: var(--gold);
+  color: #000;
+}
+.vid-month-info {
+  padding: 12px 14px;
+}
+
+.vid-month-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vid-month-artist {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+/* Голосование */
+.vid-vote {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vid-vote-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--bg3);
+  color: var(--text2);
+}
+
+.vid-vote-btn:hover { transform: scale(1.05); }
+
+.vid-vote-like:hover,
+.vid-vote-like.voted {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.vid-vote-dislike:hover,
+.vid-vote-dislike.voted {
+  background: #fdecea;
+  color: #c62828;
+}
+
+.vid-vote-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--bg3);
+  border-radius: 100px;
+  overflow: visible;
+  position: relative;
+}
+
+.vid-vote-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3a0a12, #8b1a2f, #c0392b, #e74c3c);
+  background-size: 200% 100%;
+  animation: vote-slide 2s linear infinite;
+  border-radius: 100px;
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.vid-vote-fill::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #e74c3c;
+}
+
+@keyframes vote-slide {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+/* ══════════════════════════════════════
+   БЛОК 5 — 992MUZLIVE
+══════════════════════════════════════ */
+.vid-live-row {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  padding-top: 12px;
+  margin-top: -12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg3) transparent;
+}
+.vid-live-row::-webkit-scrollbar { height: 4px; }
+.vid-live-row::-webkit-scrollbar-track { background: transparent; }
+.vid-live-row::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
+
+.vid-live-card {
+  flex-shrink: 0;
+  width: 300px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg2);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vid-live-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.vid-live-video {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: #000;
+  overflow: hidden;
+}
+
+.vid-live-video iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: none;
+}
+
+.vid-live-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #fff;
+  background: rgba(139,26,47,0.85);
+  backdrop-filter: blur(6px);
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+.vid-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff4444;
+  animation: live-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+
+.vid-live-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.vid-live-card:hover .vid-live-overlay { background: rgba(0,0,0,0.35); }
+
+.vid-live-play {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 4px 16px rgba(139,26,47,0.5);
+}
+
+.vid-live-card:hover .vid-live-play {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.vid-live-info {
+  padding: 12px 14px 14px;
+}
+
+.vid-live-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vid-live-sub {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+/* ── SCROLL TOP ── */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+  z-index: 999;
+}
+
+.scroll-top-btn.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.scroll-top-btn:hover { transform: translateY(-2px); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .vid-hero-wrap { grid-template-columns: 1fr 300px; }
+  .vid-legend-card { width: 320px; }
+}
+
+@media (max-width: 860px) {
+  .vid-hero-wrap { grid-template-columns: 1fr; }
+  .vid-hero-sidebar { max-height: 260px; }
+  .vid-legend-card { width: 280px; }
+  .vid-month-card { width: 240px; }
+  .vid-live-card { width: 250px; }
+}
+
+@media (max-width: 540px) {
+  .vid-short-card { width: 130px; }
+  .vid-month-card { width: 210px; }
+  .vid-section-title { font-size: 20px; }
+}
+.vid-section-head > div {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.vid-section-head > div .section-label {
+  width: 100%;
+  margin-bottom: -6px;
+}
+.vid-comments-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.15s;
+}
+
+.vid-comments-btn:hover img { opacity: 1 !important; }
+
+.vid-stat-btn, .vid-stat-view {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  background: none;
+  border: 1px solid rgba(0,0,0,0.15);
+  color: var(--text2);
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.vid-stat-btn:hover { border-color: rgba(255,59,92,0.5); transform: scale(1.05); }
+.vid-stat-view { cursor: default; }
+.vid-top-comment {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text2);
+  max-width: 340px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.vid-top-comment.vtc-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+.vtc-heart {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+}
+.vtc-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-style: italic;
+  color: var(--text3);
+}

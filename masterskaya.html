@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="Мастерская - 992MUZ">
+  <meta property="og:description" content="Конвертер аудио 992MUZ - MP3, WAV, FLAC, OGG, OPUS, M4A прямо в браузере">
+  <meta property="og:image" content="https://992muz.ru/assets/png/red.png">
+  <meta property="og:url" content="https://992muz.ru/masterskaya.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Мастерская - 992MUZ</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="preconnect" href="https://www.gstatic.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=JetBrains+Mono:wght@400;600&family=Bebas+Neue&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/pages/home.css">
+  <link rel="stylesheet" href="css/pages/masterskaya.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="wrap">
+    <div class="navbar-inner">
+      <button class="burger-btn" id="burgerBtn" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="mobile-overlay" id="mobileOverlay"></div>
+<div class="mobile-menu" id="mobileMenu">
+        <img src="assets/icons/logonew/zegr.png" alt="" class="mobile-menu-watermark">
+        <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Закрыть">✕</button>
+        <div class="mobile-menu-logo">
+          <img src="assets/icons/logonew/Дизайн без названия (16).png" alt="992MUZ">
+          <span>МЕНЮ</span>
+        </div>
+        <ul class="mobile-nav">
+          <li><a href="index.html"><img src="assets/icons/site.png" alt="">Главная</a></li>
+          <li><a href="artists.html"><img src="assets/icons/profile.png" alt="">Артисты</a></li>
+          <li><a href="videos.html"><img src="assets/icons/video.png" alt="">Видео</a></li>
+<li><a href="playlists.html"><img src="assets/icons/music.png" alt="">Плейлисты</a></li>
+<li><a href="studios.html"><img src="assets/icons/rec.png" alt="">Студии</a></li>
+          <li><a href="masterskaya.html" class="active"><img src="assets/icons/sstar.png" alt="">Мастерская</a></li>
+          <li><a href="https://bloggers-992muz.web.app" target="_blank"><img src="assets/icons/profile.png" alt="">Блогеры</a></li>
+        </ul>
+        <div class="mobile-menu-actions">
+          <a href="login.html" class="btn-login" id="mobileLoginBtn">
+            <img src="assets/icons/profile.png" alt="" loading="lazy"> Войти
+          </a>
+          <a href="artist-profile.html" class="btn-login" id="mobileProfileBtn" style="display:none">
+            <img src="assets/icons/profile.png" alt=""> Профиль
+          </a>
+          <button class="btn-login" id="mobileLogoutBtn" style="display:none;background:none;border:none;cursor:pointer;color:inherit;">
+            Выйти
+          </button>
+        </div>
+        <div class="mobile-menu-socials">
+          <a href="https://t.me/tg992muz" target="_blank"><img src="assets/icons/telegram.png" alt=""></a>
+          <a href="https://www.instagram.com/992muz/" target="_blank"><img src="assets/icons/instagram.png" alt=""></a>
+          <a href="https://www.youtube.com/@992MUZ" target="_blank"><img src="assets/icons/youtube.png" alt=""></a>
+        </div>
+      </div>
+      <a href="index.html" class="navbar-logo" style="display:flex;flex-direction:row;align-items:center;gap:8px;">
+        <img src="assets/png/red.png" alt="992MUZ" style="height:110px;width:auto;object-fit:contain;display:block;">
+        <span style="font-weight:300;font-size:9px;letter-spacing:.2px;opacity:.6;white-space:nowrap;line-height:1.2;">платформа таджикской<br>хип-хоп индустрии</span>
+      </a>
+      <ul class="navbar-nav">
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="artists.html">Артисты</a></li>
+        <li><a href="videos.html">Видео</a></li>
+<li><a href="playlists.html">Плейлисты</a></li>
+          <li><a href="studios.html">Студии</a></li>
+          <li><a href="masterskaya.html" class="active">Мастерская</a></li>
+          <li><a href="https://bloggers-992muz.web.app">Блогеры</a></li>
+      </ul>
+<div class="navbar-actions navbar-actions--desktop">
+        <a href="login.html" class="btn-login" id="navLoginBtn">
+<img src="assets/icons/profile.png" alt="" loading="lazy">
+          Войти
+        </a>
+        <a href="artist-profile.html" class="btn-login" id="navProfileBtn" style="display:none">
+          <img src="assets/icons/profile.png" alt="">
+          Профиль
+        </a>
+        <button class="btn-login" id="navLogoutBtn" style="display:none;background:none;border:none;cursor:pointer;color:inherit;">
+          Выйти
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="wrap ws-wrap">
+
+  <!-- HERO -->
+  <section class="ws-hero">
+<div class="ws-hero-tape">
+      <div class="ws-tape-window">
+      <span class="ws-eyebrow">Инструменты 992MUZ</span>
+        <h1 class="ws-title">Лаборатория ХИП ХАПА</h1>
+        <p class="ws-subtitle">Твой швейцарский нож и Экосистема для твоих релизов</p>
+      </div>
+    </div>
+</section>
+
+  <!-- ФОТОРЕДАКТОР ОБЛОЖЕК -->
+  <section class="ws-section ws-editor">
+    <div class="ws-block-header ws-block-header--green">
+      <span class="ws-block-eyebrow">Инструмент 01</span>
+      <h2 class="ws-block-title">Фоторедактор обложек</h2>
+    </div>
+    <p class="ws-trim-subtitle">Фон, слои фото, текст и стикеры - собери обложку под трек, YouTube-превью или сторис. При смене формата холст очищается.</p>
+
+    <div class="ws-editor-formats">
+      <button class="ws-editor-format-btn active" data-format="square" data-w="1080" data-h="1080">Квадрат · Трек</button>
+      <button class="ws-editor-format-btn" data-format="horizontal" data-w="1280" data-h="720">Горизонталь · YouTube</button>
+      <button class="ws-editor-format-btn" data-format="vertical" data-w="1080" data-h="1920">Вертикаль · Сторис</button>
+    </div>
+
+    <div class="ws-editor-layout">
+      <div class="ws-editor-canvas-col">
+<div class="ws-editor-canvas-wrap" id="wsEditorCanvasWrap">
+          <canvas id="wsEditorCanvas"></canvas>
+          <div class="ws-editor-sel-overlay" id="wsEditorSelOverlay" style="display:none;">
+            <button class="ws-editor-sel-handle" data-corner="tl"></button>
+            <button class="ws-editor-sel-handle" data-corner="tr"></button>
+            <button class="ws-editor-sel-handle" data-corner="bl"></button>
+            <button class="ws-editor-sel-handle" data-corner="br"></button>
+            <button class="ws-editor-sel-action ws-editor-sel-dup" id="wsEditorSelDup" title="Дублировать">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/></svg>
+            </button>
+<button class="ws-editor-sel-action ws-editor-sel-del" id="wsEditorSelDel" title="Удалить">✕</button>
+          </div>
+<div class="ws-editor-ctx-menu" id="wsEditorProps" style="display:none;">
+            <div class="ws-editor-ctx-drag" id="wsEditorPropsDragHandle"><span></span><span></span><span></span></div>
+            <div class="ws-editor-ctx-menu-body">
+<div class="ws-editor-slider-row">
+              <div class="ws-editor-slider-row-head">
+                <label>Прозрачность</label>
+                <input type="text" class="ws-editor-value-box" id="wsEditorOpacityValue" value="100" inputmode="numeric">
+              </div>
+              <input type="range" id="wsEditorOpacityRange" min="10" max="100" value="100">
+            </div>
+
+<div class="ws-editor-group" id="wsEditorGroupLight">
+              <div class="ws-editor-group-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2.3h6c0-1.1.4-1.8 1-2.3A7 7 0 0 0 12 2Z"/></svg>
+                Свет
+              </div>
+              <div class="ws-editor-slider-row">
+                <div class="ws-editor-slider-row-head">
+                  <label>Яркость</label>
+                  <input type="text" class="ws-editor-value-box" id="wsEditorBrightnessValue" value="0" inputmode="numeric">
+                </div>
+                <input type="range" id="wsEditorBrightnessRange" min="-50" max="50" value="0">
+              </div>
+              <div class="ws-editor-slider-row">
+                <div class="ws-editor-slider-row-head">
+                  <label>Контраст</label>
+                  <input type="text" class="ws-editor-value-box" id="wsEditorContrastValue" value="0" inputmode="numeric">
+                </div>
+                <input type="range" id="wsEditorContrastRange" min="-50" max="50" value="0">
+              </div>
+            </div>
+
+<div class="ws-editor-group" id="wsEditorGroupColor">
+              <div class="ws-editor-group-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11Z"/></svg>
+                Цвет
+              </div>
+              <div class="ws-editor-slider-row">
+                <div class="ws-editor-slider-row-head">
+                  <label>Насыщенность</label>
+                  <input type="text" class="ws-editor-value-box" id="wsEditorSaturationValue" value="0" inputmode="numeric">
+                </div>
+                <input type="range" id="wsEditorSaturationRange" min="-50" max="50" value="0">
+              </div>
+              <div class="ws-editor-slider-row">
+                <div class="ws-editor-slider-row-head">
+                  <label>Теплота</label>
+                  <input type="text" class="ws-editor-value-box" id="wsEditorWarmthValue" value="0" inputmode="numeric">
+                </div>
+                <input type="range" id="wsEditorWarmthRange" min="-50" max="50" value="0">
+              </div>
+            </div>
+
+<div class="ws-editor-group" id="wsEditorGroupTexture">
+              <div class="ws-editor-group-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/><path d="M2 18c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/></svg>
+                Текстура
+              </div>
+              <div class="ws-editor-slider-row">
+                <div class="ws-editor-slider-row-head">
+                  <label>Резкость</label>
+                  <input type="text" class="ws-editor-value-box" id="wsEditorSharpenValue" value="0" inputmode="numeric">
+                </div>
+                <input type="range" id="wsEditorSharpenRange" min="0" max="100" value="0">
+              </div>
+              <div class="ws-editor-slider-row">
+                <div class="ws-editor-slider-row-head">
+                  <label>Виньетка</label>
+                  <input type="text" class="ws-editor-value-box" id="wsEditorVignetteValue" value="0" inputmode="numeric">
+                </div>
+                <input type="range" id="wsEditorVignetteRange" min="0" max="100" value="0">
+              </div>
+            </div>
+
+<div class="ws-editor-props-textonly" id="wsEditorPropsText" style="display:none;">
+              <div class="ws-editor-sticker-heading">Эффекты</div>
+              <div class="ws-editor-effects-grid" id="wsEditorPropsEffectsGrid"></div>
+<div class="ws-editor-slider-row">
+                <div class="ws-editor-slider-row-head">
+                  <label>Пол (наклон вниз)</label>
+                  <input type="text" class="ws-editor-value-box" id="wsEditorFloorTiltValue" value="0" inputmode="numeric">
+                </div>
+                <input type="range" id="wsEditorFloorTiltRange" min="0" max="100" value="0">
+              </div>
+              <div class="ws-editor-slider-row">
+                <div class="ws-editor-slider-row-head">
+                  <label>Стена (поворот вбок)</label>
+                  <input type="text" class="ws-editor-value-box" id="wsEditorWallTiltValue" value="0" inputmode="numeric">
+                </div>
+                <input type="range" id="wsEditorWallTiltRange" min="0" max="100" value="0">
+              </div>
+<div class="ws-editor-format-row">
+                <button type="button" class="ws-fmt-btn" id="wsEditorBoldBtn" title="Жирный"><b>B</b></button>
+                <button type="button" class="ws-fmt-btn" id="wsEditorItalicBtn" title="Курсив"><i>I</i></button>
+                <button type="button" class="ws-fmt-btn" id="wsEditorUnderlineBtn" title="Подчёркнутый"><u>U</u></button>
+                <button type="button" class="ws-fmt-btn" id="wsEditorStrikeBtn" title="Зачёркнутый"><s>S</s></button>
+              </div>
+              <div class="ws-editor-format-row">
+                <button type="button" class="ws-fmt-btn ws-fmt-align" data-align="left" title="По левому краю">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h14"/></svg>
+                </button>
+                <button type="button" class="ws-fmt-btn ws-fmt-align active" data-align="center" title="По центру">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16"/><path d="M7 12h10"/><path d="M5 18h14"/></svg>
+                </button>
+                <button type="button" class="ws-fmt-btn ws-fmt-align" data-align="right" title="По правому краю">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16"/><path d="M10 12h10"/><path d="M6 18h14"/></svg>
+                </button>
+              </div>
+              <div class="ws-id3-field">
+                <label>Текст</label>
+                <textarea id="wsEditorTextContent" class="ws-id3-input" rows="2" style="resize:vertical;"></textarea>
+              </div>
+<div class="ws-id3-field">
+                <label>Шрифт</label>
+                <div class="ws-editor-font-select" id="wsEditorFontWrap">
+                <select id="wsEditorFontSelect" class="ws-select ws-visually-hidden">
+                  <optgroup label="Google Fonts">
+                    <option value="'Unbounded', sans-serif">Unbounded</option>
+                    <option value="'Bebas Neue', sans-serif">Bebas Neue</option>
+                    <option value="'Oswald', sans-serif">Oswald</option>
+                    <option value="'JetBrains Mono', monospace">JetBrains Mono</option>
+                  </optgroup>
+                  <optgroup label="Свои шрифты (zmedia)">
+                    <option value="'ZM Angry', sans-serif">Angry</option>
+                    <option value="'ZM AsiaAS Normal', sans-serif">AsiaAS Normal</option>
+                    <option value="'ZM AttackType', sans-serif">AttackType</option>
+                    <option value="'ZM Atziluth Script', sans-serif">Atziluth Script</option>
+                    <option value="'ZM Bardi OTF', sans-serif">Bardi (OTF)</option>
+                    <option value="'ZM Bardi TTF', sans-serif">Bardi (TTF)</option>
+                    <option value="'ZM Betmo Regular Cyr', sans-serif">Betmo Regular Cyr</option>
+                    <option value="'ZM Bowler', sans-serif">Bowler</option>
+                    <option value="'ZM BrillianCyrillicCnd Light', sans-serif">BrillianCyrillicCnd Light</option>
+                    <option value="'ZM BrillianCyrillicExpnd Medium', sans-serif">BrillianCyrillicExpnd Medium</option>
+                    <option value="'ZM CocoBiker Bold', sans-serif">CocoBiker Bold</option>
+                    <option value="'ZM CocoBiker Heavy', sans-serif">CocoBiker Heavy</option>
+                    <option value="'ZM CocoBiker Light', sans-serif">CocoBiker Light</option>
+                    <option value="'ZM CocoBiker Regular', sans-serif">CocoBiker Regular</option>
+                    <option value="'ZM CocoBiker Ultralight', sans-serif">CocoBiker Ultralight</option>
+                    <option value="'ZM Compacta LT Light Compress', sans-serif">Compacta LT Light Compress</option>
+                    <option value="'ZM Corvetta', sans-serif">Corvetta</option>
+                    <option value="'ZM DaMiOne', sans-serif">DaMiOne</option>
+                    <option value="'ZM EternaBreaks', sans-serif">EternaBreaks</option>
+                    <option value="'ZM Exterior Light', sans-serif">Exterior Light</option>
+                    <option value="'ZM Exterior Rough Light', sans-serif">Exterior Rough Light</option>
+                    <option value="'ZM Fluffyfont', sans-serif">Fluffyfont</option>
+                    <option value="'ZM Gothic60', sans-serif">Gothic60</option>
+                    <option value="'ZM Gropled Hollow', sans-serif">Gropled Hollow</option>
+                    <option value="'ZM Gropled Bold', sans-serif">Gropled Bold</option>
+                    <option value="'ZM Hummus', sans-serif">Hummus</option>
+                    <option value="'ZM Jaipur', sans-serif">Jaipur</option>
+                    <option value="'ZM Kosmos', sans-serif">Kosmos</option>
+                    <option value="'ZM Leporid Italic', sans-serif">Leporid Italic</option>
+                    <option value="'ZM Leporid Regular', sans-serif">Leporid Regular</option>
+                    <option value="'ZM LincolnElectric Over', sans-serif">LincolnElectric Over</option>
+                    <option value="'ZM LincolnElectric Regular', sans-serif">LincolnElectric Regular</option>
+                    <option value="'ZM LincolnElectric Under', sans-serif">LincolnElectric Under</option>
+                    <option value="'ZM Lucida CalligraphyC', sans-serif">Lucida CalligraphyC</option>
+                    <option value="'ZM Manasco', sans-serif">Manasco</option>
+                    <option value="'ZM Mr Lonely', sans-serif">Mr Lonely</option>
+                    <option value="'ZM Onmark TRIAL', sans-serif">Onmark TRIAL</option>
+                    <option value="'ZM Roadkill Heavy', sans-serif">Roadkill Heavy</option>
+                    <option value="'ZM Robofan', sans-serif">Robofan</option>
+                    <option value="'ZM Schist Black', sans-serif">Schist Black</option>
+                    <option value="'ZM Schist Bold', sans-serif">Schist Bold</option>
+                    <option value="'ZM Schist Light', sans-serif">Schist Light</option>
+                    <option value="'ZM Schist Regular', sans-serif">Schist Regular</option>
+                    <option value="'ZM Serati Italic', sans-serif">Serati Italic</option>
+                    <option value="'ZM Serati Regular', sans-serif">Serati Regular</option>
+                    <option value="'ZM Sjz', sans-serif">Sjz</option>
+                    <option value="'ZM SKNigarRUS', sans-serif">SKNigarRUS</option>
+                    <option value="'ZM ST Warmovie OTF', sans-serif">ST Warmovie (OTF)</option>
+                    <option value="'ZM ST Warmovie TTF', sans-serif">ST Warmovie (TTF)</option>
+                    <option value="'ZM TTDaysSans Black', sans-serif">TTDaysSans Black</option>
+                    <option value="'ZM TTDaysSans BlackItalic', sans-serif">TTDaysSans BlackItalic</option>
+                    <option value="'ZM TTDaysSans Bold', sans-serif">TTDaysSans Bold</option>
+                    <option value="'ZM TTDaysSans BoldItalic', sans-serif">TTDaysSans BoldItalic</option>
+                    <option value="'ZM UnifixSPDemo', sans-serif">UnifixSPDemo</option>
+                    <option value="'ZM Universal Antiqua Bold', sans-serif">Universal Antiqua Bold</option>
+                    <option value="'ZM Universal Antiqua Italic', sans-serif">Universal Antiqua Italic</option>
+                    <option value="'ZM Universal Antiqua Upright Italic', sans-serif">Universal Antiqua Upright Italic</option>
+                    <option value="'ZM Universal Antiqua', sans-serif">Universal Antiqua</option>
+                  </optgroup>
+</select>
+                  <button type="button" class="ws-editor-font-btn" id="wsEditorFontBtn">Unbounded <span class="ws-editor-font-arrow">▾</span></button>
+                  <div class="ws-editor-font-popup" id="wsEditorFontPopup" style="display:none;">
+                    <div class="ws-editor-sticker-scroll ws-editor-font-scroll" id="wsEditorFontList"></div>
+                  </div>
+                </div>
+              </div>
+<div class="ws-id3-field">
+                <label>Цвет текста</label>
+                <input type="color" id="wsEditorColorInput" value="#ffffff" class="ws-editor-color-input">
+              </div>
+
+              <div class="ws-editor-slider-row">
+                <div class="ws-editor-slider-row-head">
+                  <label>Межбуквенный интервал</label>
+                  <input type="text" class="ws-editor-value-box" id="wsEditorLetterSpacingValue" value="0" inputmode="numeric">
+                </div>
+                <input type="range" id="wsEditorLetterSpacingRange" min="-10" max="40" value="0">
+              </div>
+<div class="ws-editor-slider-row">
+                <div class="ws-editor-slider-row-head">
+                  <label>Расстояние между строками</label>
+                  <input type="text" class="ws-editor-value-box" id="wsEditorLineHeightValue" value="1.2" inputmode="decimal">
+                </div>
+                <input type="range" id="wsEditorLineHeightRange" min="8" max="30" value="12">
+              </div>
+<div class="ws-id3-field">
+                <label>Закрепить поле</label>
+                <div class="ws-editor-format-row">
+                  <button type="button" class="ws-fmt-btn ws-fmt-anchor" data-anchor="top" title="Сверху">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v14"/><path d="m6 12 6 6 6-6"/></svg>
+                  </button>
+                  <button type="button" class="ws-fmt-btn ws-fmt-anchor active" data-anchor="middle" title="По центру">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V3"/><path d="m7 8 5-5 5 5"/><path d="m7 16 5 5 5-5"/></svg>
+                  </button>
+                  <button type="button" class="ws-fmt-btn ws-fmt-anchor" data-anchor="bottom" title="Снизу">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V6"/><path d="m6 12 6-6 6 6"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <label class="ws-trim-fade-toggle" style="margin-left:0;">
+                <input type="checkbox" id="wsEditorShadowToggle">
+                Тень
+              </label>
+              <div class="ws-id3-field">
+                <label>Цвет тени</label>
+                <input type="color" id="wsEditorShadowColor" value="#000000" class="ws-editor-color-input">
+              </div>
+              <div class="ws-id3-field">
+                <label>Сила тени</label>
+                <input type="range" id="wsEditorShadowBlur" min="0" max="40" value="8">
+              </div>
+
+              <label class="ws-trim-fade-toggle" style="margin-left:0;">
+                <input type="checkbox" id="wsEditorOutlineToggle">
+                Обводка
+              </label>
+              <div class="ws-id3-field">
+                <label>Цвет обводки</label>
+                <input type="color" id="wsEditorOutlineColor" value="#000000" class="ws-editor-color-input">
+              </div>
+<div class="ws-id3-field">
+                <label>Толщина обводки</label>
+                <input type="range" id="wsEditorOutlineWidth" min="1" max="20" value="4">
+              </div>
+
+              <label class="ws-trim-fade-toggle" style="margin-left:0;">
+                <input type="checkbox" id="wsEditorGlowToggle">
+                Свечение
+              </label>
+              <div class="ws-id3-field">
+                <label>Цвет свечения</label>
+                <input type="color" id="wsEditorGlowColor" value="#e8a33d" class="ws-editor-color-input">
+              </div>
+<div class="ws-id3-field">
+                <label>Сила свечения</label>
+                <input type="range" id="wsEditorGlowBlur" min="0" max="60" value="16">
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+        <div class="ws-editor-toolbar">
+ <input type="file" id="wsEditorBgInput" accept="image/*" hidden>
+          <button class="ws-btn ws-btn-ghost" id="wsEditorBgBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            Фон
+          </button>
+          <input type="file" id="wsEditorPhotoInput" accept="image/*" hidden>
+          <button class="ws-btn ws-btn-ghost" id="wsEditorPhotoBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M9 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/><path d="m4 15 4-4 4 4 4-6 4 6"/></svg>
+            Фото
+          </button>
+<button class="ws-btn ws-btn-ghost" id="wsEditorTextBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"/><path d="M12 6v14"/><path d="M9 20h6"/></svg>
+            Текст
+          </button>
+<div class="ws-editor-sticker-wrap">
+            <button class="ws-btn ws-btn-ghost" id="wsEditorEffectsBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3"/><path d="m18.4 5.6-2.1 2.1"/><path d="M21 12h-3"/><path d="m18.4 18.4-2.1-2.1"/><path d="M12 18v3"/><path d="m5.6 18.4 2.1-2.1"/><path d="M3 12h3"/><path d="m5.6 5.6 2.1 2.1"/></svg>
+              Эффекты
+            </button>
+            <div class="ws-editor-sticker-popup" id="wsEditorEffectsPopup" style="display:none;">
+              <div class="ws-editor-sticker-scroll">
+                <div class="ws-editor-sticker-section">
+                  <div class="ws-editor-sticker-heading">Эффекты</div>
+                  <div class="ws-editor-effects-grid" id="wsEditorEffectsGrid"></div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+<div class="ws-editor-sticker-wrap">
+            <button class="ws-btn ws-btn-ghost" id="wsEditorStickerBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg>
+              Стикеры
+            </button>
+<div class="ws-editor-sticker-popup" id="wsEditorStickerPopup" style="display:none;">
+              <div class="ws-editor-sticker-scroll">
+                <div class="ws-editor-sticker-section">
+                  <div class="ws-editor-sticker-heading">Advisory</div>
+                  <div class="ws-editor-sticker-grid" id="wsEditorStickerGridAdvisory"></div>
+                </div>
+                <div class="ws-editor-sticker-section">
+                  <div class="ws-editor-sticker-heading">Иконки</div>
+                  <div class="ws-editor-sticker-grid" id="wsEditorStickerGridRapiconz"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ws-editor-sidebar">
+        <div class="ws-editor-layers" id="wsEditorLayers"></div>
+
+
+        <div class="ws-editor-export">
+          <button class="ws-btn ws-btn-primary" id="wsEditorExportPng">Скачать PNG</button>
+          <button class="ws-btn ws-btn-ghost" id="wsEditorExportJpg">Скачать JPEG</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DROPZONE -->
+  <section class="ws-section">
+    <div class="ws-block-header ws-block-header--red">
+      <span class="ws-block-eyebrow">Инструмент 02</span>
+      <h2 class="ws-block-title">Конвертер форматов</h2>
+    </div>
+    <div class="ws-dropzone" id="wsDropzone" tabindex="0" role="button" aria-label="Загрузить аудиофайлы">
+      <input type="file" id="wsFileInput" accept="audio/*" multiple hidden>
+      <div class="ws-dropzone-icon">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2h-2.5"/><path d="M8.5 12H5a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2"/></svg>
+      </div>
+      <div class="ws-dropzone-text">
+        <b>Перетащи файлы сюда</b>
+        <span>или нажми, чтобы выбрать · MP3 · WAV · FLAC · OGG · OPUS · M4A</span>
+      </div>
+    </div>
+
+    <div class="ws-controls">
+      <div class="ws-control-group">
+        <label>Конвертировать в</label>
+        <select id="wsTargetFormat" class="ws-select">
+          <option value="mp3">MP3</option>
+          <option value="wav">WAV</option>
+          <option value="flac">FLAC</option>
+          <option value="ogg">OGG (Vorbis)</option>
+          <option value="opus">OPUS</option>
+          <option value="m4a">M4A (AAC)</option>
+        </select>
+      </div>
+      <div class="ws-control-group" id="wsBitrateGroup">
+        <label>Битрейт</label>
+        <select id="wsBitrate" class="ws-select">
+          <option value="128">128 kbps</option>
+          <option value="192" selected>192 kbps</option>
+          <option value="256">256 kbps</option>
+          <option value="320">320 kbps</option>
+        </select>
+      </div>
+      <button class="ws-btn ws-btn-primary" id="wsConvertAllBtn" disabled>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5,3 19,12 5,21"/></svg>
+        Конвертировать всё
+      </button>
+      <button class="ws-btn ws-btn-ghost" id="wsClearBtn" disabled>Очистить</button>
+    </div>
+
+    <div class="ws-engine-status" id="wsEngineStatus" style="display:none;"></div>
+
+    <div class="ws-queue" id="wsQueue"></div>
+
+    <div class="ws-empty" id="wsEmptyState">
+      <img src="assets/icons/mic2.png" alt="" style="width:34px;height:34px;opacity:.35;filter:invert(1);">
+      <span>Файлы появятся здесь. Название на выходе получит метку 992muz - легко узнать среди других треков.</span>
+    </div>
+  </section>
+
+  <!-- INFO -->
+  <section class="ws-section ws-info">
+    <div class="ws-info-card">
+      <div class="ws-info-num">01</div>
+      <div class="ws-info-title">Всё локально</div>
+      <div class="ws-info-text">Файлы обрабатываются в твоём браузере. Ничего не отправляется на сервер 992MUZ.</div>
+    </div>
+    <div class="ws-info-card">
+      <div class="ws-info-num">02</div>
+      <div class="ws-info-title">Без потери формата</div>
+      <div class="ws-info-text">WAV → FLAC → MP3 и обратно. Можно пачкой, разные файлы - в разные форматы.</div>
+    </div>
+<div class="ws-info-card">
+      <div class="ws-info-num">03</div>
+      <div class="ws-info-title">Метка 992muz</div>
+      <div class="ws-info-text">Каждый готовый файл получает префикс 992muz_ в названии - фирменный знак мастерской.</div>
+    </div>
+  </section>
+
+<!-- ОБРЕЗКА ТРЕКА -->
+  <section class="ws-section ws-trim">
+<div class="ws-block-header ws-block-header--amber">
+      <span class="ws-block-eyebrow">Инструмент 03</span>
+      <h2 class="ws-block-title">Нарезка трека</h2>
+    </div>
+    <p class="ws-trim-subtitle">Загрузи трек, выдели фрагмент на шкале и скачай только его.</p>
+
+    <div class="ws-trim-dropzone" id="wsTrimDropzone" tabindex="0" role="button" aria-label="Загрузить трек для обрезки">
+      <input type="file" id="wsTrimFileInput" accept="audio/*" hidden>
+      <div class="ws-dropzone-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
+      <div class="ws-dropzone-text">
+        <b>Перетащи трек сюда</b>
+        <span>или нажми, чтобы выбрать файл</span>
+      </div>
+    </div>
+
+    <div class="ws-trim-editor" id="wsTrimEditor" style="display:none;">
+      <div class="ws-trim-name" id="wsTrimName"></div>
+
+      <div class="ws-trim-themes" id="wsTrimThemes">
+        <button class="ws-trim-theme-btn active" data-theme="classic">Classic</button>
+        <button class="ws-trim-theme-btn" data-theme="mirror">Mirror</button>
+        <button class="ws-trim-theme-btn" data-theme="neon">Neon</button>
+        <button class="ws-trim-theme-btn" data-theme="blocks">Blocks</button>
+      </div>
+
+      <div class="ws-trim-canvas-wrap" id="wsTrimCanvasWrap">
+        <canvas id="wsTrimCanvas"></canvas>
+        <div class="ws-trim-mask ws-trim-mask-left" id="wsTrimMaskLeft"></div>
+        <div class="ws-trim-mask ws-trim-mask-right" id="wsTrimMaskRight"></div>
+<div class="ws-trim-playhead" id="wsTrimPlayhead"></div>
+        <div class="ws-trim-selection" id="wsTrimSelection"></div>
+        <div class="ws-trim-handle ws-trim-handle-start" id="wsTrimHandleStart"></div>
+        <div class="ws-trim-handle ws-trim-handle-end" id="wsTrimHandleEnd"></div>
+      </div>
+<div class="ws-trim-info">
+        <input type="text" class="ws-trim-time-input" id="wsTrimStartInput" value="0:00" inputmode="numeric">
+        <span class="ws-trim-selected" id="wsTrimSelectedLabel">Фрагмент: 0:00</span>
+        <input type="text" class="ws-trim-time-input" id="wsTrimEndInput" value="0:00" inputmode="numeric">
+      </div>
+
+      <div class="ws-trim-presets">
+        <button class="ws-trim-preset-btn" data-len="15">15 сек</button>
+        <button class="ws-trim-preset-btn" data-len="30">30 сек</button>
+        <button class="ws-trim-preset-btn" data-len="60">60 сек</button>
+        <label class="ws-trim-fade-toggle">
+          <input type="checkbox" id="wsTrimFadeCheck" checked>
+          Плавные края (fade)
+        </label>
+      </div>
+      <div class="ws-trim-controls">
+        <button class="ws-btn ws-btn-ghost" id="wsTrimPlayBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+          Прослушать фрагмент
+        </button>
+        <div class="ws-control-group">
+          <label>Формат</label>
+          <select id="wsTrimFormat" class="ws-select">
+            <option value="mp3">MP3</option>
+            <option value="wav">WAV</option>
+          </select>
+        </div>
+        <button class="ws-btn ws-btn-primary" id="wsTrimDownloadBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          Скачать фрагмент
+        </button>
+<button class="ws-btn ws-btn-ghost" id="wsTrimResetBtn">Другой файл</button>
+      </div>
+    </div>
+  </section>
+
+<!-- ТЕГЕР МЕТАДАННЫХ (ID3) -->
+  <section class="ws-section ws-id3">
+<div class="ws-block-header ws-block-header--green">
+      <span class="ws-block-eyebrow">Инструмент 04</span>
+      <h2 class="ws-block-title">Тегер метаданных</h2>
+    </div>
+    <p class="ws-trim-subtitle">Загрузи MP3 - отредактируй артиста, название, альбом и обложку прямо здесь. Файл нигде не сохраняется, только у тебя в браузере.</p>
+    <div class="ws-trim-dropzone" id="wsId3Dropzone" tabindex="0" role="button" aria-label="Загрузить MP3 для редактирования тегов">
+      <input type="file" id="wsId3FileInput" accept="audio/mpeg,.mp3" hidden>
+      <div class="ws-dropzone-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+      </div>
+      <div class="ws-dropzone-text">
+        <b>Перетащи MP3 сюда</b>
+        <span>или нажми, чтобы выбрать файл</span>
+      </div>
+    </div>
+
+    <div class="ws-id3-editor" id="wsId3Editor" style="display:none;">
+      <div class="ws-id3-cover-col">
+        <div class="ws-id3-cover" id="wsId3Cover">
+          <img id="wsId3CoverImg" alt="" style="display:none;">
+          <span id="wsId3CoverPlaceholder">Нет обложки</span>
+        </div>
+        <input type="file" id="wsId3CoverInput" accept="image/*" hidden>
+        <button class="ws-btn ws-btn-ghost" id="wsId3CoverBtn">Заменить обложку</button>
+      </div>
+
+      <div class="ws-id3-fields">
+        <div class="ws-id3-field">
+          <label>Название трека</label>
+          <input type="text" id="wsId3Title" class="ws-id3-input" placeholder="Название">
+        </div>
+        <div class="ws-id3-field">
+          <label>Артист</label>
+          <input type="text" id="wsId3Artist" class="ws-id3-input" placeholder="Имя артиста">
+        </div>
+        <div class="ws-id3-field">
+          <label>Альбом</label>
+          <input type="text" id="wsId3Album" class="ws-id3-input" placeholder="Альбом">
+        </div>
+        <div class="ws-id3-field">
+          <label>Год</label>
+          <input type="text" id="wsId3Year" class="ws-id3-input" placeholder="2026" maxlength="4">
+        </div>
+
+<div class="ws-id3-actions">
+          <button class="ws-btn ws-btn-primary" id="wsId3SaveBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+            Сохранить и скачать
+          </button>
+          <button class="ws-btn ws-btn-ghost" id="wsId3ResetBtn">Другой файл</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BPM & ТОНАЛЬНОСТЬ -->
+  <section class="ws-section ws-bpm">
+<div class="ws-block-header ws-block-header--amber">
+      <span class="ws-block-eyebrow">Инструмент 05</span>
+      <h2 class="ws-block-title">BPM и тональность</h2>
+    </div>
+    <p class="ws-trim-subtitle">Загрузи трек - определим примерный темп и тональность. Оценка приблизительная, для ориентира перед записью.</p>
+
+    <div class="ws-trim-dropzone" id="wsBpmDropzone" tabindex="0" role="button" aria-label="Загрузить трек для анализа">
+      <input type="file" id="wsBpmFileInput" accept="audio/*" hidden>
+      <div class="ws-dropzone-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 9 4-18 3 9h4"/></svg>
+      </div>
+      <div class="ws-dropzone-text">
+        <b>Перетащи трек сюда</b>
+        <span>или нажми, чтобы выбрать файл</span>
+      </div>
+    </div>
+
+    <div class="ws-engine-status" id="wsBpmStatus" style="display:none;"></div>
+
+    <div class="ws-bpm-result" id="wsBpmResult" style="display:none;">
+      <div class="ws-bpm-card">
+        <div class="ws-bpm-num" id="wsBpmValue">-</div>
+        <div class="ws-bpm-label">BPM</div>
+      </div>
+      <div class="ws-bpm-card">
+        <div class="ws-bpm-num" id="wsBpmKeyValue">-</div>
+        <div class="ws-bpm-label">Тональность</div>
+      </div>
+      <button class="ws-btn ws-btn-ghost" id="wsBpmResetBtn">Другой файл</button>
+    </div>
+  </section>
+
+  <!-- QR-КОД -->
+  <section class="ws-section ws-qr">
+<div class="ws-block-header ws-block-header--red">
+      <span class="ws-block-eyebrow">Инструмент 06</span>
+      <h2 class="ws-block-title">QR-код</h2>
+    </div>
+    <p class="ws-trim-subtitle">Сделай QR-код на трек, профиль или соцсеть - для сторис, визиток и афиш.</p>
+
+    <div class="ws-qr-layout">
+      <div class="ws-qr-form">
+        <div class="ws-id3-field">
+          <label>Ссылка или текст</label>
+          <input type="text" id="wsQrText" class="ws-id3-input" placeholder="https://992muz.ru/artist-profile.html?id=...">
+        </div>
+<div class="ws-controls" style="margin-top:0;">
+          <div class="ws-control-group">
+            <label>Размер</label>
+            <select id="wsQrSize" class="ws-select">
+              <option value="256">256 px</option>
+              <option value="512" selected>512 px</option>
+              <option value="1024">1024 px</option>
+            </select>
+          </div>
+          <div class="ws-control-group">
+            <label>Дизайн</label>
+            <select id="wsQrDesign" class="ws-select">
+              <option value="classic" selected>Классический</option>
+              <option value="framed">Рамка 992MUZ</option>
+              <option value="rounded">Скруглённая карточка</option>
+            </select>
+          </div>
+        </div>
+<div class="ws-control-group">
+          <label>Цвет кода</label>
+          <div class="ws-qr-color-row">
+            <button class="ws-qr-swatch active" data-color="#0f0a0e" style="background:#0f0a0e" title="Чёрный"></button>
+            <button class="ws-qr-swatch" data-color="#c0392b" style="background:#c0392b" title="Красный 992MUZ"></button>
+            <button class="ws-qr-swatch" data-color="#e8a33d" style="background:#e8a33d" title="Амбер"></button>
+            <button class="ws-qr-swatch" data-color="#4ade80" style="background:#4ade80" title="Зелёный"></button>
+            <label class="ws-qr-swatch ws-qr-swatch-custom" title="Свой цвет">
+              <input type="color" id="wsQrColorPicker" value="#0f0a0e">
+            </label>
+          </div>
+        </div>
+        <div class="ws-trim-controls" style="margin-top:14px;">
+          <button class="ws-btn ws-btn-primary" id="wsQrGenerateBtn">Сгенерировать</button>
+          <button class="ws-btn ws-btn-ghost" id="wsQrDownloadBtn" disabled>Скачать PNG</button>
+        </div>
+      </div>
+      <div class="ws-qr-preview" id="wsQrPreview">
+        <span class="ws-qr-placeholder" id="wsQrPlaceholder">QR появится здесь</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ВЫРАВНИВАНИЕ ГРОМКОСТИ -->
+  <section class="ws-section ws-norm">
+<div class="ws-block-header ws-block-header--green">
+      <span class="ws-block-eyebrow">Инструмент 07</span>
+      <h2 class="ws-block-title">Выравнивание громкости</h2>
+    </div>
+    <p class="ws-trim-subtitle">Загрузи несколько треков - подгоним их под одинаковую громкость (приблизительно, по RMS), чтобы не скакало в плейлисте.</p>
+
+    <div class="ws-dropzone" id="wsNormDropzone" tabindex="0" role="button" aria-label="Загрузить треки для выравнивания">
+      <input type="file" id="wsNormFileInput" accept="audio/*" multiple hidden>
+      <div class="ws-dropzone-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
+      <div class="ws-dropzone-text">
+        <b>Перетащи треки сюда</b>
+        <span>или нажми, чтобы выбрать несколько файлов</span>
+      </div>
+    </div>
+
+    <div class="ws-controls">
+      <div class="ws-control-group">
+        <label>Целевой уровень</label>
+        <select id="wsNormTarget" class="ws-select">
+          <option value="-9">Громко (клубное)</option>
+          <option value="-14" selected>Стриминг (умеренно)</option>
+          <option value="-18">Тихо (акустика)</option>
+        </select>
+      </div>
+      <div class="ws-control-group">
+        <label>Формат на выходе</label>
+        <select id="wsNormFormat" class="ws-select">
+          <option value="mp3">MP3</option>
+          <option value="wav">WAV</option>
+        </select>
+      </div>
+      <button class="ws-btn ws-btn-primary" id="wsNormAllBtn" disabled>Выровнять все</button>
+      <button class="ws-btn ws-btn-ghost" id="wsNormClearBtn" disabled>Очистить</button>
+    </div>
+
+    <div class="ws-queue" id="wsNormQueue"></div>
+    <div class="ws-empty" id="wsNormEmptyState">
+      <img src="assets/icons/mic2.png" alt="" style="width:34px;height:34px;opacity:.35;filter:invert(1);">
+      <span>Треки появятся здесь. Каждый будет подогнан под один уровень громкости.</span>
+    </div>
+  </section>
+
+</div>
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-bottom">
+      <div class="footer-row-top">
+        <div class="footer-bottom-left">
+          <div class="footer-bottom-logo">
+            <img src="assets/png/red.png" alt="">
+            <span>992MUZ</span>
+          </div>
+          <div class="footer-socials">
+            <a href="https://www.youtube.com/@992MUZ" target="_blank" class="footer-social"><img src="assets/icons/youtube.png" alt="YouTube"></a>
+            <a href="https://t.me/tg992muz" target="_blank" class="footer-social"><img src="assets/icons/telegram.png" alt="Telegram"></a>
+            <a href="https://vk.com/vk992muz" target="_blank" class="footer-social"><img src="assets/icons/vk.png" alt="VK"></a>
+            <a href="https://www.tiktok.com/@992muz" target="_blank" class="footer-social"><img src="assets/icons/tiktok.png" alt="TikTok"></a>
+            <a href="https://www.instagram.com/992muz/" target="_blank" class="footer-social"><img src="assets/icons/instagram.png" alt="Instagram"></a>
+            <a href="https://www.facebook.com/profile.php?id=61565029317185" target="_blank" class="footer-social"><img src="assets/icons/facebook.png" alt="Facebook"></a>
+          </div>
+        </div>
+        <span>© 2026 by 992MUZ</span>
+      </div>
+      <div class="footer-row-bottom">
+        <a href="#" class="footer-app-btn"><img src="assets/icons/AppStore.png" alt="App Store"><span>App Store</span></a>
+        <a href="#" class="footer-app-btn"><img src="assets/icons/googleplay.png" alt="Google Play"><span>Google Play</span></a>
+        <span class="footer-sep" style="margin:0 4px;">·</span>
+        <div class="footer-langs">
+          <button class="footer-lang active" onclick="setLang(this)">RU</button>
+          <button class="footer-lang" onclick="setLang(this)">TJ</button>
+          <button class="footer-lang" onclick="setLang(this)">EN</button>
+          <button class="footer-lang" onclick="setLang(this)">PAM</button>
+        </div>
+        <span class="footer-sep" style="margin:0 4px;">·</span>
+        <div class="footer-links">
+          <button class="footer-link-btn" onclick="openModal('modal-about')">О нас</button>
+          <span class="footer-sep">·</span>
+          <button class="footer-link-btn" onclick="openModal('modal-terms')">Условия</button>
+          <span class="footer-sep">·</span>
+          <button class="footer-link-btn" onclick="openModal('modal-privacy')">Конфиденциальность</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function openModal(id){ var el=document.getElementById(id); if(el){ el.classList.add('open'); document.body.style.overflow='hidden'; } }
+  function closeModal(id){ var el=document.getElementById(id); if(el){ el.classList.remove('open'); document.body.style.overflow=''; } }
+  function setLang(btn){ document.querySelectorAll('.footer-lang').forEach(function(b){ b.classList.remove('active'); }); btn.classList.add('active'); }
+</script>
+
+<script>
+  var burgerBtn = document.getElementById('burgerBtn');
+  var mobileMenu = document.getElementById('mobileMenu');
+  var mobileOverlay = document.getElementById('mobileOverlay');
+  function toggleMenu(open){
+    burgerBtn.classList.toggle('open', open);
+    mobileMenu.classList.toggle('open', open);
+    mobileOverlay.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  burgerBtn.addEventListener('click', function(){ toggleMenu(!mobileMenu.classList.contains('open')); });
+  var mobileMenuClose = document.getElementById('mobileMenuClose');
+  if (mobileMenuClose) mobileMenuClose.addEventListener('click', function(){ toggleMenu(false); });
+  mobileOverlay.addEventListener('click', function(){ toggleMenu(false); });
+  document.querySelectorAll('.mobile-nav a').forEach(function(a){ a.addEventListener('click', function(){ toggleMenu(false); }); });
+</script>
+
+<script src="js/auth/session.js" type="module"></script>
+<script src="js/components/navbar.js" type="module"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.error('SW error:', err));
+    });
+  }
+</script>
+
+<!-- lamejs - MP3/WAV работает всегда, даже локально без деплоя -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js" crossorigin="anonymous"></script>
+<!-- jsmediatags — чтение ID3-тегов, browser-id3-writer — запись ID3-тегов -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/browser-id3-writer@3.0.0/dist/browser-id3-writer.min.js" crossorigin="anonymous"></script>
+<!-- qrcodejs — генератор QR-кодов -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" crossorigin="anonymous"></script>
+<!-- ffmpeg.wasm — для FLAC/OGG/OPUS/M4A, включится сам после деплоя с нужными заголовками -->
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js" crossorigin="anonymous"></script>
+<script src="js/pages/masterskaya.js" defer></script>
+
+</body>
+</html>

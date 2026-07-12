@@ -1,0 +1,2298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Студии звукозаписи - 992MUZ</title>
+<link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/pages/home.css">
+  <style>
+/* ======= CSS ПЕРЕМЕННЫЕ — стиль 992MUZ ======= */
+:root {
+      --pr-bg: #f5f5f5;
+      --pr-bg2: #ffffff;
+      --pr-bg3: rgba(0,0,0,0.04);
+      --pr-border: rgba(0,0,0,0.08);
+      --pr-text: #111111;
+      --pr-text2: rgba(0,0,0,0.65);
+      --pr-text3: rgba(0,0,0,0.4);
+      --pr-accent: #e63946;
+      --pr-accent2: #c1121f;
+      --pr-input-bg: rgba(0,0,0,0.04);
+      --pr-input-border: rgba(0,0,0,0.12);
+      --pr-top-badge: linear-gradient(135deg, #e63946, #c1121f);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+      background: var(--pr-bg);
+      color: var(--pr-text);
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+    /* ======= СТРАНИЦА ======= */
+.studios-page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 16px 80px;
+      background: transparent;
+    }
+    /* ======= ХЕДЕР СТРАНИЦЫ ======= */
+    .studios-header {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+.studios-header__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: nowrap;
+    }
+.studios-header__title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--pr-text);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+.studios-header__title span.icon {
+      font-size: 32px;
+    }
+
+    .studios-header__subtitle {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--pr-text3);
+      margin-top: 4px;
+      margin-left: 2px;
+      letter-spacing: 0.2px;
+    }
+    .studios-count {
+      font-size: 13px;
+      color: var(--pr-text3);
+      background: var(--pr-bg3);
+      padding: 4px 12px;
+      border-radius: 100px;
+      border: 1px solid var(--pr-border);
+    }
+
+    /* ======= ФИЛЬТРЫ ======= */
+    .studios-filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .studios-search {
+      flex: 1;
+      min-width: 200px;
+      max-width: 340px;
+      background: var(--pr-input-bg);
+      border: 1px solid var(--pr-input-border);
+      border-radius: 12px;
+      padding: 10px 16px 10px 40px;
+      color: var(--pr-text);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .2s;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.3)' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 12px center;
+    }
+    .studios-search:focus { border-color: var(--pr-accent); }
+    .studios-search::placeholder { color: var(--pr-text3); }
+
+    .filter-select {
+      background: var(--pr-input-bg);
+      border: 1px solid var(--pr-input-border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: var(--pr-text);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+      transition: border-color .2s;
+    }
+    .filter-select:focus { border-color: var(--pr-accent); }
+    .filter-select option { background: #1a1a2e; }
+
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--pr-bg3);
+      border: 1px solid var(--pr-border);
+      border-radius: 12px;
+      padding: 4px;
+    }
+
+    .filter-tab {
+      padding: 7px 14px;
+      border-radius: 9px;
+      border: none;
+      background: none;
+      color: var(--pr-text3);
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .filter-tab.active {
+      background: var(--pr-accent);
+      color: #fff;
+    }
+
+    /* ======= ГРИД КАРТОЧЕК ======= */
+    .studios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ======= КАРТОЧКА СТУДИИ ======= */
+    .studio-card {
+      background: var(--pr-bg2);
+      border: 1px solid var(--pr-border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+      cursor: pointer;
+      position: relative;
+    }
+    .studio-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(124, 111, 205, 0.4);
+      box-shadow: 0 16px 48px rgba(124, 111, 205, 0.15);
+    }
+/* Бейдж статуса студии */
+    .studio-status-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 10;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 5px 10px 5px 5px;
+      border-radius: 100px;
+      letter-spacing: 0.2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
+    }
+    .studio-status-badge__icon {
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .studio-status-badge__text {
+      text-transform: uppercase;
+    }
+    .studio-status-badge.is-open {
+      background: rgba(46, 125, 50, 0.92);
+      color: #fff;
+    }
+    .studio-status-badge.is-closed {
+      background: rgba(193, 18, 31, 0.92);
+      color: #fff;
+    }
+
+    /* ТОП бейдж */
+    /* ТОП бейдж */
+    .studio-top-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 10;
+      background: var(--pr-top-badge);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 4px 12px rgba(247, 183, 49, 0.4);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .studio-top-badge::before {
+      content: '👑';
+      font-size: 12px;
+    }
+
+    /* Слайдер фото */
+    .studio-slider {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+      background: var(--pr-bg3);
+    }
+
+    .studio-slider__track {
+      display: flex;
+      height: 100%;
+      transition: transform .4s ease;
+    }
+
+    .studio-slider__img {
+      min-width: 100%;
+      height: 100%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .studio-slider__img-placeholder {
+      min-width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a2e, #0f0f1a);
+      font-size: 48px;
+      flex-shrink: 0;
+    }
+
+    .studio-slider__dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+    }
+
+.studio-slider__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.6);
+      cursor: pointer;
+      transition: all .2s;
+      border: none;
+      padding: 0;
+      box-shadow: 0 0 2px rgba(0,0,0,0.4);
+    }
+    .studio-slider__dot.active {
+      background: #fff;
+      width: 18px;
+      border-radius: 3px;
+    }
+
+    .studio-slider__arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      border: none;
+      color: #fff;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity .2s;
+      font-size: 14px;
+      z-index: 5;
+    }
+    .studio-card:hover .studio-slider__arrow { opacity: 1; }
+    .studio-slider__arrow--prev { left: 8px; }
+    .studio-slider__arrow--next { right: 8px; }
+
+    /* Контент карточки */
+    .studio-card__body {
+      padding: 18px;
+    }
+
+    .studio-card__head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .studio-card__name {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--pr-text);
+      line-height: 1.2;
+    }
+
+    .studio-card__country {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: var(--pr-text3);
+      background: var(--pr-bg3);
+      border: 1px solid var(--pr-border);
+      padding: 3px 8px;
+      border-radius: 100px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .studio-card__desc {
+      font-size: 13px;
+      color: var(--pr-text3);
+      line-height: 1.5;
+      margin-bottom: 14px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Рейтинг */
+    .studio-card__rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .studio-stars {
+      display: flex;
+      gap: 2px;
+    }
+
+.studio-star {
+      font-size: 15px;
+      color: rgba(0,0,0,0.15);
+      cursor: pointer;
+      transition: color .15s, transform .1s;
+    }
+    .studio-star.filled { color: #f7b731; }
+    .studio-star:hover { transform: scale(1.2); }
+
+    .studio-rating-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--pr-text);
+    }
+    .studio-rating-count {
+      font-size: 12px;
+      color: var(--pr-text3);
+    }
+
+    /* Пример работ — мини треки */
+    .studio-tracks {
+      margin-bottom: 14px;
+    }
+
+    .studio-tracks__title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--pr-text3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .studio-track-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      border-radius: 10px;
+      background: var(--pr-bg3);
+      border: 1px solid var(--pr-border);
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .studio-track-item:hover { background: rgba(124, 111, 205, 0.1); }
+    .studio-track-item:last-child { margin-bottom: 0; }
+
+    .studio-track-cover {
+      width: 36px;
+      height: 36px;
+      border-radius: 7px;
+      object-fit: cover;
+      background: var(--pr-bg);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .studio-track-info { flex: 1; min-width: 0; }
+    .studio-track-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--pr-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .studio-track-artist {
+      font-size: 11px;
+      color: var(--pr-text3);
+    }
+
+.studio-track-play {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--pr-accent);
+      border: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform .2s;
+      padding: 0;
+      padding-left: 2px;
+    }
+    .studio-track-play:hover { transform: scale(1.1); }
+
+    /* Цены */
+.studio-prices {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .studio-price-item {
+      min-width: 0;
+    }
+    .studio-price-item.full-row {
+      grid-column: 1 / -1;
+    }
+    .studio-price-item {
+      background: var(--pr-bg3);
+      border: 1px solid var(--pr-border);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+
+    .studio-price-label {
+      font-size: 10px;
+      color: var(--pr-text3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .studio-price-val {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--pr-text);
+    }
+
+    .studio-price-item.full-row {
+      grid-column: 1 / -1;
+    }
+/* Плашка акции */
+    .studio-promo-banner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(230,57,70,0.12), rgba(193,18,31,0.08));
+      border: 1px solid rgba(230,57,70,0.3);
+      border-radius: 12px;
+      padding: 9px 12px;
+      margin-bottom: 14px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--pr-accent2);
+    }
+    .studio-promo-banner img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    /* Кнопки */
+    .studio-card__actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .studio-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .studio-btn--primary {
+      background: var(--pr-accent);
+      color: #fff;
+    }
+    .studio-btn--primary:hover { background: var(--pr-accent2); }
+
+    .studio-btn--secondary {
+      background: var(--pr-bg3);
+      color: var(--pr-text2);
+      border: 1px solid var(--pr-border);
+    }
+    .studio-btn--secondary:hover {
+      background: rgba(124, 111, 205, 0.15);
+      color: var(--pr-accent2);
+      border-color: var(--pr-accent);
+    }
+
+    /* Развернуть описание / комменты */
+    .studio-expand-btn {
+      background: none;
+      border: none;
+      color: var(--pr-accent);
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .studio-expand-btn:hover { color: var(--pr-accent2); }
+
+    .studio-comments-section {
+      border-top: 1px solid var(--pr-border);
+      padding-top: 16px;
+      margin-top: 4px;
+      display: none;
+    }
+    .studio-comments-section.open { display: block; }
+
+    /* ======= РЕЙТИНГ — ПОПАП ГОЛОСОВАНИЯ ======= */
+    .rating-popup {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(6px);
+      opacity: 0;
+      transition: opacity .2s;
+      pointer-events: none;
+    }
+    .rating-popup.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .rating-popup__box {
+      background: var(--pr-bg2);
+      border: 1px solid var(--pr-border);
+      border-radius: 24px;
+      padding: 32px;
+      width: 320px;
+      max-width: calc(100vw - 32px);
+      text-align: center;
+      transform: scale(0.9);
+      transition: transform .2s;
+    }
+    .rating-popup.show .rating-popup__box { transform: scale(1); }
+    .rating-popup__title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--pr-text);
+      margin-bottom: 6px;
+    }
+    .rating-popup__sub {
+      font-size: 13px;
+      color: var(--pr-text3);
+      margin-bottom: 20px;
+    }
+    .rating-popup__stars {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+.rating-popup__star {
+      font-size: 36px;
+      cursor: pointer;
+      color: rgba(0,0,0,0.15);
+      transition: color .15s, transform .15s;
+    }
+    .rating-popup__star.highlighted { color: #f7b731; }
+    .rating-popup__star:hover { transform: scale(1.2); }
+    .rating-popup__send {
+      width: 100%;
+      padding: 12px;
+      background: var(--pr-accent);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+    .rating-popup__send:hover { opacity: 0.85; }
+    .rating-popup__close {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--pr-text3);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* ======= ПУСТО ======= */
+    .studios-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--pr-text3);
+    }
+    .studios-empty__icon { font-size: 64px; margin-bottom: 16px; display: flex; justify-content: center; }
+    .studios-empty__text { font-size: 16px; margin-bottom: 8px; color: var(--pr-text2); }
+
+    /* ======= ЗАГРУЗКА ======= */
+    .studio-skeleton {
+      background: var(--pr-bg2);
+      border: 1px solid var(--pr-border);
+      border-radius: 20px;
+      overflow: hidden;
+      animation: skeletonPulse 1.5s ease-in-out infinite;
+    }
+    .studio-skeleton__img { height: 200px; background: var(--pr-bg3); }
+    .studio-skeleton__body { padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+    .studio-skeleton__line {
+      height: 14px;
+      border-radius: 7px;
+      background: var(--pr-bg3);
+    }
+    .studio-skeleton__line.short { width: 60%; }
+    .studio-skeleton__line.xshort { width: 40%; }
+    @keyframes skeletonPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* ======= TOAST ======= */
+    #studios-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--pr-bg2);
+      border: 1px solid var(--pr-border);
+      color: var(--pr-text);
+      padding: 10px 20px;
+      border-radius: 100px;
+      font-size: 13px;
+      opacity: 0;
+      transition: opacity .2s, transform .2s;
+      z-index: 9999;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    #studios-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ======= АДАПТИВ ======= */
+@media (max-width: 768px) {
+      .studios-page { padding: 20px 12px 80px; }
+      .studios-header__title { font-size: 22px; }
+      .studios-count { align-self: center; white-space: nowrap; }
+      .studios-filters { flex-direction: row !important; flex-wrap: nowrap !important; }
+      .sf-search-dropdown.open { width: 140px; }
+      .studios-grid { grid-template-columns: 1fr; }
+      .filter-tabs { overflow-x: auto; }
+      .studios-filters { gap: 8px; }
+      .studios-search { max-width: 100%; min-width: 0; flex: 1; }
+    }
+
+    @media (max-width: 480px) {
+      .studio-prices { grid-template-columns: 1fr 1fr; }
+      .studio-card__actions { flex-direction: column; }
+      .studio-btn { width: 100%; }
+    }
+    /* ======= НОВЫЕ ФИЛЬТРЫ ======= */
+.studios-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Иконка-кнопка */
+.sf-icon-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid var(--pr-border);
+  background: var(--pr-bg2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  flex-shrink: 0;
+  padding: 0;
+}
+.sf-icon-btn img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  opacity: 0.7;
+  transition: opacity .2s;
+}
+.sf-icon-btn:hover,
+.sf-icon-btn.active {
+  border-color: var(--pr-accent);
+  background: rgba(230,57,70,0.07);
+}
+.sf-icon-btn.active img,
+.sf-icon-btn:hover img {
+  opacity: 1;
+}
+
+/* Обёртка для поиска */
+.sf-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Раскрывающийся поиск */
+.sf-search-dropdown {
+  position: static;
+  width: 0;
+  overflow: hidden;
+  transition: width .3s cubic-bezier(.4,0,.2,1), opacity .3s;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+}
+.sf-search-dropdown.open {
+  width: 220px;
+  opacity: 1;
+}
+.sf-search-input {
+  width: 100%;
+  height: 42px;
+  background: var(--pr-bg2);
+  border: 1px solid var(--pr-accent);
+  border-radius: 12px;
+  padding: 0 14px;
+  color: var(--pr-text);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  white-space: nowrap;
+}
+.sf-search-input::placeholder { color: var(--pr-text3); }
+
+/* Обёртка для дропдаунов */
+.sf-dropdown-wrap {
+  position: relative;
+}
+
+/* Панель дропдауна */
+.sf-dropdown-panel {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background: var(--pr-bg2);
+  border: 1px solid var(--pr-border);
+  border-radius: 16px;
+  padding: 12px;
+  min-width: 180px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+  z-index: 200;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.97);
+  pointer-events: none;
+  transition: opacity .2s, transform .2s;
+}
+.sf-dropdown-panel.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+
+.sf-panel-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--pr-text3);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+
+.sf-options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sf-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: none;
+  background: none;
+  color: var(--pr-text2);
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  text-align: left;
+  white-space: nowrap;
+}
+.sf-option img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  opacity: 0.6;
+}
+.sf-option:hover {
+  background: var(--pr-bg3);
+  color: var(--pr-text);
+}
+.sf-option.active {
+  background: rgba(230,57,70,0.1);
+  color: var(--pr-accent);
+  font-weight: 700;
+}
+.sf-option.active img { opacity: 1; }
+
+/* Активные метки */
+.sf-active-labels {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.sf-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pr-accent);
+  background: rgba(230,57,70,0.1);
+  border: 1px solid rgba(230,57,70,0.2);
+  padding: 5px 10px;
+  border-radius: 100px;
+  animation: sfLabelIn .2s ease;
+  line-height: 1;
+}
+.sf-label span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.sf-label span img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.sf-label-close {
+  background: none;
+  border: none;
+  color: var(--pr-accent);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+}
+.sf-label-close:hover { opacity: 1; }
+@keyframes sfLabelIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+  .sf-search-dropdown.open { width: 160px; }
+  .sf-dropdown-panel {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -48%) scale(0.97) !important;
+    right: auto !important;
+    min-width: 260px !important;
+    max-width: calc(100vw - 32px) !important;
+    z-index: 9999 !important;
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+  }
+  .sf-dropdown-panel.open {
+    transform: translate(-50%, -50%) scale(1) !important;
+  }
+}
+.currency-switcher {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.cur-btn {
+  padding: 7px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--pr-border);
+  background: var(--pr-bg2);
+  color: var(--pr-text2);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all .2s;
+}
+.cur-btn.active {
+  background: var(--pr-accent);
+  color: #fff;
+  border-color: var(--pr-accent);
+}
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="wrap">
+    <div class="navbar-inner">
+      <button class="burger-btn" id="burgerBtn" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="mobile-overlay" id="mobileOverlay"></div>
+      <div class="mobile-menu" id="mobileMenu">
+        <img src="assets/png/red.png" alt="" class="mobile-menu-watermark">
+        <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Закрыть">✕</button>
+        <div class="mobile-menu-logo">
+          <img src="assets/png/red.png" alt="992MUZ">
+          <span>МЕНЮ</span>
+        </div>
+        <ul class="mobile-nav">
+          <li><a href="index.html"><img src="assets/icons/site.png" alt="">Главная</a></li>
+          <li><a href="artists.html"><img src="assets/icons/profile.png" alt="">Артисты</a></li>
+          <li><a href="videos.html"><img src="assets/icons/video.png" alt="">Видео</a></li>
+          <li><a href="playlists.html"><img src="assets/icons/music.png" alt="">Плейлисты</a></li>
+<li><a href="studios.html" class="active"><img src="assets/icons/studio.png" alt="">Студии</a></li>
+          <li><a href="masterskaya.html"><img src="assets/icons/rec.png" alt="">Мастерская</a></li>
+          <li><a href="https://bloggers-992muz.web.app" target="_blank"><img src="assets/icons/profile.png" alt="">Блогеры</a></li>
+        </ul>
+        <div class="mobile-menu-actions">
+          <a href="login.html" class="btn-login" id="mobileLoginBtn">
+            <img src="assets/icons/profile.png" alt="" loading="lazy"> Войти
+          </a>
+          <a href="artist-profile.html" class="btn-login" id="mobileProfileBtn" style="display:none">
+            <img src="assets/icons/profile.png" alt=""> Профиль
+          </a>
+          <button class="btn-login" id="mobileLogoutBtn" style="display:none;background:none;border:none;cursor:pointer;color:inherit;">
+            Выйти
+          </button>
+        </div>
+        <div class="mobile-menu-socials">
+          <a href="https://t.me/tg992muz" target="_blank"><img src="assets/icons/telegram.png" alt=""></a>
+          <a href="https://www.instagram.com/992muz/" target="_blank"><img src="assets/icons/instagram.png" alt=""></a>
+          <a href="https://www.youtube.com/@992MUZ" target="_blank"><img src="assets/icons/youtube.png" alt=""></a>
+        </div>
+      </div>
+      <a href="index.html" class="navbar-logo" style="display:flex;flex-direction:row;align-items:center;gap:8px;">
+        <img src="assets/png/red.png" alt="992MUZ" style="height:110px;width:auto;object-fit:contain;display:block;">
+        <span style="font-weight:300;font-size:9px;letter-spacing:.2px;opacity:.6;white-space:nowrap;line-height:1.2;">платформа таджикской<br>хип-хоп индустрии</span>
+      </a>
+<ul class="navbar-nav" style="color:#fff;">
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="artists.html">Артисты</a></li>
+        <li><a href="videos.html">Видео</a></li>
+        <li><a href="playlists.html">Плейлисты</a></li>
+<li><a href="studios.html" class="active">Студии</a></li>
+          <li><a href="masterskaya.html">Мастерская</a></li>
+          <li><a href="https://bloggers-992muz.web.app">Блогеры</a></li>
+      </ul>
+      <div class="navbar-actions navbar-actions--desktop">
+        <a href="login.html" class="btn-login" id="navLoginBtn">
+          <img src="assets/icons/profile.png" alt="" loading="lazy"> Войти
+        </a>
+        <a href="artist-profile.html" class="btn-login" id="navProfileBtn" style="display:none">
+          <img src="assets/icons/profile.png" alt=""> Профиль
+        </a>
+        <button class="btn-login" id="navLogoutBtn" style="display:none;background:none;border:none;cursor:pointer;color:inherit;">
+          Выйти
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Navbar будет тут: <div id="navbar-container"></div> -->
+
+<div class="studios-page">
+
+  <!-- Хедер -->
+<div class="studios-header">
+    <div class="studios-header__top">
+<div>
+        <h1 class="studios-header__title">
+          <img src="assets/icons/stud.png" style="width:32px;height:32px;object-fit:contain;">
+          Студии звукозаписи
+          <span class="studios-count" id="studiosCount">0 студий</span>
+        </h1>
+        <div class="studios-header__subtitle">Запись вокала · Сведение · Мастеринг · Подбор звукорежиссёра</div>
+      </div>
+
+      <div class="studios-filters" id="studiosFilters" style="flex-direction:row;flex-wrap:nowrap;align-items:center;">
+
+      <!-- ПОИСК -->
+      <div class="sf-search-wrap" id="sfSearchWrap">
+        <button class="sf-icon-btn" id="sfSearchToggle" title="Поиск">
+          <img src="assets/icons/search.png" alt="поиск">
+        </button>
+        <div class="sf-search-dropdown" id="sfSearchDropdown">
+          <input type="text" class="sf-search-input" id="studiosSearch" placeholder="Поиск студии...">
+        </div>
+      </div>
+
+      <!-- СТРАНЫ -->
+      <div class="sf-dropdown-wrap" id="sfCountryWrap">
+        <button class="sf-icon-btn" id="sfCountryToggle" title="Страны">
+          <img src="assets/icons/countries.png" alt="страны">
+        </button>
+<div class="sf-dropdown-panel" id="sfCountryPanel">
+          <div class="sf-panel-title">Страна</div>
+          <div class="sf-options" id="sfCountryOptions">
+            <button class="sf-option active" data-val="">Все страны</button>
+          </div>
+          <div class="sf-panel-title" id="sfCityTitle" style="margin-top:12px;display:none;">Город</div>
+          <div class="sf-options" id="sfCityOptions" style="display:none;"></div>
+        </div>
+      </div>
+
+      <!-- КАТЕГОРИИ (сортировка) -->
+      <div class="sf-dropdown-wrap" id="sfSortWrap">
+        <button class="sf-icon-btn" id="sfSortToggle" title="Сортировка">
+          <img src="assets/icons/categories.png" alt="категории">
+        </button>
+<div class="sf-dropdown-panel" id="sfSortPanel">
+          <div class="sf-panel-title">Сортировка</div>
+          <div class="sf-options">
+            <button class="sf-option active" data-sort="rating">
+              <img src="assets/icons/ret.png" alt=""> По рейтингу
+            </button>
+            <button class="sf-option" data-sort="new">
+              <img src="assets/icons/new1.png" alt=""> Новые
+            </button>
+            <button class="sf-option" data-sort="price_asc">
+              <img src="assets/icons/coin.png" alt=""> Сначала дешёвые
+            </button>
+            <button class="sf-option" data-sort="price_desc">
+              <img src="assets/icons/coin.png" alt=""> Сначала дорогие
+            </button>
+          </div>
+          <div class="sf-panel-title" style="margin-top:12px;">Фильтры</div>
+          <div class="sf-options">
+            <button class="sf-option" id="sfToggleOpen">
+              <img src="assets/icons/work.png" alt=""> Только открытые
+            </button>
+            <button class="sf-option" id="sfTogglePromo">
+              <img src="assets/icons/hot-sale.png" alt=""> Со скидками
+            </button>
+          </div>
+          <div class="sf-panel-title" style="margin-top:12px;">Валюта</div>
+          <div class="sf-options">
+            <button class="sf-option cur-opt active" data-cur="TJS">
+              <img src="assets/icons/currency.png" alt=""> с TJS
+            </button>
+            <button class="sf-option cur-opt" data-cur="RUB">
+              <img src="assets/icons/currency.png" alt=""> ₽ RUB
+            </button>
+            <button class="sf-option cur-opt" data-cur="USD">
+              <img src="assets/icons/currency.png" alt=""> $ USD
+            </button>
+            <button class="sf-option cur-opt" data-cur="EUR">
+              <img src="assets/icons/currency.png" alt=""> € EUR
+            </button>
+          </div>
+        </div>
+      </div>
+
+<!-- Активные метки -->
+      <div class="sf-active-labels" id="sfActiveLabels"></div>
+
+      </div>
+    </div>
+
+  <!-- Грид карточек -->
+  <div class="studios-grid" id="studiosGrid">
+    <!-- Скелетон при загрузке -->
+    <div class="studio-skeleton">
+      <div class="studio-skeleton__img"></div>
+      <div class="studio-skeleton__body">
+        <div class="studio-skeleton__line"></div>
+        <div class="studio-skeleton__line short"></div>
+        <div class="studio-skeleton__line xshort"></div>
+      </div>
+    </div>
+    <div class="studio-skeleton">
+      <div class="studio-skeleton__img"></div>
+      <div class="studio-skeleton__body">
+        <div class="studio-skeleton__line"></div>
+        <div class="studio-skeleton__line short"></div>
+        <div class="studio-skeleton__line xshort"></div>
+      </div>
+    </div>
+    <div class="studio-skeleton">
+      <div class="studio-skeleton__img"></div>
+      <div class="studio-skeleton__body">
+        <div class="studio-skeleton__line"></div>
+        <div class="studio-skeleton__line short"></div>
+        <div class="studio-skeleton__line xshort"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Попап рейтинга -->
+<div class="rating-popup" id="ratingPopup">
+  <div class="rating-popup__box" style="position:relative;">
+    <button class="rating-popup__close" id="ratingClose">✕</button>
+    <div class="rating-popup__title" id="ratingStudioName">Название студии</div>
+    <div class="rating-popup__sub">Оцени студию</div>
+    <div class="rating-popup__stars" id="ratingStars">
+      <span class="rating-popup__star" data-v="1">★</span>
+      <span class="rating-popup__star" data-v="2">★</span>
+      <span class="rating-popup__star" data-v="3">★</span>
+      <span class="rating-popup__star" data-v="4">★</span>
+      <span class="rating-popup__star" data-v="5">★</span>
+    </div>
+    <button class="rating-popup__send" id="ratingSend">Отправить оценку</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="studios-toast"></div>
+
+<!-- Player bar будет тут -->
+
+<script type="module">
+// ================================================================
+// FIREBASE IMPORTS — подключи свой конфиг
+// ================================================================
+import { db, auth } from './js/config/firebase.js';
+import {
+  collection, getDocs, doc, getDoc, addDoc, updateDoc,
+  query, orderBy, onSnapshot, serverTimestamp, where, increment
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { initComments } from './js/components/comments-section.js';
+
+// ================================================================
+// СОСТОЯНИЕ
+// ================================================================
+let allStudios = [];
+let currentUser = null;
+let currentSort = 'rating';
+let searchQuery = '';
+let filterCountry = '';
+let currentRatingStudioId = null;
+let selectedRating = 0;
+let filterOpenOnly = false;
+let filterPromoOnly = false;
+let filterCity = '';
+
+const TJ_CITIES = [
+  'Душанбе', 'Худжанд', 'Куляб', 'Бохтар (Курган-Тюбе)', 'Истаравшан',
+  'Канибадам', 'Турсунзаде', 'Пенджикент', 'Гарм', 'Хорог'
+];
+
+// ================================================================
+// AUTH
+// ================================================================
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  if (user) {
+    console.log('MY UID:', user.uid);
+  }
+});
+// ================================================================
+// СПИСОК СТРАН (берётся из студий + наполняется динамически)
+// ================================================================
+const COUNTRIES = [
+  { code: 'TJ', name: '🇹🇯 Таджикистан' },
+  { code: 'RU', name: '🇷🇺 Россия' },
+  { code: 'KZ', name: '🇰🇿 Казахстан' },
+  { code: 'KG', name: '🇰🇬 Кыргызстан' },
+  { code: 'UZ', name: '🇺🇿 Узбекистан' },
+  { code: 'UA', name: '🇺🇦 Украина' },
+  { code: 'AE', name: '🇦🇪 ОАЭ' },
+  { code: 'TR', name: '🇹🇷 Турция' },
+  { code: 'US', name: '🇺🇸 США' },
+  { code: 'GB', name: '🇬🇧 Великобритания' },
+  { code: 'DE', name: '🇩🇪 Германия' },
+  { code: 'OTHER', name: '🌍 Другая' },
+];
+
+function populateCountries(studios) {
+  // устарела — используется populateCountriesSF
+}
+function getCountryName(code) {
+  return COUNTRIES.find(c => c.code === code)?.name || code || '—';
+}
+
+// ================================================================
+// ЗАГРУЗКА СТУДИЙ ИЗ FIRESTORE
+// ================================================================
+async function loadStudios() {
+  sessionStorage.removeItem('studios_cache');
+  const q = query(collection(db, 'studios'), orderBy('rating', 'desc'));
+  const snap = await getDocs(q);
+  allStudios = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(s => !s.deleted);
+  sessionStorage.setItem('studios_cache', JSON.stringify(allStudios));
+  populateCountriesSF(allStudios);
+  renderStudios();
+}
+// ================================================================
+// ФИЛЬТРАЦИЯ И СОРТИРОВКА
+// ================================================================
+function getFiltered() {
+  let list = [...allStudios];
+  if (filterCountry) list = list.filter(s => s.country === filterCountry);
+if (filterCity) {
+    const fc = filterCity.trim().toLowerCase();
+    list = list.filter(s => (s.city || '').trim().toLowerCase() === fc);
+  }
+  if (filterOpenOnly) list = list.filter(s => getStudioStatus(s).open);
+  if (filterPromoOnly) list = list.filter(s => !!getPromoLabel(s));
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(s =>
+      s.name?.toLowerCase().includes(q) ||
+      s.description?.toLowerCase().includes(q)
+    );
+  }
+  if (currentSort === 'rating')     list.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+  if (currentSort === 'new')        list.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  if (currentSort === 'price_asc')  list.sort((a, b) => (a.priceVoice || 999999) - (b.priceVoice || 999999));
+  if (currentSort === 'price_desc') list.sort((a, b) => (b.priceVoice || 0) - (a.priceVoice || 0));
+  return list;
+}
+// ================================================================
+// РЕНДЕР
+// ================================================================
+function renderStudios() {
+  const grid = document.getElementById('studiosGrid');
+  const list = getFiltered();
+
+  document.getElementById('studiosCount').textContent = `${list.length} студий`;
+
+  if (list.length === 0) {
+grid.innerHTML = `
+      <div class="studios-empty">
+        <div class="studios-empty__icon"><img src="assets/icons/studio.png" style="width:64px;height:64px;object-fit:contain;opacity:0.4;"></div>
+        <div class="studios-empty__text">Студии не найдены</div>
+        <div>Попробуй изменить фильтры</div>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = '';
+  list.forEach((studio, idx) => {
+    const isTop = idx < 3 && (studio.rating || 0) >= 4;
+    grid.appendChild(buildCard(studio, isTop));
+  });
+}
+
+function buildCard(s, isTop) {
+  const card = document.createElement('div');
+  card.className = 'studio-card';
+  card.dataset.id = s.id;
+
+  // Фото (до 3)
+  const photos = Array.isArray(s.photos) ? s.photos.slice(0, 3) : [];
+
+  // Рейтинг
+  const rating = parseFloat(s.rating || 0).toFixed(1);
+  const ratingCount = s.ratingCount || 0;
+
+  // Цены
+  const prices = buildPrices(s);
+
+  // Треки (до 2)
+  const tracks = Array.isArray(s.tracks) ? s.tracks.slice(0, 2) : [];
+
+const statusInfo = getStudioStatus(s);
+
+  card.innerHTML = `
+    ${isTop ? '<div class="studio-top-badge">ТОП</div>' : ''}
+<div class="studio-status-badge ${statusInfo.open ? 'is-open' : 'is-closed'}" title="${statusInfo.sub || ''}">
+      <span class="studio-status-badge__icon"><img src="${statusInfo.icon}" style="width:11px;height:11px;object-fit:contain;"></span>
+      <span class="studio-status-badge__text">${statusInfo.label}</span>
+    </div>
+    <!-- Слайдер -->
+    <div class="studio-slider" id="slider_${s.id}">
+      <div class="studio-slider__track" id="sliderTrack_${s.id}">
+        ${photos.length > 0
+          ? photos.map(url => `<img class="studio-slider__img" src="${url}" alt="фото студии" loading="lazy">`).join('')
+          : '<div class="studio-slider__img-placeholder">🎙️</div>'
+        }
+      </div>
+      ${photos.length > 1 ? `
+        <button class="studio-slider__arrow studio-slider__arrow--prev" data-dir="prev" data-id="${s.id}">‹</button>
+        <button class="studio-slider__arrow studio-slider__arrow--next" data-dir="next" data-id="${s.id}">›</button>
+        <div class="studio-slider__dots" id="dots_${s.id}">
+          ${photos.map((_, i) => `<button class="studio-slider__dot ${i===0?'active':''}" data-i="${i}" data-id="${s.id}"></button>`).join('')}
+        </div>
+      ` : ''}
+    </div>
+
+    <!-- Тело -->
+    <div class="studio-card__body">
+<div class="studio-card__head">
+<div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
+          <div class="studio-card__name">${escHtml(s.name || 'Без названия')}</div>
+          ${s.contractAccepted
+            ? `<img src="assets/icons/verification.png" style="width:18px;height:18px;object-fit:contain;flex-shrink:0;" title="Верифицировано 992MUZ">`
+            : (s.ownerUid ? `<span style="font-size:10px;font-weight:800;color:#fff;background:#c1121f;padding:2px 8px;border-radius:100px;letter-spacing:.3px;flex-shrink:0;">НЕ ОФИЦИАЛЬНО</span>` : '')
+          }
+        </div>
+        <div class="studio-card__country">${getCountryName(s.country)}</div>
+      </div>
+${!statusInfo.open && statusInfo.sub ? `<div style="font-size:11px;color:var(--pr-accent2);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:4px;">⏰ ${escHtml(statusInfo.sub)}</div>` : ''}
+<div class="studio-card__desc">${escHtml(s.description || '')}</div>
+<div style="font-size:12px;color:var(--pr-text3);margin-bottom:6px;display:flex;align-items:center;gap:5px;"><img src="assets/icons/adress.png" style="width:14px;height:14px;object-fit:contain;opacity:0.6;"> ${s.address ? escHtml(s.address) : '<a href="https://t.me/tg992muz" target="_blank" style="color:var(--pr-accent);text-decoration:none;">Адрес уточните в Telegram</a>'}</div>
+${s.engineer ? `<div style="font-size:12px;color:var(--pr-text2);margin-bottom:10px;display:flex;align-items:center;gap:5px;"><img src="assets/icons/sound-engineer.png" style="width:14px;height:14px;object-fit:contain;opacity:0.7;"> Звукорежиссёр: <b>${escHtml(s.engineer)}</b></div>` : ''}
+
+      <!-- Рейтинг -->
+      <div class="studio-card__rating">
+        <div class="studio-stars" id="stars_${s.id}" data-id="${s.id}">
+          ${buildStarsDisplay(s.rating || 0)}
+        </div>
+<span class="studio-rating-val">${rating}</span>
+        <span class="studio-rating-count">(${ratingCount} оценок)</span>
+        <span class="studio-rating-count">· 👁 ${s.views || 0}</span>
+      </div>
+
+      <!-- Пример работ -->
+      ${tracks.length > 0 ? `
+        <div class="studio-tracks">
+          <div class="studio-tracks__title">Примеры работ</div>
+          ${tracks.map(t => buildTrackItem(t)).join('')}
+        </div>
+      ` : ''}
+
+<!-- Работали с нами -->
+      ${s.collabs && s.collabs.length > 0 ? `
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:600;color:var(--pr-text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Работали с нами</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px;max-height:72px;overflow:hidden;">
+            ${s.collabs.map(name => `<span style="background:var(--pr-bg3);border:1px solid var(--pr-border);border-radius:100px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--pr-text2);">${escHtml(name)}</span>`).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+<!-- Акция -->
+      ${getPromoLabel(s) ? `
+        <div class="studio-promo-banner">
+          <img src="assets/icons/hot-sale.png">
+          <span>${escHtml(getPromoLabel(s))}</span>
+        </div>
+      ` : ''}
+
+      <!-- Цены -->
+      ${prices}
+
+<!-- Блок договора (видно только владельцу карточки) -->
+      ${(currentUser && currentUser.uid === s.ownerUid) ? buildContractBlock(s) : ''}
+
+<!-- Кнопки -->
+      <div class="studio-card__actions" style="margin-top:8px;">
+        <button class="studio-btn studio-btn--primary" data-action="rate" data-id="${s.id}" data-name="${escHtml(s.name || '')}">
+          <img src="assets/icons/rating.png" style="width:16px;height:16px;object-fit:contain;filter:invert(1);"> Оценить
+        </button>
+        <button class="studio-btn studio-btn--secondary" data-action="comment" data-id="${s.id}">
+          <img src="assets/icons/comment1.png" style="width:16px;height:16px;object-fit:contain;opacity:0.6;"> Отзывы
+        </button>
+        <button class="studio-btn studio-btn--secondary" style="flex:0;padding:10px 12px;" data-action="share" data-id="${s.id}" data-name="${escHtml(s.name || '')}">
+          <img src="assets/icons/share.png" style="width:16px;height:16px;object-fit:contain;opacity:0.6;">
+        </button>
+      </div>
+
+      <!-- Комментарии (скрыты по умолчанию) -->
+      <div class="studio-comments-section" id="comments_${s.id}">
+        <div id="commentsInner_${s.id}"></div>
+      </div>
+    </div>
+  `;
+
+// Вынести модалки из карточки в body
+  setTimeout(() => {
+    const mTarif = card.querySelector(`#tarifModal_${s.id}`);
+    const mInfo  = card.querySelector(`#infoModal_${s.id}`);
+    if (mTarif) document.body.appendChild(mTarif);
+    if (mInfo)  document.body.appendChild(mInfo);
+  }, 0);
+
+  return card;
+}
+function buildStarsDisplay(rating) {
+  let html = '';
+  for (let i = 1; i <= 5; i++) {
+    const filled = i <= Math.round(rating);
+    html += `<span class="studio-star ${filled ? 'filled' : ''}">★</span>`;
+  }
+  return html;
+}
+
+const studioAudios = {};
+
+function buildTrackItem(t) {
+  const uid = 'st_' + Math.random().toString(36).slice(2,8);
+  return `
+    <div class="studio-track-item">
+<div class="studio-track-cover">
+        ${t.coverUrl
+          ? `<img src="${t.coverUrl}" style="width:36px;height:36px;border-radius:7px;object-fit:cover;">`
+          : '<img src="assets/icons/music-player.png" style="width:18px;height:18px;object-fit:contain;opacity:0.5;">'}
+      </div>
+      <div class="studio-track-info">
+        <div class="studio-track-name">${escHtml(t.title || 'Трек')}</div>
+        <div class="studio-track-artist">${escHtml(t.artist || '')}</div>
+        <div class="studio-track-progress-wrap" id="pw_${uid}" style="display:none;margin-top:5px;height:3px;background:rgba(0,0,0,0.1);border-radius:3px;overflow:hidden;">
+          <div id="pb_${uid}" style="height:100%;width:0%;background:var(--pr-accent);border-radius:3px;transition:width .3s linear;"></div>
+        </div>
+      </div>
+      <button class="studio-track-play" id="btn_${uid}" onclick="studioPlayPause('${uid}','${escHtml(t.audioUrl || '')}', '${escHtml(t.title || '')}')">
+        <svg width="10" height="12" viewBox="0 0 10 12" fill="white"><polygon points="0,0 10,6 0,12"/></svg>
+      </button>
+    </div>`;
+}
+
+window.studioPlayPause = function(uid, audioUrl, title) {
+  if (!audioUrl) return;
+
+  // Стоп всех других
+  Object.entries(studioAudios).forEach(([id, audio]) => {
+    if (id !== uid) {
+      audio.pause();
+      const btn = document.getElementById('btn_' + id);
+      if (btn) btn.innerHTML = '<svg width="10" height="12" viewBox="0 0 10 12" fill="white"><polygon points="0,0 10,6 0,12"/></svg>';
+      const pw = document.getElementById('pw_' + id);
+      if (pw) pw.style.display = 'none';
+    }
+  });
+
+  if (!studioAudios[uid]) {
+    studioAudios[uid] = new Audio(audioUrl);
+    studioAudios[uid].addEventListener('timeupdate', () => {
+      const audio = studioAudios[uid];
+      if (!audio.duration) return;
+      const pct = (audio.currentTime / audio.duration) * 100;
+      const pb = document.getElementById('pb_' + uid);
+      if (pb) pb.style.width = pct + '%';
+    });
+    studioAudios[uid].addEventListener('ended', () => {
+      const btn = document.getElementById('btn_' + uid);
+      if (btn) btn.innerHTML = '<svg width="10" height="12" viewBox="0 0 10 12" fill="white"><polygon points="0,0 10,6 0,12"/></svg>';
+      const pw = document.getElementById('pw_' + uid);
+      if (pw) pw.style.display = 'none';
+      const pb = document.getElementById('pb_' + uid);
+      if (pb) pb.style.width = '0%';
+    });
+  }
+
+  const audio = studioAudios[uid];
+  const btn = document.getElementById('btn_' + uid);
+  const pw = document.getElementById('pw_' + uid);
+
+  if (audio.paused) {
+    audio.play();
+    btn.innerHTML = '<svg width="10" height="10" viewBox="0 0 10 10" fill="white"><rect x="0" y="0" width="3.5" height="10"/><rect x="6.5" y="0" width="3.5" height="10"/></svg>';
+    pw.style.display = 'block';
+  } else {
+    audio.pause();
+    btn.innerHTML = '<svg width="10" height="12" viewBox="0 0 10 12" fill="white"><polygon points="0,0 10,6 0,12"/></svg>';
+    pw.style.display = 'none';
+  }
+};
+
+function buildPrices(s) {
+  const services = [
+    { label: 'Запись голоса', val: s.priceVoice },
+    { label: 'Сведение',      val: s.priceMix },
+    { label: 'Мастеринг',     val: s.priceMaster },
+    { label: 'Всё включено',  val: s.priceFull },
+  ].filter(p => p.val);
+
+  if (services.length === 0) return '';
+
+  const tariffs = [
+    { label: 'Стандарт', days: '7 дней', mult: 1, color: '#4caf50', icon: 'assets/icons/mic.png' },
+    { label: 'Экспресс',  days: '4 дня',  mult: 2, color: '#f7b731', icon: 'assets/icons/mic2.png' },
+    { label: 'Турбо',     days: '1 день',  mult: 3, color: '#e63946', icon: 'assets/icons/mic3.png' },
+  ];
+
+  const modalId = 'tarifModal_' + s.id;
+  const infoId  = 'infoModal_'  + s.id;
+
+  return `
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:0;">
+      <button onclick="document.getElementById('${modalId}').style.display='flex'"
+        style="display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 14px;background:var(--pr-accent);color:#fff;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;flex:1;">
+        <img src="assets/icons/microphone (2).png" style="width:15px;height:15px;object-fit:contain;filter:invert(1);">
+        Тарифы
+      </button>
+      <button onclick="document.getElementById('${infoId}').style.display='flex'"
+        style="width:38px;height:38px;border-radius:50%;background:var(--pr-bg3);border:1px solid var(--pr-border);color:var(--pr-text3);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">?</button>
+    </div>
+
+    <div id="${modalId}" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;">
+      <div style="background:var(--pr-bg2);border:1px solid var(--pr-border);border-radius:24px;padding:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;position:relative;">
+        <button onclick="document.getElementById('${modalId}').style.display='none'" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;color:var(--pr-text3);cursor:pointer;">✕</button>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+          <img src="assets/icons/trade.png" style="width:22px;height:22px;object-fit:contain;opacity:0.7;">
+          <span style="font-size:17px;font-weight:800;color:var(--pr-text);">Тарифы - ${escHtml(s.name)}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+          ${tariffs.map(t => `
+            <div style="background:var(--pr-bg3);border:1px solid var(--pr-border);border-radius:14px;padding:14px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <img src="${t.icon}" style="width:18px;height:18px;object-fit:contain;">
+                  <span style="font-size:14px;font-weight:700;color:var(--pr-text);">${t.label}</span>
+                </div>
+                <span style="font-size:11px;font-weight:600;color:${t.color};background:${t.color}22;padding:3px 10px;border-radius:100px;">⏱ ${t.days}</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;">
+                ${services.map(p => `
+                  <div style="background:var(--pr-bg2);border:1px solid var(--pr-border);border-radius:10px;padding:8px 10px;">
+                    <div style="font-size:10px;color:var(--pr-text3);margin-bottom:3px;">${p.label}</div>
+                    <div style="font-size:14px;font-weight:700;color:var(--pr-text);">${formatPrice(p.val * t.mult)}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <a href="https://t.me/producer992muz" target="_blank"
+          style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:var(--pr-accent);color:#fff;border-radius:14px;font-size:14px;font-weight:700;text-decoration:none;margin-bottom:0;">
+          <img src="assets/icons/telegram.png" style="width:18px;height:18px;filter:invert(1);"> Забронировать
+        </a>
+      </div>
+    </div>
+
+    <div id="${infoId}" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;">
+      <div style="background:var(--pr-bg2);border:1px solid var(--pr-border);border-radius:24px;padding:28px;width:100%;max-width:400px;position:relative;">
+        <button onclick="document.getElementById('${infoId}').style.display='none'" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;color:var(--pr-text3);cursor:pointer;">✕</button>
+        <div style="font-size:17px;font-weight:800;color:var(--pr-accent);margin-bottom:14px;">⚠️ Важно!</div>
+        <div style="font-size:13px;color:var(--pr-text2);line-height:1.7;">
+          Пишите только если <b>точно решили</b> воспользоваться услугой.<br><br>
+          Иначе вы будете <b style="color:var(--pr-accent);">заблокированы навсегда</b>.<br><br>
+          При обращении сразу укажите:<br>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;gap:8px;background:var(--pr-bg3);border-radius:10px;padding:8px 12px;font-size:12px;">🎙️ Название студии</div>
+            <div style="display:flex;align-items:center;gap:8px;background:var(--pr-bg3);border-radius:10px;padding:8px 12px;font-size:12px;">🎵 Что именно: запись голоса / сведение / мастеринг / всё включено</div>
+            <div style="display:flex;align-items:center;gap:8px;background:var(--pr-bg3);border-radius:10px;padding:8px 12px;font-size:12px;">⚡ Выбранный тариф: Стандарт / Экспресс / Турбо</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+const CONTRACT_PDF_URL = 'assets/docs/dogovor_992muz.pdf';
+function buildContractBlock(s) {
+  if (s.contractAccepted) {
+    return `
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(76,175,80,0.1);border:1px solid rgba(76,175,80,0.3);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#2e7d32;font-weight:600;">
+        <img src="assets/icons/verification.png" style="width:16px;height:16px;object-fit:contain;">
+        Договор принят ${s.contractAcceptedAt ? '· ' + new Date(s.contractAcceptedAt.seconds * 1000).toLocaleDateString('ru-RU') : ''}
+      </div>`;
+  }
+  return `
+    <div style="background:rgba(193,18,31,0.06);border:1px solid rgba(193,18,31,0.25);border-radius:14px;padding:14px;margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:700;color:#c1121f;margin-bottom:8px;">⚠️ Карточка не подтверждена официально</div>
+      <div style="font-size:12px;color:var(--pr-text2);line-height:1.5;margin-bottom:12px;">
+        Скачайте и внимательно прочитайте договор о партнёрстве. Нажимая «Согласен», вы подтверждаете, что прочли и принимаете все условия документа.
+      </div>
+      <div style="display:flex;gap:8px;">
+        <a href="${CONTRACT_PDF_URL}" target="_blank" download
+          style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:var(--pr-bg2);border:1px solid var(--pr-border);border-radius:10px;color:var(--pr-text);font-size:12px;font-weight:600;text-decoration:none;">
+          📄 Скачать договор
+        </a>
+        <button data-action="accept-contract" data-id="${s.id}"
+          style="flex:1;padding:10px;background:#c1121f;border:none;border-radius:10px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">
+          Согласен
+        </button>
+      </div>
+    </div>`;
+}
+
+const STATUS_REASON_META = {
+  renovation: { label: 'Идёт ремонт', icon: 'assets/icons/wrench.png' },
+  moved:      { label: 'Переехали', icon: 'assets/icons/moving-truck.png' },
+  forever:    { label: 'Закрыто навсегда', icon: 'assets/icons/warning2.png' },
+  none:       { label: 'Временно закрыто', icon: 'assets/icons/close (1).png' },
+};
+
+function getStudioStatus(s) {
+  if (s.status !== 'closed') return { open: true, icon: 'assets/icons/work.png', label: 'РАБОТАЕТ' };
+
+  if (s.closedUntil) {
+    const untilDate = new Date(s.closedUntil + 'T23:59:59');
+    if (new Date() > untilDate) return { open: true, icon: 'assets/icons/work.png', label: 'РАБОТАЕТ' };
+  }
+
+  const meta = STATUS_REASON_META[s.closedReason] || { label: 'Временно закрыто', icon: 'assets/icons/close.png' };
+  let sub = '';
+  if (s.closedFrom && s.closedUntil) {
+    sub = `с ${formatDate(s.closedFrom)} до ${formatDate(s.closedUntil)}`;
+  } else if (s.closedUntil) {
+    sub = `откроется ${formatDate(s.closedUntil)}`;
+  } else if (s.closedFrom) {
+    sub = `с ${formatDate(s.closedFrom)}`;
+  }
+  return { open: false, label: meta.label, icon: meta.icon, sub };
+}
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+}
+
+const PROMO_LABELS = {
+  gift4: 'Запиши 3 - 4-й трек в подарок',
+  ep6: 'EP: 6 треков по цене 4',
+  album20: 'Альбом: 20 треков по цене 16',
+};
+
+function getPromoLabel(s) {
+  if (!s.promoType) return null;
+  if (s.promoType === 'percent' && s.promoPercent) return `Скидка -${s.promoPercent}% на все услуги`;
+  return PROMO_LABELS[s.promoType] || null;
+}
+
+function escHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ================================================================
+// СЛАЙДЕР
+// ================================================================
+const sliderIndexes = {};
+
+function slidePhoto(studioId, direction) {
+  const photos = allStudios.find(s => s.id === studioId)?.photos || [];
+  if (photos.length < 2) return;
+
+  let idx = sliderIndexes[studioId] || 0;
+  if (direction === 'next') idx = (idx + 1) % photos.length;
+  else idx = (idx - 1 + photos.length) % photos.length;
+  sliderIndexes[studioId] = idx;
+
+  const track = document.getElementById(`sliderTrack_${studioId}`);
+  if (track) track.style.transform = `translateX(-${idx * 100}%)`;
+
+  // Dots
+  const dots = document.querySelectorAll(`#dots_${studioId} .studio-slider__dot`);
+  dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+
+function slideTo(studioId, idx) {
+  sliderIndexes[studioId] = idx;
+  const track = document.getElementById(`sliderTrack_${studioId}`);
+  if (track) track.style.transform = `translateX(-${idx * 100}%)`;
+  const dots = document.querySelectorAll(`#dots_${studioId} .studio-slider__dot`);
+  dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+
+// ================================================================
+// РЕЙТИНГ ПОПАП
+// ================================================================
+function openRatingPopup(studioId, studioName) {
+  if (!currentUser) { showToast('Войди чтобы оценить студию'); return; }
+  currentRatingStudioId = studioId;
+  selectedRating = 0;
+  document.getElementById('ratingStudioName').textContent = studioName;
+  highlightStars(0);
+  document.getElementById('ratingPopup').classList.add('show');
+}
+
+function highlightStars(val) {
+  document.querySelectorAll('.rating-popup__star').forEach(s => {
+    s.classList.toggle('highlighted', parseInt(s.dataset.v) <= val);
+  });
+}
+
+document.querySelectorAll('.rating-popup__star').forEach(s => {
+  s.addEventListener('mouseover', () => highlightStars(parseInt(s.dataset.v)));
+  s.addEventListener('mouseout', () => highlightStars(selectedRating));
+  s.addEventListener('click', () => {
+    selectedRating = parseInt(s.dataset.v);
+    highlightStars(selectedRating);
+  });
+});
+
+document.getElementById('ratingClose').addEventListener('click', () => {
+  document.getElementById('ratingPopup').classList.remove('show');
+});
+document.getElementById('ratingPopup').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove('show');
+});
+
+document.getElementById('ratingSend').addEventListener('click', async () => {
+  if (!selectedRating || !currentRatingStudioId) return;
+  try {
+    const studioRef = doc(db, 'studios', currentRatingStudioId);
+    const studioSnap = await getDoc(studioRef);
+    const data = studioSnap.data();
+
+    // Сохраняем оценку пользователя
+    const ratingRef = doc(db, 'studioRatings', `${currentRatingStudioId}_${currentUser.uid}`);
+    await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js')
+      .then(({ setDoc }) => setDoc(ratingRef, {
+        studioId: currentRatingStudioId,
+        userId: currentUser.uid,
+        rating: selectedRating,
+        createdAt: serverTimestamp(),
+      }));
+
+    // Пересчёт среднего
+    const ratings = await getDocs(
+      query(collection(db, 'studioRatings'), where('studioId', '==', currentRatingStudioId))
+    );
+    const vals = ratings.docs.map(d => d.data().rating);
+    const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+
+    await updateDoc(studioRef, {
+      rating: Math.round(avg * 10) / 10,
+      ratingCount: vals.length,
+    });
+
+    document.getElementById('ratingPopup').classList.remove('show');
+    showToast(`Оценка ${selectedRating}⭐ отправлена!`);
+  } catch (e) {
+    console.error(e);
+    showToast('Ошибка при отправке оценки');
+  }
+});
+
+// ================================================================
+// КОММЕНТАРИИ
+// ================================================================
+const openComments = new Set();
+
+function toggleComments(studioId) {
+  const section = document.getElementById(`comments_${studioId}`);
+  if (!section) return;
+  const isOpen = section.classList.contains('open');
+  section.classList.toggle('open', !isOpen);
+  if (!isOpen && !openComments.has(studioId)) {
+    openComments.add(studioId);
+    initComments(`studio_${studioId}`, `commentsInner_${studioId}`);
+  }
+}
+
+// ================================================================
+// ВОСПРОИЗВЕДЕНИЕ ТРЕКА
+// ================================================================
+window.playTrack = function(audioUrl, title) {
+  if (!audioUrl) return;
+  // Интеграция с твоим плеером
+  if (window.PlayerBar && window.PlayerBar.play) {
+    window.PlayerBar.play({ audioUrl, title });
+  } else {
+    // Фоллбэк
+    const audio = new Audio(audioUrl);
+    audio.play();
+  }
+  showToast(`▶ ${title}`);
+};
+
+// ================================================================
+// ДЕЛЕГИРОВАНИЕ СОБЫТИЙ
+// ================================================================
+const viewedStudios = new Set();
+function trackStudioView(studioId) {
+  if (!studioId || viewedStudios.has(studioId)) return;
+  viewedStudios.add(studioId);
+  updateDoc(doc(db, 'studios', studioId), { views: increment(1) }).catch(() => {});
+}
+
+document.getElementById('studiosGrid').addEventListener('click', (e) => {
+  const cardEl = e.target.closest('.studio-card');
+  if (cardEl && !e.target.closest('[data-action]') && !e.target.closest('.studio-slider__arrow') && !e.target.closest('.studio-slider__dot') && !e.target.closest('.studio-track-play')) {
+    trackStudioView(cardEl.dataset.id);
+  }
+  // Слайдер — стрелки
+  const arrow = e.target.closest('.studio-slider__arrow');
+  if (arrow) {
+    e.stopPropagation();
+    slidePhoto(arrow.dataset.id, arrow.dataset.dir);
+    return;
+  }
+  // Слайдер — точки
+  const dot = e.target.closest('.studio-slider__dot');
+  if (dot) {
+    e.stopPropagation();
+    slideTo(dot.dataset.id, parseInt(dot.dataset.i));
+    return;
+  }
+  // Кнопки действий
+  const btn = e.target.closest('[data-action]');
+  if (btn) {
+    e.stopPropagation();
+    const action = btn.dataset.action;
+    const id = btn.dataset.id;
+    if (action === 'rate') openRatingPopup(id, btn.dataset.name);
+    if (action === 'comment') toggleComments(id);
+    if (action === 'share') {
+      const url = `${location.origin}${location.pathname}?studio=${id}`;
+      navigator.clipboard?.writeText(url);
+      showToast('🔗 Ссылка скопирована!');
+    }
+if (action === 'contact') {
+      navigator.clipboard?.writeText(btn.dataset.contact);
+      showToast('Контакт скопирован!');
+    }
+    if (action === 'accept-contract') {
+      acceptContract(id);
+    }
+    return;
+  }
+  // Трек — Play
+  const play = e.target.closest('.studio-track-play');
+  if (play) {
+    e.stopPropagation();
+    return;
+  }
+});
+
+// ================================================================
+// ФИЛЬТРЫ
+// ================================================================
+// ================================================================
+// НОВЫЕ ФИЛЬТРЫ — логика
+// ================================================================
+
+// Поиск
+const sfSearchToggle = document.getElementById('sfSearchToggle');
+const sfSearchDropdown = document.getElementById('sfSearchDropdown');
+const sfSearchInput = document.getElementById('studiosSearch');
+
+sfSearchToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const isOpen = sfSearchDropdown.classList.toggle('open');
+  sfSearchToggle.classList.toggle('active', isOpen);
+  if (isOpen) setTimeout(() => sfSearchInput.focus(), 320);
+  else { sfSearchInput.value = ''; searchQuery = ''; renderStudios(); }
+});
+
+sfSearchInput.addEventListener('input', (e) => {
+  searchQuery = e.target.value.trim();
+  updateActiveLabels();
+  renderStudios();
+});
+
+// Страны — наполняем опциями динамически
+function populateCountriesSF(studios) {
+  const container = document.getElementById('sfCountryOptions');
+  const usedCodes = [...new Set(studios.map(s => s.country).filter(Boolean))];
+  container.innerHTML = '<button class="sf-option active" data-val="">Все страны</button>';
+  COUNTRIES.filter(c => usedCodes.includes(c.code)).forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'sf-option';
+    btn.dataset.val = c.code;
+    btn.textContent = c.name;
+    container.appendChild(btn);
+  });
+  container.querySelectorAll('.sf-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      container.querySelectorAll('.sf-option').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterCountry = btn.dataset.val;
+      filterCity = '';
+      renderCitiesSF(studios);
+      if (filterCountry !== 'TJ') closePanels();
+      updateActiveLabels();
+      renderStudios();
+    });
+  });
+  renderCitiesSF(studios);
+}
+
+function renderCitiesSF(studios) {
+  const title = document.getElementById('sfCityTitle');
+  const box = document.getElementById('sfCityOptions');
+  if (!filterCountry) {
+    title.style.display = 'none';
+    box.style.display = 'none';
+    return;
+  }
+  const cities = filterCountry === 'TJ'
+    ? TJ_CITIES
+    : [...new Set(
+        studios
+          .filter(s => s.country === filterCountry && s.city && s.city.trim())
+          .map(s => s.city.trim())
+      )].sort((a, b) => a.localeCompare(b, 'ru'));
+
+  if (cities.length === 0) {
+    title.style.display = 'none';
+    box.style.display = 'none';
+    return;
+  }
+
+  title.style.display = 'block';
+  box.style.display = 'flex';
+  box.innerHTML = `<button class="sf-option ${!filterCity ? 'active' : ''}" data-cityval="">Все города</button>` +
+    cities.map(c => `<button class="sf-option ${filterCity===c?'active':''}" data-cityval="${c}">${c}</button>`).join('');
+  box.querySelectorAll('.sf-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      box.querySelectorAll('.sf-option').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterCity = btn.dataset.cityval;
+      closePanels();
+      updateActiveLabels();
+      renderStudios();
+    });
+  });
+}
+// Переключатели "Только открытые" / "Со скидками"
+document.getElementById('sfToggleOpen').addEventListener('click', () => {
+  filterOpenOnly = !filterOpenOnly;
+  document.getElementById('sfToggleOpen').classList.toggle('active', filterOpenOnly);
+  updateActiveLabels();
+  renderStudios();
+});
+document.getElementById('sfTogglePromo').addEventListener('click', () => {
+  filterPromoOnly = !filterPromoOnly;
+  document.getElementById('sfTogglePromo').classList.toggle('active', filterPromoOnly);
+  updateActiveLabels();
+  renderStudios();
+});
+
+// Сортировка
+document.querySelectorAll('[data-sort]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-sort]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentSort = btn.dataset.sort;
+    closePanels();
+    updateActiveLabels();
+    renderStudios();
+  });
+});
+
+[
+  ['sfCountryToggle', 'sfCountryPanel'],
+  ['sfSortToggle', 'sfSortPanel'],
+].forEach(([btnId, panelId]) => {
+  document.getElementById(btnId).addEventListener('click', (e) => {
+    e.stopPropagation();
+    const panel = document.getElementById(panelId);
+    const isOpen = panel.classList.toggle('open');
+    document.getElementById(btnId).classList.toggle('active', isOpen);
+
+    if (window.innerWidth <= 768) {
+      let overlay = document.getElementById('sfPanelOverlay');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'sfPanelOverlay';
+        overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9998;display:none;';
+        overlay.addEventListener('click', () => { closePanels(); });
+        document.body.appendChild(overlay);
+      }
+      overlay.style.display = isOpen ? 'block' : 'none';
+
+      if (isOpen && !panel.querySelector('.sf-panel-close')) {
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'sf-panel-close';
+        closeBtn.innerHTML = '✕';
+        closeBtn.style.cssText = 'position:absolute;top:10px;right:10px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--pr-text3);line-height:1;';
+        closeBtn.addEventListener('click', () => { closePanels(); });
+        panel.style.position = 'relative';
+        panel.insertBefore(closeBtn, panel.firstChild);
+      }
+    }
+
+    document.querySelectorAll('.sf-dropdown-panel').forEach(p => {
+      if (p.id !== panelId) p.classList.remove('open');
+    });
+    document.querySelectorAll('.sf-icon-btn').forEach(b => {
+      if (b.id !== btnId && b.id !== 'sfSearchToggle') b.classList.remove('active');
+    });
+  });
+});
+
+function closePanels() {
+  document.querySelectorAll('.sf-dropdown-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.sf-icon-btn').forEach(b => {
+    if (b.id !== 'sfSearchToggle') b.classList.remove('active');
+  });
+  const overlay = document.getElementById('sfPanelOverlay');
+  if (overlay) overlay.style.display = 'none';
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#studiosFilters')) {
+    closePanels();
+    if (!sfSearchInput.value) {
+      sfSearchDropdown.classList.remove('open');
+      sfSearchToggle.classList.remove('active');
+    }
+  }
+});
+
+// Активные метки
+function updateActiveLabels() {
+  const wrap = document.getElementById('sfActiveLabels');
+  wrap.innerHTML = '';
+
+  if (searchQuery) {
+    const lbl = makeLbl(`🔍 "${searchQuery}"`, () => {
+      sfSearchInput.value = ''; searchQuery = '';
+      sfSearchDropdown.classList.remove('open');
+      sfSearchToggle.classList.remove('active');
+      updateActiveLabels(); renderStudios();
+    });
+    wrap.appendChild(lbl);
+  }
+
+  if (filterCountry) {
+    const name = getCountryName(filterCountry);
+    const lbl = makeLbl(name, () => {
+      filterCountry = '';
+      document.querySelectorAll('#sfCountryOptions .sf-option').forEach(b => b.classList.toggle('active', !b.dataset.val));
+      updateActiveLabels(); renderStudios();
+    });
+    wrap.appendChild(lbl);
+  }
+
+const sortLabels = {
+rating: '<img src="assets/icons/ret.png"> Рейтинг',
+  new: '<img src="assets/icons/new1.png"> Новые',
+  price_asc: '<img src="assets/icons/coin.png"> Дешевле',
+  price_desc: '<img src="assets/icons/coin.png"> Дороже'
+};
+  if (currentSort !== 'rating') {
+    const lbl = makeLbl(sortLabels[currentSort], () => {
+      currentSort = 'rating';
+      document.querySelectorAll('[data-sort]').forEach(b => b.classList.toggle('active', b.dataset.sort === 'rating'));
+      updateActiveLabels(); renderStudios();
+    });
+    wrap.appendChild(lbl);
+  }
+
+  if (filterCity) {
+    const lbl = makeLbl(`📍 ${filterCity}`, () => {
+      filterCity = '';
+      renderCitiesSF(allStudios);
+      updateActiveLabels(); renderStudios();
+    });
+    wrap.appendChild(lbl);
+  }
+
+  if (filterOpenOnly) {
+    const lbl = makeLbl('<img src="assets/icons/work.png"> Только открытые', () => {
+      filterOpenOnly = false;
+      document.getElementById('sfToggleOpen').classList.remove('active');
+      updateActiveLabels(); renderStudios();
+    });
+    wrap.appendChild(lbl);
+  }
+
+  if (filterPromoOnly) {
+    const lbl = makeLbl('<img src="assets/icons/hot-sale.png"> Со скидками', () => {
+      filterPromoOnly = false;
+      document.getElementById('sfTogglePromo').classList.remove('active');
+      updateActiveLabels(); renderStudios();
+    });
+    wrap.appendChild(lbl);
+  }
+}
+
+function makeLbl(text, onClose) {
+  const div = document.createElement('div');
+  div.className = 'sf-label';
+div.innerHTML = `<span>${text}</span><button class="sf-label-close">✕</button>`;
+  div.querySelector('.sf-label-close').addEventListener('click', onClose);
+  return div;
+}
+// ================================================================
+// ПРИНЯТИЕ ДОГОВОРА
+// ================================================================
+async function acceptContract(studioId) {
+  if (!currentUser) { showToast('Войди через Google, чтобы принять договор'); return; }
+  const studio = allStudios.find(s => s.id === studioId);
+  if (!studio || studio.ownerUid !== currentUser.uid) {
+    showToast('Это не ваша карточка');
+    return;
+  }
+  showContractConfirm(async () => {
+    try {
+      await updateDoc(doc(db, 'studios', studioId), {
+        contractAccepted: true,
+        contractAcceptedAt: serverTimestamp(),
+      });
+      studio.contractAccepted = true;
+      showToast('Договор принят. Карточка верифицирована ✅');
+      renderStudios();
+    } catch (e) {
+      console.error(e);
+      showToast('Ошибка при сохранении. Попробуйте ещё раз');
+    }
+  });
+}
+
+function showContractConfirm(onConfirm) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:4000;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:16px;';
+  overlay.innerHTML = `
+    <div style="background:var(--pr-bg2);border:1px solid var(--pr-border);border-radius:24px;padding:28px;width:100%;max-width:380px;text-align:center;">
+      <div style="font-size:32px;margin-bottom:10px;">📄</div>
+      <div style="font-size:17px;font-weight:800;color:var(--pr-text);margin-bottom:10px;">Подтверждение договора</div>
+      <div style="font-size:13px;color:var(--pr-text2);line-height:1.6;margin-bottom:22px;">
+        Вы подтверждаете, что скачали и внимательно прочитали договор, и согласны со всеми его условиями?
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button id="ccCancel" style="flex:1;padding:12px;border-radius:12px;border:1px solid var(--pr-border);background:var(--pr-bg3);color:var(--pr-text2);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;">Отмена</button>
+        <button id="ccOk" style="flex:1;padding:12px;border-radius:12px;border:none;background:var(--pr-accent);color:#fff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;">Согласен</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  const close = () => overlay.remove();
+  overlay.querySelector('#ccCancel').addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+  overlay.querySelector('#ccOk').addEventListener('click', () => {
+    close();
+    onConfirm();
+  });
+}
+// ================================================================
+// TOAST
+// ================================================================
+function showToast(msg) {
+  const t = document.getElementById('studios-toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ================================================================
+// СТАРТ
+// ================================================================
+// ================================================================
+// ВАЛЮТА
+// ================================================================
+let currentCurrency = 'TJS';
+let rates = { TJS: 1, RUB: 1, USD: 1, EUR: 1 };
+
+async function loadRates() {
+  try {
+    const r = await fetch('https://api.exchangerate-api.com/v4/latest/TJS');
+    const d = await r.json();
+if (!d.rates) throw new Error('no rates');
+    const MARKUP = 1.015;
+    rates.RUB = d.rates.RUB * MARKUP;
+    rates.USD = d.rates.USD * MARKUP;
+    rates.EUR = d.rates.EUR * MARKUP;
+    rates.TJS = 1;
+  } catch(e) {
+    rates = { TJS: 1, RUB: 8.6, USD: 0.092, EUR: 0.085 };
+  }
+}
+document.querySelectorAll('.cur-opt').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cur-opt').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCurrency = btn.dataset.cur;
+    closePanels();
+    updateActiveLabels();
+    document.querySelectorAll('[id^="tarifModal_"], [id^="infoModal_"]').forEach(m => m.remove());
+    renderStudios();
+  });
+});
+const SYMBOLS = { TJS: 'с', RUB: '₽', USD: '$', EUR: '€' };
+
+function convertPrice(tjsVal) {
+  if (!tjsVal) return null;
+  const converted = tjsVal * rates[currentCurrency];
+  return Math.round(converted);
+}
+
+// Перепишем formatPrice чтобы принимал TJS и конвертил
+function formatPrice(val, _currency) {
+  if (!val) return null;
+  const converted = convertPrice(val);
+  if (!converted) return null;
+  return `${converted.toLocaleString()} ${SYMBOLS[currentCurrency]}`;
+}
+
+await loadRates();
+loadStudios();
+</script>
+
+<script type="module" src="js/auth/session.js"></script>
+<script type="module" src="js/components/navbar.js"></script>
+<script>
+  const burgerBtn = document.getElementById('burgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileOverlay = document.getElementById('mobileOverlay');
+  function toggleMenu(open) {
+    burgerBtn.classList.toggle('open', open);
+    mobileMenu.classList.toggle('open', open);
+    mobileOverlay.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  burgerBtn.addEventListener('click', () => toggleMenu(!mobileMenu.classList.contains('open')));
+  const mobileMenuClose = document.getElementById('mobileMenuClose');
+  if (mobileMenuClose) mobileMenuClose.addEventListener('click', () => toggleMenu(false));
+  mobileOverlay.addEventListener('click', () => toggleMenu(false));
+  document.querySelectorAll('.mobile-nav a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+  let touchStartX = 0;
+  mobileMenu.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  mobileMenu.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (dx > 60) toggleMenu(false);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,431 @@
+<nav class="navbar">
+  <div class="wrap">
+    <div class="navbar-inner">
+      <button class="burger-btn" id="burgerBtn" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="mobile-overlay" id="mobileOverlay"></div>
+      <div class="mobile-menu" id="mobileMenu"><img src="assets/icons/logonew/zegr.png" alt="" class="mobile-menu-watermark">
+        <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Закрыть">✕</button>
+        <div class="mobile-menu-logo">
+          <img src="assets/icons/logonew/Дизайн без названия (16).png" alt="992MUZ">
+          <span>МЕНЮ</span>
+        </div>
+        <ul class="mobile-nav">
+          <li><a href="index.html"><img src="assets/icons/site.png" alt="">Главная</a></li>
+          <li><a href="artists.html"><img src="assets/icons/profile.png" alt="">Артисты</a></li>
+          <li><a href="videos.html"><img src="assets/icons/video.png" alt="">Видео</a></li>
+          <li><a href="playlists.html"><img src="assets/icons/music.png" alt="">Плейлисты</a></li>
+          <li><a href="studios.html"><img src="assets/icons/rec.png" alt="">Студии</a></li>
+          <li><a href="masterskaya.html"><img src="assets/icons/sstar.png" alt="">Мастерская</a></li>
+          <li><a href="https://bloggers-992muz.web.app" target="_blank"><img src="assets/icons/profile.png" alt="">Блогеры</a></li>
+          <li><button class="mobile-nav-soon-btn" id="mobileSoonBtn" type="button"><img src="assets/icons/announcement.png" alt="">СКОРО</button></li>
+        </ul>
+        <div class="mobile-menu-actions">
+          <a href="login.html" class="btn-login" id="mobileLoginBtn">
+            <img src="assets/icons/profile.png" alt="" loading="lazy"> Войти
+          </a>
+          <a href="artist-profile.html" class="btn-login" id="mobileProfileBtn" style="display:none">
+            <img src="assets/icons/profile.png" alt=""> Профиль
+          </a>
+          <button class="btn-login" id="mobileLogoutBtn" style="display:none;background:none;border:none;cursor:pointer;color:inherit;">
+            Выйти
+          </button>
+        </div>
+        <div class="mobile-menu-socials">
+          <a href="https://t.me/tg992muz" target="_blank"><img src="assets/icons/telegram.png" alt=""></a>
+          <a href="https://www.instagram.com/992muz/" target="_blank"><img src="assets/icons/instagram.png" alt=""></a>
+          <a href="https://www.youtube.com/@992MUZ" target="_blank"><img src="assets/icons/youtube.png" alt=""></a>
+        </div>
+      </div>
+      <a href="index.html" class="navbar-logo" style="display:flex;flex-direction:row;align-items:center;gap:8px;">
+        <img src="assets/png/red.png" alt="992MUZ" style="height:110px;width:auto;object-fit:contain;display:block;">
+        <span style="font-weight:300;font-size:9px;letter-spacing:.2px;opacity:.6;white-space:nowrap;line-height:1.2;">платформа таджикской<br>хип-хоп индустрии</span>
+      </a>
+      <ul class="navbar-nav">
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="artists.html">Артисты</a></li>
+        <li><a href="videos.html">Видео</a></li>
+        <li><a href="playlists.html">Плейлисты</a></li>
+        <li><a href="studios.html">Студии</a></li>
+        <li><a href="masterskaya.html">Мастерская</a></li>
+        <li><a href="https://bloggers-992muz.web.app">Блогеры</a></li>
+        <li><button class="nav-soon-btn" id="navSoonBtn" type="button">СКОРО</button></li>
+      </ul>
+      <div class="navbar-actions navbar-actions--desktop">
+        <a href="login.html" class="btn-login" id="navLoginBtn">
+          <img src="assets/icons/profile.png" alt="" loading="lazy">
+          Войти
+        </a>
+        <a href="artist-profile.html" class="btn-login" id="navProfileBtn" style="display:none">
+          <img src="assets/icons/profile.png" alt="">
+          Профиль
+        </a>
+        <button class="btn-login" id="navLogoutBtn" style="display:none;background:none;border:none;cursor:pointer;color:inherit;">
+          Выйти
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+<style>
+  .nav-soon-btn{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.04em;
+    color:#fff;
+    background:var(--accent);
+    padding:7px 16px;
+    border-radius:100px;
+    border:none;
+    cursor:pointer;
+    box-shadow:0 3px 10px rgba(139,26,47,0.35);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .nav-soon-btn:hover{ transform:translateY(-1px); box-shadow:0 5px 14px rgba(139,26,47,0.45); }
+
+  .mobile-nav-soon-btn{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    padding:16px 4px;
+    font-family:'Rem', sans-serif;
+    font-size:17px;
+    font-weight:700;
+    color:var(--accent);
+    background:none;
+    border:none;
+    border-bottom:1px solid var(--bg3);
+    letter-spacing:-0.01em;
+    cursor:pointer;
+    text-align:left;
+  }
+  .mobile-nav-soon-btn img{ width:18px; height:18px; opacity:.85; flex-shrink:0; }
+</style>
+<script>
+  (function(){
+    var burgerBtn = document.getElementById('burgerBtn');
+    var mobileMenu = document.getElementById('mobileMenu');
+    var mobileOverlay = document.getElementById('mobileOverlay');
+    var mobileMenuClose = document.getElementById('mobileMenuClose');
+    if (!burgerBtn || !mobileMenu || !mobileOverlay) return;
+
+    function openBurger(){
+      burgerBtn.classList.add('open');
+      mobileMenu.classList.add('open');
+      mobileOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeBurger(){
+      burgerBtn.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      mobileOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    burgerBtn.addEventListener('click', openBurger);
+    if (mobileMenuClose) mobileMenuClose.addEventListener('click', closeBurger);
+    mobileOverlay.addEventListener('click', closeBurger);
+  })();
+
+(function(){
+    var page = location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.navbar-nav a, .mobile-nav a').forEach(function(a){
+      if (a.getAttribute('href') === page) a.classList.add('active');
+    });
+  })();
+</script>
+
+<!-- МОДАЛКА "СКОРО" -->
+<style>
+  .soon-modal-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:999999;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(20,20,20,0.45);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+  }
+  .soon-modal-overlay.open{ display:flex; }
+
+  .soon-modal-box{
+    position:relative;
+    width:100%;
+    max-width:480px;
+    max-height:82vh;
+    background:#ffffff;
+    border-radius:22px;
+    box-shadow:0 24px 64px rgba(0,0,0,0.25), 0 4px 16px rgba(0,0,0,0.1);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    animation:soonModalIn .28s cubic-bezier(.2,.9,.3,1);
+  }
+  @keyframes soonModalIn{
+    from{ opacity:0; transform:translateY(14px) scale(.97); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  .soon-modal-close{
+    position:absolute;
+    top:16px;
+    right:16px;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    background:#f0f0f2;
+    border:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    color:#666;
+    font-size:15px;
+    z-index:2;
+    transition:background .2s, color .2s;
+  }
+  .soon-modal-close:hover{ background:#e5e5e8; color:#111; }
+
+  .soon-modal-header{
+    padding:32px 32px 16px;
+    text-align:center;
+    flex-shrink:0;
+  }
+  .soon-modal-badge{
+    display:inline-block;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.1em;
+    color:var(--accent);
+    background:var(--accent-light);
+    padding:5px 14px;
+    border-radius:100px;
+    margin-bottom:12px;
+  }
+  .soon-modal-title{
+    font-family:'Rem', sans-serif;
+    font-size:22px;
+    font-weight:700;
+    color:#111;
+    margin-bottom:6px;
+  }
+  .soon-modal-sub{
+    font-size:13px;
+    color:#888;
+  }
+
+  .soon-modal-body{
+    padding:8px 32px 32px;
+    overflow-y:auto;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(139,26,47,0.35) transparent;
+  }
+  .soon-modal-body::-webkit-scrollbar{ width:5px; }
+  .soon-modal-body::-webkit-scrollbar-track{ background:transparent; }
+  .soon-modal-body::-webkit-scrollbar-thumb{ background:rgba(139,26,47,0.35); border-radius:10px; }
+
+  .soon-section{ margin-bottom:24px; }
+  .soon-section:last-child{ margin-bottom:0; }
+  .soon-section-label{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:10px;
+  }
+  .soon-section-label.v2{ color:#b8860b; }
+  .soon-item{
+    display:flex;
+    gap:12px;
+    padding:10px 0;
+    border-bottom:1px solid #f2f2f4;
+  }
+  .soon-item:last-child{ border-bottom:none; }
+  .soon-item-icon{
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    background:var(--accent-light);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:16px;
+    flex-shrink:0;
+  }
+  .soon-item.v2 .soon-item-icon{ background:#fdf6e3; }
+  .soon-item-text{ flex:1; min-width:0; }
+  .soon-item-title{
+    font-size:13.5px;
+    font-weight:700;
+    color:#111;
+    margin-bottom:2px;
+  }
+  .soon-item-desc{
+    font-size:12.5px;
+    color:#888;
+    line-height:1.5;
+  }
+</style>
+
+<div class="soon-modal-overlay" id="soonModalOverlay">
+  <div class="soon-modal-box">
+    <button class="soon-modal-close" id="soonModalClose">✕</button>
+
+    <div class="soon-modal-header">
+      <span class="soon-modal-badge">992MUZ</span>
+      <div class="soon-modal-title">Куда мы движемся</div>
+      <div class="soon-modal-sub">Версия v.1 - уже сейчас · Версия v.2 - совсем скоро</div>
+    </div>
+
+    <div class="soon-modal-body">
+
+      <div class="soon-section">
+        <div class="soon-section-label">Сейчас · v.1</div>
+
+        <div class="soon-item">
+          <div class="soon-item-icon"><img src="assets/icons/m.gif" alt="" style="width:20px;height:20px;object-fit:contain;"></div>
+          <div class="soon-item-text">
+            <div class="soon-item-title">Новые треки каждый день</div>
+            <div class="soon-item-desc">Библиотека музыки пополняется ежедневно - свежие релизы появляются на платформе без задержек.</div>
+          </div>
+        </div>
+
+        <div class="soon-item">
+        <div class="soon-item-icon"><img src="assets/icons/rat.gif" alt="" style="width:20px;height:20px;object-fit:contain;"></div>
+          <div class="soon-item-text">
+            <div class="soon-item-title">Рейтинги и топ чарт</div>
+            <div class="soon-item-desc">Позиции в чарте пересчитываются каждую неделю на основе реальных прослушиваний.</div>
+          </div>
+        </div>
+
+        <div class="soon-item">
+          <div class="soon-item-icon"><img src="assets/icons/micrr.gif" alt="" style="width:20px;height:20px;object-fit:contain;"></div>
+          <div class="soon-item-text">
+            <div class="soon-item-title">Новые артисты</div>
+            <div class="soon-item-desc">Каждый день на платформе появляется 2-3 новых артиста с карточками и профилями.</div>
+          </div>
+        </div>
+
+        <div class="soon-item">
+        <div class="soon-item-icon"><img src="assets/icons/vii.gif" alt="" style="width:20px;height:20px;object-fit:contain;"></div>
+          <div class="soon-item-text">
+            <div class="soon-item-title">Видео контент</div>
+            <div class="soon-item-desc">Раздел с видео и клипами обновляется в том же темпе - по несколько новых работ ежедневно.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="soon-section">
+        <div class="soon-section-label v2">Совсем скоро · v.2</div>
+
+        <div class="soon-item v2">
+       <div class="soon-item-icon"><img src="assets/icons/im.gif" alt="" style="width:20px;height:20px;object-fit:contain;"></div>
+          <div class="soon-item-text">
+            <div class="soon-item-title">Фоторедактор в Мастерской</div>
+            <div class="soon-item-desc">Профессиональный редактор фото прямо в браузере - без установки сторонних программ.</div>
+          </div>
+        </div>
+
+        <div class="soon-item v2">
+          <div class="soon-item-icon"><img src="assets/icons/vvii.gif" alt="" style="width:20px;height:20px;object-fit:contain;"></div>
+          <div class="soon-item-text">
+            <div class="soon-item-title">Видеоредактор и субтитры</div>
+            <div class="soon-item-desc">Монтаж видео и автоматическое создание субтитров для собственных треков.</div>
+          </div>
+        </div>
+
+        <div class="soon-item v2">
+        <div class="soon-item-icon"><img src="assets/icons/voi.gif" alt="" style="width:20px;height:20px;object-fit:contain;"></div>
+          <div class="soon-item-text">
+            <div class="soon-item-title">Разделение голоса и бита</div>
+            <div class="soon-item-desc">Инструмент для отделения вокала от инструментала прямо на платформе.</div>
+          </div>
+        </div>
+
+        <div class="soon-item v2">
+         <div class="soon-item-icon"><img src="assets/icons/handd.gif" alt="" style="width:20px;height:20px;object-fit:contain;"></div>
+          <div class="soon-item-text">
+            <div class="soon-item-title">Русско-таджикские рифмы</div>
+            <div class="soon-item-desc">Помощник для подбора рифм на двух языках - удобно при написании текстов песен.</div>
+          </div>
+        </div>
+
+        <div class="soon-item v2">
+       <div class="soon-item-icon"><img src="assets/icons/ai.gif" alt="" style="width:20px;height:20px;object-fit:contain;"></div>
+          <div class="soon-item-text">
+            <div class="soon-item-title">ИИ инструменты</div>
+            <div class="soon-item-desc">Набор продуктов на основе искусственного интеллекта для творчества и продвижения.</div>
+          </div>
+        </div>
+
+        <div class="soon-item v2">
+       <div class="soon-item-icon"><img src="assets/icons/stt.gif" alt="" style="width:20px;height:20px;object-fit:contain;"></div>
+          <div class="soon-item-text">
+            <div class="soon-item-title">Страница «Студии»</div>
+            <div class="soon-item-desc">Расписание работы студий звукозаписи, бронирование, контакты звукорежиссёров и тарифы.</div>
+          </div>
+        </div>
+
+        <div class="soon-item v2">
+          <div class="soon-item-icon"><img src="assets/icons/mark.gif" alt="" style="width:20px;height:20px;object-fit:contain;"></div>
+          <div class="soon-item-text">
+            <div class="soon-item-title">Страница «Базар»</div>
+            <div class="soon-item-desc">Продажа услуг и музыкальной аппаратуры, объявления о поиске нужного.</div>
+          </div>
+        </div>
+
+        <div class="soon-item v2">
+         <div class="soon-item-icon"><img src="assets/icons/aart.gif" alt="" style="width:20px;height:20px;object-fit:contain;"></div>
+          <div class="soon-item-text">
+            <div class="soon-item-title">Страница «Заказать артиста»</div>
+            <div class="soon-item-desc">Стоимость выступлений на корпоративах и днях рождения, организация концертов, райдер и цены артистов.</div>
+          </div>
+        </div>
+
+        <div class="soon-item v2">
+          <div class="soon-item-icon"><img src="assets/icons/ffree.gif" alt="" style="width:20px;height:20px;object-fit:contain;"></div>
+          <div class="soon-item-text">
+            <div class="soon-item-title">Всё бесплатно</div>
+            <div class="soon-item-desc">Все новые функции v.2 доступны без подписки и скрытых платежей.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    var overlay = document.getElementById('soonModalOverlay');
+    var closeBtn = document.getElementById('soonModalClose');
+    var openBtns = [document.getElementById('navSoonBtn'), document.getElementById('mobileSoonBtn')];
+
+    function openSoon(){
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeSoon(){
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    openBtns.forEach(function(btn){
+      if (btn) btn.addEventListener('click', openSoon);
+    });
+    if (closeBtn) closeBtn.addEventListener('click', closeSoon);
+    overlay.addEventListener('click', function(e){
+      if (e.target === overlay) closeSoon();
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeSoon();
+    });
+  })();
+</script>
