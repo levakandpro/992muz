@@ -1459,6 +1459,29 @@ let lastVisibleDoc = null;
 let noMoreArtists = false;
 let isLoadingMore = false;
 let searchDebounceTimer = null;
+// Полный список активных артистов для поиска — грузится один раз при первом
+// поиске (обычная пагинация ARTISTS_PAGE_SIZE не подходит для поиска,
+// т.к. без него ищем только среди уже подгруженной первой страницы)
+let ALL_ARTISTS_FULL = null;
+let fullArtistsLoadPromise = null;
+
+async function ensureFullArtistsLoaded() {
+  if (ALL_ARTISTS_FULL) return ALL_ARTISTS_FULL;
+  if (fullArtistsLoadPromise) return fullArtistsLoadPromise;
+  fullArtistsLoadPromise = (async () => {
+    try {
+      const q = query(collection(db, 'artistApplications'), where('status', '==', 'active'));
+      const snap = await getDocs(q);
+      ALL_ARTISTS_FULL = [];
+      snap.forEach(d => ALL_ARTISTS_FULL.push(mapArtistDoc(d)));
+    } catch(e) {
+      console.error('ensureFullArtistsLoaded error', e);
+      ALL_ARTISTS_FULL = ALL_ARTISTS.slice();
+    }
+    return ALL_ARTISTS_FULL;
+  })();
+  return fullArtistsLoadPromise;
+}
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
   likedArtistIds.clear();
@@ -2198,8 +2221,16 @@ function setupStoriesRealtime() {
   checkStoriesOnce();
   setInterval(checkStoriesOnce, STORIES_POLL_INTERVAL);
 }
-function applyFiltersAndRender() {
-  let list = ALL_ARTISTS.slice();
+async function applyFiltersAndRender() {
+  // Пока идёт поиск — ищем по ПОЛНОМУ списку активных артистов, а не только
+  // по уже подгруженной странице ALL_ARTISTS (иначе не находились артисты,
+  // которых Firestore не отдал в первых 21 документе)
+  let source = ALL_ARTISTS;
+  if (searchQuery) {
+    source = await ensureFullArtistsLoaded();
+  }
+
+  let list = source.slice();
 
   list = list.filter(a => !a.newBlood);
 
