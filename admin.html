@@ -2124,41 +2124,78 @@ window.cleanupNonR2Tracks = async () => {
   )) return;
 
   let deletedMain = 0, deletedBlockOrphans = 0, kept = 0;
+  const errors = [];
 
-  // 1. Основная коллекция tracks
-  const mainSnap = await getDocs(collection(db, 'tracks'));
-  const toDeleteMain = mainSnap.docs.filter(d => !isR2TrackUrl(d.data().trackUrl));
-  kept = mainSnap.size - toDeleteMain.length;
+  try {
+    // 1. Основная коллекция tracks
+    const mainSnap = await getDocs(collection(db, 'tracks'));
+    console.log('[cleanup] Всего треков в tracks:', mainSnap.size);
 
-  for (const d of toDeleteMain) {
-    const t = d.data();
-    if (t.blockDocIds) {
-      for (const [block, docId] of Object.entries(t.blockDocIds)) {
-        await deleteDoc(doc(db, block, docId)).catch(() => {});
+    const toDeleteMain = mainSnap.docs.filter(d => !isR2TrackUrl(d.data().trackUrl));
+    kept = mainSnap.size - toDeleteMain.length;
+    console.log('[cleanup] Найдено для удаления из tracks:', toDeleteMain.length, 'оставлено (R2):', kept);
+    if (toDeleteMain.length) {
+      console.log('[cleanup] Пример первого удаляемого трека:', toDeleteMain[0].id, toDeleteMain[0].data());
+    }
+
+    for (const d of toDeleteMain) {
+      const t = d.data();
+      if (t.blockDocIds) {
+        for (const [block, docId] of Object.entries(t.blockDocIds)) {
+          try {
+            await deleteDoc(doc(db, block, docId));
+          } catch(e) {
+            console.error('[cleanup] Ошибка удаления копии в блоке', block, docId, e);
+            errors.push(`${block}/${docId}: ${e.message}`);
+          }
+        }
+      }
+      try {
+        await deleteDoc(doc(db, 'tracks', d.id));
+        deletedMain++;
+      } catch(e) {
+        console.error('[cleanup] Ошибка удаления трека из tracks', d.id, e);
+        errors.push(`tracks/${d.id}: ${e.message}`);
       }
     }
-    await deleteDoc(doc(db, 'tracks', d.id)).catch(() => {});
-    deletedMain++;
-  }
 
-  // 2. Осиротевшие копии прямо в блоках сайта (newReleases, top50 и т.д.),
-  // не связанные с основной коллекцией tracks — тоже старые, тоже чистим
-  for (const block of SITE_BLOCKS) {
-    let blockSnap;
-    try { blockSnap = await getDocs(collection(db, block)); } catch(e) { continue; }
-    for (const bd of blockSnap.docs) {
-      const bt = bd.data();
-      if (!isR2TrackUrl(bt.trackUrl)) {
-        await deleteDoc(doc(db, block, bd.id)).catch(() => {});
-        deletedBlockOrphans++;
+    // 2. Осиротевшие копии прямо в блоках сайта (newReleases, top50 и т.д.),
+    // не связанные с основной коллекцией tracks — тоже старые, тоже чистим
+    for (const block of SITE_BLOCKS) {
+      let blockSnap;
+      try { blockSnap = await getDocs(collection(db, block)); } catch(e) {
+        console.error('[cleanup] Ошибка чтения блока', block, e);
+        errors.push(`чтение блока ${block}: ${e.message}`);
+        continue;
+      }
+      for (const bd of blockSnap.docs) {
+        const bt = bd.data();
+        if (!isR2TrackUrl(bt.trackUrl)) {
+          try {
+            await deleteDoc(doc(db, block, bd.id));
+            deletedBlockOrphans++;
+          } catch(e) {
+            console.error('[cleanup] Ошибка удаления из блока', block, bd.id, e);
+            errors.push(`${block}/${bd.id}: ${e.message}`);
+          }
+        }
       }
     }
+  } catch(e) {
+    console.error('[cleanup] Общая ошибка функции:', e);
+    errors.push('Общая ошибка: ' + e.message);
   }
 
-  await logAction('delete', 'Очистка старых (не R2) треков', `удалено основных: ${deletedMain}, удалено копий в блоках: ${deletedBlockOrphans}, оставлено (R2): ${kept}`);
+  await logAction('delete', 'Очистка старых (не R2) треков', `удалено основных: ${deletedMain}, удалено копий в блоках: ${deletedBlockOrphans}, оставлено (R2): ${kept}${errors.length ? ', ошибок: ' + errors.length : ''}`);
   loadTracks();
   loadBlockCollections();
-  await showAlert(`Готово!\nУдалено треков: ${deletedMain}\nУдалено старых копий в блоках сайта: ${deletedBlockOrphans}\nОставлено (уже на R2): ${kept}`);
+
+  if (errors.length) {
+    console.log('[cleanup] ВСЕ ОШИБКИ:', errors);
+    await showAlert(`Готово с ошибками!\nУдалено треков: ${deletedMain}\nУдалено старых копий в блоках сайта: ${deletedBlockOrphans}\nОставлено (уже на R2): ${kept}\nОшибок: ${errors.length}\n\nПервая ошибка: ${errors[0]}\n\nПолный список ошибок — в консоли браузера (F12).`);
+  } else {
+    await showAlert(`Готово!\nУдалено треков: ${deletedMain}\nУдалено старых копий в блоках сайта: ${deletedBlockOrphans}\nОставлено (уже на R2): ${kept}`);
+  }
 };
 
 // ─── VIDEOS ───
