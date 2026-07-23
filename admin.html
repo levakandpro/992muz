@@ -622,10 +622,8 @@ select.btn{padding:5px 8px}
       <h1>Загрузить трек</h1>
       <div id="trackMsg" class="msg"></div>
 
-      <div class="form-row">
-        <div class="field"><label>Название</label><input id="tTitle" placeholder="Название трека"></div>
-        <div class="field"><label>Артист</label><input id="tArtist" placeholder="Имя артиста" list="artistSuggestions" autocomplete="off"><datalist id="artistSuggestions"></datalist></div>
-      </div>
+<datalist id="artistSuggestions"></datalist>
+      <div style="color:#888;font-size:12px;margin-bottom:10px;">Выбери один или несколько аудио файлов ниже — артист и название подставятся автоматически из имени файла в формате «Артист - Название.mp3», их можно поправить вручную перед загрузкой.</div>
 
       <div style="margin-bottom:8px;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Добавить в блоки:</div>
       <div class="checkboxes" id="blockChecks">
@@ -672,18 +670,20 @@ select.btn{padding:5px 8px}
             <input type="file" id="coverFile" accept="image/*" onchange="previewCover(this)">
           </div>
         </div>
-        <div class="field">
-          <label>Аудио файл (mp3)</label>
+<div class="field">
+          <label>Аудио файлы (можно несколько)</label>
           <div class="upload-area" onclick="document.getElementById('audioFile').click()">
-            <div id="audioLabel">🎵 Выбрать аудио</div>
-            <input type="file" id="audioFile" accept="audio/*" onchange="labelFile(this,'audioLabel')">
+            <div id="audioLabel">🎵 Выбрать аудио (можно несколько)</div>
+            <input type="file" id="audioFile" accept="audio/*" multiple onchange="handleAudioFilesSelect(this)">
           </div>
         </div>
       </div>
 
+      <div id="trackQueueList" style="margin-bottom:12px;"></div>
+
       <div class="progress-bar"><div class="progress-fill" id="trackProgress"></div></div>
       <br>
-      <button class="btn btn-red" onclick="uploadTrack()">⬆ Загрузить трек</button>
+      <button class="btn btn-red" onclick="uploadTrack()">⬆ Загрузить треки</button>
 
 <h1 style="margin-top:28px">Все треки</h1>
       <div style="display:flex;gap:10px;margin-bottom:12px;align-items:center;flex-wrap:wrap;">
@@ -703,8 +703,8 @@ select.btn{padding:5px 8px}
           <option>U</option><option>V</option><option>W</option><option>X</option><option>Y</option><option>Z</option>
         </select>
 <span id="trackCount" style="color:#555;font-size:12px;white-space:nowrap;"></span>
-      </div>
-      <button class="btn btn-gray" style="margin-bottom:12px;" onclick="restoreOriginalArtists()">🛠 Восстановить оригинальные имена артистов</button>
+      </div><button class="btn btn-gray" style="margin-bottom:12px;" onclick="restoreOriginalArtists()">🛠 Восстановить оригинальные имена артистов</button>
+      <button class="btn btn-red" style="margin-bottom:12px;margin-left:8px;" onclick="cleanupNonR2Tracks()">🧹 Удалить старые треки (не R2)</button>  <button class="btn btn-gray" style="margin-bottom:12px;" onclick="restoreOriginalArtists()">🛠 Восстановить оригинальные имена артистов</button>
       <table><thead><tr><th>Название</th><th>Артист</th><th>Блоки</th><th>Плейлисты</th><th>Дата</th><th></th></tr></thead>
         <tbody id="tracksBody"></tbody>
       </table>
@@ -1798,71 +1798,166 @@ window.labelFile = (inp, labelId) => {
   if (inp.files[0]) document.getElementById(labelId).textContent = inp.files[0].name;
 };
 
+// ─── ОЧЕРЕДЬ ПАКЕТНОЙ ЗАГРУЗКИ ТРЕКОВ ───
+function parseTrackFilename(filename) {
+  const base = filename.replace(/\.[^/.]+$/, '');
+  const sepMatch = base.match(/\s*[-–—]\s*/);
+  if (sepMatch) {
+    const idx = sepMatch.index;
+    const artist = base.slice(0, idx).trim();
+    const title = base.slice(idx + sepMatch[0].length).trim();
+    if (artist && title) return { artist, title };
+  }
+  return { artist: '', title: base.trim() };
+}
+
+let trackQueue = [];
+let trackQueueIdCounter = 0;
+
+window.handleAudioFilesSelect = (input) => {
+  const files = Array.from(input.files || []);
+  if (!files.length) return;
+  files.forEach(file => {
+    const parsed = parseTrackFilename(file.name);
+    trackQueue.push({
+      id: 'q' + (++trackQueueIdCounter),
+      file,
+      artist: parsed.artist,
+      title: parsed.title
+    });
+  });
+  document.getElementById('audioLabel').textContent = `🎵 Выбрано файлов: ${trackQueue.length}`;
+  renderTrackQueue();
+};
+
+function renderTrackQueue() {
+  const box = document.getElementById('trackQueueList');
+  if (!box) return;
+  box.innerHTML = trackQueue.map(q => `
+    <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:10px 12px;margin-bottom:8px;">
+      <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
+        <div style="flex:1;min-width:160px;">
+          <label style="color:#888;font-size:11px;display:block;margin-bottom:3px;">Артист</label>
+          <input value="${(q.artist||'').replace(/"/g,'&quot;')}" style="width:100%;" oninput="updateQueueField('${q.id}','artist',this.value)">
+        </div>
+        <div style="flex:1;min-width:160px;">
+          <label style="color:#888;font-size:11px;display:block;margin-bottom:3px;">Название</label>
+          <input value="${(q.title||'').replace(/"/g,'&quot;')}" style="width:100%;" oninput="updateQueueField('${q.id}','title',this.value)">
+        </div>
+        <button class="btn btn-gray" onclick="removeFromQueue('${q.id}')">✕</button>
+      </div>
+      <div style="color:#555;font-size:11px;margin-top:4px;">${q.file.name}</div>
+      <div class="progress-bar" style="margin-top:6px;"><div class="progress-fill" id="qprog-${q.id}"></div></div>
+      <div id="qstatus-${q.id}" style="font-size:11px;color:#666;margin-top:2px;"></div>
+    </div>
+  `).join('');
+}
+
+window.updateQueueField = (id, field, value) => {
+  const item = trackQueue.find(q => q.id === id);
+  if (item) item[field] = value;
+};
+
+window.removeFromQueue = (id) => {
+  trackQueue = trackQueue.filter(q => q.id !== id);
+  document.getElementById('audioLabel').textContent = trackQueue.length
+    ? `🎵 Выбрано файлов: ${trackQueue.length}`
+    : '🎵 Выбрать аудио (можно несколько)';
+  renderTrackQueue();
+};
+
 window.uploadTrack = async () => {
-  const title = document.getElementById('tTitle').value.trim();
-  const artist = document.getElementById('tArtist').value.trim();
-  const audioFile = document.getElementById('audioFile').files[0];
-  const coverFile = document.getElementById('coverFile').files[0];
   const msg = document.getElementById('trackMsg');
 
-  if (!title || !artist || !audioFile) { showMsg(msg,'Заполните название, артиста и аудио','err'); return; }
+  if (!trackQueue.length) { showMsg(msg,'Выберите хотя бы один аудио файл','err'); return; }
+
+  const missingArtist = trackQueue.find(q => !q.artist.trim());
+  const missingTitle = trackQueue.find(q => !q.title.trim());
+  if (missingArtist || missingTitle) {
+    showMsg(msg,'Заполните артиста и название у всех треков в списке','err');
+    return;
+  }
 
   const blocks = [...document.querySelectorAll('#blockChecks input:checked')].map(c=>c.value);
   const playlists = [...document.querySelectorAll('#playlistChecks input:checked')].map(c=>c.value);
-  const prog = document.getElementById('trackProgress');
+  const coverFile = document.getElementById('coverFile').files[0];
 
-  try {
-    prog.style.width='20%';
-    let coverUrl='', coverPublicId='';
-    if (coverFile) {
-      const cr = await cldUpload(coverFile,'pamir-music/covers');
-      coverUrl = cr.secure_url; coverPublicId = cr.public_id;
+  let sharedCoverUrl = '', sharedCoverPublicId = '';
+  if (coverFile) {
+    try {
+      const cr = await r2Upload(coverFile,'covers');
+      sharedCoverUrl = cr.secure_url || cr.url || '';
+      sharedCoverPublicId = cr.key || cr.public_id || '';
+    } catch(e) {
+      showMsg(msg,'Ошибка загрузки обложки: '+e.message,'err');
+      return;
     }
-    prog.style.width='50%';
-    const [ar, duration] = await Promise.all([
-      r2Upload(audioFile,'tracks'),
-      getAudioDuration(audioFile)
-    ]);
-    prog.style.width='80%';
+  }
 
-const data = {
-      title, artist,
-      trackUrl: ar.secure_url || ar.url || '', trackPublicId: ar.key || ar.public_id || '',
-      coverUrl, coverPublicId,
-      duration: duration||0,
-      blocks, playlists,
-      plays:0, likes:0,
-      addedAt: serverTimestamp()
-    };
-    // Сохранить основной документ в tracks
-    const mainRef = await addDoc(collection(db,'tracks'), data);
+  let okCount = 0, errCount = 0;
 
-    // Скопировать в каждый выбранный блок, запомнив id копий —
-    // это нужно, чтобы при удалении трека удалялись и копии в блоках
-    // (блоки на сайте читаются из отдельных коллекций — pop, estrada и т.д.)
-    const blockDocIds = {};
-    for (const b of blocks) {
-      const blockRef = await addDoc(collection(db,b), { ...data, trackId: mainRef.id });
-      blockDocIds[b] = blockRef.id;
+  for (const q of [...trackQueue]) {
+    const title = q.title.trim();
+    const artist = q.artist.trim();
+    const statusEl = document.getElementById('qstatus-'+q.id);
+    const progEl = document.getElementById('qprog-'+q.id);
+    try {
+      if (progEl) progEl.style.width = '20%';
+      if (statusEl) statusEl.textContent = 'Загрузка...';
+
+      const [ar, duration] = await Promise.all([
+        r2Upload(q.file,'tracks'),
+        getAudioDuration(q.file)
+      ]);
+      if (progEl) progEl.style.width = '70%';
+
+      const data = {
+        title, artist,
+        trackUrl: ar.secure_url || ar.url || '', trackPublicId: ar.key || ar.public_id || '',
+        coverUrl: sharedCoverUrl, coverPublicId: sharedCoverPublicId,
+        duration: duration||0,
+        blocks, playlists,
+        plays:0, likes:0,
+        addedAt: serverTimestamp()
+      };
+      // Сохранить основной документ в tracks
+      const mainRef = await addDoc(collection(db,'tracks'), data);
+
+      // Скопировать в каждый выбранный блок, запомнив id копий —
+      // это нужно, чтобы при удалении трека удалялись и копии в блоках
+      // (блоки на сайте читаются из отдельных коллекций — pop, estrada и т.д.)
+      const blockDocIds = {};
+      for (const b of blocks) {
+        const blockRef = await addDoc(collection(db,b), { ...data, trackId: mainRef.id });
+        blockDocIds[b] = blockRef.id;
+      }
+      // Плейлисты копировать никуда не нужно — playlists.js читает их
+      // прямо из поля `playlists` в этом же документе (array-contains), без отдельных коллекций
+      if (blocks.length) await updateDoc(mainRef, { blockDocIds });
+
+      if (progEl) progEl.style.width = '100%';
+      if (statusEl) { statusEl.textContent = '✅ Загружено'; statusEl.style.color = '#4caf50'; }
+      saveArtistToHistory(artist);
+      okCount++;
+    } catch(e) {
+      if (statusEl) { statusEl.textContent = '❌ Ошибка: ' + e.message; statusEl.style.color = '#e74c3c'; }
+      if (progEl) progEl.style.width = '0%';
+      errCount++;
     }
-    // Плейлисты копировать никуда не нужно — playlists.js читает их
-    // прямо из поля `playlists` в этом же документе (array-contains), без отдельных коллекций
-    if (blocks.length) await updateDoc(mainRef, { blockDocIds });
+  }
 
-    prog.style.width='100%';
-    showMsg(msg,'Трек успешно загружен!','ok');
-    ['tTitle','tArtist'].forEach(i=>document.getElementById(i).value='');
-    document.querySelectorAll('#blockChecks input,#playlistChecks input').forEach(c=>c.checked=false);
-    document.getElementById('audioFile').value='';
-    document.getElementById('coverFile').value='';
-    document.getElementById('coverPreview').style.display='none';
-    document.getElementById('coverLabel').textContent='📷 Выбрать обложку';
-    document.getElementById('audioLabel').textContent='🎵 Выбрать аудио';
-    setTimeout(()=>prog.style.width='0%',1000);
-    loadTracks();
-  } catch(e) { showMsg(msg,'Ошибка: '+e.message,'err'); prog.style.width='0%'; }
+  showMsg(msg, `Готово! Загружено: ${okCount}${errCount ? `, ошибок: ${errCount}` : ''}`, 'ok');
+
+  document.querySelectorAll('#blockChecks input,#playlistChecks input').forEach(c=>c.checked=false);
+  document.getElementById('audioFile').value='';
+  document.getElementById('coverFile').value='';
+  document.getElementById('coverPreview').style.display='none';
+  document.getElementById('coverLabel').textContent='📷 Выбрать обложку';
+  document.getElementById('audioLabel').textContent='🎵 Выбрать аудио (можно несколько)';
+  trackQueue = [];
+  renderTrackQueue();
+  loadTracks();
 };
-
 let allTracksForTable = [];
 
 async function loadTracks() {
@@ -2015,6 +2110,57 @@ window.deleteBlockDoc = async (block, docId) => {
   loadBlockCollections();
 };
 
+// ─── ОЧИСТКА СТАРЫХ (НЕ R2) ТРЕКОВ ───
+// R2-треки узнаём по домену воркера в trackUrl (см. R2_CONFIG.workerUrl выше).
+// Всё остальное (Cloudinary-ссылки, пустые trackUrl) считается старым и удаляется.
+function isR2TrackUrl(url) {
+  return !!(url && url.includes('workers.dev'));
+}
+
+window.cleanupNonR2Tracks = async () => {
+  if (!await showConfirm(
+    'Удалить ВСЕ треки, загруженные НЕ через R2 (старые — с Cloudinary или вообще без файла)?\nТреки, уже перенесённые на R2, останутся нетронутыми.\nЭто действие нельзя отменить.',
+    'Удалить старые'
+  )) return;
+
+  let deletedMain = 0, deletedBlockOrphans = 0, kept = 0;
+
+  // 1. Основная коллекция tracks
+  const mainSnap = await getDocs(collection(db, 'tracks'));
+  const toDeleteMain = mainSnap.docs.filter(d => !isR2TrackUrl(d.data().trackUrl));
+  kept = mainSnap.size - toDeleteMain.length;
+
+  for (const d of toDeleteMain) {
+    const t = d.data();
+    if (t.blockDocIds) {
+      for (const [block, docId] of Object.entries(t.blockDocIds)) {
+        await deleteDoc(doc(db, block, docId)).catch(() => {});
+      }
+    }
+    await deleteDoc(doc(db, 'tracks', d.id)).catch(() => {});
+    deletedMain++;
+  }
+
+  // 2. Осиротевшие копии прямо в блоках сайта (newReleases, top50 и т.д.),
+  // не связанные с основной коллекцией tracks — тоже старые, тоже чистим
+  for (const block of SITE_BLOCKS) {
+    let blockSnap;
+    try { blockSnap = await getDocs(collection(db, block)); } catch(e) { continue; }
+    for (const bd of blockSnap.docs) {
+      const bt = bd.data();
+      if (!isR2TrackUrl(bt.trackUrl)) {
+        await deleteDoc(doc(db, block, bd.id)).catch(() => {});
+        deletedBlockOrphans++;
+      }
+    }
+  }
+
+  await logAction('delete', 'Очистка старых (не R2) треков', `удалено основных: ${deletedMain}, удалено копий в блоках: ${deletedBlockOrphans}, оставлено (R2): ${kept}`);
+  loadTracks();
+  loadBlockCollections();
+  await showAlert(`Готово!\nУдалено треков: ${deletedMain}\nУдалено старых копий в блоках сайта: ${deletedBlockOrphans}\nОставлено (уже на R2): ${kept}`);
+};
+
 // ─── VIDEOS ───
 function parseYtId(val) {
   const m = val.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([A-Za-z0-9_-]{11})/);
@@ -2080,10 +2226,10 @@ window.createArtist = async () => {
   const prog = document.getElementById('artistProgress');
   try {
     prog.style.width='30%';
-    let avatarUrl='', avatarPublicId='';
+let avatarUrl='', avatarPublicId='';
     if (avatarFile) {
-      const ar = await cldUpload(avatarFile,'pamir-music/avatars');
-      avatarUrl = ar.secure_url; avatarPublicId = ar.public_id;
+      const ar = await r2Upload(avatarFile,'avatars');
+      avatarUrl = ar.secure_url || ar.url || ''; avatarPublicId = ar.key || ar.public_id || '';
     }
     prog.style.width='80%';
 await addDoc(collection(db,'artistApplications'), {
@@ -2360,9 +2506,9 @@ window.saveCardFromAdmin = async () => {
   let avatarUpdates = {};
   if (avatarFile) {
     avatarProg.style.width = '40%';
-    try {
-      const ar = await cldUpload(avatarFile, 'pamir-music/avatars');
-      avatarUpdates = { avatarUrl: ar.secure_url, avatarPublicId: ar.public_id };
+try {
+      const ar = await r2Upload(avatarFile, 'avatars');
+      avatarUpdates = { avatarUrl: ar.secure_url || ar.url || '', avatarPublicId: ar.key || ar.public_id || '' };
       avatarProg.style.width = '100%';
       setTimeout(() => avatarProg.style.width = '0%', 800);
     } catch(e) {
@@ -2700,13 +2846,6 @@ function saveArtistToHistory(name) {
 // Вызываем при загрузке
 loadArtistSuggestions();
 
-// Патчим uploadTrack чтобы сохранял артиста
-const _origUploadTrack = window.uploadTrack;
-window.uploadTrack = async function() {
-  const artist = document.getElementById('tArtist').value.trim();
-  if (artist) saveArtistToHistory(artist);
-  return _origUploadTrack.apply(this, arguments);
-};
 
 // ─── TRACK EDIT MODAL ───
 window.previewEditCover = (inp) => {
@@ -2758,11 +2897,11 @@ window.saveTrackEdit = async () => {
   const newPlaylists = [...document.querySelectorAll('#tePlaylistChecks input:checked')].map(c => c.value);
   const updates = { title, artist, blocks: newBlocks, playlists: newPlaylists };
 
-    if (coverFile) {
+if (coverFile) {
       prog.style.width = '50%';
-      const cr = await cldUpload(coverFile, '992-music/covers');
-      updates.coverUrl = cr.secure_url;
-      updates.coverPublicId = cr.public_id;
+      const cr = await r2Upload(coverFile, 'covers');
+      updates.coverUrl = cr.secure_url || cr.url || '';
+      updates.coverPublicId = cr.key || cr.public_id || '';
     }
 
     prog.style.width = '80%';
