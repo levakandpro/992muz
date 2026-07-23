@@ -1521,7 +1521,7 @@ function mapArtistDoc(d) {
     slug: data.slug || '',
     name: data.nickname || data.displayName || 'Артист',
     city: data.city || '',
-    photo: data.avatarUrl || 'assets/images/kartochki/vert.jpg',
+photo: data.avatarUrl || 'assets/images/kartochki/vert.png',
     photoInner: data.avatarUrl || 'assets/images/kartochki/kvadr.jpg',
     bio: data.cardBio || '',
     genre: data.genre || '',
@@ -1644,7 +1644,7 @@ const DEMO_ARTISTS = [
     likes: 924,
     comments: 47,
     verified: true,
-    photo: 'assets/images/kartochki/vert.jpg',
+photo: 'assets/images/kartochki/vert.png',
     photoInner: 'assets/images/kartochki/kvadr.jpg',
     bio: 'Памирский рэпер из Хорога, выросший в горах Бадахшана. Музыку начал писать в 16 лет, вдохновляясь природой Памира, его людьми и историей. В текстах - жизнь простого человека, тоска по родине, любовь и сила духа. Выпустил 3 сольных проекта, сотрудничал с артистами из Таджикистана, России и Афганистана. Верит что памирская музыка должна звучать на весь мир.',
 socials: {
@@ -1675,7 +1675,7 @@ demoVideos: [
     ],
 featWants: 124,
     collabs: [
-      { id: 'artist_1', name: 'Рустам', photo: 'assets/images/kartochki/vert.jpg' }
+     { id: 'artist_1', name: 'Рустам', photo: 'assets/images/kartochki/vert.png' }
     ],
     story: {
       type: 'track',
@@ -2244,7 +2244,7 @@ function buildArtistCardHTML(artist) {
   const storyActive = hasActiveStory(artist);
   return `
       <div class="artist-card-photo-wrap">
-        <img class="artist-card-photo" src="${optimizeImg(artist.photo, 400)}" alt="${artist.name}" loading="lazy" decoding="async" onerror="this.src='assets/images/kartochki/vert.jpg'">
+       <img class="artist-card-photo" src="${optimizeImg(artist.photo, 400)}" alt="${artist.name}" loading="lazy" decoding="async" onerror="this.src='assets/images/kartochki/vert.png'">
        ${artist.verified ? `<div class="artist-card-verified"><img src="assets/icons/verification.png" alt=""><div class="artist-card-verified-tip">Верифицированный артист <b>992MUZ</b></div></div>` : ''}
       </div>
       <div class="artist-card-body">

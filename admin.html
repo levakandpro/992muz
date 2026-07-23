@@ -1576,6 +1576,46 @@ async function cldUpload(file, folder) {
   }
   return d;
 }
+// ─── R2 (Cloudflare) — для новых треков, вместо Cloudinary ───
+const R2_CONFIG = {
+  workerUrl: 'https://white-fog-aa2c992muzmedia.levakandproduction.workers.dev',
+  uploadSecret: 'r2upload_992muz_9f3kd82jz7Q'
+};
+
+function getAudioDuration(file) {
+  return new Promise((resolve) => {
+    const url = URL.createObjectURL(file);
+    const audio = new Audio();
+    audio.preload = 'metadata';
+    audio.onloadedmetadata = () => {
+      const dur = audio.duration || 0;
+      URL.revokeObjectURL(url);
+      resolve(dur);
+    };
+    audio.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve(0);
+    };
+    audio.src = url;
+  });
+}
+
+async function r2Upload(file, folder) {
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('folder', folder);
+  fd.append('secret', R2_CONFIG.uploadSecret);
+  const r = await fetch(R2_CONFIG.workerUrl, {
+    method: 'POST',
+    headers: { 'X-Upload-Secret': R2_CONFIG.uploadSecret },
+    body: fd
+  });
+  const d = await r.json();
+  if (!r.ok || d.error) {
+    throw new Error(d.error || 'Ошибка загрузки в R2');
+  }
+  return d;
+}
 
 // ─── ТОП ЧАРТ: еженедельный снимок прослушиваний для стрелок тренда ───
 function getMondayKey(d = new Date()) {
@@ -1779,19 +1819,21 @@ window.uploadTrack = async () => {
       coverUrl = cr.secure_url; coverPublicId = cr.public_id;
     }
     prog.style.width='50%';
-    const ar = await cldUpload(audioFile,'pamir-music/tracks');
+    const [ar, duration] = await Promise.all([
+      r2Upload(audioFile,'tracks'),
+      getAudioDuration(audioFile)
+    ]);
     prog.style.width='80%';
 
-    const data = {
+const data = {
       title, artist,
-      trackUrl: ar.secure_url, trackPublicId: ar.public_id,
+      trackUrl: ar.secure_url || ar.url || '', trackPublicId: ar.key || ar.public_id || '',
       coverUrl, coverPublicId,
-      duration: ar.duration||0,
+      duration: duration||0,
       blocks, playlists,
       plays:0, likes:0,
       addedAt: serverTimestamp()
     };
-
     // Сохранить основной документ в tracks
     const mainRef = await addDoc(collection(db,'tracks'), data);
 

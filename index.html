@@ -1332,7 +1332,7 @@ window.setNowPlaying = function(audio, title, artist, coverUrl, overlayImg) {
     window.gp.overlayImg = overlayImg || null;
     window.gp.isRadio = false;
     gpSyncPlayBtnVisibility();
-    window.gpUpdateMediaSession && window.gpUpdateMediaSession(title, artist, window.cldImg ? window.cldImg(coverUrl, 512) : coverUrl);
+    window.gpUpdateMediaSession && window.gpUpdateMediaSession(title, artist, window.cldImg ? window.cldImg(coverUrl, 500) : coverUrl);
 
     var nameEl = document.querySelector('.player-track-name');
     var artistEl = document.querySelector('.player-track-artist');
@@ -1375,7 +1375,7 @@ window.setNowPlayingRadio = function(audio, title, artist, coverUrl) {
 window.gpUpdateMediaSession && window.gpUpdateMediaSession(
       title || 'ЭФИР',
       artist || '992MUZ',
-      coverUrl ? (window.cldImg ? window.cldImg(coverUrl, 512) : coverUrl) : null
+      coverUrl ? (window.cldImg ? window.cldImg(coverUrl, 500) : coverUrl) : null
     );
     audio.addEventListener('pause', function(){ if (window.gp.audio === audio) gpUpdateIcon(false); });
     audio.addEventListener('play', function(){ if (window.gp.audio === audio) gpUpdateIcon(true); });
@@ -1421,9 +1421,7 @@ window.gpUpdateMediaSession = function(title, artist, coverUrl) {
       artist: artist || 'Артист',
       album: '992MUZ',
 artwork: coverUrl ? [
-        { src: window.cldImgSquare ? window.cldImgSquare(coverUrl, 96) : coverUrl, sizes: '96x96' },
-        { src: window.cldImgSquare ? window.cldImgSquare(coverUrl, 256) : coverUrl, sizes: '256x256' },
-        { src: window.cldImgSquare ? window.cldImgSquare(coverUrl, 512) : coverUrl, sizes: '512x512' }
+        { src: window.cldImgSquare ? window.cldImgSquare(coverUrl, 256) : coverUrl, sizes: '256x256' }
       ] : []
     });
 
@@ -1555,7 +1553,7 @@ async function runGlobalSearch(qRaw) {
 if (matchedArtists.length) {
         html += '<div class="nav-search-section-label">Артисты</div>';
 matchedArtists.forEach(a => {
-          const photo = window.cldImg(a.avatarUrl, 72) || 'assets/icons/profile.png';
+         const photo = window.cldImg(a.avatarUrl, 80) || 'assets/icons/profile.png';
           const name = a.nickname || a.displayName || 'Артист';
           const artistId = a.uid || a.docId;
           html += `<a class="nav-search-item" href="artists.html?artist=${artistId}">
@@ -1571,7 +1569,7 @@ matchedArtists.forEach(a => {
       if (matchedTracks.length) {
         html += '<div class="nav-search-section-label">Треки</div>';
 matchedTracks.forEach(t => {
-          const cover = window.cldImg(t.coverUrl, 72) || 'assets/icons/mountain.png';
+         const cover = window.cldImg(t.coverUrl, 80) || 'assets/icons/mountain.png';
           let badge = '', href = '#';
           if (t.playlists && t.playlists.length) {
             const pl = t.playlists[0];
