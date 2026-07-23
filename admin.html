@@ -1882,7 +1882,7 @@ window.uploadTrack = async () => {
   const playlists = [...document.querySelectorAll('#playlistChecks input:checked')].map(c=>c.value);
   const coverFile = document.getElementById('coverFile').files[0];
 
-  let sharedCoverUrl = '', sharedCoverPublicId = '';
+let sharedCoverUrl = '', sharedCoverPublicId = '';
   if (coverFile) {
     try {
       const cr = await r2Upload(coverFile,'covers');
@@ -1891,6 +1891,30 @@ window.uploadTrack = async () => {
     } catch(e) {
       showMsg(msg,'Ошибка загрузки обложки: '+e.message,'err');
       return;
+    }
+  }
+
+  // Если загружена общая обложка — подтягиваем её же в карточки артистов
+  // (ищем карточку по совпадению имени, обновляем фото карточки)
+  if (sharedCoverUrl) {
+    const uniqueArtistNames = [...new Set(trackQueue.map(q => q.artist.trim()).filter(Boolean))];
+    for (const artistName of uniqueArtistNames) {
+      try {
+        const nameWords = _radioSearchNormalize(artistName).split(' ').filter(Boolean);
+        const appsSnap = await getDocs(query(collection(db,'artistApplications'), where('status','==','active')));
+        const match = appsSnap.docs.find(d => {
+          const hay = _radioSearchNormalize(d.data().nickname || d.data().displayName || '');
+          return _radioSearchMatch(hay, nameWords);
+        });
+        if (match) {
+          await updateDoc(doc(db,'artistApplications',match.id), {
+            avatarUrl: sharedCoverUrl,
+            avatarPublicId: sharedCoverPublicId
+          });
+        }
+      } catch(e) {
+        console.error('[uploadTrack] Не удалось обновить фото карточки для', artistName, e);
+      }
     }
   }
 
