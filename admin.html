@@ -2111,12 +2111,13 @@ window.deleteBlockDoc = async (block, docId) => {
 };
 
 // ─── ОЧИСТКА СТАРЫХ (НЕ R2) ТРЕКОВ ───
-// R2-треки узнаём по домену воркера в trackUrl (см. R2_CONFIG.workerUrl выше).
+// R2-треки узнаём по домену — либо воркера (*.workers.dev), либо кастомного
+// CDN-домена cdn.992muz.ru, на который сейчас реально отдаются файлы.
 // Всё остальное (Cloudinary-ссылки, пустые trackUrl) считается старым и удаляется.
+const R2_URL_MARKERS = ['workers.dev', 'cdn.992muz.ru'];
 function isR2TrackUrl(url) {
-  return !!(url && url.includes('workers.dev'));
+  return !!(url && R2_URL_MARKERS.some(marker => url.includes(marker)));
 }
-
 window.cleanupNonR2Tracks = async () => {
   if (!await showConfirm(
     'Удалить ВСЕ треки, загруженные НЕ через R2 (старые — с Cloudinary или вообще без файла)?\nТреки, уже перенесённые на R2, останутся нетронутыми.\nЭто действие нельзя отменить.',
