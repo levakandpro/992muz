@@ -2537,8 +2537,8 @@ function ftRenderTrack(t) {
   const likedSet = ftGetLikedSet();
   likeBtn.classList.toggle('liked', likedSet.has(t.id));
 
-  const todayCount = (t.featuredPlaysDate === ftTodayKey()) ? (t.featuredPlaysToday || 0) : 0;
-  playsToday.innerHTML = `👂 ${ftFormatCompact(todayCount)} слушали сегодня`;
+const todayCount = (t.featuredPlaysDate === ftTodayKey()) ? (t.featuredPlaysToday || 0) : 0;
+  playsToday.innerHTML = `<img src="assets/models/Spotify%20button%20flat%203D.svg" alt="" style="width:14px;height:14px;flex-shrink:0;"> ${ftFormatCompact(todayCount)} слушали сегодня`;
 
   if (t.userId) {
     artistLink.href = `artists.html?artist=${t.userId}`;
@@ -2583,9 +2583,9 @@ async function ftRegisterPlayToday(t) {
   const today = ftTodayKey();
   const isNewDay = t.featuredPlaysDate !== today;
   const newCount = isNewDay ? 1 : (t.featuredPlaysToday || 0) + 1;
-  t.featuredPlaysToday = newCount;
+ t.featuredPlaysToday = newCount;
   t.featuredPlaysDate = today;
-  document.getElementById('ftPlaysToday').innerHTML = `👂 ${ftFormatCompact(newCount)} слушали сегодня`;
+  document.getElementById('ftPlaysToday').innerHTML = `<img src="assets/models/Spotify%20button%20flat%203D.svg" alt="" style="width:14px;height:14px;flex-shrink:0;"> ${ftFormatCompact(newCount)} слушали сегодня`;
   try {
     await updateDoc(doc(db, 'tracks', t.id), { featuredPlaysToday: newCount, featuredPlaysDate: today });
   } catch(e) { console.error('Ошибка учёта прослушивания трека дня:', e); }
