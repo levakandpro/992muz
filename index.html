@@ -616,7 +616,120 @@
     }
   }
 </style>
-
+<!-- ТРЕК ДНЯ -->
+<style>
+  .featured-track-section{
+    display:flex;
+    justify-content:center;
+  }
+  .featured-track-card{
+    width:100%;
+    max-width:380px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+  .ft-cover-wrap{
+    position:relative;
+    width:220px;
+    height:220px;
+    border-radius:20px;
+    overflow:hidden;
+    background:#1a1a1a;
+    box-shadow:0 10px 30px rgba(0,0,0,0.35);
+    cursor:pointer;
+    margin-bottom:16px;
+  }
+  .ft-cover-wrap img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .ft-play-overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,0.25);
+    opacity:0;
+    transition:opacity .2s;
+  }
+  .ft-cover-wrap:hover .ft-play-overlay,
+  .ft-cover-wrap.playing .ft-play-overlay{
+    opacity:1;
+  }
+  .ft-play-overlay svg{ width:46px; height:46px; }
+  .ft-title{
+    font-size:17px;
+    font-weight:700;
+    color:var(--text,#111);
+    margin-bottom:4px;
+    max-width:100%;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .ft-artist{
+    font-size:13.5px;
+    color:var(--text3,#888);
+    margin-bottom:14px;
+  }
+  .ft-progress-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+  }
+  .ft-time{
+    font-size:11px;
+    color:var(--text3,#888);
+    min-width:32px;
+    font-variant-numeric:tabular-nums;
+  }
+  .ft-progress-bar{
+    flex:1;
+    height:5px;
+    border-radius:100px;
+    background:var(--bg3,#eee);
+    overflow:hidden;
+    cursor:pointer;
+  }
+  .ft-progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--accent,#8B1A2F),#c0392b);
+    border-radius:100px;
+    transition:width .1s linear;
+  }
+</style>
+<section class="section" id="featured-track">
+  <div class="section-head">
+    <div>
+      <div class="section-label">Рекомендуем</div>
+      <h2>Трек дня</h2>
+    </div>
+  </div>
+  <div class="featured-track-section">
+    <div class="featured-track-card" id="featuredTrackCard" style="display:none;">
+      <div class="ft-cover-wrap" id="ftCoverWrap">
+        <img id="ftCoverImg" src="assets/icons/mountain.png" alt="">
+        <div class="ft-play-overlay">
+          <svg viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
+        </div>
+      </div>
+      <div class="ft-title" id="ftTitle">Название</div>
+      <div class="ft-artist" id="ftArtist">Артист</div>
+      <div class="ft-progress-row">
+        <span class="ft-time" id="ftTimeCur">0:00</span>
+        <div class="ft-progress-bar" id="ftProgressBar"><div class="ft-progress-fill" id="ftProgressFill"></div></div>
+        <span class="ft-time" id="ftTimeDur">0:00</span>
+      </div>
+    </div>
+  </div>
+</section>
 <!-- СЛУЧАЙНЫЕ ХИТЫ (ВСЕГДА ИЗ TOP50) -->
   <section class="section" id="random-hits">
     <div class="section-head">
@@ -2269,6 +2382,85 @@ async function loadRandomHits() {
 }
 
 loadRandomHits();
+</script>
+
+<script type="module">
+import { db } from './js/config/firebase.js';
+import { collection, query, where, limit, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+let ftAudio = null;
+
+function ftFormatTime(sec) {
+  if (!sec || !isFinite(sec)) return '0:00';
+  const m = Math.floor(sec / 60), s = Math.floor(sec % 60).toString().padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+async function loadFeaturedTrack() {
+  const card = document.getElementById('featuredTrackCard');
+  if (!card) return;
+  try {
+    const snap = await getDocs(query(collection(db, 'tracks'), where('featuredHome', '==', true), limit(1)));
+    if (snap.empty) return;
+    const t = snap.docs[0].data();
+    if (!t.trackUrl) return;
+
+    const coverImg = document.getElementById('ftCoverImg');
+    const coverWrap = document.getElementById('ftCoverWrap');
+    const titleEl = document.getElementById('ftTitle');
+    const artistEl = document.getElementById('ftArtist');
+    const fill = document.getElementById('ftProgressFill');
+    const timeCur = document.getElementById('ftTimeCur');
+    const timeDur = document.getElementById('ftTimeDur');
+    const progressBar = document.getElementById('ftProgressBar');
+
+    coverImg.src = window.cldImg ? window.cldImg(t.coverUrl, 440) : (t.coverUrl || 'assets/icons/mountain.png');
+    coverImg.onerror = () => { coverImg.src = 'assets/icons/mountain.png'; };
+    titleEl.textContent = t.title || 'Без названия';
+    artistEl.textContent = t.artist || 'Артист';
+    card.style.display = 'flex';
+
+    coverWrap.addEventListener('click', () => {
+      const overlaySvg = coverWrap.querySelector('.ft-play-overlay svg');
+      if (ftAudio && !ftAudio.paused) {
+        ftAudio.pause();
+        overlaySvg.innerHTML = '<polygon points="5,3 19,12 5,21"/>';
+        coverWrap.classList.remove('playing');
+        return;
+      }
+      if (!ftAudio) {
+        ftAudio = new Audio(t.trackUrl);
+        ftAudio.preload = 'auto';
+        ftAudio.addEventListener('loadedmetadata', () => { timeDur.textContent = ftFormatTime(ftAudio.duration); });
+        ftAudio.addEventListener('timeupdate', () => {
+          if (!ftAudio.duration) return;
+          fill.style.width = (ftAudio.currentTime / ftAudio.duration * 100) + '%';
+          timeCur.textContent = ftFormatTime(ftAudio.currentTime);
+        });
+        ftAudio.addEventListener('ended', () => {
+          overlaySvg.innerHTML = '<polygon points="5,3 19,12 5,21"/>';
+          coverWrap.classList.remove('playing');
+          fill.style.width = '0%';
+          timeCur.textContent = '0:00';
+        });
+      }
+      ftAudio.play();
+      overlaySvg.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+      coverWrap.classList.add('playing');
+      window.setNowPlaying && window.setNowPlaying(ftAudio, t.title, t.artist, t.coverUrl, null);
+    });
+
+    progressBar.addEventListener('click', (e) => {
+      if (!ftAudio || !ftAudio.duration) return;
+      const rect = progressBar.getBoundingClientRect();
+      ftAudio.currentTime = ((e.clientX - rect.left) / rect.width) * ftAudio.duration;
+    });
+  } catch (e) {
+    console.error('Ошибка загрузки трека дня:', e);
+  }
+}
+
+loadFeaturedTrack();
 </script>
 <div class="chat-settings-overlay" id="chatSettingsOverlay">
   <div class="chat-settings-modal">
