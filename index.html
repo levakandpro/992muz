@@ -775,8 +775,8 @@
 <section class="section" id="featured-track">
   <div class="section-head">
     <div>
-      <div class="section-label">Рекомендуем</div>
-      <h2>Трек дня</h2>
+<div class="section-label">Рекомендуем</div>
+      <h2 style="display:flex;align-items:center;gap:8px;">Трек дня<img src="assets/models/Top 100.gif" alt="" style="width:24px;height:24px;object-fit:contain;"></h2>
     </div>
   </div>
   <div class="featured-track-section">
@@ -2677,7 +2677,7 @@ async function loadFeaturedTrack() {
     ftTracks = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(t => t.trackUrl);
     if (!ftTracks.length) return;
 
-    ftIdx = 0;
+ftIdx = ftTracks.length > 1 ? Math.floor(Math.random() * ftTracks.length) : 0;
     ftRenderTrack(ftTracks[ftIdx]);
     card.style.display = 'flex';
     ftAttachHandlers();
