@@ -697,13 +697,80 @@
     overflow:hidden;
     cursor:pointer;
   }
-  .ft-progress-fill{
+.ft-progress-fill{
     height:100%;
     width:0%;
     background:linear-gradient(90deg,var(--accent,#8B1A2F),#c0392b);
     border-radius:100px;
     transition:width .1s linear;
   }
+  .featured-track-card{
+    transition:opacity .4s ease, transform .4s ease;
+  }
+  .featured-track-card.ft-fade-out{
+    opacity:0;
+    transform:scale(0.94) translateY(6px);
+  }
+.featured-track-card.ft-fade-in{
+    animation:ftFadeIn .5s ease forwards;
+  }
+  @keyframes ftFadeIn{
+    from{ opacity:0; transform:scale(0.94) translateY(6px); }
+    to{ opacity:1; transform:scale(1) translateY(0); }
+  }
+  .ft-meta-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .ft-plays-today{
+    font-size:12px;
+    color:var(--text3,#888);
+    display:flex;
+    align-items:center;
+    gap:5px;
+  }
+  .ft-artist-link{
+    font-size:12px;
+    font-weight:600;
+    color:var(--accent,#8B1A2F);
+    text-decoration:none;
+    display:none;
+    align-items:center;
+    gap:3px;
+  }
+  .ft-artist-link:hover{ text-decoration:underline; }
+  .ft-actions-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-top:14px;
+  }
+  .ft-action-btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:var(--bg2,#fff);
+    border:1px solid var(--bg3,#eee);
+    border-radius:100px;
+    padding:7px 14px;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--text2,#555);
+    cursor:pointer;
+    transition:background .15s, border-color .15s, color .15s;
+  }
+  .ft-action-btn:hover{ background:var(--bg3,#f3f3f3); }
+  .ft-action-btn.liked{
+    color:#e0245e;
+    border-color:rgba(224,36,94,0.3);
+    background:rgba(224,36,94,0.08);
+  }
+  .ft-action-btn svg{ width:15px; height:15px; flex-shrink:0; }
 </style>
 <section class="section" id="featured-track">
   <div class="section-head">
@@ -720,12 +787,29 @@
           <svg viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
         </div>
       </div>
-      <div class="ft-title" id="ftTitle">Название</div>
+<div class="ft-title" id="ftTitle">Название</div>
       <div class="ft-artist" id="ftArtist">Артист</div>
+      <div class="ft-meta-row">
+        <span class="ft-plays-today" id="ftPlaysToday"></span>
+        <a class="ft-artist-link" id="ftArtistLink" href="#">
+          Ещё треки артиста
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
       <div class="ft-progress-row">
         <span class="ft-time" id="ftTimeCur">0:00</span>
         <div class="ft-progress-bar" id="ftProgressBar"><div class="ft-progress-fill" id="ftProgressFill"></div></div>
         <span class="ft-time" id="ftTimeDur">0:00</span>
+      </div>
+      <div class="ft-actions-row">
+        <button class="ft-action-btn" id="ftLikeBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+          <span id="ftLikeCount">0</span>
+        </button>
+        <button class="ft-action-btn" id="ftShareBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+          Поделиться
+        </button>
       </div>
     </div>
   </div>
@@ -2386,9 +2470,13 @@ loadRandomHits();
 
 <script type="module">
 import { db } from './js/config/firebase.js';
-import { collection, query, where, limit, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { collection, query, where, getDocs, doc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 let ftAudio = null;
+let ftTracks = [];
+let ftIdx = 0;
+let ftRotateTimer = null;
+const FT_ROTATE_INTERVAL = 8000; // раз в 8 секунд — смена трека, если сейчас ничего не играет
 
 function ftFormatTime(sec) {
   if (!sec || !isFinite(sec)) return '0:00';
@@ -2396,64 +2484,209 @@ function ftFormatTime(sec) {
   return `${m}:${s}`;
 }
 
+function ftFormatCompact(n) {
+  n = n || 0;
+  if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+  return String(n);
+}
+
+function ftTodayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+}
+
+function ftGetLikedSet() {
+  try { return new Set(JSON.parse(localStorage.getItem('ftLikedTracks_v1') || '[]')); }
+  catch(e) { return new Set(); }
+}
+function ftSaveLikedSet(set) {
+  localStorage.setItem('ftLikedTracks_v1', JSON.stringify([...set]));
+}
+
+function ftResetAudioUI() {
+  const fill = document.getElementById('ftProgressFill');
+  const timeCur = document.getElementById('ftTimeCur');
+  const timeDur = document.getElementById('ftTimeDur');
+  const coverWrap = document.getElementById('ftCoverWrap');
+  if (fill) fill.style.width = '0%';
+  if (timeCur) timeCur.textContent = '0:00';
+  if (timeDur) timeDur.textContent = '0:00';
+  if (coverWrap) {
+    coverWrap.classList.remove('playing');
+    const svg = coverWrap.querySelector('.ft-play-overlay svg');
+    if (svg) svg.innerHTML = '<polygon points="5,3 19,12 5,21"/>';
+  }
+}
+
+function ftRenderTrack(t) {
+  const coverImg = document.getElementById('ftCoverImg');
+  const titleEl = document.getElementById('ftTitle');
+  const artistEl = document.getElementById('ftArtist');
+  const likeBtn = document.getElementById('ftLikeBtn');
+  const likeCount = document.getElementById('ftLikeCount');
+  const playsToday = document.getElementById('ftPlaysToday');
+  const artistLink = document.getElementById('ftArtistLink');
+
+  coverImg.src = window.cldImg ? window.cldImg(t.coverUrl, 440) : (t.coverUrl || 'assets/icons/mountain.png');
+  coverImg.onerror = () => { coverImg.src = 'assets/icons/mountain.png'; };
+  titleEl.textContent = t.title || 'Без названия';
+  artistEl.textContent = t.artist || 'Артист';
+
+  likeCount.textContent = ftFormatCompact(t.likes || 0);
+  const likedSet = ftGetLikedSet();
+  likeBtn.classList.toggle('liked', likedSet.has(t.id));
+
+  const todayCount = (t.featuredPlaysDate === ftTodayKey()) ? (t.featuredPlaysToday || 0) : 0;
+  playsToday.innerHTML = `👂 ${ftFormatCompact(todayCount)} слушали сегодня`;
+
+  if (t.userId) {
+    artistLink.href = `artists.html?artist=${t.userId}`;
+    artistLink.style.display = 'inline-flex';
+  } else {
+    artistLink.style.display = 'none';
+  }
+}
+
+function ftIsCurrentlyPlaying() {
+  return !!(ftAudio && !ftAudio.paused);
+}
+
+// Плавная (с анимацией) смена трека дня — пропускает цикл, если пользователь сейчас слушает текущий трек
+function ftSwapToNext() {
+  if (ftIsCurrentlyPlaying()) return;
+  if (ftTracks.length < 2) return;
+
+  const card = document.getElementById('featuredTrackCard');
+  if (!card) return;
+
+  card.classList.add('ft-fade-out');
+  setTimeout(() => {
+    ftIdx = (ftIdx + 1) % ftTracks.length;
+    if (ftAudio) { ftAudio.pause(); ftAudio = null; }
+    ftResetAudioUI();
+    ftRenderTrack(ftTracks[ftIdx]);
+    card.classList.remove('ft-fade-out');
+    card.classList.add('ft-fade-in');
+    setTimeout(() => card.classList.remove('ft-fade-in'), 500);
+  }, 400);
+}
+
+function ftStartRotation() {
+  clearInterval(ftRotateTimer);
+  if (ftTracks.length < 2) return; // один трек — ротировать нечего
+  ftRotateTimer = setInterval(ftSwapToNext, FT_ROTATE_INTERVAL);
+}
+
+// Засчитывает прослушивание "сегодня" — сбрасывает счётчик, если день сменился
+async function ftRegisterPlayToday(t) {
+  const today = ftTodayKey();
+  const isNewDay = t.featuredPlaysDate !== today;
+  const newCount = isNewDay ? 1 : (t.featuredPlaysToday || 0) + 1;
+  t.featuredPlaysToday = newCount;
+  t.featuredPlaysDate = today;
+  document.getElementById('ftPlaysToday').innerHTML = `👂 ${ftFormatCompact(newCount)} слушали сегодня`;
+  try {
+    await updateDoc(doc(db, 'tracks', t.id), { featuredPlaysToday: newCount, featuredPlaysDate: today });
+  } catch(e) { console.error('Ошибка учёта прослушивания трека дня:', e); }
+}
+
+function ftAttachHandlers() {
+  const coverWrap = document.getElementById('ftCoverWrap');
+  const progressBar = document.getElementById('ftProgressBar');
+  const fill = document.getElementById('ftProgressFill');
+  const timeCur = document.getElementById('ftTimeCur');
+  const timeDur = document.getElementById('ftTimeDur');
+  const likeBtn = document.getElementById('ftLikeBtn');
+  const likeCount = document.getElementById('ftLikeCount');
+  const shareBtn = document.getElementById('ftShareBtn');
+
+  coverWrap.addEventListener('click', () => {
+    const t = ftTracks[ftIdx];
+    if (!t || !t.trackUrl) return;
+    const overlaySvg = coverWrap.querySelector('.ft-play-overlay svg');
+
+    if (ftAudio && !ftAudio.paused) {
+      ftAudio.pause();
+      overlaySvg.innerHTML = '<polygon points="5,3 19,12 5,21"/>';
+      coverWrap.classList.remove('playing');
+      return;
+    }
+
+    if (!ftAudio || ftAudio.src !== t.trackUrl) {
+      ftAudio = new Audio(t.trackUrl);
+      ftAudio.preload = 'auto';
+      let playCounted = false;
+      ftAudio.addEventListener('loadedmetadata', () => { timeDur.textContent = ftFormatTime(ftAudio.duration); });
+      ftAudio.addEventListener('timeupdate', () => {
+        if (!ftAudio.duration) return;
+        fill.style.width = (ftAudio.currentTime / ftAudio.duration * 100) + '%';
+        timeCur.textContent = ftFormatTime(ftAudio.currentTime);
+        if (!playCounted && ftAudio.currentTime >= 5) {
+          playCounted = true;
+          ftRegisterPlayToday(t);
+        }
+      });
+      ftAudio.addEventListener('ended', () => {
+        overlaySvg.innerHTML = '<polygon points="5,3 19,12 5,21"/>';
+        coverWrap.classList.remove('playing');
+        fill.style.width = '0%';
+        timeCur.textContent = '0:00';
+      });
+    }
+    ftAudio.play();
+    overlaySvg.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+    coverWrap.classList.add('playing');
+    window.setNowPlaying && window.setNowPlaying(ftAudio, t.title, t.artist, t.coverUrl, null);
+  });
+
+  progressBar.addEventListener('click', (e) => {
+    if (!ftAudio || !ftAudio.duration) return;
+    const rect = progressBar.getBoundingClientRect();
+    ftAudio.currentTime = ((e.clientX - rect.left) / rect.width) * ftAudio.duration;
+  });
+
+  likeBtn.addEventListener('click', async () => {
+    const t = ftTracks[ftIdx];
+    if (!t) return;
+    const likedSet = ftGetLikedSet();
+    const isLiked = likedSet.has(t.id);
+    const newLikes = (t.likes || 0) + (isLiked ? -1 : 1);
+    t.likes = newLikes;
+    if (isLiked) likedSet.delete(t.id); else likedSet.add(t.id);
+    ftSaveLikedSet(likedSet);
+    likeBtn.classList.toggle('liked', !isLiked);
+    likeCount.textContent = ftFormatCompact(newLikes);
+    try { await updateDoc(doc(db, 'tracks', t.id), { likes: newLikes }); }
+    catch(e) { console.error('Ошибка сохранения лайка:', e); }
+  });
+
+  shareBtn.addEventListener('click', () => {
+    const t = ftTracks[ftIdx];
+    if (!t || !t.trackUrl) return;
+    if (navigator.share) navigator.share({ title: `${t.title} — ${t.artist}`, url: t.trackUrl });
+    else navigator.clipboard.writeText(t.trackUrl);
+  });
+}
+
 async function loadFeaturedTrack() {
   const card = document.getElementById('featuredTrackCard');
   if (!card) return;
   try {
-    const snap = await getDocs(query(collection(db, 'tracks'), where('featuredHome', '==', true), limit(1)));
-    if (snap.empty) return;
-    const t = snap.docs[0].data();
-    if (!t.trackUrl) return;
+    const snap = await getDocs(query(collection(db, 'tracks'), where('featuredHome', '==', true)));
+    ftTracks = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(t => t.trackUrl);
+    if (!ftTracks.length) return;
 
-    const coverImg = document.getElementById('ftCoverImg');
-    const coverWrap = document.getElementById('ftCoverWrap');
-    const titleEl = document.getElementById('ftTitle');
-    const artistEl = document.getElementById('ftArtist');
-    const fill = document.getElementById('ftProgressFill');
-    const timeCur = document.getElementById('ftTimeCur');
-    const timeDur = document.getElementById('ftTimeDur');
-    const progressBar = document.getElementById('ftProgressBar');
-
-    coverImg.src = window.cldImg ? window.cldImg(t.coverUrl, 440) : (t.coverUrl || 'assets/icons/mountain.png');
-    coverImg.onerror = () => { coverImg.src = 'assets/icons/mountain.png'; };
-    titleEl.textContent = t.title || 'Без названия';
-    artistEl.textContent = t.artist || 'Артист';
+    ftIdx = 0;
+    ftRenderTrack(ftTracks[ftIdx]);
     card.style.display = 'flex';
+    ftAttachHandlers();
+    ftStartRotation();
 
-    coverWrap.addEventListener('click', () => {
-      const overlaySvg = coverWrap.querySelector('.ft-play-overlay svg');
-      if (ftAudio && !ftAudio.paused) {
-        ftAudio.pause();
-        overlaySvg.innerHTML = '<polygon points="5,3 19,12 5,21"/>';
-        coverWrap.classList.remove('playing');
-        return;
-      }
-      if (!ftAudio) {
-        ftAudio = new Audio(t.trackUrl);
-        ftAudio.preload = 'auto';
-        ftAudio.addEventListener('loadedmetadata', () => { timeDur.textContent = ftFormatTime(ftAudio.duration); });
-        ftAudio.addEventListener('timeupdate', () => {
-          if (!ftAudio.duration) return;
-          fill.style.width = (ftAudio.currentTime / ftAudio.duration * 100) + '%';
-          timeCur.textContent = ftFormatTime(ftAudio.currentTime);
-        });
-        ftAudio.addEventListener('ended', () => {
-          overlaySvg.innerHTML = '<polygon points="5,3 19,12 5,21"/>';
-          coverWrap.classList.remove('playing');
-          fill.style.width = '0%';
-          timeCur.textContent = '0:00';
-        });
-      }
-      ftAudio.play();
-      overlaySvg.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
-      coverWrap.classList.add('playing');
-      window.setNowPlaying && window.setNowPlaying(ftAudio, t.title, t.artist, t.coverUrl, null);
-    });
-
-    progressBar.addEventListener('click', (e) => {
-      if (!ftAudio || !ftAudio.duration) return;
-      const rect = progressBar.getBoundingClientRect();
-      ftAudio.currentTime = ((e.clientX - rect.left) / rect.width) * ftAudio.duration;
+    // Пауза ротации, пока вкладка свёрнута — не тратим ресурсы впустую
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) clearInterval(ftRotateTimer);
+      else ftStartRotation();
     });
   } catch (e) {
     console.error('Ошибка загрузки трека дня:', e);

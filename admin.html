@@ -740,6 +740,9 @@ select.btn{padding:5px 8px}
           </div>
         </div>
 <div class="progress-bar" style="margin-bottom:16px;"><div class="progress-fill" id="teProgress"></div></div>
+<label style="display:flex;align-items:center;gap:8px;margin-bottom:16px;cursor:pointer;background:#2a1a00;border:1px solid #4a3300;border-radius:8px;padding:9px 12px;">
+          <input type="checkbox" id="teFeaturedHome" style="accent-color:#f0c040;width:16px;height:16px"> 🌟 Добавить в ротацию блока «Трек дня» на главной (можно отметить несколько треков)
+        </label>
         <div style="margin-bottom:8px;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Блоки:</div>
         <div class="checkboxes" id="teBlockChecks" style="margin-bottom:12px;">
           <label><input type="checkbox" value="newReleases"> Новинки</label>
@@ -2931,11 +2934,12 @@ document.getElementById('teCoverLabel').textContent = '📷 Сменить об�
   document.getElementById('teCoverFile').value = '';
   document.getElementById('teProgress').style.width = '0%';
   document.getElementById('teMsg').className = 'msg';
-  // Проставить галки блоков и плейлистов
+// Проставить галки блоков и плейлистов
   const teBlocks = t.blocks || [];
   const tePlaylists = t.playlists || [];
   document.querySelectorAll('#teBlockChecks input').forEach(c => c.checked = teBlocks.includes(c.value));
   document.querySelectorAll('#tePlaylistChecks input').forEach(c => c.checked = tePlaylists.includes(c.value));
+  document.getElementById('teFeaturedHome').checked = !!t.featuredHome;
   document.getElementById('trackEditOverlay').style.display = 'flex';
 };
 
@@ -2955,9 +2959,10 @@ window.saveTrackEdit = async () => {
 
   try {
     prog.style.width = '30%';
-   const newBlocks = [...document.querySelectorAll('#teBlockChecks input:checked')].map(c => c.value);
+const newBlocks = [...document.querySelectorAll('#teBlockChecks input:checked')].map(c => c.value);
   const newPlaylists = [...document.querySelectorAll('#tePlaylistChecks input:checked')].map(c => c.value);
-  const updates = { title, artist, blocks: newBlocks, playlists: newPlaylists };
+const featuredHome = document.getElementById('teFeaturedHome').checked;
+  const updates = { title, artist, blocks: newBlocks, playlists: newPlaylists, featuredHome };
 
 if (coverFile) {
       prog.style.width = '50%';
