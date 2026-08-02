@@ -2678,8 +2678,9 @@ async function loadFeaturedTrack() {
   const card = document.getElementById('featuredTrackCard');
   if (!card) return;
   try {
-    const snap = await getDocs(query(collection(db, 'tracks'), where('featuredHome', '==', true)));
+const snap = await getDocs(query(collection(db, 'tracks'), where('featuredHome', '==', true)));
     ftTracks = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(t => t.trackUrl);
+    console.log('[ftDebug] featuredHome треков найдено:', ftTracks.length, ftTracks.map(t => t.title));
     if (!ftTracks.length) return;
 
     // Явно исключаем повтор последнего показанного трека при каждой загрузке страницы
