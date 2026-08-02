@@ -1,5 +1,5 @@
 // js/upload/track-upload.js
-import { CLOUDINARY_CONFIG, getTrackUrl, getCoverUrl } from '../config/cloudinary.js';
+import { R2_CONFIG, getTrackUrl, getCoverUrl } from '../config/r2.js';
 
 /**
  * Универсальная загрузка файла в Cloudinary
@@ -8,15 +8,12 @@ import { CLOUDINARY_CONFIG, getTrackUrl, getCoverUrl } from '../config/cloudinar
  * @param {Function} onProgress - колбек прогресса (0-100)
  * @returns {Promise<object>} - данные загруженного файла
  */
-async function uploadToCloudinary(file, folder, onProgress = null) {
+async function uploadToR2(file, folder, onProgress = null) {
   const formData = new FormData();
   formData.append('file', file);
-  formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
   formData.append('folder', folder);
 
-  // Тип ресурса: видео для аудио, image для изображений
-  const resourceType = file.type.startsWith('audio') ? 'video' : 'image';
-  const uploadUrl = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/${resourceType}/upload`;
+  const uploadUrl = R2_CONFIG.workerUrl;
 
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -42,10 +39,10 @@ async function uploadToCloudinary(file, folder, onProgress = null) {
 
     xhr.addEventListener('error', () => reject(new Error('Ошибка сети')));
     xhr.open('POST', uploadUrl);
+    xhr.setRequestHeader('X-Upload-Secret', R2_CONFIG.uploadSecret);
     xhr.send(formData);
   });
 }
-
 /**
  * Загрузить трек (mp3/wav/flac)
  * @param {File} audioFile
@@ -69,34 +66,34 @@ const allowedAudio = ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/flac', 'aud
   const results = {};
 
   // 1. Загрузка обложки (если есть)
-  if (coverFile) {
+if (coverFile) {
     try {
       onProgress && onProgress(0, 'cover');
-      const coverData = await uploadToCloudinary(
+      const coverData = await uploadToR2(
         coverFile,
-        CLOUDINARY_CONFIG.folders.covers,
+        R2_CONFIG.folders.covers,
         (p) => onProgress && onProgress(p, 'cover')
       );
-      results.coverPublicId = coverData.public_id;
-      results.coverUrl = getCoverUrl(coverData.public_id);
+      results.coverPublicId = coverData.key;
+      results.coverUrl = coverData.secure_url || getCoverUrl(coverData.key);
     } catch (err) {
       console.warn('Ошибка загрузки обложки:', err);
     }
   }
 
-  // 2. Загрузка трека
+// 2. Загрузка трека
   onProgress && onProgress(0, 'track');
-  const trackData = await uploadToCloudinary(
+  const trackData = await uploadToR2(
     audioFile,
-    CLOUDINARY_CONFIG.folders.tracks,
+    R2_CONFIG.folders.tracks,
     (p) => onProgress && onProgress(p, 'track')
   );
 
-  results.trackPublicId = trackData.public_id;
-  results.trackUrl = getTrackUrl(trackData.public_id);
-  results.duration = trackData.duration || 0;
-  results.format = trackData.format;
-  results.bytes = trackData.bytes;
+  results.trackPublicId = trackData.key;
+  results.trackUrl = trackData.secure_url || getTrackUrl(trackData.key);
+  results.duration = 0;
+  results.format = (audioFile.name.split('.').pop() || '').toLowerCase();
+  results.bytes = audioFile.size;
 
   // 3. Данные для сохранения в Firebase
   results.firestoreData = {
@@ -136,16 +133,16 @@ const maxSize = 5 * 1024 * 1024;
     throw new Error('Фото слишком большое. Максимум 5 МБ.');
   }
 
-  const data = await uploadToCloudinary(
+const data = await uploadToR2(
     imageFile,
-    CLOUDINARY_CONFIG.folders.avatars,
+    R2_CONFIG.folders.avatars,
     onProgress
   );
 
   return {
-    publicId: data.public_id,
-    url: `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_150,h_150,c_fill,g_face,q_auto,f_auto/${data.public_id}`,
+    publicId: data.key,
+    url: data.secure_url,
   };
 }
 
-export { uploadTrack, uploadAvatar, uploadToCloudinary };
+export { uploadTrack, uploadAvatar, uploadToR2 };
