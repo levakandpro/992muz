@@ -776,7 +776,12 @@
   <div class="section-head">
     <div>
 <div class="section-label">Рекомендуем</div>
-      <h2 style="display:flex;align-items:center;gap:8px;">Трек дня<img src="assets/models/Top 100.gif" alt="" style="width:24px;height:24px;object-fit:contain;"></h2>
+      <h2 style="display:flex;align-items:center;gap:6px;line-height:1;margin:0;">
+        <span style="display:inline-block;">Трек дня</span>
+        <span style="width:30px;height:30px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;position:relative;top:1px;">
+          <img src="assets/models/Top 100.gif" alt="" style="display:block;width:100%;height:100%;object-fit:contain;transform:scale(1.7);">
+        </span>
+      </h2>
     </div>
   </div>
   <div class="featured-track-section">
@@ -2677,7 +2682,17 @@ async function loadFeaturedTrack() {
     ftTracks = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(t => t.trackUrl);
     if (!ftTracks.length) return;
 
-ftIdx = ftTracks.length > 1 ? Math.floor(Math.random() * ftTracks.length) : 0;
+    // Явно исключаем повтор последнего показанного трека при каждой загрузке страницы
+    const lastShownId = sessionStorage.getItem('ftLastShownId_v1');
+    let pool = ftTracks;
+    if (ftTracks.length > 1 && lastShownId) {
+      const filtered = ftTracks.filter(t => t.id !== lastShownId);
+      if (filtered.length) pool = filtered;
+    }
+    const chosen = pool[Math.floor(Math.random() * pool.length)];
+    ftIdx = ftTracks.indexOf(chosen);
+    sessionStorage.setItem('ftLastShownId_v1', ftTracks[ftIdx].id);
+
     ftRenderTrack(ftTracks[ftIdx]);
     card.style.display = 'flex';
     ftAttachHandlers();
