@@ -2646,7 +2646,25 @@ function ftAttachHandlers() {
     ftAudio.currentTime = ((e.clientX - rect.left) / rect.width) * ftAudio.duration;
   });
 
-  likeBtn.addEventListener('click', async () => {
+// Дебаунс записи лайков в Firestore — при быстрых повторных кликах (лайк/дизлайк туда-сюда)
+  // в базу уходит только финальное значение одним запросом через 1.2 сек паузы, а не на каждый клик
+  let ftLikeDebounceTimer = null;
+  let ftPendingLikeTrackId = null;
+  let ftPendingLikeDelta = 0;
+
+  function ftFlushLikeToFirestore() {
+    if (!ftPendingLikeTrackId || ftPendingLikeDelta === 0) { ftPendingLikeDelta = 0; ftPendingLikeTrackId = null; return; }
+    const trackId = ftPendingLikeTrackId;
+    const delta = ftPendingLikeDelta;
+    ftPendingLikeDelta = 0;
+    ftPendingLikeTrackId = null;
+    updateDoc(doc(db, 'tracks', trackId), { likes: increment(delta) })
+      .catch(e => console.error('Ошибка сохранения лайка:', e));
+  }
+
+  window.addEventListener('beforeunload', ftFlushLikeToFirestore);
+
+  likeBtn.addEventListener('click', () => {
     const t = ftTracks[ftIdx];
     if (!t) return;
     const likedSet = ftGetLikedSet();
@@ -2657,8 +2675,17 @@ function ftAttachHandlers() {
     ftSaveLikedSet(likedSet);
     likeBtn.classList.toggle('liked', !isLiked);
     likeCount.textContent = ftFormatCompact(newLikes);
-    try { await updateDoc(doc(db, 'tracks', t.id), { likes: newLikes }); }
-    catch(e) { console.error('Ошибка сохранения лайка:', e); }
+
+    // Если переключились на другой трек до отправки предыдущего изменения — сначала
+    // сбрасываем накопленное по старому треку, затем копим по новому
+    if (ftPendingLikeTrackId && ftPendingLikeTrackId !== t.id) {
+      ftFlushLikeToFirestore();
+    }
+    ftPendingLikeTrackId = t.id;
+    ftPendingLikeDelta += isLiked ? -1 : 1;
+
+    clearTimeout(ftLikeDebounceTimer);
+    ftLikeDebounceTimer = setTimeout(ftFlushLikeToFirestore, 1200);
   });
 
   shareBtn.addEventListener('click', () => {
