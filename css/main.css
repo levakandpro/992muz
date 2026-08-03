@@ -337,6 +337,7 @@ button { cursor: pointer; border: none; background: none; color: inherit; font: 
   width: 100%;
   aspect-ratio: 1/1;
   object-fit: cover;
+  object-position: top;
   display: block;
 }
 .vote-card-name {

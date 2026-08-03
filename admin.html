@@ -3397,17 +3397,17 @@ window.addVoteArtist = async () => {
   if (file) {
     const prog = document.getElementById('vaProgress');
     prog.style.width = '30%';
-    const fd = new FormData();
-    fd.append('file', file);
-    fd.append('upload_preset', '992Muz');
-    fd.append('folder', 'pamir-music/vote');
-   const res = await fetch('https://api.cloudinary.com/v1_1/waamiohc/image/upload', { method:'POST', body:fd });
+    try {
+      const r2r = await r2Upload(file, 'vote');
+      photoUrl = r2r.secure_url || r2r.url || '';
+    } catch(e) {
+      showMsg(msg, 'Ошибка загрузки фото: ' + e.message, 'err');
+      prog.style.width = '0%';
+      return;
+    }
     prog.style.width = '100%';
-    const data = await res.json();
-    photoUrl = data.secure_url || '';
     setTimeout(() => prog.style.width = '0%', 800);
   }
-
   await addDoc(collection(db,'voteArtists'), { name, photoUrl, votes: 0, createdAt: serverTimestamp() });
   document.getElementById('vaName').value = '';
   document.getElementById('vaPhotoFile').value = '';
@@ -3426,8 +3426,28 @@ window.delVoteArtist = async (id) => {
 window.editVoteArtist = async (id, name, photo) => {
   const newName = await showPrompt('Имя:', name);
   if (!newName) return;
-  const newPhoto = await showPrompt('Ссылка на фото:', photo);
-  await updateDoc(doc(db,'voteArtists',id), { name: newName.trim(), photoUrl: newPhoto?.trim()||photo });
+  const updates = { name: newName.trim() };
+
+  const wantsNewPhoto = await showConfirm('Загрузить новое фото для этого артиста? (Отмена = оставить текущее фото)', 'Да, загрузить');
+  if (wantsNewPhoto) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    const file = await new Promise(resolve => {
+      input.onchange = () => resolve(input.files[0] || null);
+      input.click();
+    });
+    if (file) {
+      try {
+        const r2r = await r2Upload(file, 'vote');
+        updates.photoUrl = r2r.secure_url || r2r.url || photo;
+      } catch(e) {
+        await showAlert('Ошибка загрузки фото: ' + e.message);
+      }
+    }
+  }
+
+  await updateDoc(doc(db,'voteArtists',id), updates);
   loadVoteArtists();
 };
 window.toggleStudioStatusFields = () => {
