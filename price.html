@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'DejaVu Sans', 'Helvetica Neue', Arial, sans-serif;
+    color: #EDEDED;
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 0;
+  }
+
+  .page {
+    width: 794px;
+    padding: 60px 64px;
+    page-break-after: always;
+    position: relative;
+    background: #0A0A0A;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    box-shadow: 0 0 0 1px #2a2a2a;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  @media print {
+    body { background: #0A0A0A; gap: 0; padding: 0; }
+    .page { box-shadow: none; height: 1123px; }
+  }
+
+  /* ---------- COVER ---------- */
+  .cover {
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:center;
+    text-align:center;
+    padding-top:60px;
+    padding-bottom:60px;
+    background: radial-gradient(circle at 50% 30%, #1a0505 0%, #0A0A0A 65%);
+  }
+  .cover .logo992 {
+    font-weight:900;
+    font-size: 130px;
+    letter-spacing: -6px;
+    color:#E4172B;
+    line-height:1;
+  }
+  .cover .subline {
+    font-weight:700;
+    font-size: 22px;
+    letter-spacing: 6px;
+    color:#F4F4F4;
+    margin-top:8px;
+    text-transform:uppercase;
+  }
+  .cover .divider {
+    width:80px; height:3px; background:#E4172B; margin:32px 0;
+  }
+  .cover .tagline {
+    font-size:17px;
+    color:#B7B7B7;
+    max-width:520px;
+    line-height:1.7;
+  }
+  .cover .foot {
+    margin-top:40px;
+    text-align:center;
+    font-size:12px;
+    letter-spacing:3px;
+    color:#5a5a5a;
+    text-transform:uppercase;
+  }
+
+  /* ---------- HEADERS ---------- */
+  .kicker {
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:4px;
+    color:#E4172B;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  h1.title {
+    font-weight:800;
+    font-size:34px;
+    color:#F5F5F5;
+    margin-bottom:14px;
+    letter-spacing:-0.5px;
+  }
+  .lead {
+    font-size:14.5px;
+    color:#A6A6A6;
+    line-height:1.7;
+    max-width:640px;
+    margin-bottom:28px;
+  }
+
+  /* ---------- PORTFOLIO PAGE ---------- */
+  .artist-row {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:20px;
+  }
+  .artist-pill {
+    background:#161616;
+    border:1px solid #2a2a2a;
+    color:#D8D8D8;
+    font-size:12.5px;
+    padding:8px 14px;
+    border-radius:20px;
+    font-weight:500;
+  }
+  .shot {
+    width:100%;
+    border-radius:12px;
+    border:1px solid #262626;
+    display:block;
+  }
+  .shot-cap {
+    font-size:11.5px;
+    color:#767676;
+    margin-top:8px;
+    letter-spacing:0.3px;
+  }
+
+  /* ---------- SERVICE CARDS ---------- */
+  .service {
+    background:#131313;
+    border:1px solid #232323;
+    border-left:3px solid #E4172B;
+    border-radius:10px;
+    padding:26px 30px;
+    margin-bottom:20px;
+  }
+  .service-top {
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:10px;
+  }
+  .service-name {
+    font-weight:700;
+    font-size:18px;
+    color:#F5F5F5;
+  }
+  .service-price {
+    font-weight:800;
+    font-size:20px;
+    color:#E4172B;
+    white-space:nowrap;
+    margin-left:20px;
+  }
+  .service-desc {
+    font-size:13.5px;
+    color:#9C9C9C;
+    line-height:1.65;
+  }
+  .service-note {
+    margin-top:10px;
+    font-size:12px;
+    color:#6E6E6E;
+    font-style:italic;
+  }
+  .service ul {
+    margin: 8px 0 0 0;
+    padding-left:18px;
+  }
+  .service li {
+    font-size:13.5px;
+    color:#B5B5B5;
+    line-height:1.9;
+  }
+  .closing-note {
+    margin-top:8px;
+    padding-top:20px;
+    border-top:1px solid #232323;
+    font-size:12.5px;
+    color:#6E6E6E;
+    line-height:1.6;
+    max-width:560px;
+  }
+
+  /* ---------- CARD PAGE ---------- */
+  .card-example {
+    display:flex;
+    gap:32px;
+    margin-bottom:28px;
+    align-items:flex-start;
+  }
+  .card-example img {
+    width: 340px;
+    border-radius:12px;
+    border:1px solid #262626;
+  }
+  .card-includes {
+    flex:1;
+  }
+  .card-includes .item {
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .dot {
+    width:6px; height:6px; border-radius:50%;
+    background:#E4172B;
+    margin-top:7px;
+    flex-shrink:0;
+  }
+  .item-text b { color:#F0F0F0; font-weight:600; }
+  .item-text { font-size:13.5px; color:#A6A6A6; line-height:1.6; }
+
+  /* ---------- CONTACT PAGE ---------- */
+  .contact-page {
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding-top:80px;
+    padding-bottom:80px;
+  }
+  .contact-page .logo992-sm {
+    font-weight:900;
+    font-size:64px;
+    letter-spacing:-3px;
+    color:#E4172B;
+    margin-bottom:36px;
+  }
+  .contact-box {
+    background:#131313;
+    border:1px solid #232323;
+    border-radius:14px;
+    padding:36px 48px;
+    margin-bottom:36px;
+  }
+  .contact-box .label {
+    font-size:12px;
+    letter-spacing:2px;
+    color:#767676;
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .contact-box .value {
+    font-weight:700;
+    font-size:20px;
+    color:#F5F5F5;
+  }
+.socials {
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:14px;
+    max-width:420px;
+    margin:0 auto;
+  }
+.social-pill {
+    background:#161616;
+    border:1px solid #2a2a2a;
+    border-radius:24px;
+    padding:10px 20px;
+    font-size:13px;
+    color:#D0D0D0;
+    font-weight:500;
+    text-align:center;
+    white-space:nowrap;
+  }
+  .social-pill b { color:#F5F5F5; }
+  .final-note {
+    margin-top:36px;
+    font-size:12.5px;
+    color:#666;
+    max-width:480px;
+    line-height:1.7;
+  }
+.slider {
+    position: relative;
+    width: 100%;
+    height: 460px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #262626;
+  }
+  .slider-track {
+    display: flex;
+    transition: transform 0.4s ease;
+  }
+.slide {
+    width: 100%;
+    height: 460px;
+    object-fit: cover;
+    object-position: top;
+    flex-shrink: 0;
+    display: block;
+  }
+  .slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(10,10,10,0.6);
+    color: #F5F5F5;
+    border: 1px solid #333;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+  .slider-arrow.prev { left: 12px; }
+  .slider-arrow.next { right: 12px; }
+  .slider-arrow:hover { background: #E4172B; }
+  .slider-dots {
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+  .slider-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+    cursor: pointer;
+  }
+  .slider-dot.active { background: #E4172B; }
+  .link-preview {
+    color: #E4172B;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .lightbox-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+  }
+  .lightbox-overlay.active { display: flex; }
+  .lightbox-overlay img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    color: #fff;
+    font-size: 32px;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+.info-icon-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+  .info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid #E4172B;
+    color: #E4172B;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+.tooltip {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: none;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 12.5px;
+    font-weight: 400;
+    color: #B5B5B5;
+    line-height: 1.65;
+    width: 280px;
+    max-width: calc(100vw - 32px);
+    max-height: 320px;
+    overflow-y: auto;
+    z-index: 999;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+  }
+  .tooltip.active { display: block; }
+
+  .tooltip::-webkit-scrollbar { width: 6px; }
+  .tooltip::-webkit-scrollbar-track { background: transparent; }
+  .tooltip::-webkit-scrollbar-thumb { background: #E4172B; border-radius: 3px; }
+  .tooltip { scrollbar-width: thin; scrollbar-color: #E4172B transparent; }
+
+  @media (max-width: 640px) {
+    .tooltip {
+      position: fixed;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      width: calc(100vw - 48px);
+      max-height: 60vh;
+    }
+  }
+  .dist-platforms {
+    display:inline-block;
+    background:#161616;
+    border:1px solid #E4172B;
+    color:#E4172B;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.3px;
+    padding:8px 16px;
+    border-radius:20px;
+    margin-bottom:20px;
+  }
+  /* --- Animated 992MUZ.RU loader --- */
+  .loader-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    width: auto;
+    margin: 2rem auto;
+    font-family: 'DejaVu Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1.6em;
+    font-weight: 600;
+    user-select: none;
+    color: #fff;
+    scale: 2;
+  }
+  .loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    background-color: transparent;
+    mask: repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 6px,
+      black 7px,
+      black 8px
+    );
+  }
+  .loader::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle at 50% 50%, #ff0 0%, transparent 50%),
+      radial-gradient(circle at 45% 45%, #f00 0%, transparent 45%),
+      radial-gradient(circle at 55% 55%, #0ff 0%, transparent 45%),
+      radial-gradient(circle at 45% 55%, #0f0 0%, transparent 45%),
+      radial-gradient(circle at 55% 45%, #00f 0%, transparent 45%);
+    mask: radial-gradient(
+      circle at 50% 50%,
+      transparent 0%,
+      transparent 10%,
+      black 25%
+    );
+    animation:
+      transform-animation 2s infinite alternate,
+      opacity-animation 4s infinite;
+    animation-timing-function: cubic-bezier(0.6, 0.8, 0.5, 1);
+  }
+  @keyframes transform-animation {
+    0% { transform: translate(-55%); }
+    100% { transform: translate(55%); }
+  }
+  @keyframes opacity-animation {
+    0%, 100% { opacity: 0; }
+    15% { opacity: 1; }
+    65% { opacity: 0; }
+  }
+  .loader-letter {
+    display: inline-block;
+    opacity: 0;
+    animation: loader-letter-anim 4s infinite linear;
+    z-index: 2;
+  }
+  .loader-letter:nth-child(1) { animation-delay: 0.1s; }
+  .loader-letter:nth-child(2) { animation-delay: 0.205s; }
+  .loader-letter:nth-child(3) { animation-delay: 0.31s; }
+  .loader-letter:nth-child(4) { animation-delay: 0.415s; }
+  .loader-letter:nth-child(5) { animation-delay: 0.521s; }
+  .loader-letter:nth-child(6) { animation-delay: 0.626s; }
+  .loader-letter:nth-child(7) { animation-delay: 0.731s; }
+  .loader-letter:nth-child(8) { animation-delay: 0.837s; }
+  .loader-letter:nth-child(9) { animation-delay: 0.942s; }
+  @keyframes loader-letter-anim {
+    0% { opacity: 0; }
+    5% {
+      opacity: 1;
+      text-shadow: 0 0 4px #fff;
+      transform: scale(1.1) translateY(-2px);
+    }
+    20% { opacity: 0.2; }
+    100% { opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE 1 — COVER ================= -->
+<div class="page cover">
+<div class="loader-wrapper">
+    <span class="loader-letter">9</span>
+    <span class="loader-letter">9</span>
+    <span class="loader-letter">2</span>
+    <span class="loader-letter">M</span>
+    <span class="loader-letter">U</span>
+    <span class="loader-letter">Z</span>
+    <span class="loader-letter">.</span>
+    <span class="loader-letter">R</span>
+    <span class="loader-letter">U</span>
+    <div class="loader"></div>
+  </div>
+  <div class="subline" style="margin-top:36px;">P R O D U C T I O N</div>
+  <div class="divider"></div>
+  <div class="tagline">
+    Продюсерский центр и медиаплатформа 992MUZ<br>
+    Визуал, продвижение и медиаприсутствие для артистов -<br>
+    от студии до топов актуального.
+  </div>
+  <div class="foot">Прайс-лист услуг · 2026</div>
+</div>
+
+<!-- ================= PAGE 2 — PORTFOLIO ================= -->
+<div class="page">
+  <div class="kicker">Нам доверяют</div>
+  <h1 class="title">Артисты, с которыми мы работаем</h1>
+  <p class="lead">
+    Официальные визуалы, публикации и совместные релизы уже сделаны с десятками
+    артистов таджикской сцены. Ниже - часть тех, кто уже в каталоге 992MUZ.
+  </p>
+
+  <div class="artist-row">
+    <span class="artist-pill">Манижа Давлатова</span>
+    <span class="artist-pill">Нигина Амонкулова</span>
+    <span class="artist-pill">Муборез</span>
+    <span class="artist-pill">Сироджиддин Возиров</span>
+    <span class="artist-pill">Абада</span>
+    <span class="artist-pill">Мастер Исмаил</span>
+    <span class="artist-pill">Бобои Набот</span>
+    <span class="artist-pill">Сэм Саламов</span>
+    <span class="artist-pill">Мино</span>
+    <span class="artist-pill">Айзик</span>
+    <span class="artist-pill">0 Грамм</span>
+    <span class="artist-pill">Нигора Холова</span>
+    <span class="artist-pill">Usmon</span>
+    <span class="artist-pill">Сураё Косимова</span>
+    <span class="artist-pill">Парвина Шукрулаева</span>
+    <span class="artist-pill">Минарет</span>
+    <span class="artist-pill">Шахбози Акобир</span>
+    <span class="artist-pill">Фарангиз Дунё</span>
+    <span class="artist-pill">Зикриёллох</span>
+    <span class="artist-pill">Ca$her West Side</span>
+    <span class="artist-pill">M Amir</span>
+    <span class="artist-pill">Zeper</span>
+    <span class="artist-pill">Дилшод Тохири</span>
+    <span class="artist-pill">Fira Rastaman</span>
+    <span class="artist-pill">DJ Emrejan</span>
+    <span class="artist-pill">Klaus</span>
+    <span class="artist-pill">Rain 104</span>
+    <span class="artist-pill">Шикорчи</span>
+    <span class="artist-pill">Mr Slim</span>
+    <span class="artist-pill">Parviz Muhammadi</span>
+  </div>
+
+<div class="slider" id="artistSlider">
+    <div class="slider-track" id="sliderTrack">
+      <img class="slide" src="assets/images/skrini/1 (1).png">
+      <img class="slide" src="assets/images/skrini/1 (2).png">
+      <img class="slide" src="assets/images/skrini/1 (3).png">
+      <img class="slide" src="assets/images/skrini/1 (4).png">
+      <img class="slide" src="assets/images/skrini/1 (5).png">
+      <img class="slide" src="assets/images/skrini/1 (6).png">
+      <img class="slide" src="assets/images/skrini/1 (7).png">
+      <img class="slide" src="assets/images/skrini/1 (8).png">
+      <img class="slide" src="assets/images/skrini/1 (9).png">
+      <img class="slide" src="assets/images/skrini/1 (10).png">
+      <img class="slide" src="assets/images/skrini/1 (11).png">
+      <img class="slide" src="assets/images/skrini/1 (12).png">
+      <img class="slide" src="assets/images/skrini/1 (13).png">
+      <img class="slide" src="assets/images/skrini/1 (14).png">
+    </div>
+    <button class="slider-arrow prev" onclick="moveSlide(-1)">‹</button>
+    <button class="slider-arrow next" onclick="moveSlide(1)">›</button>
+    <div class="slider-dots" id="sliderDots"></div>
+  </div>
+  <div class="shot-cap">Каталог артистов - 992muz.ru</div>
+</div>
+
+<!-- ================= PAGE 3 — SERVICES ================= -->
+<div class="page">
+  <div class="kicker">Услуги</div>
+  <h1 class="title">Продвижение и публикации</h1>
+  <p class="lead">
+    Публикация принимается не автоматически - каждая заявка обсуждается индивидуально.
+    Мы сохраняем качество ленты 992 и работаем только с релизами, которые ей соответствуют.
+  </p>
+
+<div class="service">
+    <div class="service-top">
+      <div class="service-name">
+Сторис в топы Instagram
+        <span class="info-icon-wrap">
+          <span class="info-icon" onclick="toggleTooltip(event, 'tip1')">?</span>
+          <div class="tooltip" id="tip1">
+            Со всеми вашими ссылками, которые предоставите.<br><br>
+            Ролик, аккаунт и публикация фиксированы - изменить после согласования нельзя.
+          </div>
+        </span>
+      </div>
+      <div class="service-price">от 500 TJS</div>
+    </div>
+    <div class="service-desc">
+      Публикация сторис от аккаунта 992 с выходом в актуальные/топы платформы.
+    </div>
+    <ul>
+      <li><b>500 TJS</b> - 1 публикация, разово</li>
+      <li><b>700 TJS</b> - 3 публикации в неделю, в самые пиковые часы аккаунта (1 неделя)</li>
+    </ul>
+    <div class="service-note">Принимается только ваше готовое видео/пост. Монтаж видео от нас - 200 TJS. Авторский официальный ИИ-контент - $140.</div>
+  </div>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">Полная публикация</div>
+      <div class="service-price">1000 TJS</div>
+    </div>
+    <div class="service-desc">Комплексный выход релиза на всех площадках 992:</div>
+<ul>
+      <li>Сторис в топы Instagram - по желанию с соавторством, + сторис на 24 часа с вашей ссылкой</li>
+    <li>Пост с пометкой «by LEVAKAND PRD» · «Эксклюзивно на 992MUZ» <span style="color:#E4172B; white-space:nowrap;">(обязательно)</span></li>
+      <li>Публикация в наших пабликах: Telegram, VK, TikTok</li>
+      <li>Размещение на 992muz.ru в разделе <span class="link-preview" onclick="openLightbox('assets/images/skrini/aaa.png')">«Новинки»</span></li>
+    </ul>
+  </div>
+
+<div class="service">
+    <div class="service-top">
+      <div class="service-name">«Трек дня» на сайте</div>
+      <div class="service-price">300 TJS / мес</div>
+    </div>
+    <div class="service-desc">
+      Трек размещается в блоке «Трек дня» на главной странице 992muz.ru на 1 месяц -
+      первое, что видит каждый посетитель сайта.
+    </div>
+    <div class="service-note">
+      + 700 TJS - попадание трека в <span class="link-preview" onclick="openLightbox('assets/images/skrini/22.png')">ТОП ЧАРТ</span>
+    </div>
+  </div>
+
+<div class="service">
+    <div class="service-top">
+      <div class="service-name">
+Анимационный визуал под Reels
+        <span class="info-icon-wrap">
+          <span class="info-icon" onclick="toggleTooltip(event, 'tip2')">?</span>
+          <div class="tooltip" id="tip2">
+            Сценарий обсуждается вместе - можно довериться вкусу визуалайзера, креатора или продюсера.<br><br>
+            Также согласовываем персонажа.<br><br>
+            Обязательно пришлите: трек (укажите фрагмент 60 сек, который использовать), фото/референс, с которого будем срисовывать образ.<br><br>
+            Важно: базовые черты (причёска, одежда, общий образ) передаются по референсу, но кроме реалистичных работ все анимированные и мультяшные иллюстрации не будут похожи на вас один в один - это АРТ, и итоговый образ подбирается примерно, без претензий на точное портретное сходство.<br><br>
+            Срок выполнения: 2 дня после оплаты.<br>
+            Правки: 5 бесплатно, далее каждая - 100 TJS.
+          </div>
+        </span>
+      </div>
+      <div class="service-price">$140</div>
+    </div>
+    <div class="service-desc">
+      Индивидуальный анимационный ролик под ваш трек - до 60 секунд, готов к публикации
+      в Reels / Shorts / TikTok.
+    </div>
+  </div>
+
+  <div class="closing-note">
+    Все цены указаны за одну публикацию/услугу. Финальные условия и сроки
+    согласовываются индивидуально после рассмотрения заявки.
+  </div>
+</div>
+
+<!-- ================= PAGE 4 — ARTIST CARD ================= -->
+<div class="page">
+  <div class="kicker">Услуга</div>
+  <h1 class="title">Карточка артиста на сайте</h1>
+  <p class="lead">
+    Личная страница на 992muz.ru рядом с топовыми артистами платформы -
+    ваш официальный digital-профиль.
+  </p>
+
+  <div class="card-example">
+   <img src="assets/images/shot_card.png">
+    <div class="card-includes">
+      <div class="item">
+        <div class="dot"></div>
+        <div class="item-text"><b>Персональная карточка</b> на сайте, в общем каталоге артистов</div>
+      </div>
+      <div class="item">
+        <div class="dot"></div>
+        <div class="item-text"><b>Биография</b> - оформленная и опубликованная</div>
+      </div>
+      <div class="item">
+        <div class="dot"></div>
+        <div class="item-text"><b>Сборка клипов</b> - все ваши видео в одном месте</div>
+      </div>
+      <div class="item">
+        <div class="dot"></div>
+        <div class="item-text"><b>Дискография</b> - полный каталог треков</div>
+      </div>
+      <div class="item">
+        <div class="dot"></div>
+        <div class="item-text"><b>Сторис</b> и статистика прослушиваний</div>
+      </div>
+    </div>
+  </div>
+
+<div class="service">
+    <div class="service-top">
+      <div class="service-name">
+Карточка артиста
+        <span class="info-icon-wrap">
+          <span class="info-icon" onclick="toggleTooltip(event, 'tip3')">?</span>
+<div class="tooltip" id="tip3">
+            <b style="color:#F5F5F5;">Требования к трекам</b><br><br>
+            Файл строго в формате <b style="color:#F5F5F5;">MP3</b> - другие форматы не принимаются.<br><br>
+            Название оформляется строго по формату:<br>
+            <b style="color:#F5F5F5;">Артист - Название трека</b><br><br>
+            Без «prod by», лишних слов, скобок и посторонних символов в названии - трек с такими пометками к публикации не принимается.<br><br>
+            Имя артиста должно быть написано одинаково во всех треках, без разночтений в написании.<br><br>
+            Совместные треки оформляются только через <b style="color:#F5F5F5;">x</b>, <b style="color:#F5F5F5;">ft.</b>, <b style="color:#F5F5F5;">feat.</b> или <b style="color:#F5F5F5;">при уч.</b><br><br>
+            Метаданные трека (ID3) обязательны - минимум артист и название. Остальное (обложка, альбом и т.д.) оформляем мы.<br><br>
+            <b style="color:#F5F5F5;">Видео и клипы</b><br><br>
+            Ссылки принимаются <b style="color:#F5F5F5;">только с YouTube</b> и только на <b style="color:#F5F5F5;">ваши собственные работы</b>. Чужой контент, репосты и ворованные клипы не публикуются.<br><br>
+            <b style="color:#F5F5F5;">Модерация контента</b><br><br>
+            Каждый присланный трек прослушивается перед публикацией. Материалы, содержащие <b style="color:#F5F5F5;">нецензурную лексику, призывы к насилию или оскорбление религиозных чувств</b>, к размещению не принимаются и удаляются без возможности оспорить решение.<br><br>
+            Присылая материалы, вы подтверждаете, что все права на них принадлежат вам.<br><br>
+            <b style="color:#F5F5F5;">Оформление треков</b><br><br>
+            Если не хотите оформлять сами - сделаем это за вас: <b style="color:#F5F5F5;">50 TJS</b> за альбом до 20 треков, свыше 20 треков - <b style="color:#F5F5F5;">100 TJS</b>.<br><br>
+            <b style="color:#F5F5F5;">Обложки</b><br><br>
+            На треках используется обложка 992MUZ. Если предоставите свою - на неё будет наложена рамка «АРХИВ 992MUZ». В названии альбома указывается название сайта.
+          </div>
+        </span>
+      </div>
+      <div class="service-price">500 TJS</div>
+    </div>
+  </div>
+
+  <div class="closing-note">
+    Оформление карточки занимает 3–5 рабочих дней после согласования материалов
+    (фото, треки, биография).
+  </div>
+</div>
+
+<!-- ================= PAGE 5 — DISTRIBUTION ================= -->
+<div class="page">
+<div class="kicker">Услуги</div>
+  <h1 class="title">Дистрибьюция</h1>
+  <div class="dist-platforms">
+    Apple Music · iTunes · Spotify · ВКонтакте · Boom · Яндекс Музыка · Tik-Tok · YouTube · Content ID · Deezer · Shazam · СберЗвук и другие
+  </div>
+  <p class="lead">
+    Отправка вашего релиза на все крупнейшие мировые площадки. Перед загрузкой
+    каждый трек проверяется на соответствие требованиям ниже.
+  </p>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">
+Дистрибьюция трека
+        <span class="info-icon-wrap">
+          <span class="info-icon" onclick="toggleTooltip(event, 'tip4')">?</span>
+<div class="tooltip" id="tip4">
+            <b style="color:#F5F5F5;">Сроки</b><br><br>
+            Загрузка занимает от 10 дней - мы советуем не торопиться, чтобы трек успел попасть в плейлисты платформ.<br><br>
+            Если нужно быстрее - есть платное ускорение за <b style="color:#F5F5F5;">200 TJS</b> (по желанию).<br><br>
+            <b style="color:#F5F5F5;">Требования к треку</b><br><br>
+            Принимаются только треки на <b style="color:#F5F5F5;">авторские (выкупленные) биты</b>. Использование чужого бита без прав ведёт к <b style="color:#F5F5F5;">блокировке имени артиста и всех его треков</b> на всех площадках по всему миру - без возможности снять блокировку.<br><br>
+            ИИ-треки принимаются.<br><br>
+            В поле продюсера трека обязательно указывается <b style="color:#F5F5F5;">prod by LEVAKAND</b>.<br><br>
+            <b style="color:#F5F5F5;">Обложка и файл</b><br><br>
+            Обложка - строго формат <b style="color:#F5F5F5;">PNG, 1500×1500</b>, без единой надписи на изображении (без названия трека, имени артиста и любого текста).<br><br>
+            Аудиофайл - строго формат <b style="color:#F5F5F5;">WAV</b>.<br><br>
+            <b style="color:#F5F5F5;">Куда загружается релиз</b><br><br>
+           Apple Music, iTunes, Spotify, ВКонтакте, Boom, Яндекс Музыка, Tik-Tok, YouTube, Content ID, Deezer, Shazam, СберЗвук и другие.
+          </div>
+        </span>
+      </div>
+      <div class="service-price">200 TJS</div>
+    </div>
+    <div class="service-desc">
+      Загрузка одного трека на все крупнейшие мировые и локальные площадки.
+    </div>
+  </div>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">EP - строго 6 треков</div>
+      <div class="service-price">1000 TJS</div>
+    </div>
+    <div class="service-desc">Дистрибьюция мини-альбома фиксированным объёмом в 6 треков.</div>
+  </div>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">Полный альбом - до 20 треков</div>
+      <div class="service-price">1800 TJS</div>
+    </div>
+    <div class="service-desc">Дистрибьюция альбома объёмом до 20 треков.</div>
+  </div>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">Открытие официальных карточек</div>
+      <div class="service-price">400 TJS</div>
+    </div>
+    <div class="service-desc">
+      Открытие официальных карточек артиста ВКонтакте и Яндекс Музыка -
+      с биографией и вашими фотографиями.
+    </div>
+  </div>
+
+  <div class="closing-note">
+    Все услуги дистрибьюции согласовываются индивидуально после проверки материалов
+    на соответствие требованиям.
+  </div>
+</div>
+
+<!-- ================= PAGE 6 — DISTRIBUTION EXTRAS ================= -->
+<div class="page">
+  <div class="kicker">Дистрибьюция</div>
+  <h1 class="title">Дополнительные услуги</h1>
+  <p class="lead">
+    Расширенные инструменты продвижения релиза после дистрибьюции.
+  </p>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">STEM-мастеринг</div>
+      <div class="service-price">850 TJS</div>
+    </div>
+    <div class="service-desc">
+      Ручной мастеринг по стемам: инженер обрабатывает каждую группу инструментов
+      отдельно и только потом собирает финальный мастер. Громко, чисто и плотно -
+      от дешёвых наушников до клубных систем. Готовность за 24 часа.
+    </div>
+  </div>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">Добавление релиза в базу синхронизации</div>
+      <div class="service-price">1200 TJS</div>
+    </div>
+    <div class="service-desc">
+      Разместим релиз в каталоге, в котором кино-компании могут подобрать музыку
+      для своего производства - за использование вашего материала вы зарабатываете
+      дополнительный доход.
+    </div>
+    <div class="service-note">Услуга осуществляется для одного трека из альбома.</div>
+  </div>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">Загрузка официального клипа на площадки</div>
+      <div class="service-price">600 TJS</div>
+    </div>
+    <div class="service-desc">
+      Загрузка вашего видеоматериала (клипа) в официальную карточку артиста:
+      ВКонтакте, Apple Music, Яндекс Видео.
+    </div>
+    <div class="service-note">Услуга осуществляется для одного трека из альбома.</div>
+  </div>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">Таргетированная реклама в TikTok</div>
+      <div class="service-price">3000 TJS</div>
+    </div>
+    <div class="service-desc">
+      Инструмент, который даёт охват звуку и набирает подписчиков на официальный
+      аккаунт TikTok. Для работы нужен видео-сниппет либо нативное видео под звук -
+      оно выкладывается в профиль артиста, и прямо на него запускается реклама.
+      Есть возможность выводить трафик в Яндекс Музыку при хороших показателях
+      рекламы (обсуждается отдельно).
+    </div>
+  </div>
+
+<div class="service">
+    <div class="service-top">
+      <div class="service-name">Маска custom TikTok</div>
+      <div class="service-price">4600 TJS</div>
+    </div>
+    <div class="service-desc">
+      Изготовление в TikTok уникальной пользовательской маски по вашему техническому
+      заданию. В зависимости от сложности ТЗ стоимость может меняться.
+    </div>
+    <div class="service-note">Услуга осуществляется для одного трека из альбома.</div>
+  </div>
+
+  <div class="kicker" style="margin-top:12px;">Только для Москвы</div>
+  <h1 class="title" style="font-size:26px;">Съёмки и продакшн в Москве</h1>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">Модели</div>
+      <div class="service-price">от 7000 RUB / час</div>
+    </div>
+    <div class="service-desc">
+      Красивые модели для съёмок клипа или контента - подбор по вашему запросу.
+    </div>
+  </div>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">Оператор с аппаратурой</div>
+      <div class="service-price">7000 RUB / час</div>
+    </div>
+    <div class="service-desc">
+      Профессиональный оператор со своей аппаратурой и камерой Sony - полностью
+      готов к съёмке на месте.
+    </div>
+  </div>
+
+<div class="service">
+    <div class="service-top">
+      <div class="service-name">Монтаж клипа</div>
+      <div class="service-price">15 000 RUB</div>
+    </div>
+    <div class="service-desc">
+      Соберём крутой монтаж с подбором готового LUT под настроение трека. Отдаём
+      в 4К или Full HD - чисто, без ретуши и спецэффектов. Мы за живую
+      кинематографичную картинку, а не за перегруженный эффектами монтаж -
+      сейчас именно такой стиль выглядит дороже и цепляет сильнее.
+    </div>
+    <div class="service-note">
+      В подарок - видео с пометкой <b style="color:#E4172B;">PROD BY LEVAKAND</b>,
+      которое мы отрекламируем на 992MUZ.
+    </div>
+  </div>
+
+<div class="closing-note">
+    Все цены указаны за одну услугу. Финальные условия и сроки согласовываются
+    индивидуально после рассмотрения заявки.
+  </div>
+</div>
+
+<!-- ================= PAGE 7 — SERVICE ADS ================= -->
+<div class="page">
+  <div class="kicker">Реклама</div>
+  <h1 class="title">Продвижение ваших услуг</h1>
+  <p class="lead">
+    Студия, сведение и мастеринг, запись, биты на продажу, дизайн обложек и другое -
+    расскажем о вас нашей аудитории на всех площадках 992.
+  </p>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">Сторис с вашей ссылкой</div>
+      <div class="service-price">от 500 TJS</div>
+    </div>
+    <div class="service-desc">
+      Публикация сторис от аккаунта 992 с прямой ссылкой на вас - для быстрых
+      заявок и переходов.
+    </div>
+    <ul>
+      <li><b>500 TJS</b> - 1 сторис, разово</li>
+      <li><b>1200 TJS</b> - 4 сторис в течение месяца</li>
+    </ul>
+  </div>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">Пост</div>
+      <div class="service-price">1500 TJS</div>
+    </div>
+    <div class="service-desc">
+      Публикация остаётся в аккаунте навсегда - работает на вас постоянно,
+      а не только в моменте.
+    </div>
+  </div>
+
+  <div class="service">
+    <div class="service-top">
+      <div class="service-name">Размещение на 992MUZ.RU</div>
+      <div class="service-price">300 TJS</div>
+    </div>
+    <div class="service-desc">
+      Карточка ваших услуг на сайте - остаётся навсегда, без ежемесячной оплаты.
+    </div>
+  </div>
+
+  <div class="closing-note">
+    В любой из этих услуг бонусом бесплатно - публикация на всех остальных
+    наших пабликах (Telegram, VK, TikTok).
+  </div>
+</div>
+
+<!-- ================= PAGE 5 — CONTACT ================= -->
+<div class="page contact-page">
+  <div class="logo992-sm">992</div>
+
+  <div class="contact-box">
+    <div class="label">По всем вопросам</div>
+    <div class="value">t.me/producer992muz</div>
+    <div class="label" style="margin-top:18px;">Или в Instagram Direct</div>
+    <div class="value">@992muz</div>
+  </div>
+
+  <div class="socials">
+    <span class="social-pill"><b>Сайт</b> · 992muz.ru</span>
+    <span class="social-pill"><b>Telegram</b> · t.me/tg992muz</span>
+    <span class="social-pill"><b>VK</b> · vk.com/vk992muz</span>
+    <span class="social-pill"><b>TikTok</b> · tiktok.com/@992muz</span>
+  </div>
+
+  <div class="final-note">
+    Все услуги обсуждаются индивидуально. Мы принимаем не все заявки -
+    это гарантирует качество каждой публикации 992.
+  </div>
+</div>
+<script>
+  const track = document.getElementById('sliderTrack');
+  const slides = track.querySelectorAll('.slide');
+  const dotsWrap = document.getElementById('sliderDots');
+  let current = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToSlide(i);
+    dotsWrap.appendChild(dot);
+  });
+  const dots = dotsWrap.querySelectorAll('.slider-dot');
+
+  function updateSlider() {
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+  function moveSlide(dir) {
+    current = (current + dir + slides.length) % slides.length;
+    updateSlider();
+  }
+  function goToSlide(i) {
+    current = i;
+    updateSlider();
+  }
+function openLightbox(src) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightboxOverlay').classList.add('active');
+  }
+  function closeLightbox(e) {
+    if (e.target.id === 'lightboxOverlay' || e.target.classList.contains('lightbox-close')) {
+      document.getElementById('lightboxOverlay').classList.remove('active');
+    }
+  }
+function toggleTooltip(e, id) {
+    e.stopPropagation();
+    document.querySelectorAll('.tooltip').forEach(t => {
+      if (t.id !== id) t.classList.remove('active');
+    });
+    const tooltip = document.getElementById(id);
+    const willShow = !tooltip.classList.contains('active');
+    const isMobile = window.innerWidth <= 640;
+
+    if (willShow && !isMobile) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const tooltipWidth = 280;
+
+      // центрируем тултип по горизонтали относительно иконки
+      let left = rect.left + rect.width / 2 - tooltipWidth / 2;
+      const minLeft = 16;
+      const maxLeft = window.innerWidth - tooltipWidth - 16;
+      if (left < minLeft) left = minLeft;
+      if (left > maxLeft) left = maxLeft;
+
+      // проверяем, влезает ли снизу, иначе открываем вверх
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const openUp = spaceBelow < 340;
+
+      tooltip.style.left = left + 'px';
+      tooltip.style.transform = 'none';
+      if (openUp) {
+        tooltip.style.top = 'auto';
+        tooltip.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
+      } else {
+        tooltip.style.bottom = 'auto';
+        tooltip.style.top = (rect.bottom + 8) + 'px';
+      }
+    }
+    // на мобилке позиция задаётся через CSS media query (top:50%/left:50%)
+
+    tooltip.classList.toggle('active');
+  }
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.tooltip').forEach(t => t.classList.remove('active'));
+  });
+  let startX = 0;
+  track.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+  track.addEventListener('touchend', e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) moveSlide(diff > 0 ? 1 : -1);
+  });
+</script>
+<div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox(event)">&times;</button>
+  <img id="lightboxImg" src="">
+</div>
+</body>
+</html>
