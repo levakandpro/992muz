@@ -527,6 +527,133 @@
     20% { opacity: 0.2; }
     100% { opacity: 0; }
   }
+  .site-button {
+    margin: 0;
+    height: auto;
+    background: transparent;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .site-btn-text {
+    --border-right: 6px;
+    --text-stroke-color: rgba(255,255,255,0.6);
+    --animation-color: #E4172B;
+    --fs-size: 2em;
+    letter-spacing: 3px;
+    text-decoration: none;
+    font-size: var(--fs-size);
+    font-family: 'DejaVu Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 800;
+    position: relative;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--text-stroke-color);
+    display: inline-block;
+  }
+  .site-btn-hover {
+    position: absolute;
+    box-sizing: border-box;
+    content: attr(data-text);
+    color: var(--animation-color, #E4172B);
+    width: 0%;
+    inset: 0;
+    border-right: 6px solid #E4172B;
+    overflow: hidden;
+    transition: 0.5s;
+    -webkit-text-stroke: 1px #E4172B;
+    white-space: nowrap;
+  }
+  .site-button:hover .site-btn-hover {
+    width: 100%;
+    filter: drop-shadow(0 0 23px #E4172B);
+  }
+  /* --- Instagram intro overlay --- */
+  .insta-intro-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.88);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: introFadeIn 0.5s ease;
+  }
+  .insta-intro-overlay.hidden { display: none; }
+  @keyframes introFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+.insta-intro-img {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    margin: 0 auto 22px;
+    display: block;
+  }
+  @keyframes introPopIn {
+    from { transform: scale(0.8) translateY(20px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+  }
+.insta-intro-close {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    color: #F5F5F5;
+    font-size: 30px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    line-height: 1;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    z-index: 1001;
+  }
+  .insta-intro-close:hover { background: rgba(255,255,255,0.18); }
+  .insta-intro-close:hover { color: #fff; }
+.insta-intro-img {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    margin: 0 auto 24px;
+    display: block;
+    border-radius: 28px;
+    filter: drop-shadow(0 0 24px rgba(0,0,0,0.6));
+  }
+  .insta-intro-title {
+    font-weight: 800;
+    font-size: 19px;
+    color: #F5F5F5;
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+  .insta-intro-btn {
+    display: inline-block;
+    background: #E4172B;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 32px;
+    border-radius: 30px;
+    margin-bottom: 18px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .insta-intro-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(228,23,43,0.4);
+  }
+  .insta-intro-sub {
+    font-size: 12.5px;
+    color: #8a8a8a;
+    line-height: 1.6;
+  }
 </style>
 </head>
 <body>
@@ -1029,23 +1156,30 @@
 
 <!-- ================= PAGE 5 — CONTACT ================= -->
 <div class="page contact-page">
-  <div class="logo992-sm">992</div>
+  <div class="logo992-sm">992MUZ PRESENT</div>
 
-  <div class="contact-box">
+<div class="contact-box">
     <div class="label">По всем вопросам</div>
-    <div class="value">t.me/producer992muz</div>
+    <a class="value" href="https://t.me/producer992muz" target="_blank" style="text-decoration:none;">t.me/producer992muz</a>
     <div class="label" style="margin-top:18px;">Или в Instagram Direct</div>
-    <div class="value">@992muz</div>
+    <a class="value" href="https://instagram.com/992muz" target="_blank" style="text-decoration:none;">@992muz</a>
   </div>
 
   <div class="socials">
-    <span class="social-pill"><b>Сайт</b> · 992muz.ru</span>
-    <span class="social-pill"><b>Telegram</b> · t.me/tg992muz</span>
-    <span class="social-pill"><b>VK</b> · vk.com/vk992muz</span>
-    <span class="social-pill"><b>TikTok</b> · tiktok.com/@992muz</span>
+    <a class="social-pill" href="https://992muz.ru" target="_blank" style="text-decoration:none;"><b>Сайт</b> · 992muz.ru</a>
+    <a class="social-pill" href="https://t.me/tg992muz" target="_blank" style="text-decoration:none;"><b>Telegram</b> · t.me/tg992muz</a>
+    <a class="social-pill" href="https://vk.com/vk992muz" target="_blank" style="text-decoration:none;"><b>VK</b> · vk.com/vk992muz</a>
+    <a class="social-pill" href="https://tiktok.com/@992muz" target="_blank" style="text-decoration:none;"><b>TikTok</b> · tiktok.com/@992muz</a>
   </div>
 
-  <div class="final-note">
+<a class="site-button" href="https://992muz.ru" target="_blank" style="margin-top:20px;">
+    <span class="site-btn-text">
+      &nbsp;992MUZ.RU&nbsp;
+      <span aria-hidden="true" class="site-btn-hover">&nbsp;992MUZ.RU&nbsp;</span>
+    </span>
+  </a>
+
+  <div class="final-note" style="margin-top:28px;">
     Все услуги обсуждаются индивидуально. Мы принимаем не все заявки -
     это гарантирует качество каждой публикации 992.
   </div>
@@ -1132,10 +1266,25 @@ function toggleTooltip(e, id) {
     const diff = startX - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 40) moveSlide(diff > 0 ? 1 : -1);
   });
+  function closeInstaIntro() {
+    document.getElementById('instaIntroOverlay').classList.add('hidden');
+  }
+  document.getElementById('instaIntroOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeInstaIntro();
+  });
 </script>
 <div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox(event)">
   <button class="lightbox-close" onclick="closeLightbox(event)">&times;</button>
   <img id="lightboxImg" src="">
+</div>
+<div class="insta-intro-overlay" id="instaIntroOverlay">
+  <div class="insta-intro-card">
+    <button class="insta-intro-close" onclick="closeInstaIntro()">&times;</button>
+    <img class="insta-intro-img" src="assets/images/instintro.gif">
+    <div class="insta-intro-title">Подписаны на нас<br>в Instagram?</div>
+    <a class="insta-intro-btn" href="https://instagram.com/992muz" target="_blank" onclick="closeInstaIntro()">Подписаться</a>
+   <div class="insta-intro-sub">Каждую неделю дарим подарки музыкантам <img src="assets/images/Verification Badge.gif" style="width:18px; height:18px; vertical-align:middle;"></div>
+  </div>
 </div>
 </body>
 </html>
