@@ -29,7 +29,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
 <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/pages/home.css">
-<link rel="stylesheet" href="css/pages/chat.css">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -63,189 +62,62 @@
   }
   </script>
   <style>
-    .track-search-inline{display:flex;align-items:center;}
-    .track-search-icon-btn{background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .track-search-icon-btn img{width:15px;height:15px;opacity:0.55;transition:opacity .2s;}
-    .track-search-icon-btn:hover img{opacity:0.9;}
-   .track-search-inline input{width:0;opacity:0;padding:0;margin-left:0;border:none;outline:none;background:rgba(255,255,255,0.06);color:var(--text,#e0e0e0);font-size:12px;border-radius:100px;transition:width .25s ease,opacity .2s ease,padding .25s ease,margin-left .25s ease;}
-    .track-search-inline input::placeholder{color:rgba(255,255,255,0.35);}
+.track-search-inline{display:flex;align-items:center;}
+.track-search-icon-btn{background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.track-search-icon-btn img{width:15px;height:15px;opacity:0.55;transition:opacity .2s;}
+.track-search-icon-btn:hover img{opacity:0.9;}
+.track-search-inline input{width:0;opacity:0;padding:0;margin-left:0;border:none;outline:none;background:rgba(255,255,255,0.06);color:var(--text,#e0e0e0);font-size:12px;border-radius:100px;transition:width .25s ease,opacity .2s ease,padding .25s ease,margin-left .25s ease;}
+.track-search-inline input::placeholder{color:rgba(255,255,255,0.35);}
 .track-search-inline.open input{width:150px;opacity:1;padding:6px 12px;margin-left:6px;border:1px solid rgba(255,255,255,0.1);}
-
-    .nav-search-wrap{position:relative;display:flex;align-items:center;margin-left:6px;}
-    .nav-search-icon-btn{background:none;border:none;cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center;}
-    .nav-search-icon-btn img{width:17px;height:17px;opacity:0.6;transition:opacity .2s;}
-    .nav-search-icon-btn:hover img{opacity:1;}
-    .nav-search-input{width:0;opacity:0;padding:0;margin-left:0;border:none;outline:none;background:rgba(0,0,0,0.05);color:var(--text,#111);font-size:13px;border-radius:100px;transition:width .25s ease,opacity .2s ease,padding .25s ease,margin-left .25s ease;}
-    .nav-search-wrap.open .nav-search-input{width:220px;opacity:1;padding:7px 14px;margin-left:4px;border:1px solid rgba(0,0,0,0.08);}
-    .nav-search-results{display:none;position:absolute;top:calc(100% + 8px);right:0;width:320px;max-height:420px;overflow-y:auto;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,0.35);z-index:5000;padding:8px;}
-    .nav-search-wrap.open.has-query .nav-search-results{display:block;}
-    .nav-search-section-label{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#666;padding:8px 10px 4px;}
-    .nav-search-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;text-decoration:none;color:inherit;cursor:pointer;}
-    .nav-search-item:hover{background:#242424;}
-    .nav-search-item img.nsi-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#333;}
-    .nav-search-item img.nsi-cover{width:36px;height:36px;border-radius:8px;object-fit:cover;flex-shrink:0;background:#333;}
-    .nsi-info{min-width:0;flex:1;}
-    .nsi-title{font-size:13px;font-weight:600;color:#e0e0e0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .nsi-sub{font-size:11px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .nsi-badge{font-size:10px;color:#c0392b;background:rgba(192,57,43,0.15);padding:2px 7px;border-radius:20px;flex-shrink:0;}
+.nav-search-wrap{position:relative;display:flex;align-items:center;margin-left:6px;}
+.nav-search-icon-btn{background:none;border:none;cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center;}
+.nav-search-icon-btn img{width:17px;height:17px;opacity:0.6;transition:opacity .2s;}
+.nav-search-icon-btn:hover img{opacity:1;}
+.nav-search-input{width:0;opacity:0;padding:0;margin-left:0;border:none;outline:none;background:rgba(0,0,0,0.05);color:var(--text,#111);font-size:13px;border-radius:100px;transition:width .25s ease,opacity .2s ease,padding .25s ease,margin-left .25s ease;}
+.nav-search-wrap.open .nav-search-input{width:220px;opacity:1;padding:7px 14px;margin-left:4px;border:1px solid rgba(0,0,0,0.08);}
+.nav-search-results{display:none;position:absolute;top:calc(100% + 8px);right:0;width:320px;max-height:420px;overflow-y:auto;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,0.35);z-index:5000;padding:8px;}
+.nav-search-wrap.open.has-query .nav-search-results{display:block;}
+.nav-search-section-label{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#666;padding:8px 10px 4px;}
+.nav-search-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;text-decoration:none;color:inherit;cursor:pointer;}
+.nav-search-item:hover{background:#242424;}
+.nav-search-item img.nsi-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#333;}
+.nav-search-item img.nsi-cover{width:36px;height:36px;border-radius:8px;object-fit:cover;flex-shrink:0;background:#333;}
+.nsi-info{min-width:0;flex:1;}
+.nsi-title{font-size:13px;font-weight:600;color:#e0e0e0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.nsi-sub{font-size:11px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.nsi-badge{font-size:10px;color:#c0392b;background:rgba(192,57,43,0.15);padding:2px 7px;border-radius:20px;flex-shrink:0;}
 .nav-search-empty{padding:16px;text-align:center;color:#666;font-size:12px;}
 .nav-search-results::-webkit-scrollbar{width:5px;}
-    .nav-search-results::-webkit-scrollbar-track{background:transparent;}
-    .nav-search-results::-webkit-scrollbar-thumb{background:rgba(192,57,43,0.5);border-radius:10px;}
-    .nav-search-results{scrollbar-width:thin;scrollbar-color:rgba(192,57,43,0.5) transparent;}
-.radio-hour-label{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      font-size:10px;
-      font-weight:600;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      color:rgba(255,255,255,0.45);
-      margin-top:8px;
-      animation:radioHourFade .4s ease;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width:220px;
-    }
-.radio-hour-label::before{
-      content:'';
-      width:4px; height:4px;
-      border-radius:50%;
-      background:#ffb238;
-      flex-shrink:0;
-      animation:radioHourPulse 1.8s infinite;
-    }
-    @keyframes radioHourFade{
-      from{ opacity:0; transform:translateY(2px); }
-      to{ opacity:1; transform:translateY(0); }
-    }
-    @keyframes radioHourPulse{
-      0%,100%{ opacity:1; }
-      50%{ opacity:.25; }
-    }
-.radio-cover-layer{
-      position:absolute;
-      inset:0;
-      width:100%; height:100%;
-      object-fit:cover;
-      transition:opacity .6s ease;
-      pointer-events:none;
-    }
-.navbar-fan-stats{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      font-size:12px;
-      color:var(--text3,#999);
-      white-space:nowrap;
-      padding:0 6px;
-      font-variant-numeric:tabular-nums;
-    }
-    .navbar-fan-stats span:not(.nfs-sep){
-      display:flex;
-      align-items:baseline;
-      gap:5px;
-    }
-    .navbar-fan-stats b{
-      color:var(--accent,#8B1A2F);
-      font-weight:700;
-      letter-spacing:-.01em;
-    }
-    .navbar-fan-stats .nfs-sep{
-      width:1px;
-      height:12px;
-      background:currentColor;
-      opacity:.15;
-      display:inline-block;
-    }
-    @media (max-width: 768px){
-      .navbar-fan-stats{ display:none; }
-    }
-.navbar-mobile-stats{
-      display:none;
-    }
-    @media (max-width: 768px){
-      .navbar-mobile-stats{
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        gap:16px;
-        font-size:11.5px;
-        color:var(--text3,#999);
-        padding:8px 16px 10px;
-        border-top:1px solid rgba(0,0,0,0.05);
-        font-variant-numeric:tabular-nums;
-      }
-      .navbar-mobile-stats span:not(.nfs-sep){
-        display:flex;
-        align-items:baseline;
-        gap:5px;
-      }
-      .navbar-mobile-stats b{
-        color:var(--accent,#8B1A2F);
-        font-weight:700;
-        letter-spacing:-.01em;
-      }
-.navbar-mobile-stats .nfs-sep{
-        width:1px;
-        height:11px;
-        background:currentColor;
-        opacity:.15;
-        display:inline-block;
-      }
-    }
-.hero-radio-badge-rotator{
-      display:inline-block;
-      will-change:transform,opacity;
-    }
-    .hero-radio-badge-rotator.hrbr-out{
-      animation:hrbrSlideOut .35s ease forwards;
-    }
-    .hero-radio-badge-rotator.hrbr-in{
-      animation:hrbrSlideIn .35s ease forwards;
-    }
-    @keyframes hrbrSlideOut{
-      from{ transform:translateY(0); opacity:1; }
-      to{ transform:translateY(-8px); opacity:0; }
-    }
-@keyframes hrbrSlideIn{
-      from{ transform:translateY(8px); opacity:0; }
-      to{ transform:translateY(0); opacity:1; }
-    }
-
-    /* Бегущая строка для длинных названий трека/артиста в hero-радио — короткий текст стоит
-       по центру неподвижно, длинный плавно едет туда-обратно, без сдвига макета */
-    .hero-radio-prev .radio-track-name,
-    .hero-radio-next .radio-track-name,
-    .hero-radio-current .radio-track-name.lg,
-    .hero-radio-current .radio-track-artist{
-      overflow:hidden !important;
-      text-align:center !important;
-      display:block !important;
-      width:100% !important;
-      position:relative;
-    }
-    .rt-marquee-inner{
-      display:inline-block;
-      white-space:nowrap;
-      max-width:100%;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      vertical-align:top;
-    }
-    .rt-marquee-active .rt-marquee-inner{
-      max-width:none;
-      overflow:visible;
-      text-overflow:clip;
-      animation:rtMarqueePingPong var(--rt-duration,8s) ease-in-out infinite;
-    }
-    @keyframes rtMarqueePingPong{
-      0%, 12%{ transform:translateX(0); }
-      45%, 58%{ transform:translateX(var(--rt-distance,0px)); }
-      100%{ transform:translateX(0); }
-    }
+.nav-search-results::-webkit-scrollbar-track{background:transparent;}
+.nav-search-results::-webkit-scrollbar-thumb{background:rgba(192,57,43,0.5);border-radius:10px;}
+.nav-search-results{scrollbar-width:thin;scrollbar-color:rgba(192,57,43,0.5) transparent;}
+.radio-hour-label{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-top:8px;animation:radioHourFade .4s ease;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
+.radio-hour-label::before{content:'';width:4px;height:4px;border-radius:50%;background:#ffb238;flex-shrink:0;animation:radioHourPulse 1.8s infinite;}
+@keyframes radioHourFade{from{opacity:0;transform:translateY(2px);}to{opacity:1;transform:translateY(0);}}
+@keyframes radioHourPulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+.radio-cover-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .6s ease;pointer-events:none;}
+.navbar-fan-stats{display:flex;align-items:center;gap:14px;font-size:12px;color:var(--text3,#999);white-space:nowrap;padding:0 6px;font-variant-numeric:tabular-nums;}
+.navbar-fan-stats span:not(.nfs-sep){display:flex;align-items:baseline;gap:5px;}
+.navbar-fan-stats b{color:var(--accent,#8B1A2F);font-weight:700;letter-spacing:-.01em;}
+.navbar-fan-stats .nfs-sep{width:1px;height:12px;background:currentColor;opacity:.15;display:inline-block;}
+@media (max-width: 768px){.navbar-fan-stats{display:none;}}
+.navbar-mobile-stats{display:none;}
+@media (max-width: 768px){
+.navbar-mobile-stats{display:flex;align-items:center;justify-content:center;gap:16px;font-size:11.5px;color:var(--text3,#999);padding:8px 16px 10px;border-top:1px solid rgba(0,0,0,0.05);font-variant-numeric:tabular-nums;}
+.navbar-mobile-stats span:not(.nfs-sep){display:flex;align-items:baseline;gap:5px;}
+.navbar-mobile-stats b{color:var(--accent,#8B1A2F);font-weight:700;letter-spacing:-.01em;}
+.navbar-mobile-stats .nfs-sep{width:1px;height:11px;background:currentColor;opacity:.15;display:inline-block;}
+}
+.hero-radio-badge-rotator{display:inline-block;will-change:transform,opacity;}
+.hero-radio-badge-rotator.hrbr-out{animation:hrbrSlideOut .35s ease forwards;}
+.hero-radio-badge-rotator.hrbr-in{animation:hrbrSlideIn .35s ease forwards;}
+@keyframes hrbrSlideOut{from{transform:translateY(0);opacity:1;}to{transform:translateY(-8px);opacity:0;}}
+@keyframes hrbrSlideIn{from{transform:translateY(8px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+/* Бегущая строка: короткий текст стоит по центру, длинный едет туда-обратно, без сдвига макета */
+.hero-radio-prev .radio-track-name,.hero-radio-next .radio-track-name,.hero-radio-current .radio-track-name.lg,.hero-radio-current .radio-track-artist{overflow:hidden !important;text-align:center !important;display:block !important;width:100% !important;position:relative;}
+.rt-marquee-inner{display:inline-block;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;vertical-align:top;}
+.rt-marquee-active .rt-marquee-inner{max-width:none;overflow:visible;text-overflow:clip;animation:rtMarqueePingPong var(--rt-duration,8s) ease-in-out infinite;}
+@keyframes rtMarqueePingPong{0%,12%{transform:translateX(0);}45%,58%{transform:translateX(var(--rt-distance,0px));}100%{transform:translateX(0);}}
   </style>
 </head>
 <body>
@@ -292,11 +164,9 @@
    <ul class="mobile-nav">
           <li><a href="/" class="active"><img src="assets/icons/site.png" alt="">Главная</a></li>
           <li><a href="/artists"><img src="assets/icons/profile.png" alt="">Артисты</a></li>
-          <li><a href="/videos"><img src="assets/icons/video.png" alt="">Видео</a></li>
+           <li><a href="/videos"><img src="assets/icons/video.png" alt="">Видео</a></li>
 <li><a href="/playlists"><img src="assets/icons/music.png" alt="">Плейлисты</a></li>
-<li><a href="/studios"><img src="assets/icons/rec.png" alt="">Студии</a></li>
           <li><a href="/masterskaya"><img src="assets/icons/sstar.png" alt="">Мастерская</a></li>
-<li><a href="#" class="bloggers-soon-trigger"><img src="assets/icons/profile.png" alt="">Блогеры</a></li>
           <li><button class="mobile-nav-soon-btn" id="mobileSoonBtn" type="button"><img src="assets/icons/announcement.png" alt="">СКОРО</button></li>
         </ul>
         <div class="mobile-menu-actions">
@@ -325,9 +195,7 @@
         <li><a href="/artists">Артисты</a></li>
         <li><a href="/videos">Видео</a></li>
 <li><a href="/playlists">Плейлисты</a></li>
-          <li><a href="/studios">Студии</a></li>
           <li><a href="/masterskaya">Мастерская</a></li>
-<li><a href="#" class="bloggers-soon-trigger">Блогеры</a></li>
         <li><button class="nav-soon-btn" id="navSoonBtn" type="button">СКОРО</button></li>
       </ul>
  <div class="nav-search-wrap" id="navSearchWrap">
@@ -379,10 +247,6 @@
  <div class="hero-radio-badge">
                 <span class="dot"></span>
                 <span class="hero-radio-badge-rotator" id="heroRadioBadgeText">Онлайн радио</span>
-                <button class="hero-chat-btn" id="heroChatBtn">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                  Чат
-                </button>
               </div>
               <h1 class="hero-title">
                 <span>992MUZ</span><br>
@@ -430,67 +294,6 @@
             </div>
           </div>
         </div>
-
-        <!-- ЗАД: ЧАТ -->
-        <div class="hero-flip-face hero-flip-face--back">
-          <div class="chat-panel">
-            <div class="chat-header">
-<div class="chat-header-left">
-                <span class="chat-live-dot"></span>
-                <span class="chat-title">Радио Чат</span>
-                <span class="chat-online-count" id="chatOnlineCount">- онлайн</span>
-              </div>
-              <div class="chat-now-playing" id="chatNowPlaying">
-                <div class="chat-now-cover" id="chatNowCover">
-                  <img src="assets/icons/mountain.png" alt="" id="chatNowCoverImg">
-                  <button class="chat-now-playbtn" id="chatNowPlayBtn">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
-                  </button>
-                </div>
-                <div class="chat-now-info">
-                  <div class="chat-now-title" id="chatNowTitle">Текущий трек</div>
-                  <div class="chat-now-artist" id="chatNowArtist">Артист</div>
-                  <div class="chat-now-progress">
-                    <span class="chat-now-time" id="chatNowTime">0:00</span>
-                    <div class="chat-now-bar"><div class="chat-now-fill" id="chatNowFill"></div></div>
-                    <span class="chat-now-time" id="chatNowDur">3:30</span>
-                  </div>
-                </div>
-              </div>
-<div class="chat-header-actions" style="display:flex;gap:6px;">
-  <button class="chat-rules-btn" id="chatRulesBtn" title="Правила чата">?</button>
-  <button class="chat-mute-btn" id="chatMuteBtn" title="Звук выкл">
-    <svg id="chatMuteIcon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>
-  </button>
-  <button class="chat-settings-btn" id="chatSettingsBtn" title="Настройки">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-  </button>
-  <button class="chat-fullscreen-btn" id="chatFullscreenBtn" title="На весь экран">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-  </button>
-  <button class="chat-close-btn" id="chatCloseBtn">✕</button>
-</div>
-            </div>
-            <div class="chat-messages" id="chatMessages">
-              <div class="chat-empty">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                <span>Будьте первым в чате 🎤</span>
-              </div>
-            </div>
-            <div class="chat-emoji-bar" id="chatEmojiBar"></div>
-            <div class="chat-cooldown" id="chatCooldown"></div>
-            <div class="chat-input-wrap">
-              <input type="text" class="chat-input" id="chatInput" placeholder="Напиши что-нибудь... 🎵" maxlength="300" autocomplete="off">
-              <span class="chat-char-count" id="chatCharCount">300</span>
-              <button class="chat-send-btn" id="chatSendBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              </button>
-            </div>
-            <div class="chat-login-banner" id="chatLoginBanner" style="display:none;">
-            <span>Чтобы писать - <a href="/login">войди</a> или <a href="/register">зарегистрируйся</a></span>
-            </div>
-          </div>
-</div>
 
       </div>
     </div>
@@ -1105,55 +908,41 @@
 
 
 </div>
-
+<style>
+  @media (max-width: 900px){
+    .footer-bottom{ flex-wrap:wrap !important; justify-content:center !important; row-gap:14px !important; text-align:center; }
+    .footer-bottom-left{ order:1; width:100%; justify-content:center !important; }
+    #footerLinksRow{ order:2; width:100%; justify-content:center !important; flex-wrap:wrap !important; overflow:visible !important; }
+    .footer-bottom > span{ order:3; width:100%; text-align:center; }
+  }
+</style>
 <footer class="footer">
   <div class="wrap">
-    <div class="footer-bottom">
-      <div class="footer-row-top">
-        <div class="footer-bottom-left">
-          <div class="footer-bottom-logo">
-            <img src="assets/png/red.png" alt="">
-            <span>992MUZ</span>
-          </div>
-          <div class="footer-socials">
-            <a href="https://www.youtube.com/@992MUZ" target="_blank" class="footer-social"><img src="assets/icons/youtube.png" alt="YouTube"></a>
-            <a href="https://t.me/tg992muz" target="_blank" class="footer-social"><img src="assets/icons/telegram.png" alt="Telegram"></a>
-            <a href="https://vk.com/vk992muz" target="_blank" class="footer-social"><img src="assets/icons/vk.png" alt="VK"></a>
-            <a href="https://www.tiktok.com/@992muz" target="_blank" class="footer-social"><img src="assets/icons/tiktok.png" alt="TikTok"></a>
-            <a href="https://www.instagram.com/992muz/" target="_blank" class="footer-social"><img src="assets/icons/instagram.png" alt="Instagram"></a>
-            <a href="https://www.facebook.com/profile.php?id=61565029317185" target="_blank" class="footer-social"><img src="assets/icons/facebook.png" alt="Facebook"></a>
-          </div>
-          <div class="footer-stats">
-            <span id="statTracks">- треков</span>
-            <span class="footer-sep">·</span>
-            <span id="statArtists">- артистов</span>
-            <span class="footer-sep">·</span>
-            <span id="statPlaylists">- плейлистов</span>
-          </div>
+    <div class="footer-bottom" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:24px;">
+      <div class="footer-bottom-left" style="display:flex;align-items:center;gap:16px;flex-shrink:0;">
+        <div class="footer-bottom-logo" style="display:flex;align-items:center;gap:6px;white-space:nowrap;">
+          <img src="assets/png/red.png" alt="">
+          <span>992MUZ</span>
         </div>
-        <span>© 2026 by 992MUZ</span>
-      </div>
-      <div class="footer-row-bottom">
-        <a href="#" class="footer-app-btn"><img src="assets/icons/AppStore.png" alt="App Store"><span>App Store</span></a>
-        <a href="#" class="footer-app-btn"><img src="assets/icons/googleplay.png" alt="Google Play"><span>Google Play</span></a>
-        <span class="footer-sep" style="margin:0 4px;">·</span>
-        <div class="footer-langs">
-          <button class="footer-lang active" onclick="setLang(this)">RU</button>
-          <button class="footer-lang" onclick="setLang(this)">TJ</button>
-          <button class="footer-lang" onclick="setLang(this)">EN</button>
-          <button class="footer-lang" onclick="setLang(this)">PAM</button>
-        </div>
-        <span class="footer-sep" style="margin:0 4px;">·</span>
-        <div class="footer-links">
-          <button class="footer-link-btn" onclick="openModal('modal-about')">О нас</button>
-          <span class="footer-sep">·</span>
-          <button class="footer-link-btn" onclick="openModal('modal-terms')">Условия</button>
-          <span class="footer-sep">·</span>
-          <button class="footer-link-btn" onclick="openModal('modal-privacy')">Конфиденциальность</button>
-          <span class="footer-sep">·</span>
-          <button class="footer-link-btn" onclick="openModal('modal-dmca')">Правообладателям</button>
+        <div class="footer-socials" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <a href="https://www.youtube.com/@992MUZ" target="_blank" class="footer-social"><img src="assets/icons/youtube.png" alt="YouTube"></a>
+          <a href="https://t.me/tg992muz" target="_blank" class="footer-social"><img src="assets/icons/telegram.png" alt="Telegram"></a>
+          <a href="https://vk.com/vk992muz" target="_blank" class="footer-social"><img src="assets/icons/vk.png" alt="VK"></a>
+          <a href="https://www.tiktok.com/@992muz" target="_blank" class="footer-social"><img src="assets/icons/tiktok.png" alt="TikTok"></a>
+          <a href="https://www.instagram.com/992muz/" target="_blank" class="footer-social"><img src="assets/icons/instagram.png" alt="Instagram"></a>
+          <a href="https://www.facebook.com/profile.php?id=61565029317185" target="_blank" class="footer-social"><img src="assets/icons/facebook.png" alt="Facebook"></a>
         </div>
       </div>
+      <div class="footer-links" id="footerLinksRow" style="display:flex;align-items:center;gap:0;white-space:nowrap;flex-shrink:1;overflow:hidden;">
+        <button class="footer-link-btn" onclick="openModal('modal-about')">О нас</button>
+        <span class="footer-sep">·</span>
+        <button class="footer-link-btn" onclick="openModal('modal-terms')">Условия</button>
+        <span class="footer-sep">·</span>
+        <button class="footer-link-btn" onclick="openModal('modal-privacy')">Конфиденциальность</button>
+        <span class="footer-sep">·</span>
+        <button class="footer-link-btn" onclick="openModal('modal-dmca')">Правообладателям</button>
+      </div>
+      <span style="flex-shrink:0;white-space:nowrap;">© 2026 by 992MUZ</span>
     </div>
   </div>
 </footer>
@@ -1265,60 +1054,23 @@
 </div>
 
 <script>
-  function openModal(id) {
-    document.getElementById(id).classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeModal(id) {
-    document.getElementById(id).classList.remove('open');
-    document.body.style.overflow = '';
-  }
-document.querySelectorAll('.modal-overlay').forEach(function(m) {
-    m.addEventListener('click', function(e) {
-      if (e.target === m) closeModal(m.id);
-    });
-  });
-
-  // Открыть нужную модалку сразу при заходе по ссылке с хэшем
-  // (используется для Google OAuth consent screen: privacy/terms ссылки)
-  (function(){
-    var hash = window.location.hash.replace('#','');
-    var hashMap = { privacy: 'modal-privacy', terms: 'modal-terms', dmca: 'modal-dmca', about: 'modal-about' };
-    if (hashMap[hash]) openModal(hashMap[hash]);
-  })();
-function setLang(btn) {
-    document.querySelectorAll('.footer-lang').forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
-  }
+function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+document.querySelectorAll('.modal-overlay').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeModal(m.id);});});
+// Открыть модалку сразу при заходе по ссылке с хэшем (Google OAuth consent screen: privacy/terms)
+(function(){var hash=window.location.hash.replace('#','');var hashMap={privacy:'modal-privacy',terms:'modal-terms',dmca:'modal-dmca',about:'modal-about'};if(hashMap[hash])openModal(hashMap[hash]);})();
 </script>
-
 <script>
-  (function(){
-    var burgerBtn = document.getElementById('burgerBtn');
-    var mobileMenu = document.getElementById('mobileMenu');
-    var mobileOverlay = document.getElementById('mobileOverlay');
-    var mobileMenuClose = document.getElementById('mobileMenuClose');
-    if (!burgerBtn || !mobileMenu || !mobileOverlay) return;
-
-    function openBurger(){
-      burgerBtn.classList.add('open');
-      mobileMenu.classList.add('open');
-      mobileOverlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeBurger(){
-      burgerBtn.classList.remove('open');
-      mobileMenu.classList.remove('open');
-      mobileOverlay.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-burgerBtn.addEventListener('click', openBurger);
-    if (mobileMenuClose) mobileMenuClose.addEventListener('click', closeBurger);
-    mobileOverlay.addEventListener('click', closeBurger);
-  })();
+(function(){
+var burgerBtn=document.getElementById('burgerBtn'),mobileMenu=document.getElementById('mobileMenu'),mobileOverlay=document.getElementById('mobileOverlay'),mobileMenuClose=document.getElementById('mobileMenuClose');
+if(!burgerBtn||!mobileMenu||!mobileOverlay)return;
+function openBurger(){burgerBtn.classList.add('open');mobileMenu.classList.add('open');mobileOverlay.classList.add('open');document.body.style.overflow='hidden';}
+function closeBurger(){burgerBtn.classList.remove('open');mobileMenu.classList.remove('open');mobileOverlay.classList.remove('open');document.body.style.overflow='';}
+burgerBtn.addEventListener('click',openBurger);
+if(mobileMenuClose)mobileMenuClose.addEventListener('click',closeBurger);
+mobileOverlay.addEventListener('click',closeBurger);
+})();
 </script>
-
 
 <!-- PLAYER BAR -->
 <div class="player-bar" id="mainPlayerBar" style="height:62px;padding:0 20px;gap:14px;background:linear-gradient(90deg,#3d0a14 0%,#1a0a0e 60%,#0f0a0e 100%);border-top:1px solid rgba(139,26,47,0.3);box-sizing:border-box;max-width:100vw;overflow:hidden;">
@@ -1429,199 +1181,150 @@ burgerBtn.addEventListener('click', openBurger);
 </button>
 <script>
 (function(){
-    var player = document.querySelector('.player-bar');
-    var btn = document.getElementById('scrollTopBtn');
-    window.addEventListener('scroll', function(){
-      var isPlaying = window.gp && window.gp.audio && !window.gp.audio.paused;
-      var show = window.scrollY > 100 || isPlaying;
-      if(player) player.classList.toggle('visible', show);
-      if(btn) btn.classList.toggle('visible', window.scrollY > 100);
-    });
-    if(btn) btn.addEventListener('click', function(){
-      window.scrollTo({top:0,behavior:'smooth'});
-    });
-  })();
-  // Stats from Firebase — fallback to static if no DB
-  (function(){
-    var t = document.getElementById('statTracks');
-    var a = document.getElementById('statArtists');
-    var p = document.getElementById('statPlaylists');
-    // Замени на реальные запросы к Firebase когда будет готово
-    if(t) t.textContent = '1 240 треков';
-    if(a) a.textContent = '87 артистов';
-    if(p) p.textContent = '12 плейлистов';
-  })();
-  document.querySelectorAll('.new-track-cover-wrap, .ringtone-play').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var row = btn.closest('.new-track-row');
-      var isPlaying = row.classList.contains('playing');
-      document.querySelectorAll('.new-track-row').forEach(function(r){ r.classList.remove('playing'); });
-      if (!isPlaying) row.classList.add('playing');
-    });
-  });
+var player=document.querySelector('.player-bar'),btn=document.getElementById('scrollTopBtn');
+window.addEventListener('scroll',function(){
+var isPlaying=window.gp&&window.gp.audio&&!window.gp.audio.paused;
+var show=window.scrollY>100||isPlaying;
+if(player)player.classList.toggle('visible',show);
+if(btn)btn.classList.toggle('visible',window.scrollY>100);
+});
+if(btn)btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+})();
+// Stats from Firebase — fallback to static if no DB
+(function(){
+var t=document.getElementById('statTracks'),a=document.getElementById('statArtists'),p=document.getElementById('statPlaylists');
+if(t)t.textContent='1 240 треков';
+if(a)a.textContent='87 артистов';
+if(p)p.textContent='12 плейлистов';
+})();
+document.querySelectorAll('.new-track-cover-wrap, .ringtone-play').forEach(function(btn){
+btn.addEventListener('click',function(){
+var row=btn.closest('.new-track-row');
+var isPlaying=row.classList.contains('playing');
+document.querySelectorAll('.new-track-row').forEach(function(r){r.classList.remove('playing');});
+if(!isPlaying)row.classList.add('playing');
+});
+});
 </script>
 <script>
-  // Сжимает и конвертирует картинку "на лету" через Cloudinary (WebP/AVIF + нужный размер)
-window.cldImg = function(url, width) {
-    if (!url || !url.includes('res.cloudinary.com') || !url.includes('/upload/')) return url;
-    return url.replace(/\/upload\/(?:[^\/]+\/)?(v\d+\/)/, `/upload/f_auto,q_auto,w_${width}/$1`);
-  };
-  // Квадратная обложка (для плеера, media session) - режет по центру, а не тянет пропорции
-window.cldImgSquare = function(url, size) {
-    if (!url || !url.includes('res.cloudinary.com') || !url.includes('/upload/')) return url;
-    // c_pad с отступом 12% — гарантирует, что вся обложка целиком видна в квадрате,
-    // даже если Windows потом обрежет края при показе в трее
-    return url.replace(/\/upload\/(?:[^\/]+\/)?(v\d+\/)/, `/upload/f_auto,q_auto,c_pad,b_auto,w_${size},h_${size}/$1`);
-  };
+// Сжимает и конвертирует картинку "на лету" через Cloudinary (WebP/AVIF + нужный размер)
+window.cldImg=function(url,width){if(!url||!url.includes('res.cloudinary.com')||!url.includes('/upload/'))return url;return url.replace(/\/upload\/(?:[^\/]+\/)?(v\d+\/)/,`/upload/f_auto,q_auto,w_${width}/$1`);};
+// Квадратная обложка (для плеера, media session) - режет по центру, а не тянет пропорции.
+// c_pad с отступом 12% — гарантирует, что вся обложка целиком видна в квадрате даже если Windows обрежет края в трее
+window.cldImgSquare=function(url,size){if(!url||!url.includes('res.cloudinary.com')||!url.includes('/upload/'))return url;return url.replace(/\/upload\/(?:[^\/]+\/)?(v\d+\/)/,`/upload/f_auto,q_auto,c_pad,b_auto,w_${size},h_${size}/$1`);};
 </script>
 <script>
-  // ЕДИНЫЙ ПЛЕЕР - управляет паузой/воспроизведением независимо от прокрутки страницы
-window.gp = { audio: null, overlayImg: null, isRadio: false };
-
-function gpUpdateIcon(playing) {
-    var playIcon = document.getElementById('playerPlayIcon');
-    var pauseIcon = document.getElementById('playerPauseIcon');
-    if ('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
-    if (!playIcon || !pauseIcon) return;
-    playIcon.style.display = playing ? 'none' : '';
-    pauseIcon.style.display = playing ? '' : 'none';
-  }
+// ЕДИНЫЙ ПЛЕЕР - управляет паузой/воспроизведением независимо от прокрутки страницы
+window.gp={audio:null,overlayImg:null,isRadio:false};
+function gpUpdateIcon(playing){
+var playIcon=document.getElementById('playerPlayIcon'),pauseIcon=document.getElementById('playerPauseIcon');
+if('mediaSession' in navigator)navigator.mediaSession.playbackState=playing?'playing':'paused';
+if(!playIcon||!pauseIcon)return;
+playIcon.style.display=playing?'none':'';
+pauseIcon.style.display=playing?'':'none';
+}
 // Синхронизирует иконки play/pause и volume/mute для радио — звук глушится, трек не останавливается
-  function gpSyncRadioMuteUI(muted) {
-    gpUpdateIcon(!muted);
-    var muteIcon = document.getElementById('radioMuteIcon');
-    if (muteIcon) muteIcon.src = muted ? 'assets/icons/mute .png' : 'assets/icons/volume.png';
-  }
-  // Показывает кнопку play/pause только для обычных треков, скрывает для радио (там управляет radioMuteBtn)
-  function gpSyncPlayBtnVisibility() {
-    var btn = document.getElementById('playerPlayPauseBtn');
-    var muteBtn = document.getElementById('radioMuteBtn');
-    if (!btn) return;
-    if (window.gp.isRadio) {
-      btn.style.display = 'none';
-      if (muteBtn) muteBtn.style.display = 'flex';
-    } else {
-      btn.style.display = 'flex';
-      if (muteBtn) muteBtn.style.display = 'none';
-    }
-  }
-  // Вызывается когда включают обычный трек (не радио)
-window.setNowPlaying = function(audio, title, artist, coverUrl, overlayImg) {
-    if (window.gp.audio && window.gp.audio !== audio) window.gp.audio.pause();
-    window.gp.audio = audio;
-    window.gp.overlayImg = overlayImg || null;
-    window.gp.isRadio = false;
-    gpSyncPlayBtnVisibility();
-    window.gpUpdateMediaSession && window.gpUpdateMediaSession(title, artist, window.cldImg ? window.cldImg(coverUrl, 500) : coverUrl);
-
-    var nameEl = document.querySelector('.player-track-name');
-    var artistEl = document.querySelector('.player-track-artist');
-    var thumbEl = document.querySelector('.player-thumb-img');
-    if (nameEl) nameEl.textContent = title || 'Трек';
-    if (artistEl) artistEl.textContent = artist || 'Артист';
-if (thumbEl) {
-      thumbEl.onerror = function(){ this.onerror=null; this.src='assets/icons/mountain.png'; this.style.padding='6px'; this.style.filter='invert(1)'; this.style.opacity='0.4'; };
-      if (coverUrl) { thumbEl.src = coverUrl; thumbEl.style.padding = '0'; thumbEl.style.opacity = '1'; thumbEl.style.filter = 'none'; }
-      else { thumbEl.src = 'assets/icons/mountain.png'; thumbEl.style.padding = '6px'; thumbEl.style.filter = 'invert(1)'; thumbEl.style.opacity = '0.4'; }
-    }
-    document.querySelector('.player-bar')?.classList.add('visible');
-    gpUpdateIcon(true);
-
-    audio.addEventListener('pause', function() {
-      if (window.gp.audio === audio) { gpUpdateIcon(false); if (window.gp.overlayImg) window.gp.overlayImg.src = 'assets/icons/play.png'; }
-    });
-    audio.addEventListener('play', function() {
-      if (window.gp.audio === audio) { gpUpdateIcon(true); if (window.gp.overlayImg) window.gp.overlayImg.src = 'assets/icons/pause.png'; }
-    });
-
-    var fill = document.querySelector('.player-bar .progress-fill');
-    var times = document.querySelectorAll('.player-bar .player-time');
-    audio.addEventListener('timeupdate', function() {
-      if (!audio.duration || window.gp.audio !== audio) return;
-      if (fill) fill.style.width = (audio.currentTime / audio.duration * 100) + '%';
-      if (times[0]) { var m=Math.floor(audio.currentTime/60), s=Math.floor(audio.currentTime%60).toString().padStart(2,'0'); times[0].textContent = m+':'+s; }
-      if (times[1]) { var m2=Math.floor(audio.duration/60), s2=Math.floor(audio.duration%60).toString().padStart(2,'0'); times[1].textContent = m2+':'+s2; }
-    });
-  };
-
-  // Вызывается когда включают радио
-window.setNowPlayingRadio = function(audio, title, artist, coverUrl) {
-    if (window.gp.audio && window.gp.audio !== audio) window.gp.audio.pause();
-    window.gp.audio = audio;
-    window.gp.overlayImg = null;
-    window.gp.isRadio = true;
-    gpSyncPlayBtnVisibility();
-    gpSyncRadioMuteUI(audio.muted);
-window.gpUpdateMediaSession && window.gpUpdateMediaSession(
-      title || 'ЭФИР',
-      artist || '992MUZ',
-      coverUrl ? (window.cldImg ? window.cldImg(coverUrl, 500) : coverUrl) : null
-    );
-    audio.addEventListener('pause', function(){ if (window.gp.audio === audio) gpUpdateIcon(false); });
-    audio.addEventListener('play', function(){ if (window.gp.audio === audio) gpUpdateIcon(true); });
-  };
-document.getElementById('playerPlayPauseBtn')?.addEventListener('click', function() {
-    var a = window.gp.audio;
-    if (!a) return;
-    if (window.gp.isRadio) {
-      // Для радио пауза не останавливает трек (иначе слетит синхронизация по времени) — просто глушим звук
-      a.muted = !a.muted;
-      gpSyncRadioMuteUI(a.muted);
-    } else {
-      if (a.paused) a.play(); else a.pause();
-    }
-  });
-
-  // ─── ОЧЕРЕДЬ ТРЕКОВ (для кнопок след./пред. и экрана блокировки) ───
-  window.gp.queue = [];   // список { row, playFn } из текущего блока
-  window.gp.queueIdx = -1;
-
-  window.gp.setQueue = function(rows, idx) {
-    window.gp.queue = rows;
-    window.gp.queueIdx = idx;
-  };
-
-  function gpGoTo(offset) {
-    if (!window.gp.queue.length) return;
-    var newIdx = window.gp.queueIdx + offset;
-    if (newIdx < 0 || newIdx >= window.gp.queue.length) return;
-    window.gp.queueIdx = newIdx;
-    var item = window.gp.queue[newIdx];
-    if (item && item.play) item.play();
-  }
-
-  document.getElementById('playerPrevBtn')?.addEventListener('click', function(){ gpGoTo(-1); });
-  document.getElementById('playerNextBtn')?.addEventListener('click', function(){ gpGoTo(1); });
-
-  // ─── MEDIA SESSION API - экран блокировки, шторка, Bluetooth-наушники ───
-window.gpUpdateMediaSession = function(title, artist, coverUrl) {
-    if (!('mediaSession' in navigator)) return;
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: title || 'Трек',
-      artist: artist || 'Артист',
-      album: '992MUZ',
-artwork: coverUrl ? [
-        { src: window.cldImgSquare ? window.cldImgSquare(coverUrl, 256) : coverUrl, sizes: '256x256' }
-      ] : []
-    });
-
-    if (window.gp.isRadio) {
-      // Радио: play/pause на экране блокировки только глушат звук, prev/next и перемотка недоступны
-      navigator.mediaSession.setActionHandler('play', function(){ window.gp.audio && (window.gp.audio.muted = false); if (typeof gpSyncRadioMuteUI === 'function') gpSyncRadioMuteUI(false); });
-      navigator.mediaSession.setActionHandler('pause', function(){ window.gp.audio && (window.gp.audio.muted = true); if (typeof gpSyncRadioMuteUI === 'function') gpSyncRadioMuteUI(true); });
-      navigator.mediaSession.setActionHandler('previoustrack', null);
-      navigator.mediaSession.setActionHandler('nexttrack', null);
-      navigator.mediaSession.setActionHandler('seekto', null);
-    } else {
-      navigator.mediaSession.setActionHandler('play', function(){ window.gp.audio && window.gp.audio.play(); });
-      navigator.mediaSession.setActionHandler('pause', function(){ window.gp.audio && window.gp.audio.pause(); });
-      navigator.mediaSession.setActionHandler('previoustrack', function(){ gpGoTo(-1); });
-      navigator.mediaSession.setActionHandler('nexttrack', function(){ gpGoTo(1); });
-      navigator.mediaSession.setActionHandler('seekto', function(details){
-        if (window.gp.audio && details.seekTime != null) window.gp.audio.currentTime = details.seekTime;
-      });
-    }
-  };
+function gpSyncRadioMuteUI(muted){
+gpUpdateIcon(!muted);
+var muteIcon=document.getElementById('radioMuteIcon');
+if(muteIcon)muteIcon.src=muted?'assets/icons/mute .png':'assets/icons/volume.png';
+}
+// Показывает кнопку play/pause только для обычных треков, скрывает для радио (там управляет radioMuteBtn)
+function gpSyncPlayBtnVisibility(){
+var btn=document.getElementById('playerPlayPauseBtn'),muteBtn=document.getElementById('radioMuteBtn');
+if(!btn)return;
+if(window.gp.isRadio){btn.style.display='none';if(muteBtn)muteBtn.style.display='flex';}
+else{btn.style.display='flex';if(muteBtn)muteBtn.style.display='none';}
+}
+// Вызывается когда включают обычный трек (не радио)
+window.setNowPlaying=function(audio,title,artist,coverUrl,overlayImg){
+if(window.gp.audio&&window.gp.audio!==audio)window.gp.audio.pause();
+window.gp.audio=audio;
+window.gp.overlayImg=overlayImg||null;
+window.gp.isRadio=false;
+gpSyncPlayBtnVisibility();
+window.gpUpdateMediaSession&&window.gpUpdateMediaSession(title,artist,window.cldImg?window.cldImg(coverUrl,500):coverUrl);
+var nameEl=document.querySelector('.player-track-name'),artistEl=document.querySelector('.player-track-artist'),thumbEl=document.querySelector('.player-thumb-img');
+if(nameEl)nameEl.textContent=title||'Трек';
+if(artistEl)artistEl.textContent=artist||'Артист';
+if(thumbEl){
+thumbEl.onerror=function(){this.onerror=null;this.src='assets/icons/mountain.png';this.style.padding='6px';this.style.filter='invert(1)';this.style.opacity='0.4';};
+if(coverUrl){thumbEl.src=coverUrl;thumbEl.style.padding='0';thumbEl.style.opacity='1';thumbEl.style.filter='none';}
+else{thumbEl.src='assets/icons/mountain.png';thumbEl.style.padding='6px';thumbEl.style.filter='invert(1)';thumbEl.style.opacity='0.4';}
+}
+document.querySelector('.player-bar')?.classList.add('visible');
+gpUpdateIcon(true);
+audio.addEventListener('pause',function(){if(window.gp.audio===audio){gpUpdateIcon(false);if(window.gp.overlayImg)window.gp.overlayImg.src='assets/icons/play.png';}});
+audio.addEventListener('play',function(){if(window.gp.audio===audio){gpUpdateIcon(true);if(window.gp.overlayImg)window.gp.overlayImg.src='assets/icons/pause.png';}});
+var fill=document.querySelector('.player-bar .progress-fill'),times=document.querySelectorAll('.player-bar .player-time');
+audio.addEventListener('timeupdate',function(){
+if(!audio.duration||window.gp.audio!==audio)return;
+if(fill)fill.style.width=(audio.currentTime/audio.duration*100)+'%';
+if(times[0]){var m=Math.floor(audio.currentTime/60),s=Math.floor(audio.currentTime%60).toString().padStart(2,'0');times[0].textContent=m+':'+s;}
+if(times[1]){var m2=Math.floor(audio.duration/60),s2=Math.floor(audio.duration%60).toString().padStart(2,'0');times[1].textContent=m2+':'+s2;}
+});
+};
+// Вызывается когда включают радио
+window.setNowPlayingRadio=function(audio,title,artist,coverUrl){
+if(window.gp.audio&&window.gp.audio!==audio)window.gp.audio.pause();
+window.gp.audio=audio;
+window.gp.overlayImg=null;
+window.gp.isRadio=true;
+gpSyncPlayBtnVisibility();
+gpSyncRadioMuteUI(audio.muted);
+window.gpUpdateMediaSession&&window.gpUpdateMediaSession(title||'ЭФИР',artist||'992MUZ',coverUrl?(window.cldImg?window.cldImg(coverUrl,500):coverUrl):null);
+audio.addEventListener('pause',function(){if(window.gp.audio===audio)gpUpdateIcon(false);});
+audio.addEventListener('play',function(){if(window.gp.audio===audio)gpUpdateIcon(true);});
+};
+document.getElementById('playerPlayPauseBtn')?.addEventListener('click',function(){
+var a=window.gp.audio;
+if(!a)return;
+if(window.gp.isRadio){
+// Для радио пауза не останавливает трек (иначе слетит синхронизация по времени) — просто глушим звук
+a.muted=!a.muted;
+gpSyncRadioMuteUI(a.muted);
+}else{
+if(a.paused)a.play();else a.pause();
+}
+});
+// ─── ОЧЕРЕДЬ ТРЕКОВ (для кнопок след./пред. и экрана блокировки) ───
+window.gp.queue=[];
+window.gp.queueIdx=-1;
+window.gp.setQueue=function(rows,idx){window.gp.queue=rows;window.gp.queueIdx=idx;};
+function gpGoTo(offset){
+if(!window.gp.queue.length)return;
+var newIdx=window.gp.queueIdx+offset;
+if(newIdx<0||newIdx>=window.gp.queue.length)return;
+window.gp.queueIdx=newIdx;
+var item=window.gp.queue[newIdx];
+if(item&&item.play)item.play();
+}
+document.getElementById('playerPrevBtn')?.addEventListener('click',function(){gpGoTo(-1);});
+document.getElementById('playerNextBtn')?.addEventListener('click',function(){gpGoTo(1);});
+// ─── MEDIA SESSION API - экран блокировки, шторка, Bluetooth-наушники ───
+window.gpUpdateMediaSession=function(title,artist,coverUrl){
+if(!('mediaSession' in navigator))return;
+navigator.mediaSession.metadata=new MediaMetadata({
+title:title||'Трек',
+artist:artist||'Артист',
+album:'992MUZ',
+artwork:coverUrl?[{src:window.cldImgSquare?window.cldImgSquare(coverUrl,256):coverUrl,sizes:'256x256'}]:[]
+});
+if(window.gp.isRadio){
+// Радио: play/pause на экране блокировки только глушат звук, prev/next и перемотка недоступны
+navigator.mediaSession.setActionHandler('play',function(){window.gp.audio&&(window.gp.audio.muted=false);if(typeof gpSyncRadioMuteUI==='function')gpSyncRadioMuteUI(false);});
+navigator.mediaSession.setActionHandler('pause',function(){window.gp.audio&&(window.gp.audio.muted=true);if(typeof gpSyncRadioMuteUI==='function')gpSyncRadioMuteUI(true);});
+navigator.mediaSession.setActionHandler('previoustrack',null);
+navigator.mediaSession.setActionHandler('nexttrack',null);
+navigator.mediaSession.setActionHandler('seekto',null);
+}else{
+navigator.mediaSession.setActionHandler('play',function(){window.gp.audio&&window.gp.audio.play();});
+navigator.mediaSession.setActionHandler('pause',function(){window.gp.audio&&window.gp.audio.pause();});
+navigator.mediaSession.setActionHandler('previoustrack',function(){gpGoTo(-1);});
+navigator.mediaSession.setActionHandler('nexttrack',function(){gpGoTo(1);});
+navigator.mediaSession.setActionHandler('seekto',function(details){if(window.gp.audio&&details.seekTime!=null)window.gp.audio.currentTime=details.seekTime;});
+}
+};
 </script>
 <script type="module">
 import { db, auth } from './js/config/firebase.js';
@@ -2733,71 +2436,6 @@ const snap = await getDocs(query(collection(db, 'tracks'), where('featuredHome',
 
 loadFeaturedTrack();
 </script>
-<div class="chat-settings-overlay" id="chatSettingsOverlay">
-  <div class="chat-settings-modal">
-    <div class="chat-settings-head">
-      <span>⚙️ Настройки чата</span>
-      <button id="chatSettingsClose">✕</button>
-    </div>
-    <div class="chat-settings-body">
-
-      <div class="chat-settings-section">
-        <div class="chat-settings-label">🎨 Тема</div>
-        <div class="chat-settings-themes">
-          <button class="chat-theme-btn active" data-theme="red">Красная</button>
-          <button class="chat-theme-btn" data-theme="dark">Тёмная</button>
-          <button class="chat-theme-btn" data-theme="light">Светлая</button>
-        </div>
-      </div>
-
-      <div class="chat-settings-section">
-        <div class="chat-settings-label">✨ Анимация фона</div>
-        <div class="chat-settings-themes">
-          <button class="chat-theme-btn active" data-anim="none">Нет</button>
-          <button class="chat-theme-btn" data-anim="fireflies">Светлячки</button>
-          <button class="chat-theme-btn" data-anim="waves">Волны</button>
-          <button class="chat-theme-btn" data-anim="stars">Звёзды</button>
-        </div>
-      </div>
-
-      <div class="chat-settings-section">
-        <div class="chat-settings-row">
-          <span>😊 Эмодзи-бар</span>
-          <label class="chat-toggle"><input type="checkbox" id="settingEmoji" checked><span class="chat-toggle-slider"></span></label>
-        </div>
-        <div class="chat-settings-row">
-          <span>✏️ Показывать "печатает..."</span>
-          <label class="chat-toggle"><input type="checkbox" id="settingTyping" checked><span class="chat-toggle-slider"></span></label>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-<div class="chat-rules-overlay" id="chatRulesOverlay">
-  <div class="chat-rules-modal">
-    <div class="chat-rules-head">
-      <span>📋 Правила чата</span>
-      <button id="chatRulesClose">✕</button>
-    </div>
-    <div class="chat-rules-body">
-      <p class="chat-rules-warning">⚠️ Нарушение правил = <b>мгновенная блокировка</b> по Device ID, IP и номеру телефона. Навсегда. Без восстановления.</p>
-      <ul>
-        <li>- Мат, оскорбления и унижения - <b>бан навсегда</b></li>
-        <li>- Политические темы и споры - запрещено</li>
-        <li>- Религиозные высказывания и провокации - запрещено</li>
-        <li>- Ссылки, реклама, спам - удаляются мгновенно</li>
-        <li>- Угрозы, запугивание, травля - бан навсегда</li>
-        <li>- Личные данные других людей - строго запрещено</li>
-        <li>- Расизм, национализм, ненависть - бан навсегда</li>
-        <li>- Флуд и повторяющиеся сообщения - мут</li>
-        <li>- Выдача себя за другого человека - бан</li>
-        <li>- Призывы к насилию или незаконным действиям - бан + жалоба в органы</li>
-      </ul>
-      <p class="chat-rules-tech">🔒 Система фиксирует Device Fingerprint, IP-адрес и метаданные каждого сообщения. Повторный вход с другого аккаунта или устройства - автоматически обнаруживается.</p>
-    </div>
-  </div>
-</div>
 
 <!-- УВЕЛИЧЕННОЕ ПРЕВЬЮ ОБЛОЖКИ (наведение / долгое нажатие) -->
 <div class="pl-strip-cover-preview" id="plStripCoverPreview" onclick="openHomePlaylist(plStripPreviewKey)">
@@ -4287,7 +3925,6 @@ document.addEventListener('keydown', function(e){
     });
   })();
 </script>
-<script type="module" src="js/pages/chat.js?v=2"></script>
 <script type="module" src="js/auth/session.js"></script>
 <style>
   .pwa-update-banner{
