@@ -846,6 +846,64 @@
     </div>
   </section>
 
+<!-- TELEGRAM -->
+<style>
+  .tg-feed-wrap{
+    position:relative;
+    border-radius:18px;
+    overflow:hidden;
+    background:#1a1a1a;
+    box-shadow:0 6px 18px rgba(0,0,0,0.3);
+  }
+  .tg-feed-frame{
+    width:100%;
+    height:520px;
+    border:none;
+    display:block;
+    background:#1a1a1a;
+  }
+  .tg-feed-actions{
+    display:flex;
+    justify-content:center;
+    margin-top:14px;
+  }
+  .tg-feed-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    font-weight:700;
+    color:#fff;
+    background:#229ED9;
+    padding:10px 22px;
+    border-radius:100px;
+    text-decoration:none;
+    box-shadow:0 4px 14px rgba(34,158,217,0.35);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .tg-feed-btn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(34,158,217,0.45); }
+  @media (max-width: 768px){
+    .tg-feed-frame{ height:420px; }
+  }
+</style>
+<section class="section" id="telegram-feed">
+  <div class="section-head">
+    <div>
+      <div class="section-label">Сообщество</div>
+      <h2>Наш Telegram</h2>
+    </div>
+  </div>
+  <div class="tg-feed-wrap">
+    <iframe class="tg-feed-frame" src="https://t.me/s/tg992muz" loading="lazy" title="992MUZ Telegram"></iframe>
+  </div>
+  <div class="tg-feed-actions">
+    <a href="https://t.me/tg992muz" target="_blank" class="tg-feed-btn">
+      <img src="assets/icons/telegram.png" alt="" style="width:16px;height:16px;">
+      Подписаться в Telegram
+    </a>
+  </div>
+</section>
+
 </div>
 <style>
   @media (min-width: 901px){
