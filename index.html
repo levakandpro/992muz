@@ -17,6 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://992muz.ru/assets/og/og-cover.jpg">
 <meta name="yandex-verification" content="c9ec4924211c6689" />
+<meta name="p:domain_verify" content="85c4f74c3cba217e8ea403ec3eabce89"/>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -145,7 +146,14 @@
     <button onclick="closeVoteAuthModal()" style="width:100%;padding:9px;border-radius:10px;background:none;border:1px solid #333;color:#999;font-size:13px;cursor:pointer;">Не сейчас</button>
   </div>
 </div>
-
+<div id="voteAlertModal" onclick="if(event.target===this)closeVoteAlert()" style="display:none;position:fixed;inset:0;z-index:999999;align-items:center;justify-content:center;">
+  <div onclick="closeVoteAlert()" style="position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);"></div>
+  <div style="position:relative;background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:28px 24px;width:100%;max-width:320px;margin:20px;text-align:center;">
+    <div id="voteAlertIcon" style="font-size:34px;margin-bottom:12px;">🗳</div>
+    <div id="voteAlertText" style="font-size:14px;color:#fff;line-height:1.6;margin-bottom:18px;"></div>
+    <button onclick="closeVoteAlert()" style="width:100%;padding:11px;border-radius:10px;background:#c0392b;color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;">Понятно</button>
+  </div>
+</div>
 
 <!-- NAVBAR -->
 <nav class="navbar">
@@ -255,7 +263,7 @@
               <button class="hero-btn" onclick="startRadio()">
                 <img src="assets/icons/play.png" alt="">
                 Слушать радио
-              </a>
+              </button>
             </div>
             <div class="hero-visual">
               <div class="hero-radio-info">
@@ -612,6 +620,10 @@
         <button class="ft-action-btn" id="ftShareBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
           Поделиться
+        </button>
+        <button class="ft-action-btn" id="ftPinBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 20c1-2 1.5-4 2-7"/><path d="M9 12a3 3 0 1 1 5.5 1.7c-.6 1.1-1.9 1.3-2.5.3"/></svg>
+          Pinterest
         </button>
       </div>
     </div>
@@ -1292,8 +1304,6 @@ let currentRow = null;
   document.addEventListener('click', (e) => {
     if (!wrap.contains(e.target)) { wrap.classList.remove('open','has-query'); }
   });
-
-  const SEARCH_BLOCKS = ['newReleases','oldschool','pop','estrada','lirika','ringtones','top50'];
   const PLAYLIST_LABELS = {
     medlyaki:'Медляки', klubnye:'Клубные', guitar:'Под гитару', pamirskie:'Памирские',
     fity:'Фиты', 'pered-snom':'Перед сном', andergrand:'Андерграунд', 'v-tachku':'В тачку',
@@ -2228,6 +2238,17 @@ function ftAttachHandlers() {
     if (navigator.share) navigator.share({ title: `${t.title} — ${t.artist}`, url: t.trackUrl });
     else navigator.clipboard.writeText(t.trackUrl);
   });
+
+  const pinBtn = document.getElementById('ftPinBtn');
+  pinBtn?.addEventListener('click', () => {
+    const t = ftTracks[ftIdx];
+    if (!t) return;
+    const pageUrl = 'https://992muz.ru/';
+    const mediaUrl = t.coverUrl || 'https://992muz.ru/assets/og/og-cover.jpg';
+    const description = `${t.title || 'Трек'} — ${t.artist || '992MUZ'} | 992MUZ`;
+    const pinUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(pageUrl)}&media=${encodeURIComponent(mediaUrl)}&description=${encodeURIComponent(description)}`;
+    window.open(pinUrl, '_blank', 'width=750,height=550,noopener,noreferrer');
+  });
 }
 
 async function loadFeaturedTrack() {
@@ -2965,186 +2986,6 @@ window.showVoteTip = (e, el) => {
 render();
 })();
 </script>
-<script type="module">
-import { db } from './js/config/firebase.js';
-import { collection, query, where, orderBy, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-const creatorsGrid = document.getElementById('creatorsGrid');
-const creatorsTabs = document.getElementById('creatorsTabs');
-let creatorsCache = {};
-let creatorsAudio = null;
-
-const DISTRIBUTOR_CARD = {
-  type: 'distributor',
-  sub: 'Выложим твой трек на все цифровые площадки',
-  telegram: 'https://t.me/producer992muz'
-};
-
-async function loadCreators(type) {
-  if (type === 'distributor') { renderCreators(type, [DISTRIBUTOR_CARD]); return; }
-  if (!creatorsCache[type]) {
-    try {
-      const snap = await getDocs(query(collection(db, 'creators'), where('type', '==', type)));
-      creatorsCache[type] = snap.docs
-        .map(d => ({ id: d.id, ...d.data() }))
-        .sort((a, b) => {
-          // Закреплённые (topRank 1-3) всегда идут первыми в своём порядке,
-          // остальные — следом в обычном порядке добавления
-          const ta = a.topRank || 99, tb = b.topRank || 99;
-          if (ta !== tb) return ta - tb;
-          return (a.order||0) - (b.order||0);
-        });
-    } catch(e) { console.error('Ошибка загрузки креаторов:', e); creatorsCache[type] = []; }
-  }
-  renderCreators(type, creatorsCache[type]);
-}
-function renderCreators(type, items) {
-  if (!items.length) {
-    creatorsGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:#999;font-size:13px;">Пока никого нет</div>';
-    return;
-  }
-  creatorsGrid.innerHTML = items.map(c => renderCreatorCard(type, c)).join('');
-  if (type === 'designer') startDesignerCycles();
-}
-
-function esc(str) {
-  return String(str||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
-}
-
-function renderCreatorCard(type, c) {
-  const tg = c.telegram || '#';
-  const nameEsc = esc(c.name || '');
-  const topBadge = c.topRank ? `<img class="creator-top-badge" src="assets/icons/ttop.png" alt="Топ">` : '';
-
-  if (type === 'studio') {
-    return `<div class="creator-card">
-<div class="creator-cover-wrap"><img class="creator-cover" src="${c.cover||'assets/icons/mountain.png'}" alt="" loading="lazy"></div>
-<div class="creator-grad"></div>
-      ${topBadge}
-      <div class="creator-overlay">
-        <div class="creator-name">${c.name||'Студия'}</div>
-        ${c.workedWith ? `<div class="creator-sub">Работали с: ${c.workedWith}</div>` : ''}
-        <button class="creator-btn" onclick="openCreatorContact('${tg}','Бронирование студии','${nameEsc}')">ЗАБРОНИРОВАТЬ</button>
-      </div>
-    </div>`;
-  }
-  if (type === 'beatmaker') {
-    return `<div class="creator-card">
-    <div class="creator-cover-wrap"><img class="creator-cover" src="${c.cover||'assets/icons/mountain.png'}" alt="" loading="lazy"></div>
-<div class="creator-grad"></div>
-      ${topBadge}
-      ${c.audioUrl ? `<button class="creator-audio-btn" data-audio="${c.audioUrl}" onclick="window.__toggleCreatorAudio(this)"><img src="assets/icons/play.png" alt=""></button>` : ''}
-      <div class="creator-overlay">
-        <div class="creator-name">${c.name||'Битмейкер'}</div>
-        <button class="creator-btn" onclick="openCreatorContact('${tg}','Заказ бита','${nameEsc}')">Заказать бит</button>
-      </div>
-    </div>`;
-  }
-  if (type === 'designer') {
-    const covers = (c.covers||[]).filter(Boolean);
-    const imgs = covers.map((url, idx) => `<img class="creator-cover fading${idx===0?' show':''}" src="${url}" alt="">`).join('');
-    return `<div class="creator-card" data-designer-idx="0" data-covers='${JSON.stringify(covers)}'>
-      <div class="creator-cover-wrap">${imgs}</div>
-<div class="creator-grad"></div>
-      ${topBadge}
-      <div class="creator-overlay">
-        <div class="creator-name">${c.name||'Дизайнер'}</div>
-        <button class="creator-btn" onclick="openCreatorContact('${tg}','Заказ дизайна','${nameEsc}')">Заказать дизайн</button>
-      </div>
-    </div>`;
-  }
-  if (type === 'clipmaker') {
-    return `<div class="creator-card">
-      <div class="creator-cover-wrap">
-        <iframe class="creator-video" src="https://www.youtube.com/embed/${c.ytId}?autoplay=1&mute=1&loop=1&playlist=${c.ytId}&controls=0&modestbranding=1&rel=0" allow="autoplay"></iframe>
-      </div>
-<div class="creator-grad"></div>
-      ${topBadge}
-      <div class="creator-overlay">
-        <div class="creator-name">${c.name||'Клипмейкер'}</div>
-        <button class="creator-btn" onclick="openCreatorContact('${tg}','Заказ клипа','${nameEsc}')">ХОЧУ КЛИП</button>
-      </div>
-    </div>`;
-  }
-  if (type === 'distributor') {
-    return `<div class="creator-card">
-      <div class="creator-cover-wrap" style="background:linear-gradient(135deg,#3d0a14,#8B1A2F);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:#fff;">LEVAKAND PRO</span>
-      </div>
-      <div class="creator-grad"></div>
-      <div class="creator-overlay">
-        <div class="creator-sub" style="-webkit-line-clamp:3;">${c.sub}</div>
-        <button class="creator-btn" onclick="openCreatorContact('${tg}','Отправка трека','LEVAKAND PRO')">Отправить трек</button>
-      </div>
-    </div>`;
-  }
-  return '';
-}
-window.__toggleCreatorAudio = (btn) => {
-  const url = btn.dataset.audio;
-  if (creatorsAudio && creatorsAudio.src === url && !creatorsAudio.paused) {
-    creatorsAudio.pause(); btn.querySelector('img').src = 'assets/icons/play.png'; return;
-  }
-  if (creatorsAudio) creatorsAudio.pause();
-  document.querySelectorAll('.creator-audio-btn img').forEach(img => img.src = 'assets/icons/play.png');
-  creatorsAudio = new Audio(url);
-  creatorsAudio.play();
-  btn.querySelector('img').src = 'assets/icons/pause.png';
-  creatorsAudio.addEventListener('ended', () => { btn.querySelector('img').src = 'assets/icons/play.png'; });
-};
-
-let designerTimer = null;
-function startDesignerCycles() {
-  clearInterval(designerTimer);
-  designerTimer = setInterval(() => {
-    document.querySelectorAll('.creator-card[data-covers]').forEach(card => {
-      const covers = JSON.parse(card.dataset.covers || '[]');
-      if (covers.length < 2) return;
-      let idx = parseInt(card.dataset.designerIdx || '0');
-      const imgs = card.querySelectorAll('.creator-cover');
-      imgs[idx]?.classList.remove('show');
-      idx = (idx + 1) % covers.length;
-      imgs[idx]?.classList.add('show');
-      card.dataset.designerIdx = idx;
-    });
-  }, 3500);
-}
-
-creatorsTabs?.addEventListener('click', (e) => {
-  const btn = e.target.closest('.creators-tab');
-  if (!btn) return;
-  creatorsTabs.querySelectorAll('.creators-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  if (creatorsAudio) { creatorsAudio.pause(); creatorsAudio = null; }
-  loadCreators(btn.dataset.type);
-});
-
-loadCreators('studio');
-</script>
-
-<!-- МОДАЛКА СВЯЗИ С КРЕАТОРОМ -->
-<div class="creator-contact-overlay" id="creatorContactOverlay" onclick="if(event.target===this)closeCreatorContact()">
-  <div class="creator-contact-box">
-    <h3 id="creatorContactTitle">Свяжитесь с нами</h3>
-    <p id="creatorContactText"></p>
-    <a href="#" target="_blank" class="cc-btn" id="creatorContactBtn" onclick="closeCreatorContact()">Написать</a>
-    <button class="cc-cancel" onclick="closeCreatorContact()">Отмена</button>
-  </div>
-</div>
-<script>
-  window.openCreatorContact = function(tg, label, name) {
-    document.getElementById('creatorContactTitle').textContent = label;
-    document.getElementById('creatorContactText').textContent = 'Напишите сразу в сообщении название «' + name + '», чтобы мы были в курсе, о какой заявке речь.';
-    document.getElementById('creatorContactBtn').href = tg;
-    document.getElementById('creatorContactOverlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  };
-window.closeCreatorContact = function() {
-    document.getElementById('creatorContactOverlay').classList.remove('open');
-    document.body.style.overflow = '';
-  };
-</script>
-
 <!-- МОДАЛКА "СКОРО" -->
 <style>
   .nav-soon-btn{
