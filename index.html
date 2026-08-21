@@ -3728,7 +3728,7 @@ async function loadNavbarFanStats() {
       wrap.innerHTML = '<div class="insta-intro-title"><img class="insta-intro-title-icon" src="assets/images/instintro.gif" alt="">Подписаны на нас<br>в Instagram?</div>';
     } else {
       wrap.innerHTML = '<div class="insta-intro-video-wrap">' +
-        '<video class="insta-intro-video" id="introVideoEl" src="' + chosen.src + '" autoplay muted loop playsinline></video>' +
+        '<video class="insta-intro-video" id="introVideoEl" src="' + chosen.src + '" autoplay muted loop playsinline disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false"></video>' +
         '<button class="insta-intro-unmute-btn" id="introUnmuteBtn" type="button">🔇</button>' +
         '</div>';
       var videoEl = document.getElementById('introVideoEl');
