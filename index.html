@@ -223,6 +223,34 @@
     box-shadow: 0 12px 32px rgba(0,0,0,0.5);
     background: #111;
   }
+  .insta-intro-video-wrap {
+    position: relative;
+    width: 220px;
+    margin-bottom: 20px;
+  }
+  .insta-intro-video-wrap .insta-intro-video {
+    margin-bottom: 0;
+  }
+  .insta-intro-unmute-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+  }
+  .insta-intro-unmute-btn:hover {
+    background: rgba(228,23,43,0.85);
+  }
   </style>
 </head>
 <body>
@@ -3699,7 +3727,19 @@ async function loadNavbarFanStats() {
     if (chosen.type === 'insta') {
       wrap.innerHTML = '<div class="insta-intro-title"><img class="insta-intro-title-icon" src="assets/images/instintro.gif" alt="">Подписаны на нас<br>в Instagram?</div>';
     } else {
-      wrap.innerHTML = '<video class="insta-intro-video" src="' + chosen.src + '" autoplay muted loop playsinline></video>';
+      wrap.innerHTML = '<div class="insta-intro-video-wrap">' +
+        '<video class="insta-intro-video" id="introVideoEl" src="' + chosen.src + '" autoplay muted loop playsinline></video>' +
+        '<button class="insta-intro-unmute-btn" id="introUnmuteBtn" type="button">🔇</button>' +
+        '</div>';
+      var videoEl = document.getElementById('introVideoEl');
+      var unmuteBtn = document.getElementById('introUnmuteBtn');
+      if (unmuteBtn && videoEl) {
+        unmuteBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          videoEl.muted = !videoEl.muted;
+          unmuteBtn.textContent = videoEl.muted ? '🔇' : '🔊';
+        });
+      }
     }
   })();
 </script>
