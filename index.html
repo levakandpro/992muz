@@ -119,6 +119,110 @@
 .rt-marquee-inner{display:inline-block;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;vertical-align:top;}
 .rt-marquee-active .rt-marquee-inner{max-width:none;overflow:visible;text-overflow:clip;animation:rtMarqueePingPong var(--rt-duration,8s) ease-in-out infinite;}
 @keyframes rtMarqueePingPong{0%,12%{transform:translateX(0);}45%,58%{transform:translateX(var(--rt-distance,0px));}100%{transform:translateX(0);}}
+  .insta-intro-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: introFadeIn 0.5s ease;
+  }
+  .insta-intro-overlay.hidden { display: none; }
+  @keyframes introFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .insta-intro-img {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    margin: 0 auto 24px;
+    display: block;
+    border-radius: 28px;
+    filter: drop-shadow(0 0 24px rgba(0,0,0,0.6));
+  }
+  .insta-intro-close {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    color: #F5F5F5;
+    font-size: 30px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    line-height: 1;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    z-index: 1001;
+  }
+  .insta-intro-close:hover { background: rgba(255,255,255,0.18); color: #fff; }
+  .insta-intro-title {
+    font-weight: 800;
+    font-size: 19px;
+    color: #F5F5F5;
+    margin-bottom: 20px;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    gap: 8px;
+  }
+  .insta-intro-title-icon {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  .insta-intro-btn {
+    display: inline-block;
+    background: #E4172B;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 32px;
+    border-radius: 30px;
+    margin-bottom: 18px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .insta-intro-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(228,23,43,0.4);
+  }
+  .insta-intro-sub {
+    font-size: 12.5px;
+    color: #8a8a8a;
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .insta-intro-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 360px;
+    padding: 0 24px;
+  }
+  .insta-intro-video {
+    width: 220px;
+    height: 390px;
+    object-fit: cover;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+    background: #111;
+  }
   </style>
 </head>
 <body>
@@ -845,64 +949,6 @@
 <div class="new-tracks-list" id="pop-grid" style="max-height:420px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(139,26,47,0.6) transparent;">
     </div>
   </section>
-
-<!-- TELEGRAM -->
-<style>
-  .tg-feed-wrap{
-    position:relative;
-    border-radius:18px;
-    overflow:hidden;
-    background:#1a1a1a;
-    box-shadow:0 6px 18px rgba(0,0,0,0.3);
-  }
-  .tg-feed-frame{
-    width:100%;
-    height:520px;
-    border:none;
-    display:block;
-    background:#1a1a1a;
-  }
-  .tg-feed-actions{
-    display:flex;
-    justify-content:center;
-    margin-top:14px;
-  }
-  .tg-feed-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    font-size:13px;
-    font-weight:700;
-    color:#fff;
-    background:#229ED9;
-    padding:10px 22px;
-    border-radius:100px;
-    text-decoration:none;
-    box-shadow:0 4px 14px rgba(34,158,217,0.35);
-    transition:transform .15s, box-shadow .15s;
-  }
-  .tg-feed-btn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(34,158,217,0.45); }
-  @media (max-width: 768px){
-    .tg-feed-frame{ height:420px; }
-  }
-</style>
-<section class="section" id="telegram-feed">
-  <div class="section-head">
-    <div>
-      <div class="section-label">Сообщество</div>
-      <h2>Наш Telegram</h2>
-    </div>
-  </div>
-  <div class="tg-feed-wrap">
-    <iframe class="tg-feed-frame" src="https://t.me/s/tg992muz" loading="lazy" title="992MUZ Telegram"></iframe>
-  </div>
-  <div class="tg-feed-actions">
-    <a href="https://t.me/tg992muz" target="_blank" class="tg-feed-btn">
-      <img src="assets/icons/telegram.png" alt="" style="width:16px;height:16px;">
-      Подписаться в Telegram
-    </a>
-  </div>
-</section>
 
 </div>
 <style>
@@ -3622,6 +3668,40 @@ async function loadNavbarFanStats() {
     }
   }
   loadNavbarFanStats();
+</script>
+<div class="insta-intro-overlay" id="instaIntroOverlay">
+  <div class="insta-intro-card" id="introCard">
+    <button class="insta-intro-close" onclick="closeInstaIntro()">&times;</button>
+    <div id="introMediaWrap"></div>
+    <a class="insta-intro-btn" href="https://instagram.com/992muz" target="_blank" onclick="closeInstaIntro()">Подписаться</a>
+    <div class="insta-intro-sub">Каждую неделю дарим подарки музыкантам <img src="assets/images/Verification Badge.gif" style="width:16px; height:16px; object-fit:contain; flex-shrink:0;"></div>
+  </div>
+</div>
+<script>
+  function closeInstaIntro() {
+    document.getElementById('instaIntroOverlay').classList.add('hidden');
+  }
+  document.getElementById('instaIntroOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeInstaIntro();
+  });
+  (function() {
+    var introOptions = [
+      { type: 'insta' },
+      { type: 'video', src: 'assets/video/a1.mp4' },
+      { type: 'video', src: 'assets/video/a2.mp4' },
+      { type: 'video', src: 'assets/video/a3.mp4' },
+      { type: 'video', src: 'assets/video/a4.mp4' },
+      { type: 'video', src: 'assets/video/a5.mp4' }
+    ];
+    var chosen = introOptions[Math.floor(Math.random() * introOptions.length)];
+    var wrap = document.getElementById('introMediaWrap');
+    if (!wrap) return;
+    if (chosen.type === 'insta') {
+      wrap.innerHTML = '<div class="insta-intro-title"><img class="insta-intro-title-icon" src="assets/images/instintro.gif" alt="">Подписаны на нас<br>в Instagram?</div>';
+    } else {
+      wrap.innerHTML = '<video class="insta-intro-video" src="' + chosen.src + '" autoplay muted loop playsinline></video>';
+    }
+  })();
 </script>
 </body>
 </html>
