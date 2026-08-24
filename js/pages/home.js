@@ -16,8 +16,12 @@ function resize() {
 resize();
 window.addEventListener('resize', resize);
 
-const particles = Array.from({length: 55}, (_, i) => ({
-  x: (i / 55) * canvas.width + (Math.random() - 0.5) * 100,
+// На слабых устройствах рисуем меньше точек — визуально почти незаметно,
+// а нагрузка на отрисовку заметно ниже
+const PARTICLE_COUNT = (window.isLowPowerDevice) ? 25 : 55;
+
+const particles = Array.from({length: PARTICLE_COUNT}, (_, i) => ({
+  x: (i / PARTICLE_COUNT) * canvas.width + (Math.random() - 0.5) * 100,
   y: Math.random() * canvas.height,
   r: Math.random() * 1.8 + 0.4,
   vx: (Math.random() - 0.5) * 0.3,
@@ -26,7 +30,12 @@ const particles = Array.from({length: 55}, (_, i) => ({
   opacityDir: Math.random() * 0.008 + 0.003,
 }));
 
+let heroCanvasVisible = true;
+let heroCanvasRunning = false;
+let heroCanvasFrameId = null;
+
 function draw() {
+  if (!heroCanvasVisible || document.hidden) { heroCanvasRunning = false; return; }
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   particles.forEach(p => {
     p.x += p.vx;
@@ -42,6 +51,36 @@ function draw() {
     ctx.fillStyle = `rgba(255,255,255,${p.opacity * 0.6})`;
     ctx.fill();
   });
-  requestAnimationFrame(draw);
+  heroCanvasFrameId = requestAnimationFrame(draw);
 }
-draw();
+
+function startHeroCanvas() {
+  if (heroCanvasRunning) return;
+  heroCanvasRunning = true;
+  draw();
+}
+function stopHeroCanvas() {
+  heroCanvasRunning = false;
+  if (heroCanvasFrameId) cancelAnimationFrame(heroCanvasFrameId);
+}
+
+// Рисуем, только пока блок реально виден на экране — как только пользователь
+// проскроллил вниз, анимация останавливается и не тратит батарею/CPU впустую
+if ('IntersectionObserver' in window) {
+  const heroObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      heroCanvasVisible = entry.isIntersecting;
+      if (heroCanvasVisible) startHeroCanvas();
+      else stopHeroCanvas();
+    });
+  }, { threshold: 0.1 });
+  heroObserver.observe(canvas.parentElement);
+} else {
+  startHeroCanvas();
+}
+
+// Пауза на свёрнутой вкладке — доп. экономия
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) stopHeroCanvas();
+  else if (heroCanvasVisible) startHeroCanvas();
+});
