@@ -251,6 +251,14 @@
   .insta-intro-unmute-btn:hover {
     background: rgba(228,23,43,0.85);
   }
+  /* На слабых устройствах/медленном интернете отключаем backdrop-filter — он сильно
+     просаживает FPS на бюджетных Android-телефонах при открытии модалок */
+  html.low-power .soon-modal-overlay,
+  html.low-power .bloggers-soon-overlay,
+  html.low-power .modal-blur-veil {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
   </style>
 </head>
 <body>
@@ -269,7 +277,7 @@
   </div>
 </div>
 <div id="voteAuthRequiredModal" style="display:none;position:fixed;inset:0;z-index:999999;align-items:center;justify-content:center;">
-  <div onclick="closeVoteAuthModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);"></div>
+  <div class="modal-blur-veil" onclick="closeVoteAuthModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);"></div>
   <div style="position:relative;background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:28px 24px;width:100%;max-width:320px;margin:20px;text-align:center;">
     <div style="font-size:34px;margin-bottom:10px;">🔒</div>
     <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:8px;">Войдите, чтобы проголосовать</div>
@@ -279,7 +287,7 @@
   </div>
 </div>
 <div id="voteAlertModal" onclick="if(event.target===this)closeVoteAlert()" style="display:none;position:fixed;inset:0;z-index:999999;align-items:center;justify-content:center;">
-  <div onclick="closeVoteAlert()" style="position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);"></div>
+  <div class="modal-blur-veil" onclick="closeVoteAlert()" style="position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);"></div>
   <div style="position:relative;background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:28px 24px;width:100%;max-width:320px;margin:20px;text-align:center;">
     <div id="voteAlertIcon" style="font-size:34px;margin-bottom:12px;">🗳</div>
     <div id="voteAlertText" style="font-size:14px;color:#fff;line-height:1.6;margin-bottom:18px;"></div>
@@ -1275,6 +1283,21 @@ window.cldImg=function(url,width){if(!url||!url.includes('res.cloudinary.com')||
 // Квадратная обложка (для плеера, media session) - режет по центру, а не тянет пропорции.
 // c_pad с отступом 12% — гарантирует, что вся обложка целиком видна в квадрате даже если Windows обрежет края в трее
 window.cldImgSquare=function(url,size){if(!url||!url.includes('res.cloudinary.com')||!url.includes('/upload/'))return url;return url.replace(/\/upload\/(?:[^\/]+\/)?(v\d+\/)/,`/upload/f_auto,q_auto,c_pad,b_auto,w_${size},h_${size}/$1`);};
+// Определяет "слабое" устройство/соединение — экономим автовоспроизведение видео, тяжёлые эффекты и лишние сетевые запросы
+window.isLowPowerDevice = (function(){
+  try {
+    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    var saveData = !!(conn && conn.saveData);
+    var slowConn = !!(conn && /(^|-)(slow-2g|2g|3g)$/.test(conn.effectiveType || ''));
+    var fewCores = !!(navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+    var reducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    return saveData || slowConn || reducedMotion || fewCores;
+  } catch(e) { return false; }
+})();
+// Отключаем тяжёлые CSS-эффекты (backdrop-filter/blur) на слабых устройствах через CSS-класс
+if (window.isLowPowerDevice) {
+  document.documentElement.classList.add('low-power');
+}
 </script>
 <script>
 // ЕДИНЫЙ ПЛЕЕР - управляет паузой/воспроизведением независимо от прокрутки страницы
@@ -1583,6 +1606,7 @@ async function loadNewReleases() {
     if (snap.empty) { grid.innerHTML = '<div style="text-align:center;padding:30px;color:#999;font-size:13px;">Новинок пока нет</div>'; return; }
     grid.innerHTML = '';
     let i = 1;
+    const fragment = document.createDocumentFragment();
 shuffleArray(snap.docs).forEach(d => {
       const t = d.data();
       const cover = window.cldImg(t.coverUrl, 100) || 'assets/icons/mountain.png';
@@ -1678,8 +1702,9 @@ currentAudio.play();
         else { navigator.clipboard.writeText(url); }
       });
 
-      grid.appendChild(row);
+      fragment.appendChild(row);
     });
+    grid.appendChild(fragment);
   } catch(e) {
     console.error(e);
     grid.innerHTML = '<div style="text-align:center;padding:30px;color:#999;font-size:13px;">Ошибка загрузки</div>';
@@ -1726,6 +1751,7 @@ return {
     const maxSubs = Math.max(top10[0]?.subscribers || 1, 1);
     grid.innerHTML = '';
     const fills = [];
+    const fragment = document.createDocumentFragment();
     top10.forEach((a, i) => {
       const rank = i + 1;
       const rankClass = rank === 1 ? 'r1' : rank === 2 ? 'r2' : rank === 3 ? 'r3' : '';
@@ -1745,9 +1771,10 @@ return {
         </div>
         <div class="chart-subs"><img src="assets/icons/profile.png" alt="">${fmtCompactNum(a.subscribers)}</div>
       `;
-      grid.appendChild(row);
+      fragment.appendChild(row);
       fills.push(row.querySelector('.chart-bar-fill'));
     });
+    grid.appendChild(fragment);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         fills.forEach(f => { f.style.width = f.dataset.pct + '%'; });
@@ -1876,6 +1903,7 @@ async function loadBlock(collectionNames, gridId) {
     if (!items.length) { grid.innerHTML = '<div style="text-align:center;padding:30px;color:#999;font-size:13px;">Треков пока нет</div>'; return; }
     grid.innerHTML = '';
     let i = 1;
+    const fragment = document.createDocumentFragment();
 items.forEach(({ id, col, data: t }) => {
       const collectionName = col;
       const d = { id };
@@ -1971,16 +1999,45 @@ window.setNowPlaying && window.setNowPlaying(currentAudio, t.title, t.artist, t.
         else navigator.clipboard.writeText(url);
       });
 
-      grid.appendChild(row);
+      fragment.appendChild(row);
     });
+    grid.appendChild(fragment);
   } catch(e) {
     console.error(e);
     grid.innerHTML = '<div style="text-align:center;padding:30px;color:#999;font-size:13px;">Ошибка загрузки</div>';
   }
 }
-loadBlock('oldschool', 'oldschool-grid');
-loadBlock(['pop', 'estrada'], 'pop-grid');
-loadBlock('lirika', 'lyrics-list');
+// Ленивая загрузка нижних блоков — Firestore-запрос уходит только когда пользователь
+// реально приближается к блоку при скролле, а не сразу при открытии страницы.
+// Это снижает число параллельных сетевых запросов и нагрузку на рендер в первую секунду.
+(function() {
+  var lazyBlocks = [
+    { sectionId: 'oldschool', collections: 'oldschool', gridId: 'oldschool-grid' },
+    { sectionId: 'pop', collections: ['pop', 'estrada'], gridId: 'pop-grid' },
+    { sectionId: 'lyrics', collections: 'lirika', gridId: 'lyrics-list' }
+  ];
+
+  if (!('IntersectionObserver' in window)) {
+    // Старые браузеры без поддержки IntersectionObserver — грузим как раньше, сразу
+    lazyBlocks.forEach(function(b) { loadBlock(b.collections, b.gridId); });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      var match = lazyBlocks.find(function(b) { return b.sectionId === entry.target.id; });
+      if (!match) return;
+      loadBlock(match.collections, match.gridId);
+      observer.unobserve(entry.target);
+    });
+  }, { rootMargin: '400px 0px', threshold: 0 });
+
+  lazyBlocks.forEach(function(b) {
+    var el = document.getElementById(b.sectionId);
+    if (el) observer.observe(el);
+  });
+})();
 </script>
 
 <script type="module">
@@ -2062,15 +2119,16 @@ function rhRenderInitial() {
   const track = document.getElementById('randomHitsTrack');
   if (!track) return;
   track.innerHTML = '';
+  const fragment = document.createDocumentFragment();
   rhVisible.forEach((t) => {
     const item = document.createElement('div');
     item.className = 'rh-item';
     item.innerHTML = rhBuildCardHTML(t);
     rhAttachPlayHandler(item, t, track);
-    track.appendChild(item);
+    fragment.appendChild(item);
   });
+  track.appendChild(fragment);
 }
-
 // Плавно заменяет несколько случайных видимых карточек на новые треки из пула,
 // которых сейчас нет на экране — создаёт эффект "живого" перемешивания без перезагрузки
 function rhRotateSome() {
@@ -2112,6 +2170,10 @@ function rhStartAutoRotate() {
   clearInterval(rhRotateTimer);
   rhRotateTimer = setInterval(rhRotateSome, RH_ROTATE_INTERVAL);
 }
+function rhStopAutoRotate() {
+  clearInterval(rhRotateTimer);
+  rhRotateTimer = null;
+}
 
 async function loadRandomHits() {
   const track = document.getElementById('randomHitsTrack');
@@ -2130,10 +2192,15 @@ async function loadRandomHits() {
     rhRenderInitial();
     rhStartAutoRotate();
 
-    // Если вкладка была свёрнута — пауза ротации не нужна, но при возврате
-    // хотим сразу освежить карточки, а не ждать полный интервал
+    // На свёрнутой вкладке карточки всё равно никто не видит — полностью
+    // останавливаем ротацию (экономия CPU), а при возврате сразу освежаем и запускаем снова
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) rhRotateSome();
+      if (document.hidden) {
+        rhStopAutoRotate();
+      } else {
+        rhRotateSome();
+        rhStartAutoRotate();
+      }
     });
   } catch(e) {
     console.error('Ошибка загрузки случайных хитов:', e);
@@ -2625,14 +2692,26 @@ function pollListenersCount() {
   currentListenersTotal = stepSimulatedBase();
 }
 pollListenersCount();
-setInterval(pollListenersCount, 20000);
+let listenersPollInterval = setInterval(pollListenersCount, 20000);
+// На свёрнутой вкладке счётчик всё равно никто не видит — останавливаем таймер,
+// чтобы не тратить CPU/батарею впустую, и сразу освежаем значение при возврате
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    clearInterval(listenersPollInterval);
+  } else {
+    pollListenersCount();
+    listenersPollInterval = setInterval(pollListenersCount, 20000);
+  }
+});
 
 // Слайд-анимация бейджа: "Онлайн радио" ↔ "Сейчас слушают: N"
 (function() {
   const el = document.getElementById('heroRadioBadgeText');
   if (!el) return;
   let showingListeners = false;
-  setInterval(() => {
+  let badgeInterval = null;
+
+  function tick() {
     el.classList.add('hrbr-out');
     setTimeout(() => {
       showingListeners = !showingListeners;
@@ -2643,7 +2722,24 @@ setInterval(pollListenersCount, 20000);
       el.classList.add('hrbr-in');
       setTimeout(() => el.classList.remove('hrbr-in'), 350);
     }, 350);
-  }, 5000);
+  }
+
+  function startBadgeRotation() {
+    if (badgeInterval) return;
+    badgeInterval = setInterval(tick, 5000);
+  }
+  function stopBadgeRotation() {
+    clearInterval(badgeInterval);
+    badgeInterval = null;
+  }
+
+  startBadgeRotation();
+  // Пауза этой мелкой, но постоянной анимации на свёрнутой вкладке — незаметно для
+  // пользователя, но снимает лишнюю фоновую работу с процессора на слабых телефонах
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopBadgeRotation();
+    else startBadgeRotation();
+  });
 })();
 
 let radioTracks = [];
@@ -3712,7 +3808,7 @@ async function loadNavbarFanStats() {
   document.getElementById('instaIntroOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeInstaIntro();
   });
-  (function() {
+   (function() {
     var introOptions = [
       { type: 'insta' },
       { type: 'video', src: 'assets/video/a1.mp4' },
@@ -3721,14 +3817,17 @@ async function loadNavbarFanStats() {
       { type: 'video', src: 'assets/video/a4.mp4' },
       { type: 'video', src: 'assets/video/a5.mp4' }
     ];
-    var chosen = introOptions[Math.floor(Math.random() * introOptions.length)];
+    var lowPower = window.isLowPowerDevice;
+    // На слабых устройствах/медленном интернете видео вообще не выбираем — сразу показываем лёгкий вариант с Instagram
+    var pool = lowPower ? introOptions.filter(function(o){ return o.type === 'insta'; }) : introOptions;
+    var chosen = pool[Math.floor(Math.random() * pool.length)];
     var wrap = document.getElementById('introMediaWrap');
     if (!wrap) return;
     if (chosen.type === 'insta') {
       wrap.innerHTML = '<div class="insta-intro-title"><img class="insta-intro-title-icon" src="assets/images/instintro.gif" alt="">Подписаны на нас<br>в Instagram?</div>';
     } else {
       wrap.innerHTML = '<div class="insta-intro-video-wrap">' +
-        '<video class="insta-intro-video" id="introVideoEl" src="' + chosen.src + '" autoplay muted loop playsinline disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false"></video>' +
+        '<video class="insta-intro-video" id="introVideoEl" src="' + chosen.src + '" autoplay muted loop playsinline preload="metadata" disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false"></video>' +
         '<button class="insta-intro-unmute-btn" id="introUnmuteBtn" type="button">🔇</button>' +
         '</div>';
       var videoEl = document.getElementById('introVideoEl');
