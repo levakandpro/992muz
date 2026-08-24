@@ -27,7 +27,8 @@
   <link rel="preconnect" href="https://res.cloudinary.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"></noscript>
 <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/pages/home.css">
   <script type="application/ld+json">
@@ -238,7 +239,7 @@
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: rgba(0,0,0,0.55);
+    background: rgba(0,0,0,0.65);
     border: 1px solid rgba(255,255,255,0.3);
     color: #fff;
     font-size: 16px;
@@ -246,7 +247,6 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    backdrop-filter: blur(4px);
   }
   .insta-intro-unmute-btn:hover {
     background: rgba(228,23,43,0.85);
@@ -258,6 +258,13 @@
   html.low-power .modal-blur-veil {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+  }
+  /* Браузер не считает вёрстку и не рисует эти блоки, пока пользователь до них не долистал —
+     экономит время рендера на первой загрузке страницы, особенно на слабых телефонах.
+     Как только блок приближается к экрану, он отрисовывается как обычно. */
+  #oldschool, #pop, #lyrics {
+    content-visibility: auto;
+    contain-intrinsic-size: 900px;
   }
   </style>
 </head>
@@ -277,7 +284,7 @@
   </div>
 </div>
 <div id="voteAuthRequiredModal" style="display:none;position:fixed;inset:0;z-index:999999;align-items:center;justify-content:center;">
-  <div class="modal-blur-veil" onclick="closeVoteAuthModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);"></div>
+  <div class="modal-blur-veil" onclick="closeVoteAuthModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);"></div>
   <div style="position:relative;background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:28px 24px;width:100%;max-width:320px;margin:20px;text-align:center;">
     <div style="font-size:34px;margin-bottom:10px;">🔒</div>
     <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:8px;">Войдите, чтобы проголосовать</div>
@@ -287,8 +294,7 @@
   </div>
 </div>
 <div id="voteAlertModal" onclick="if(event.target===this)closeVoteAlert()" style="display:none;position:fixed;inset:0;z-index:999999;align-items:center;justify-content:center;">
-  <div class="modal-blur-veil" onclick="closeVoteAlert()" style="position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);"></div>
-  <div style="position:relative;background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:28px 24px;width:100%;max-width:320px;margin:20px;text-align:center;">
+  <div class="modal-blur-veil" onclick="closeVoteAlert()" style="position:absolute;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);"></div>
     <div id="voteAlertIcon" style="font-size:34px;margin-bottom:12px;">🗳</div>
     <div id="voteAlertText" style="font-size:14px;color:#fff;line-height:1.6;margin-bottom:18px;"></div>
     <button onclick="closeVoteAlert()" style="width:100%;padding:11px;border-radius:10px;background:#c0392b;color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;">Понятно</button>
@@ -1253,12 +1259,20 @@ mobileOverlay.addEventListener('click',closeBurger);
 <script>
 (function(){
 var player=document.querySelector('.player-bar'),btn=document.getElementById('scrollTopBtn');
-window.addEventListener('scroll',function(){
+var scrollTicking=false;
+function updateOnScroll(){
 var isPlaying=window.gp&&window.gp.audio&&!window.gp.audio.paused;
 var show=window.scrollY>100||isPlaying;
 if(player)player.classList.toggle('visible',show);
 if(btn)btn.classList.toggle('visible',window.scrollY>100);
-});
+scrollTicking=false;
+}
+window.addEventListener('scroll',function(){
+if(!scrollTicking){
+requestAnimationFrame(updateOnScroll);
+scrollTicking=true;
+}
+},{passive:true});
 if(btn)btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
 })();
 // Stats from Firebase — fallback to static if no DB
@@ -1651,6 +1665,10 @@ shuffleArray(snap.docs).forEach(d => {
         }
         if (currentAudio) {
           currentAudio.pause();
+          // Явно освобождаем буфер предыдущего трека — иначе на слабых Android
+          // браузер может подолгу держать декодированные аудиоданные в памяти
+          currentAudio.src = '';
+          currentAudio.load();
           if (currentRow) {
             currentRow.querySelector('.new-track-play-overlay img').src = 'assets/icons/play.png';
             currentRow.querySelector('.new-track-progress-wrap').style.display = 'none';
@@ -1949,6 +1967,10 @@ items.forEach(({ id, col, data: t }) => {
         }
         if (currentAudio) {
           currentAudio.pause();
+          // Явно освобождаем буфер предыдущего трека — иначе на слабых Android
+          // браузер может подолгу держать декодированные аудиоданные в памяти
+          currentAudio.src = '';
+          currentAudio.load();
           if (currentRow) {
             currentRow.querySelector('.new-track-play-overlay img').src = 'assets/icons/play.png';
             currentRow.querySelector('.new-track-progress-wrap').style.display = 'none';
@@ -1956,7 +1978,7 @@ items.forEach(({ id, col, data: t }) => {
         }
 currentAudio = new Audio(url);
 currentAudio.preload = 'auto';
-currentAudio.preload = 'auto'; currentRow = row;
+currentRow = row;
         let playCounted = false;
         prog.style.display = 'flex'; overlay.src = 'assets/icons/pause.png';
 currentAudio.addEventListener('timeupdate', () => {
@@ -1984,6 +2006,7 @@ window.setNowPlaying && window.setNowPlaying(currentAudio, t.title, t.artist, t.
       });
 
       row.querySelector('.like-btn').addEventListener('click', async e => {
+        const btn = e.currentTarget;
         const cur = parseInt(btn.dataset.likes)||0;
         const isLiked = btn.classList.contains('liked');
         const nv = isLiked ? cur-1 : cur+1;
@@ -1992,7 +2015,6 @@ window.setNowPlaying && window.setNowPlaying(currentAudio, t.title, t.artist, t.
         btn.classList.toggle('liked');
         await updateDoc(doc(db, collectionName, d.id), {likes:nv});
       });
-
       row.querySelector('.share-btn').addEventListener('click', () => {
         const url = t.trackUrl; if (!url) return;
         if (navigator.share) navigator.share({title:t.title, url});
@@ -2090,7 +2112,13 @@ function rhAttachPlayHandler(item, t, track) {
       return;
     }
 
-    if (rhAudio) rhAudio.pause();
+    if (rhAudio) {
+      rhAudio.pause();
+      // Явно освобождаем буфер предыдущего трека — иначе на слабых Android
+      // браузер может подолгу держать декодированные аудиоданные в памяти
+      rhAudio.src = '';
+      rhAudio.load();
+    }
     if (rhActiveItem) {
       const prevSvg = rhActiveItem.querySelector('.rh-play-overlay svg');
       if (prevSvg) prevSvg.innerHTML = '<polygon points="5,3 19,12 5,21"/>';
@@ -2306,7 +2334,14 @@ function ftSwapToNext() {
   card.classList.add('ft-fade-out');
   setTimeout(() => {
     ftIdx = (ftIdx + 1) % ftTracks.length;
-    if (ftAudio) { ftAudio.pause(); ftAudio = null; }
+    if (ftAudio) {
+      ftAudio.pause();
+      // Явно освобождаем буфер предыдущего трека — иначе на слабых Android
+      // браузер может подолгу держать декодированные аудиоданные в памяти
+      ftAudio.src = '';
+      ftAudio.load();
+      ftAudio = null;
+    }
     ftResetAudioUI();
     ftRenderTrack(ftTracks[ftIdx]);
     card.classList.remove('ft-fade-out');
@@ -2357,6 +2392,12 @@ function ftAttachHandlers() {
     }
 
     if (!ftAudio || ftAudio.src !== t.trackUrl) {
+      if (ftAudio) {
+        // Явно освобождаем буфер предыдущего трека — иначе на слабых Android
+        // браузер может подолгу держать декодированные аудиоданные в памяти
+        ftAudio.src = '';
+        ftAudio.load();
+      }
       ftAudio = new Audio(t.trackUrl);
       ftAudio.preload = 'auto';
       let playCounted = false;
@@ -2948,7 +2989,13 @@ function playRadioTrack(idx, startOffset) {
   radioIdx = idx;
   const t = radioTracks[idx];
   if (!t) return;
-if (radioAudio) { radioAudio.pause(); }
+if (radioAudio) {
+    radioAudio.pause();
+    // Явно освобождаем буфер предыдущего трека — иначе на слабых Android
+    // браузер может подолгу держать декодированные аудиоданные в памяти
+    radioAudio.src = '';
+    radioAudio.load();
+  }
   radioAudio = new Audio(t.trackUrl);
 
   radioAudio.addEventListener('loadedmetadata', function onMeta(){
@@ -3258,9 +3305,9 @@ render();
     align-items:center;
     justify-content:center;
     padding:20px;
-    background:rgba(20,20,20,0.45);
-    backdrop-filter:blur(6px);
-    -webkit-backdrop-filter:blur(6px);
+    background:rgba(20,20,20,0.55);
+    backdrop-filter:blur(3px);
+    -webkit-backdrop-filter:blur(3px);
   }
   .soon-modal-overlay.open{ display:flex; }
 
@@ -3551,9 +3598,9 @@ document.addEventListener('keydown', function(e){
     align-items:center;
     justify-content:center;
     padding:20px;
-    background:rgba(20,20,20,0.5);
-    backdrop-filter:blur(8px);
-    -webkit-backdrop-filter:blur(8px);
+    background:rgba(20,20,20,0.6);
+    backdrop-filter:blur(3px);
+    -webkit-backdrop-filter:blur(3px);
   }
   .bloggers-soon-overlay.open{ display:flex; }
   .bloggers-soon-box{
