@@ -1,8 +1,8 @@
 /* ── NAVBAR ── */
 .navbar {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(0,0,0,0.06);
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
@@ -737,8 +737,8 @@ padding: 22px 20px;
 /* ── PLAYER BAR ── */
 .player-bar {
   position: fixed; bottom: 0; left: 0; right: 0;
-  background: rgba(255,255,255,0.96);
-  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(8px);
   border-top: 1px solid rgba(0,0,0,0.08);
   box-shadow: 0 -4px 24px rgba(0,0,0,0.1);
   height: 74px;
