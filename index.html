@@ -1349,7 +1349,7 @@ if(nameEl)nameEl.textContent=title||'Трек';
 if(artistEl)artistEl.textContent=artist||'Артист';
 if(thumbEl){
 thumbEl.onerror=function(){this.onerror=null;this.src='assets/icons/mountain.png';this.style.padding='6px';this.style.filter='invert(1)';this.style.opacity='0.4';};
-if(coverUrl){thumbEl.src=coverUrl;thumbEl.style.padding='0';thumbEl.style.opacity='1';thumbEl.style.filter='none';}
+if(coverUrl){thumbEl.src=window.cldImg?window.cldImg(coverUrl,100):coverUrl;thumbEl.style.padding='0';thumbEl.style.opacity='1';thumbEl.style.filter='none';}
 else{thumbEl.src='assets/icons/mountain.png';thumbEl.style.padding='6px';thumbEl.style.filter='invert(1)';thumbEl.style.opacity='0.4';}
 }
 document.querySelector('.player-bar')?.classList.add('visible');
@@ -2820,7 +2820,8 @@ function crossfadeHeroCover(coverUrl) {
   const hiddenLayer = layers[1 - heroCoverFrontIdx];
 
   const isFallback = !coverUrl;
-  const finalSrc = coverUrl || 'assets/icons/mountain.png';
+  const compressedCoverUrl = coverUrl && window.cldImg ? window.cldImg(coverUrl, 320) : coverUrl;
+  const finalSrc = compressedCoverUrl || 'assets/icons/mountain.png';
 
   // Если новая обложка совпадает с уже показанной — не гоняем анимацию зря
   if (visibleLayer.getAttribute('data-cover') === finalSrc) return;
@@ -3049,7 +3050,7 @@ crossfadeHeroCover(t.coverUrl);
     const prevImg = document.querySelector('.hero-radio-prev .radio-thumb-sm img');
     const prevNameEl = document.querySelector('.hero-radio-prev .radio-track-name');
     if (prevImg) {
-      if (prevT?.coverUrl) { prevImg.src = prevT.coverUrl; prevImg.style = ''; }
+      if (prevT?.coverUrl) { prevImg.src = window.cldImg ? window.cldImg(prevT.coverUrl, 120) : prevT.coverUrl; prevImg.style = ''; }
       else { prevImg.src = 'assets/icons/mountain.png'; prevImg.style = 'padding:8px;filter:invert(1);opacity:0.5;'; }
     }
     setMarqueeText(prevNameEl, prevT?.title || 'Предыдущий');
@@ -3057,7 +3058,7 @@ crossfadeHeroCover(t.coverUrl);
     const nextImg = document.querySelector('.hero-radio-next .radio-thumb-sm img');
     const nextNameEl = document.querySelector('.hero-radio-next .radio-track-name');
     if (nextImg) {
-      if (nextT?.coverUrl) { nextImg.src = nextT.coverUrl; nextImg.style = ''; }
+      if (nextT?.coverUrl) { nextImg.src = window.cldImg ? window.cldImg(nextT.coverUrl, 120) : nextT.coverUrl; nextImg.style = ''; }
       else { nextImg.src = 'assets/icons/mountain.png'; nextImg.style = 'padding:8px;filter:invert(1);opacity:0.5;'; }
     }
    setMarqueeText(nextNameEl, nextT?.title || 'Следующий');
@@ -3083,7 +3084,7 @@ radioAudio.addEventListener('ended', () => {
   if (pArtist) pArtist.textContent = t.artist || 'Артист';
 if (pThumb) {
     pThumb.onerror = function(){ this.onerror=null; this.src='assets/icons/mountain.png'; this.style='width:100%;height:100%;object-fit:contain;object-position:center;padding:8px;filter:invert(0.7);'; };
-    if (t.coverUrl) { pThumb.src = t.coverUrl; pThumb.style = 'width:100%;height:100%;object-fit:contain;object-position:center;'; }
+    if (t.coverUrl) { pThumb.src = window.cldImg ? window.cldImg(t.coverUrl, 100) : t.coverUrl; pThumb.style = 'width:100%;height:100%;object-fit:contain;object-position:center;'; }
     else { pThumb.src = 'assets/icons/mountain.png'; pThumb.style = 'width:100%;height:100%;object-fit:contain;object-position:center;padding:8px;filter:invert(0.7);'; }
   }
 const pBtn = document.getElementById('radioMuteBtn');
@@ -3157,7 +3158,7 @@ return `<div class="vote-card${isVoted ? ' voted' : ''}" onclick="castVote('${a.
 ${i === 0 && (a.votes||0) > 0 ? `<div class="vote-place-badge" data-tip="${placeLabels[0]}" onmouseenter="showVoteTip(event,this)" onmouseleave="hideVoteTip()"><img src="assets/icons/cccrow.png" style="width:22px;height:22px;pointer-events:none;"></div>` : ''}
 ${i === 1 && (a.votes||0) > 0 ? `<div class="vote-place-badge" data-tip="${placeLabels[1]}" onmouseenter="showVoteTip(event,this)" onmouseleave="hideVoteTip()"><img src="assets/icons/cccrow.png" style="width:22px;height:22px;pointer-events:none;"></div>` : ''}
 ${i === 2 && (a.votes||0) > 0 ? `<div class="vote-place-badge" data-tip="${placeLabels[2]}" onmouseenter="showVoteTip(event,this)" onmouseleave="hideVoteTip()"><img src="assets/icons/cccrow.png" style="width:22px;height:22px;pointer-events:none;"></div>` : ''}
-        <img class="vote-card-img" src="${a.photoUrl || 'assets/icons/profile.png'}" alt="${a.name}" onerror="this.src='assets/icons/profile.png'">
+        <img class="vote-card-img" src="${a.photoUrl ? (window.cldImg ? window.cldImg(a.photoUrl, 200) : a.photoUrl) : 'assets/icons/profile.png'}" alt="${a.name}" onerror="this.src='assets/icons/profile.png'">
         <div class="vote-card-name">${a.name}</div>
         <div class="vote-card-count">${a.votes||0} голосов · ${pct}%</div>
         <div class="vote-bar"><div class="vote-bar-fill" style="width:${barW}%"></div></div>
@@ -3214,7 +3215,7 @@ const votedId = getVotedId();
       a.pct = Math.round(((a.votes||0)/total)*100)||0;
       a.barW = Math.round(((a.votes||0)/max)*100);
       const placeText = i===0?'🥇 1 место':i===1?'🥈 2 место':i===2?'🥉 3 место':`#${i+1} место`;
-      document.getElementById('votePreviewImg').src = a.photoUrl || 'assets/icons/profile.png';
+         document.getElementById('votePreviewImg').src = a.photoUrl ? (window.cldImg ? window.cldImg(a.photoUrl, 240) : a.photoUrl) : 'assets/icons/profile.png';
       document.getElementById('votePreviewName').textContent = a.name;
       document.getElementById('votePreviewPlace').textContent = placeText;
       document.getElementById('votePreviewVotes').textContent = (a.votes||0) + ' голосов · ' + a.pct + '%';
