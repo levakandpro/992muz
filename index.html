@@ -537,8 +537,9 @@
 @media (max-width: 768px){
     .random-hits-strip-wrap{
       scroll-snap-type:x mandatory;
-      width:100vw;
-      margin-left:calc(-50vw + 50%);
+      width:auto;
+      margin-left:calc(-50vw + 50% + var(--scrollbar-comp,0px));
+      margin-right:calc(-50vw + 50% + var(--scrollbar-comp,0px));
     }
     .random-hits-strip-track{
       gap:0;
