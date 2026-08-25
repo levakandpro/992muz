@@ -1149,6 +1149,36 @@ if(mobileMenuClose)mobileMenuClose.addEventListener('click',closeBurger);
 mobileOverlay.addEventListener('click',closeBurger);
 })();
 </script>
+<script>
+// Жёстко запрещаем горизонтальное "утягивание" всей страницы при свайпе пальцем —
+// работает надёжно на всех мобильных браузерах, где одного CSS оказалось недостаточно.
+// Внутри специальных горизонтальных каруселей (хиты, плейлисты, голосование) свайп вбок
+// по-прежнему разрешён и работает как обычно.
+(function() {
+  var HORIZONTAL_SCROLL_SELECTORS = '.random-hits-strip-wrap, .vote-grid, .items-grid.scrollable, .pl-strip-wrap, .new-tracks-list';
+  var startX = 0, startY = 0, lockedHorizontal = false, insideAllowedArea = false;
+
+  document.addEventListener('touchstart', function(e) {
+    if (e.touches.length !== 1) return;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    lockedHorizontal = false;
+    insideAllowedArea = !!e.target.closest(HORIZONTAL_SCROLL_SELECTORS);
+  }, { passive: true });
+
+  document.addEventListener('touchmove', function(e) {
+    if (insideAllowedArea || e.touches.length !== 1) return;
+    var dx = e.touches[0].clientX - startX;
+    var dy = e.touches[0].clientY - startY;
+    if (!lockedHorizontal && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 6) {
+      lockedHorizontal = true;
+    }
+    if (lockedHorizontal) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+})();
+</script>
 
 <!-- PLAYER BAR -->
 <div class="player-bar" id="mainPlayerBar" style="height:62px;padding:0 20px;gap:14px;background:linear-gradient(90deg,#3d0a14 0%,#1a0a0e 60%,#0f0a0e 100%);border-top:1px solid rgba(139,26,47,0.3);box-sizing:border-box;max-width:100vw;overflow:hidden;">
