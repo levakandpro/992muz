@@ -2568,6 +2568,7 @@ loadFeaturedTrack();
 <div class="pl-strip-modal-overlay" id="plStripModalOverlay" onclick="if(event.target===this) closePlStripModal()">
   <div class="pl-strip-modal-box">
     <iframe id="plStripModalFrame" src="" style="width:100%;height:100%;border:none;"></iframe>
+    <button class="pl-strip-modal-close" id="plStripModalCloseBtn" type="button" aria-label="Закрыть">✕</button>
   </div>
 </div>
 
@@ -2637,6 +2638,7 @@ let plStripPreviewTimer = null;
   };
 
   window.openHomePlaylist = function(key) {
+    clearPlStripPreview();
     const overlay = document.getElementById('plStripModalOverlay');
     const frame = document.getElementById('plStripModalFrame');
     if (!overlay || !frame) return;
@@ -2644,7 +2646,6 @@ let plStripPreviewTimer = null;
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   };
-
 window.closePlStripModal = function() {
     const overlay = document.getElementById('plStripModalOverlay');
     const frame = document.getElementById('plStripModalFrame');
@@ -2653,10 +2654,12 @@ window.closePlStripModal = function() {
     document.body.style.overflow = '';
   };
 
+  const plStripModalCloseBtn = document.getElementById('plStripModalCloseBtn');
+  if (plStripModalCloseBtn) plStripModalCloseBtn.addEventListener('click', closePlStripModal);
+
   window.addEventListener('message', (e) => {
     if (e.data && e.data.type === 'closePlStripModal') closePlStripModal();
   });
- 
 })();
 </script>
 <script type="module">
