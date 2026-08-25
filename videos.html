@@ -473,7 +473,16 @@ const FILMS = [
   { title: '8 Миля', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1704946/de906015-a4b2-4d32-ac60-2d09ba361363/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-229813304&id=456239185&hash=410f9740e0545dc1&hd=3' },
   { title: 'Голос Улиц', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/64682e69-e95c-40d2-b7c2-24b9998ba52d/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-227596514&id=456243567&hash=166058ca76690022&hd=4' },
    { title: 'Рэп как искусство', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1773646/ea427f3e-93de-4448-8771-1013342a156e/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-149889774&id=456247881&hash=5d5c1ca437fec3c2&hd=3' },
-  { title: 'Разбогатей или сдохни', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1898899/1b0ee282-5739-4c36-b906-13a36d2dbdb7/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-240576267&id=456239066&hash=4cd635f2f69a6930&hd=2' }
+  { title: 'Разбогатей или сдохни', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1898899/1b0ee282-5739-4c36-b906-13a36d2dbdb7/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-240576267&id=456239066&hash=4cd635f2f69a6930&hd=2' },
+  { title: 'Тупак: Воскрешение', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1946459/e194720b-12e8-4219-b576-fac70d7c2290/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-84264744&id=456239368&hash=306b353cd966e9c6&hd=4' },
+  { title: 'Ноториус', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/e0793cb1-352e-421a-bcda-5f4b51da3abc/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-82499507&id=456248596&hash=31721183f8f0ee97&hd=4' },
+  { title: 'Суета и движение', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1777765/5a4a8246-a5b6-443a-9558-eb2c65c72d03/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-218359460&id=456240216&hash=08a1e083b3ddaf9e&hd=4' },
+  { title: 'Жизнь меняет тебя', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/6cf5b31f-15a5-4a8d-8b17-55c71a7cf5f4/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-26551941&id=169209676&hash=bd4edbc75dec7cce&hd=2' },
+  { title: 'Талантливый парень', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/c26a0668-5dff-4b98-a5d5-d89f32eb10f3/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-32671307&id=169164967&hash=7d3c54c54277f817&hd=3' },
+  { title: 'The Up in Smoke Tour', poster: 'https://www.film.ru/sites/default/files/styles/thumb_260x400/public/movies/posters/_tmdb/eS8Q9n2H4cN4gqLJKUX4tZgIDqb.jpg', src: 'https://vkvideo.ru/video_ext.php?oid=-73400845&id=456240833&hash=60bc1c8d85fc5d2c&hd=2' },
+  { title: 'Авторитет', poster: 'https://www.film.ru/sites/default/files/styles/thumb_260x400/public/movies/posters/9535.jpg', src: 'https://vkvideo.ru/video_ext.php?oid=-123591749&id=456239217&hash=03773df80b2667c3&hd=4' },
+  { title: 'ПЛОХОЙ РЭП', poster: 'https://www.film.ru/sites/default/files/styles/thumb_260x400/public/movies/posters/_imported/peVDrIWV3XgUnVnKvTmst3yEbpc.jpg', src: 'https://vkvideo.ru/video_ext.php?oid=-26551941&id=456247612&hash=de698c31598a6642&hd=3' },
+  { title: 'BEEF: Русский хип-хоп', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1629390/4da18061-8f52-420c-97c0-6b6ca3458d2a/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-19129928&id=456239592&hash=d282aaf8d27331bf&hd=3' }
 ];
 
 function renderFilms() {
@@ -766,8 +775,8 @@ async function loadTopComment(sectionId) {
 }
 @media (max-width: 640px) {
   .vid-film-card {
-    flex: 0 0 78vw;
-    max-width: 280px;
+    flex: 0 0 100%;
+    max-width: 100%;
   }
   .vid-film-play {
     opacity: 1;
