@@ -212,6 +212,23 @@
     gap: 6px;
     white-space: nowrap;
   }
+  .insta-intro-dontshow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: #8a8a8a;
+    cursor: pointer;
+    user-select: none;
+  }
+  .insta-intro-dontshow input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    accent-color: #E4172B;
+  }
   .insta-intro-card {
     display: flex;
     flex-direction: column;
@@ -3941,6 +3958,10 @@ async function loadNavbarFanStats() {
     <div id="introMediaWrap"></div>
     <a class="insta-intro-btn" href="https://instagram.com/992muz" target="_blank" onclick="closeInstaIntro()">Подписаться</a>
     <div class="insta-intro-sub">Каждую неделю дарим подарки музыкантам <img src="assets/images/Verification Badge.gif" style="width:16px; height:16px; object-fit:contain; flex-shrink:0;"></div>
+    <label class="insta-intro-dontshow">
+      <input type="checkbox" id="introDontShowCheckbox">
+      Больше не показывать
+    </label>
   </div>
 </div>
 <script>
@@ -3953,11 +3974,22 @@ async function loadNavbarFanStats() {
       introVideo.pause();
       introVideo.currentTime = 0;
     }
+    // Если пользователь поставил галочку "Больше не показывать" — запоминаем это
+    // в localStorage, чтобы попап больше не появлялся при следующих заходах на сайт
+    var dontShowCheckbox = document.getElementById('introDontShowCheckbox');
+    if (dontShowCheckbox && dontShowCheckbox.checked) {
+      localStorage.setItem('instaIntroDontShow_v1', '1');
+    }
   }
   document.getElementById('instaIntroOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeInstaIntro();
   });
    (function() {
+    // Если пользователь ранее поставил галочку "Больше не показывать" — не показываем попап вообще
+    if (localStorage.getItem('instaIntroDontShow_v1') === '1') {
+      document.getElementById('instaIntroOverlay').classList.add('hidden');
+      return;
+    }
     var introOptions = [
       { type: 'insta' },
       { type: 'video', src: 'assets/video/a1.mp4' },
