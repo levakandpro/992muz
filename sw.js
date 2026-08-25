@@ -1,5 +1,5 @@
 const CACHE_NAME = '992muz-v3';
-const STATIC_CACHE = '992muz-static-v1';
+const STATIC_CACHE = '992muz-static-v2';
 const OFFLINE_URL = '/offline.html';
 const STATIC_EXTENSIONS = ['.css', '.woff', '.woff2', '.otf', '.ttf', '.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.ico'];
 const AUDIO_CACHE = '992muz-audio-v1';
@@ -72,15 +72,17 @@ if (event.request.mode === 'navigate') {
   const isStatic = STATIC_EXTENSIONS.some((ext) => url.includes(ext)) && !url.includes('res.cloudinary.com');
 
   if (isStatic) {
-    // Статика (свои иконки, шрифты, css) - сразу из кэша, без ожидания сети
+    // Статика (свои иконки, шрифты, css) - показываем сохранённую копию сразу (быстро),
+    // но параллельно всегда проверяем сервер на новую версию и обновляем кэш в фоне.
+    // Так следующий заход пользователя уже покажет свежий файл, без ручной чистки кэша.
     event.respondWith(
       caches.open(STATIC_CACHE).then((cache) =>
         cache.match(event.request).then((cached) => {
-          if (cached) return cached;
-          return fetch(event.request).then((response) => {
+          const networkFetch = fetch(event.request).then((response) => {
             if (response.ok) cache.put(event.request, response.clone());
             return response;
-          });
+          }).catch(() => cached);
+          return cached || networkFetch;
         })
       )
     );
