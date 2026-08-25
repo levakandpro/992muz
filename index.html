@@ -1321,8 +1321,10 @@ mobileOverlay.addEventListener('click',closeBurger);
 var player=document.querySelector('.player-bar'),btn=document.getElementById('scrollTopBtn');
 var scrollTicking=false;
 function updateOnScroll(){
-var isPlaying=window.gp&&window.gp.audio&&!window.gp.audio.paused;
-var show=window.scrollY>100||isPlaying;
+// Плеер остаётся на экране, если трек уже был запущен (даже стоит на паузе) —
+// иначе кнопка play/pause "уезжает" за край экрана и до неё нельзя дотянуться
+var hasTrack=window.gp&&window.gp.audio;
+var show=window.scrollY>100||hasTrack;
 if(player)player.classList.toggle('visible',show);
 if(btn)btn.classList.toggle('visible',window.scrollY>100);
 scrollTicking=false;
@@ -1451,6 +1453,34 @@ gpSyncRadioMuteUI(a.muted);
 if(a.paused)a.play();else a.pause();
 }
 });
+// ─── ПЕРЕМОТКА ТРЕКА В НИЖНЕМ ПЛЕЕРЕ (клик и перетаскивание пальцем) ───
+(function(){
+var bar=document.getElementById('radioProgressBarMain');
+if(!bar)return;
+var dragging=false;
+function seekToPointer(clientX){
+var a=window.gp.audio;
+if(!a||!a.duration||!isFinite(a.duration))return;
+var rect=bar.getBoundingClientRect();
+var pct=Math.min(1,Math.max(0,(clientX-rect.left)/rect.width));
+a.currentTime=pct*a.duration;
+var fill=bar.querySelector('.progress-fill');
+if(fill)fill.style.width=(pct*100)+'%';
+}
+bar.addEventListener('pointerdown',function(e){
+// Радио не перематывается вручную — там фиксированное расписание эфира
+if(window.gp.isRadio)return;
+dragging=true;
+bar.setPointerCapture(e.pointerId);
+seekToPointer(e.clientX);
+});
+bar.addEventListener('pointermove',function(e){
+if(!dragging)return;
+seekToPointer(e.clientX);
+});
+bar.addEventListener('pointerup',function(){dragging=false;});
+bar.addEventListener('pointercancel',function(){dragging=false;});
+})();
 // ─── ОЧЕРЕДЬ ТРЕКОВ (для кнопок след./пред. и экрана блокировки) ───
 window.gp.queue=[];
 window.gp.queueIdx=-1;
@@ -3916,6 +3946,13 @@ async function loadNavbarFanStats() {
 <script>
   function closeInstaIntro() {
     document.getElementById('instaIntroOverlay').classList.add('hidden');
+    // Останавливаем видео при закрытии попапа — иначе оно продолжает играть
+    // (и звучать) в фоне, пока страница не будет обновлена
+    var introVideo = document.getElementById('introVideoEl');
+    if (introVideo) {
+      introVideo.pause();
+      introVideo.currentTime = 0;
+    }
   }
   document.getElementById('instaIntroOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeInstaIntro();
