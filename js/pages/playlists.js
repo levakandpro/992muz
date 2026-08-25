@@ -272,6 +272,10 @@ window.openPlaylist = async function(id) {
 
   document.getElementById('plModal').classList.add('open');
   document.body.style.overflow = 'hidden';
+  const plModalBoxReset = document.getElementById('plModalBox');
+  if (plModalBoxReset) plModalBoxReset.classList.remove('pl-modal-box-expanded');
+  const plMoreBtnReset = document.getElementById('plModalMoreToggle');
+  if (plMoreBtnReset) plMoreBtnReset.classList.remove('open');
 
   setTimeout(() => {
     extractColor(document.getElementById('plModalCover'), applyModalColor);
@@ -481,6 +485,10 @@ tracksEl.innerHTML = '';
 window.closePlaylist = function() {
   document.getElementById('plModal').classList.remove('open');
   document.body.style.overflow = '';
+  const plModalBoxClose = document.getElementById('plModalBox');
+  if (plModalBoxClose) plModalBoxClose.classList.remove('pl-modal-box-expanded');
+  const plMoreBtnClose = document.getElementById('plModalMoreToggle');
+  if (plMoreBtnClose) plMoreBtnClose.classList.remove('open');
   const panel = document.getElementById('plCommentsPanel');
   if (panel) panel.classList.remove('open');
   _commentsOpenId = null;
@@ -489,8 +497,12 @@ window.closePlaylist = function() {
     window.parent.postMessage({ type: 'closePlStripModal' }, '*');
   }
 };
-window.handleModalClick = function(e) {
-  if (e.target === document.getElementById('plModal')) closePlaylist();
+window.togglePlaylistMore = function() {
+  const plModalBox = document.getElementById('plModalBox');
+  const plMoreBtn = document.getElementById('plModalMoreToggle');
+  if (!plModalBox || !plMoreBtn) return;
+  plModalBox.classList.toggle('pl-modal-box-expanded');
+  plMoreBtn.classList.toggle('open');
 };
 
 window.toggleLike = async function(btn) {

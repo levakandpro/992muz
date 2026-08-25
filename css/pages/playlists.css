@@ -361,6 +361,10 @@
   height: 18px;
 }
 
+.pl-modal-more-toggle {
+  display: none;
+}
+
 /* ── MODAL BODY + TRACKS ── */
 .pl-modal-body {
   flex: 1;
@@ -492,10 +496,45 @@
 }
 @media (max-width: 640px) {
   .pl-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .pl-modal-top { flex-direction: column; align-items: center; text-align: center; }
-  .pl-modal-actions { justify-content: center; }
-  .pl-modal-cover { width: 140px; height: 140px; }
-  .pl-modal-title { font-size: 20px; }
+  .pl-modal { max-height: 92vh; }
+  .pl-modal-top {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    padding: 18px 16px 12px;
+    gap: 12px;
+  }
+  .pl-modal-cover { width: 64px; height: 64px; border-radius: 10px; }
+  .pl-modal-share-btn { width: 22px; height: 22px; top: 4px; right: 4px; }
+  .pl-modal-share-btn img { width: 10px; height: 10px; }
+  .pl-modal-label { font-size: 10px; margin-bottom: 3px; }
+  .pl-modal-title { font-size: 16px; margin-bottom: 8px; line-height: 1.2; }
+  .pl-modal-actions { justify-content: flex-start; gap: 8px; }
+  .pl-modal-play-all { padding: 9px 16px; font-size: 12px; }
+  .pl-modal-like-btn,
+  .pl-modal-comment-btn,
+  .pl-modal-more-toggle {
+    width: 34px;
+    height: 34px;
+  }
+  .pl-modal-more-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--bg3);
+    border: none;
+    cursor: pointer;
+    color: var(--text2);
+    transition: all 0.15s;
+  }
+  .pl-modal-more-toggle svg { transition: transform 0.2s ease; }
+  .pl-modal-more-toggle.open svg { transform: rotate(180deg); }
+  .pl-modal:not(.pl-modal-box-expanded) .pl-modal-desc,
+  .pl-modal:not(.pl-modal-box-expanded) .pl-modal-stats,
+  .pl-modal:not(.pl-modal-box-expanded) .pl-modal-mode-btns {
+    display: none !important;
+  }
 }
 /* ── CARD ПОЯВЛЕНИЕ ── */
 .pl-card {
