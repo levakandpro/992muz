@@ -3929,8 +3929,11 @@ async function loadNavbarFanStats() {
       { type: 'video', src: 'assets/video/a4.mp4' },
       { type: 'video', src: 'assets/video/a5.mp4' }
     ];
-     var lowPower = window.isLowPowerDevice || window.hasFloatingVideoBug;
-    // На слабых устройствах/медленном интернете/Xiaomi-Redmi видео вообще не выбираем — сразу показываем лёгкий вариант с Instagram
+     var isMobileScreen = window.innerWidth <= 768;
+    var lowPower = window.isLowPowerDevice || window.hasFloatingVideoBug || isMobileScreen;
+    // На мобильных телефонах видео в этом попапе вообще не показываем — только текстовый
+    // вариант с Instagram. На разных Android-браузерах (особенно Xiaomi/Redmi) видео может
+    // уезжать в угол экрана из-за особенностей телефона, это невозможно надёжно починить кодом сайта.
     var pool = lowPower ? introOptions.filter(function(o){ return o.type === 'insta'; }) : introOptions;
     var chosen = pool[Math.floor(Math.random() * pool.length)];
     var wrap = document.getElementById('introMediaWrap');
