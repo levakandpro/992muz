@@ -794,7 +794,6 @@
 <div class="ft-title" id="ftTitle">Название</div>
       <div class="ft-artist" id="ftArtist">Артист</div>
       <div class="ft-meta-row">
-        <span class="ft-plays-today" id="ftPlaysToday"></span>
         <a class="ft-artist-link" id="ftArtistLink" href="#">
           Ещё треки артиста
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -806,10 +805,6 @@
         <span class="ft-time" id="ftTimeDur">0:00</span>
       </div>
       <div class="ft-actions-row">
-        <button class="ft-action-btn" id="ftLikeBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-          <span id="ftLikeCount">0</span>
-        </button>
         <button class="ft-action-btn" id="ftShareBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
           Поделиться
@@ -2378,14 +2373,6 @@ function ftTodayKey() {
   return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
 }
 
-function ftGetLikedSet() {
-  try { return new Set(JSON.parse(localStorage.getItem('ftLikedTracks_v1') || '[]')); }
-  catch(e) { return new Set(); }
-}
-function ftSaveLikedSet(set) {
-  localStorage.setItem('ftLikedTracks_v1', JSON.stringify([...set]));
-}
-
 function ftResetAudioUI() {
   const fill = document.getElementById('ftProgressFill');
   const timeCur = document.getElementById('ftTimeCur');
@@ -2405,22 +2392,12 @@ function ftRenderTrack(t) {
   const coverImg = document.getElementById('ftCoverImg');
   const titleEl = document.getElementById('ftTitle');
   const artistEl = document.getElementById('ftArtist');
-  const likeBtn = document.getElementById('ftLikeBtn');
-  const likeCount = document.getElementById('ftLikeCount');
-  const playsToday = document.getElementById('ftPlaysToday');
   const artistLink = document.getElementById('ftArtistLink');
 
   coverImg.src = window.cldImg ? window.cldImg(t.coverUrl, 440) : (t.coverUrl || 'assets/icons/mountain.png');
   coverImg.onerror = () => { coverImg.src = 'assets/icons/mountain.png'; };
   titleEl.textContent = t.title || 'Без названия';
   artistEl.textContent = t.artist || 'Артист';
-
-  likeCount.textContent = ftFormatCompact(t.likes || 0);
-  const likedSet = ftGetLikedSet();
-  likeBtn.classList.toggle('liked', likedSet.has(t.id));
-
-const todayCount = (t.featuredPlaysDate === ftTodayKey()) ? (t.featuredPlaysToday || 0) : 0;
-  playsToday.innerHTML = `<img src="assets/models/Spotify%20button%20flat%203D.svg" alt="" style="width:14px;height:14px;flex-shrink:0;"> ${ftFormatCompact(todayCount)} слушали сегодня`;
 
   if (t.userId) {
     artistLink.href = `artists.html?artist=${t.userId}`;
@@ -2467,18 +2444,7 @@ function ftStartRotation() {
   ftRotateTimer = setInterval(ftSwapToNext, FT_ROTATE_INTERVAL);
 }
 
-// Засчитывает прослушивание "сегодня" — сбрасывает счётчик, если день сменился
-async function ftRegisterPlayToday(t) {
-  const today = ftTodayKey();
-  const isNewDay = t.featuredPlaysDate !== today;
-  const newCount = isNewDay ? 1 : (t.featuredPlaysToday || 0) + 1;
- t.featuredPlaysToday = newCount;
-  t.featuredPlaysDate = today;
-  document.getElementById('ftPlaysToday').innerHTML = `<img src="assets/models/Spotify%20button%20flat%203D.svg" alt="" style="width:14px;height:14px;flex-shrink:0;"> ${ftFormatCompact(newCount)} слушали сегодня`;
-  try {
-    await updateDoc(doc(db, 'tracks', t.id), { featuredPlaysToday: newCount, featuredPlaysDate: today });
-  } catch(e) { console.error('Ошибка учёта прослушивания трека дня:', e); }
-}
+
 
 function ftAttachHandlers() {
   const coverWrap = document.getElementById('ftCoverWrap');
@@ -2486,8 +2452,6 @@ function ftAttachHandlers() {
   const fill = document.getElementById('ftProgressFill');
   const timeCur = document.getElementById('ftTimeCur');
   const timeDur = document.getElementById('ftTimeDur');
-  const likeBtn = document.getElementById('ftLikeBtn');
-  const likeCount = document.getElementById('ftLikeCount');
   const shareBtn = document.getElementById('ftShareBtn');
 
   coverWrap.addEventListener('click', () => {
@@ -2517,10 +2481,6 @@ function ftAttachHandlers() {
         if (!ftAudio.duration) return;
         fill.style.width = (ftAudio.currentTime / ftAudio.duration * 100) + '%';
         timeCur.textContent = ftFormatTime(ftAudio.currentTime);
-        if (!playCounted && ftAudio.currentTime >= 5) {
-          playCounted = true;
-          ftRegisterPlayToday(t);
-        }
       });
       ftAudio.addEventListener('ended', () => {
         overlaySvg.innerHTML = '<polygon points="5,3 19,12 5,21"/>';
@@ -2539,48 +2499,6 @@ function ftAttachHandlers() {
     if (!ftAudio || !ftAudio.duration) return;
     const rect = progressBar.getBoundingClientRect();
     ftAudio.currentTime = ((e.clientX - rect.left) / rect.width) * ftAudio.duration;
-  });
-
-// Дебаунс записи лайков в Firestore — при быстрых повторных кликах (лайк/дизлайк туда-сюда)
-  // в базу уходит только финальное значение одним запросом через 1.2 сек паузы, а не на каждый клик
-  let ftLikeDebounceTimer = null;
-  let ftPendingLikeTrackId = null;
-  let ftPendingLikeDelta = 0;
-
-  function ftFlushLikeToFirestore() {
-    if (!ftPendingLikeTrackId || ftPendingLikeDelta === 0) { ftPendingLikeDelta = 0; ftPendingLikeTrackId = null; return; }
-    const trackId = ftPendingLikeTrackId;
-    const delta = ftPendingLikeDelta;
-    ftPendingLikeDelta = 0;
-    ftPendingLikeTrackId = null;
-    updateDoc(doc(db, 'tracks', trackId), { likes: increment(delta) })
-      .catch(e => console.error('Ошибка сохранения лайка:', e));
-  }
-
-  window.addEventListener('beforeunload', ftFlushLikeToFirestore);
-
-  likeBtn.addEventListener('click', () => {
-    const t = ftTracks[ftIdx];
-    if (!t) return;
-    const likedSet = ftGetLikedSet();
-    const isLiked = likedSet.has(t.id);
-    const newLikes = (t.likes || 0) + (isLiked ? -1 : 1);
-    t.likes = newLikes;
-    if (isLiked) likedSet.delete(t.id); else likedSet.add(t.id);
-    ftSaveLikedSet(likedSet);
-    likeBtn.classList.toggle('liked', !isLiked);
-    likeCount.textContent = ftFormatCompact(newLikes);
-
-    // Если переключились на другой трек до отправки предыдущего изменения — сначала
-    // сбрасываем накопленное по старому треку, затем копим по новому
-    if (ftPendingLikeTrackId && ftPendingLikeTrackId !== t.id) {
-      ftFlushLikeToFirestore();
-    }
-    ftPendingLikeTrackId = t.id;
-    ftPendingLikeDelta += isLiked ? -1 : 1;
-
-    clearTimeout(ftLikeDebounceTimer);
-    ftLikeDebounceTimer = setTimeout(ftFlushLikeToFirestore, 1200);
   });
 
   shareBtn.addEventListener('click', () => {
