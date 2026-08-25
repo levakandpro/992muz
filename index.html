@@ -253,6 +253,26 @@
   .insta-intro-unmute-btn:hover {
     background: rgba(228,23,43,0.85);
   }
+  .insta-intro-video-play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(228,23,43,0.9);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  }
+  .insta-intro-video-play-btn:hover {
+    background: #E4172B;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
   /* На слабых устройствах/медленном интернете отключаем backdrop-filter — он сильно
      просаживает FPS на бюджетных Android-телефонах при открытии модалок */
   html.low-power .soon-modal-overlay,
@@ -3911,12 +3931,28 @@ async function loadNavbarFanStats() {
     if (chosen.type === 'insta') {
       wrap.innerHTML = '<div class="insta-intro-title"><img class="insta-intro-title-icon" src="assets/images/instintro.gif" alt="">Подписаны на нас<br>в Instagram?</div>';
     } else {
+      // Видео НЕ запускается автоматически — только по нажатию пользователя. Это полностью
+      // исключает "плавающее окно" на Xiaomi/Redmi и других Android-телефонах, так как
+      // эта функция телефона срабатывает только на видео, запущенное автоматически без участия человека.
       wrap.innerHTML = '<div class="insta-intro-video-wrap">' +
-        '<video class="insta-intro-video" id="introVideoEl" src="' + chosen.src + '" autoplay muted loop playsinline webkit-playsinline="true" x5-playsinline="true" x5-video-player-type="h5" x5-video-player-fullscreen="false" preload="metadata" disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false"></video>' +
-        '<button class="insta-intro-unmute-btn" id="introUnmuteBtn" type="button">🔇</button>' +
+        '<video class="insta-intro-video" id="introVideoEl" src="' + chosen.src + '" muted loop playsinline webkit-playsinline="true" x5-playsinline="true" x5-video-player-type="h5" x5-video-player-fullscreen="false" preload="metadata" disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false"></video>' +
+        '<button class="insta-intro-video-play-btn" id="introVideoPlayBtn" type="button" aria-label="Воспроизвести">' +
+          '<svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>' +
+        '</button>' +
+        '<button class="insta-intro-unmute-btn" id="introUnmuteBtn" type="button" style="display:none;">🔇</button>' +
         '</div>';
       var videoEl = document.getElementById('introVideoEl');
       var unmuteBtn = document.getElementById('introUnmuteBtn');
+      var playBtn = document.getElementById('introVideoPlayBtn');
+      if (playBtn && videoEl) {
+        playBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          videoEl.muted = false;
+          videoEl.play();
+          playBtn.style.display = 'none';
+          if (unmuteBtn) unmuteBtn.style.display = 'flex';
+        });
+      }
       if (unmuteBtn && videoEl) {
         unmuteBtn.addEventListener('click', function(e) {
           e.stopPropagation();
