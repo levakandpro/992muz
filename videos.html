@@ -122,7 +122,26 @@
     </div>
   </section>
 
-  <!-- ══ БЛОК 3: ЛЕГЕНДАРНЫЕ РАБОТЫ ══ -->
+  <!-- ══ БЛОК 2.5: ФИЛЬМЫ ══ -->
+  <section class="vid-section">
+    <div class="vid-section-head">
+      <div>
+        <div class="section-label">Кино про рэп</div>
+        <h2 class="vid-section-title">Фильмы</h2>
+      </div>
+    </div>
+    <div class="vid-scroll-wrap">
+      <button class="vid-scroll-arrow vid-scroll-arrow-left" onclick="scrollRow('filmsRow', -1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="vid-scroll-arrow vid-scroll-arrow-right" onclick="scrollRow('filmsRow', 1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <div class="vid-film-row" id="filmsRow"></div>
+    </div>
+  </section>
+
+  <!-- ══ БЛОК 3: ЛЕГЕНДАРНЫЕ РАБОТЫ ══ -->а
   <section class="vid-section">
     <div class="vid-section-head">
       <div>
@@ -449,6 +468,49 @@ window.switchHero = function(el, videoId) {
 <script>
 let _shortIndex = 0;
 
+const FILMS = [
+  { title: '2Pac: Легенда', poster: 'https://avatars.mds.yandex.net/get-ott/374297/2a00000173c3ccfd8845450a064183be997b/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-224928954&id=456239281&hash=43913c96b1ab7014&hd=3' },
+  { title: '8 Миля', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1704946/de906015-a4b2-4d32-ac60-2d09ba361363/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-229813304&id=456239185&hash=410f9740e0545dc1&hd=3' },
+  { title: 'Голос Улиц', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/64682e69-e95c-40d2-b7c2-24b9998ba52d/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-227596514&id=456243567&hash=166058ca76690022&hd=4' },
+   { title: 'Рэп как искусство', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1773646/ea427f3e-93de-4448-8771-1013342a156e/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-149889774&id=456247881&hash=5d5c1ca437fec3c2&hd=3' },
+  { title: 'Разбогатей или сдохни', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1898899/1b0ee282-5739-4c36-b906-13a36d2dbdb7/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-240576267&id=456239066&hash=4cd635f2f69a6930&hd=2' }
+];
+
+function renderFilms() {
+  const row = document.getElementById('filmsRow');
+  if (!row) return;
+  row.innerHTML = FILMS.map(f => {
+    const clickAttr = f.link
+      ? `onclick="window.open('${f.link}','_blank')"`
+      : `onclick="openFilmVideo('${f.src}')"`;
+    return `
+    <div class="vid-film-card" ${clickAttr}>
+      <div class="vid-film-poster">
+        <img src="${f.poster}" alt="${f.title}">
+        <div class="vid-film-play"><div class="vid-film-play-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="#111"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+      </div>
+      <div class="vid-film-title">${f.title}</div>
+    </div>`;
+  }).join('');
+}
+renderFilms();
+
+function openFilmVideo(vkSrc) {
+  const wrap = document.getElementById('vidModalInner');
+  const iframeWrap = document.getElementById('vidModalWrap');
+  const prevBtn = document.getElementById('shortPrev');
+  const nextBtn = document.getElementById('shortNext');
+  wrap.style.width = '90%';
+  wrap.style.maxWidth = '900px';
+  iframeWrap.style.aspectRatio = '16/9';
+  iframeWrap.style.height = '';
+  prevBtn.style.display = 'none';
+  nextBtn.style.display = 'none';
+  document.getElementById('vidModalIframe').src = vkSrc;
+  document.getElementById('vidModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
 function openVideo(videoId, isShort, docId) {
   const wrap = document.getElementById('vidModalInner');
   const iframeWrap = document.getElementById('vidModalWrap');
@@ -638,6 +700,79 @@ async function loadTopComment(sectionId) {
   letter-spacing: 0.08em;
   color: var(--accent);
   animation: spin 1.2s linear infinite reverse;
+}
+</style>
+<style>
+.vid-film-row {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 4px;
+}
+.vid-film-row::-webkit-scrollbar { display: none; }
+.vid-film-card {
+  flex: 0 0 220px;
+  scroll-snap-align: start;
+  cursor: pointer;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg2);
+  transition: transform 0.25s ease;
+}
+.vid-film-card:hover { transform: translateY(-4px); }
+.vid-film-poster {
+  width: 100%;
+  aspect-ratio: 2/3;
+  position: relative;
+  overflow: hidden;
+}
+.vid-film-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.vid-film-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.25);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.vid-film-card:hover .vid-film-play { opacity: 1; }
+.vid-film-play-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vid-film-title {
+  padding: 10px 4px 2px;
+  font-family: 'Rem', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 640px) {
+  .vid-film-card {
+    flex: 0 0 78vw;
+    max-width: 280px;
+  }
+  .vid-film-play {
+    opacity: 1;
+    background: rgba(0,0,0,0.15);
+  }
 }
 </style>
 <script src="js/auth/session.js" type="module"></script>
