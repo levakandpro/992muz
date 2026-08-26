@@ -267,6 +267,19 @@
   </div>
 </div>
 
+<!-- ABOUT FILM MODAL -->
+<div id="aboutFilmModal" style="display:none;position:fixed;inset:0;z-index:2100;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);align-items:center;justify-content:center;" onclick="closeAboutFilm(event)">
+  <div style="background:var(--bg2);border-radius:20px;width:90%;max-width:560px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.4);">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid var(--bg3);flex-shrink:0;">
+      <span id="aboutFilmTitle" style="font-family:'Rem',sans-serif;font-size:17px;font-weight:800;color:var(--text);"></span>
+      <button onclick="closeAboutFilm(null,true)" style="width:32px;height:32px;border-radius:50%;background:var(--bg3);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);flex-shrink:0;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="aboutFilmText" style="flex:1;overflow-y:auto;padding:20px 24px 24px;font-size:14px;line-height:1.7;color:var(--text2);white-space:pre-wrap;"></div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, collection, query, where, orderBy, getDocs, doc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
@@ -469,6 +482,8 @@ window.switchHero = function(el, videoId) {
 let _shortIndex = 0;
 
 const FILMS = [
+  { title: '992MUZ ХРОНИКИ | Истоки', poster: 'assets/images/skrini-poster.png', src: 'https://www.youtube.com/embed/kbx-Vx4byLo?rel=0&autoplay=1', about: `992MUZ ХРОНИКИ | Глава I: Истоки\nДокументальный фильм | История таджикского рэпа\nЖанр: музыкальная документалистика\nДлительность: 40+ минут\n\nЭто не просто фильм. Это архив, который чуть не исчез.\n\nПервые треки, первые баттлы под открытым небом, первые студии - всё, что формировало таджикский рэп с середины 2000-х, рассказано теми, кто был там лично. Живые интервью с легендами и представителями олдскула, реальные архивные записи, реальные истории — без цензуры и без прикрас.\n\nВ фильме - голоса тех, кто стоял у истоков жанра в республике. Их треки знает каждый. Их истории до сих пор не были рассказаны.\n\nБез спойлеров - просто нажми play и услышь то, что раньше нигде не звучало.\n\nПродюсер, режиссёр, монтаж, звук: Sibastian TeeJay\nПродакшн: LEVAKAND PRODUCTION\nПри поддержке: 992MUZ` },
+  
   { title: '2Pac: Легенда', poster: 'https://avatars.mds.yandex.net/get-ott/374297/2a00000173c3ccfd8845450a064183be997b/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-224928954&id=456239281&hash=43913c96b1ab7014&hd=3' },
   { title: '8 Миля', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1704946/de906015-a4b2-4d32-ac60-2d09ba361363/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-229813304&id=456239185&hash=410f9740e0545dc1&hd=3' },
   { title: 'Голос Улиц', poster: 'https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/64682e69-e95c-40d2-b7c2-24b9998ba52d/300x450', src: 'https://vkvideo.ru/video_ext.php?oid=-227596514&id=456243567&hash=166058ca76690022&hd=4' },
@@ -488,15 +503,19 @@ const FILMS = [
 function renderFilms() {
   const row = document.getElementById('filmsRow');
   if (!row) return;
-  row.innerHTML = FILMS.map(f => {
+  row.innerHTML = FILMS.map((f, i) => {
     const clickAttr = f.link
       ? `onclick="window.open('${f.link}','_blank')"`
       : `onclick="openFilmVideo('${f.src}')"`;
+    const aboutBtn = f.about
+      ? `<button class="vid-film-about-btn" onclick="event.stopPropagation();openAboutFilm(${i})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> О фильме</button>`
+      : '';
     return `
     <div class="vid-film-card" ${clickAttr}>
       <div class="vid-film-poster">
         <img src="${f.poster}" alt="${f.title}">
         <div class="vid-film-play"><div class="vid-film-play-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="#111"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+        ${aboutBtn}
       </div>
       <div class="vid-film-title">${f.title}</div>
     </div>`;
@@ -519,7 +538,19 @@ function openFilmVideo(vkSrc) {
   document.getElementById('vidModal').style.display = 'flex';
   document.body.style.overflow = 'hidden';
 }
-
+function openAboutFilm(index) {
+  const f = FILMS[index];
+  if (!f || !f.about) return;
+  document.getElementById('aboutFilmTitle').textContent = f.title;
+  document.getElementById('aboutFilmText').innerHTML = f.about.replace(/\n/g, '<br>');
+  document.getElementById('aboutFilmModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeAboutFilm(e, force) {
+  if (!force && e && e.target !== document.getElementById('aboutFilmModal')) return;
+  document.getElementById('aboutFilmModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
 function openVideo(videoId, isShort, docId) {
   const wrap = document.getElementById('vidModalInner');
   const iframeWrap = document.getElementById('vidModalWrap');
@@ -772,6 +803,30 @@ async function loadTopComment(sectionId) {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.vid-film-about-btn {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 10px;
+  border-radius: 100px;
+  border: none;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 2;
+}
+.vid-film-about-btn:hover {
+  background: var(--accent);
 }
 @media (max-width: 640px) {
   .vid-film-card {
