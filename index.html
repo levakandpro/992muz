@@ -678,19 +678,74 @@
     .film-banner-cast{ margin-top:30px; }
     .film-cast-avatar, .film-cast-more{ width:28px; height:28px; font-size:9.5px; }
   }
+  .film-banner-hide-item{
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.25s ease;
+  }
+  .film-banner-card.expanded .film-banner-hide-item{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .film-banner-toggle-grad{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:70px;
+    background:linear-gradient(0deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+    pointer-events:none;
+    z-index:2;
+  }
+  .film-banner-toggle-btn{
+    position:absolute;
+    left:50%;
+    bottom:14px;
+    transform:translateX(-50%);
+    z-index:5;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 16px;
+    border-radius:100px;
+    border:none;
+    background:rgba(0,0,0,0.65);
+    backdrop-filter:blur(6px);
+    color:#fff;
+    font-family:'Inter', sans-serif;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .film-banner-toggle-btn svg{
+    transition:transform 0.25s ease;
+  }
+  .film-banner-card.expanded .film-banner-toggle-btn{
+    bottom:auto;
+    top:16px;
+  }
+  .film-banner-card.expanded .film-banner-toggle-btn svg{
+    transform:rotate(180deg);
+  }
 </style>
 <section class="section" id="home-film-banner">
   <div class="film-banner-section">
     <div class="film-banner-card">
       <img class="film-banner-poster" src="assets/images/skrini/pos.png" alt="992MUZ ХРОНИКИ | Истоки">
-      <div class="film-banner-grad"></div>
+      <div class="film-banner-grad film-banner-hide-item"></div>
+      <div class="film-banner-toggle-grad"></div>
 
-      <img src="assets/icons/new.png" alt="NEW" style="position:absolute;top:16px;right:16px;width:46px;height:auto;z-index:3;">
-      <img src="assets/images/advisory/1 (4).png" alt="Parental Advisory" style="position:absolute;top:16px;right:70px;width:44px;height:auto;z-index:3;">
+      <button type="button" class="film-banner-toggle-btn" onclick="toggleFilmBanner(this)">
+        <span>Показать</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
 
-      <div class="film-banner-badge">Документальный фильм</div>
+      <img class="film-banner-hide-item" src="assets/icons/new.png" alt="NEW" style="position:absolute;top:16px;right:16px;width:46px;height:auto;z-index:3;">
+      <img class="film-banner-hide-item" src="assets/images/advisory/1 (4).png" alt="Parental Advisory" style="position:absolute;top:16px;right:70px;width:44px;height:auto;z-index:3;">
 
-      <div class="film-banner-cast">
+      <div class="film-banner-badge film-banner-hide-item">Документальный фильм</div>
+
+      <div class="film-banner-cast film-banner-hide-item">
         <a href="https://992muz.ru/artist/jaman-connection" title="Jaman Connection" class="film-cast-avatar">JC</a>
         <a href="https://992muz.ru/artist/m-one-master-ismail" title="Master Ismail" class="film-cast-avatar">MI</a>
         <a href="https://992muz.ru/artist/abada-harry-ray" title="Abada" class="film-cast-avatar">AB</a>
@@ -698,7 +753,7 @@
         <span class="film-cast-more">+9</span>
       </div>
 
-      <div class="film-banner-content">
+      <div class="film-banner-content film-banner-hide-item">
         <div>
           <div class="film-banner-title">992MUZ ХРОНИКИ | Истоки</div>
           <div class="film-banner-sub" id="filmBannerViews">История таджикского рэпа · Глава I</div>
@@ -745,7 +800,13 @@
     progressFill.style.width = Math.min(pct,100) + '%';
     progressLabel.textContent = 'Досмотрено ' + Math.min(pct,100) + '%';
   }
-
+  window.toggleFilmBanner = function(btn){
+    var card = btn.closest('.film-banner-card');
+    if (!card) return;
+    var expanded = card.classList.toggle('expanded');
+    var label = btn.querySelector('span');
+    if (label) label.textContent = expanded ? 'Скрыть' : 'Показать';
+  };
   window.markFilmWatched = function(){
     var cur = parseInt(localStorage.getItem('filmWatchedPct_v1') || '0');
     var next = Math.min(cur + 25, 100);
