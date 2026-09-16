@@ -2,7 +2,7 @@
 
 const R2_CONFIG = {
   workerUrl: 'https://white-fog-aa2c992muzmedia.levakandproduction.workers.dev',
-  uploadSecret: 'ВСТАВЬ_СЮДА_ЗНАЧЕНИЕ_UPLOAD_SECRET', // см. Worker → Settings → Variables → UPLOAD_SECRET
+   uploadSecret: '4b9587c5-81c7-4c84-a213-fab1bd5796cc',
   folders: {
     tracks: 'tracks',
     covers: 'covers',

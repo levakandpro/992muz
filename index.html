@@ -93,11 +93,6 @@
 .nav-search-results::-webkit-scrollbar-track{background:transparent;}
 .nav-search-results::-webkit-scrollbar-thumb{background:rgba(192,57,43,0.5);border-radius:10px;}
 .nav-search-results{scrollbar-width:thin;scrollbar-color:rgba(192,57,43,0.5) transparent;}
-.radio-hour-label{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-top:8px;animation:radioHourFade .4s ease;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
-.radio-hour-label::before{content:'';width:4px;height:4px;border-radius:50%;background:#ffb238;flex-shrink:0;animation:radioHourPulse 1.8s infinite;}
-@keyframes radioHourFade{from{opacity:0;transform:translateY(2px);}to{opacity:1;transform:translateY(0);}}
-@keyframes radioHourPulse{0%,100%{opacity:1;}50%{opacity:.25;}}
-.radio-cover-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .6s ease;pointer-events:none;}
 .navbar-fan-stats{display:flex;align-items:center;gap:14px;font-size:12px;color:var(--text3,#999);white-space:nowrap;padding:0 6px;font-variant-numeric:tabular-nums;}
 .navbar-fan-stats span:not(.nfs-sep){display:flex;align-items:baseline;gap:5px;}
 .navbar-fan-stats b{color:var(--accent,#8B1A2F);font-weight:700;letter-spacing:-.01em;}
@@ -110,193 +105,7 @@
 .navbar-mobile-stats b{color:var(--accent,#8B1A2F);font-weight:700;letter-spacing:-.01em;}
 .navbar-mobile-stats .nfs-sep{width:1px;height:11px;background:currentColor;opacity:.15;display:inline-block;}
 }
-.hero-radio-badge-rotator{display:inline-block;will-change:transform,opacity;}
-.hero-radio-badge-rotator.hrbr-out{animation:hrbrSlideOut .35s ease forwards;}
-.hero-radio-badge-rotator.hrbr-in{animation:hrbrSlideIn .35s ease forwards;}
-@keyframes hrbrSlideOut{from{transform:translateY(0);opacity:1;}to{transform:translateY(-8px);opacity:0;}}
-@keyframes hrbrSlideIn{from{transform:translateY(8px);opacity:0;}to{transform:translateY(0);opacity:1;}}
-/* Бегущая строка: короткий текст стоит по центру, длинный едет туда-обратно, без сдвига макета */
-.hero-radio-prev .radio-track-name,.hero-radio-next .radio-track-name,.hero-radio-current .radio-track-name.lg,.hero-radio-current .radio-track-artist{overflow:hidden !important;text-align:center !important;display:block !important;width:100% !important;position:relative;}
-.rt-marquee-inner{display:inline-block;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;vertical-align:top;}
-.rt-marquee-active .rt-marquee-inner{max-width:none;overflow:visible;text-overflow:clip;animation:rtMarqueePingPong var(--rt-duration,8s) ease-in-out infinite;}
-@keyframes rtMarqueePingPong{0%,12%{transform:translateX(0);}45%,58%{transform:translateX(var(--rt-distance,0px));}100%{transform:translateX(0);}}
-  .insta-intro-overlay {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100vh;
-    height: 100dvh;
-    background: rgba(0,0,0,0.95);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow-y: auto;
-    padding: 20px 0;
-    box-sizing: border-box;
-    animation: introFadeIn 0.5s ease;
-  }
-  .insta-intro-overlay.hidden { display: none; }
-  @keyframes introFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  .insta-intro-img {
-    width: 180px;
-    height: 180px;
-    object-fit: contain;
-    margin: 0 auto 24px;
-    display: block;
-    border-radius: 28px;
-    filter: drop-shadow(0 0 24px rgba(0,0,0,0.6));
-  }
-  .insta-intro-close {
-    position: fixed;
-    top: 24px;
-    right: 24px;
-    color: #F5F5F5;
-    font-size: 30px;
-    cursor: pointer;
-    background: rgba(255,255,255,0.08);
-    border: none;
-    line-height: 1;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    z-index: 1001;
-  }
-  .insta-intro-close:hover { background: rgba(255,255,255,0.18); color: #fff; }
-  .insta-intro-title {
-    font-weight: 800;
-    font-size: 19px;
-    color: #F5F5F5;
-    margin-bottom: 20px;
-    line-height: 1.4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: left;
-    gap: 8px;
-  }
-  .insta-intro-title-icon {
-    width: 44px;
-    height: 44px;
-    object-fit: contain;
-    flex-shrink: 0;
-  }
-  .insta-intro-btn {
-    display: inline-block;
-    background: #E4172B;
-    color: #fff;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 14px 32px;
-    border-radius: 30px;
-    margin-bottom: 18px;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .insta-intro-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(228,23,43,0.4);
-  }
-  .insta-intro-sub {
-    font-size: 12.5px;
-    color: #8a8a8a;
-    line-height: 1.6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    white-space: nowrap;
-  }
-  .insta-intro-dontshow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    margin-top: 14px;
-    font-size: 12px;
-    color: #8a8a8a;
-    cursor: pointer;
-    user-select: none;
-  }
-  .insta-intro-dontshow input[type="checkbox"] {
-    width: 15px;
-    height: 15px;
-    cursor: pointer;
-    accent-color: #E4172B;
-  }
-  .insta-intro-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    max-width: 360px;
-    padding: 0 24px;
-  }
-  .insta-intro-video {
-    width: 220px;
-    max-width: 60vw;
-    height: 390px;
-    max-height: 50vh;
-    max-height: 50dvh;
-    object-fit: cover;
-    border-radius: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.5);
-    background: #111;
-  }
-  .insta-intro-video-wrap {
-    position: relative;
-    width: 220px;
-    max-width: 60vw;
-    margin-bottom: 20px;
-  }
-  .insta-intro-video-wrap .insta-intro-video {
-    margin-bottom: 0;
-  }
-  .insta-intro-unmute-btn {
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.65);
-    border: 1px solid rgba(255,255,255,0.3);
-    color: #fff;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  .insta-intro-unmute-btn:hover {
-    background: rgba(228,23,43,0.85);
-  }
-  .insta-intro-video-play-btn {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: rgba(228,23,43,0.9);
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-  }
-  .insta-intro-video-play-btn:hover {
-    background: #E4172B;
-    transform: translate(-50%, -50%) scale(1.05);
-  }
+
   /* На слабых устройствах/медленном интернете отключаем backdrop-filter — он сильно
      просаживает FPS на бюджетных Android-телефонах при открытии модалок */
   html.low-power .soon-modal-overlay,
@@ -432,72 +241,6 @@
   </div>
 </nav>
 <div class="wrap" style="padding-top:20px; padding-bottom:100px;">
-
- <!-- HERO RADIO + CHAT FLIP -->
-  <section class="section">
-    <div class="hero-flip-scene">
-      <div class="hero-flip-card" id="heroFlipCard">
-
-        <!-- ПЕРЕД: РАДИО -->
-        <div class="hero-flip-face hero-flip-face--front">
-          <div class="hero-placeholder">
-            <div class="hero-mountains-bg"></div>
-            <canvas class="hero-canvas" id="heroCanvas"></canvas>
-            <div class="hero-text">
- <div class="hero-radio-badge">
-                <span class="dot"></span>
-                <span class="hero-radio-badge-rotator" id="heroRadioBadgeText">Онлайн радио</span>
-              </div>
-              <h1 class="hero-title">
-                <span>992MUZ</span><br>
-                <span>ЭФИР</span>
-              </h1>
-              <button class="hero-btn" onclick="startRadio()">
-                <img src="assets/icons/play.png" alt="">
-                Слушать радио
-              </button>
-            </div>
-            <div class="hero-visual">
-              <div class="hero-radio-info">
-                <div class="hero-radio-prev">
-                  <div class="radio-thumb radio-thumb-sm">
-                    <img src="assets/icons/mountain.png" alt="" style="padding:8px;filter:invert(1);opacity:0.5;">
-                  </div>
-                  <div class="radio-track-name">Предыдущий</div>
-                </div>
-                <span class="radio-arrow">‹</span>
-<div class="hero-radio-current">
-                  <div class="ring-wrap">
-                    <div class="ring"></div>
-                    <div class="ring"></div>
-                    <div class="ring"></div>
-<div class="radio-thumb radio-thumb-lg" style="position:relative;">
-                      <img class="radio-cover-layer" src="assets/icons/mountain.png" alt="" style="padding:12px;filter:invert(1);opacity:0.6;z-index:2;">
-                      <img class="radio-cover-layer" src="" alt="" style="opacity:0;z-index:1;">
-                      <div class="radio-play-overlay">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
-                      </div>
-                    </div>
-                  </div>
-<div class="radio-track-name lg">Текущий трек</div>
-                  <div class="radio-track-artist">Артист</div>
-                  <div class="radio-hour-label" id="radioHourLabel"></div>
-                </div>
-                <span class="radio-arrow">›</span>
-                <div class="hero-radio-next">
-                  <div class="radio-thumb radio-thumb-sm">
-                    <img src="assets/icons/mountain.png" alt="" style="padding:8px;filter:invert(1);opacity:0.5;">
-                  </div>
-                  <div class="radio-track-name">Следующий</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
 
 <style>
 .random-hits-strip-wrap{
@@ -1100,13 +843,9 @@ function closeHomeAboutFilm(e, force){
         <span class="ft-time" id="ftTimeDur">0:00</span>
       </div>
       <div class="ft-actions-row">
-        <button class="ft-action-btn" id="ftShareBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
-          Поделиться
-        </button>
-        <button class="ft-action-btn" id="ftPinBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 20c1-2 1.5-4 2-7"/><path d="M9 12a3 3 0 1 1 5.5 1.7c-.6 1.1-1.9 1.3-2.5.3"/></svg>
-          Pinterest
+        <button class="ft-action-btn" id="ftDownloadBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+          Скачать
         </button>
       </div>
     </div>
@@ -1515,8 +1254,6 @@ mobileOverlay.addEventListener('click',closeBurger);
   }, { passive: false });
 })();
 </script>
-
-<!-- PLAYER BAR -->
 <div class="player-bar" id="mainPlayerBar" style="height:62px;padding:0 20px;gap:14px;background:linear-gradient(90deg,#3d0a14 0%,#1a0a0e 60%,#0f0a0e 100%);border-top:1px solid rgba(139,26,47,0.3);box-sizing:border-box;max-width:100vw;overflow:hidden;">
   <div class="player-bar-info" style="display:flex;align-items:center;gap:10px;width:230px;flex-shrink:0;min-width:0;">
 <div style="width:42px;height:42px;border-radius:8px;overflow:hidden;background:#2a0810;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,0.4);">
@@ -1525,9 +1262,9 @@ mobileOverlay.addEventListener('click',closeBurger);
 <div style="min-width:0;overflow:hidden;">
       <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">
         <span id="radioPulseDot" style="width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;flex-shrink:0;display:none;"></span>
-        <div class="player-track-name" style="font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;">Радио</div>
+        <div class="player-track-name" style="font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;"></div>
       </div>
-      <div class="player-track-artist" style="font-size:11px;color:rgba(255,255,255,0.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;">992MUZ</div>
+      <div class="player-track-artist" style="font-size:11px;color:rgba(255,255,255,0.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;"></div>
     </div>
   </div>
   <span class="player-time player-bar-time-left" style="font-size:11px;color:rgba(255,255,255,0.35);flex-shrink:0;min-width:32px;">0:00</span>
@@ -1541,12 +1278,9 @@ mobileOverlay.addEventListener('click',closeBurger);
     <svg id="playerPauseIcon" width="16" height="16" viewBox="0 0 24 24" fill="#fff" style="display:none;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
   </button>
   <span class="player-time player-bar-time-right" style="font-size:11px;color:rgba(255,255,255,0.35);flex-shrink:0;min-width:32px;">0:00</span>
-  <button id="radioMuteBtn" style="width:38px;height:38px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px rgba(139,26,47,0.5);">
+  <button id="radioMuteBtn" style="width:38px;height:38px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;display:none;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px rgba(139,26,47,0.5);">
     <img id="radioMuteIcon" src="assets/icons/volume.png" alt="" style="width:18px;height:18px;filter:invert(1);">
   </button>
-  <div class="player-bar-live" style="display:flex;align-items:center;justify-content:center;padding:3px 9px;border-radius:100px;background:rgba(139,26,47,0.3);border:0.5px solid rgba(139,26,47,0.6);flex-shrink:0;">
-    <span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:1px;">LIVE</span>
-  </div>
 </div>
 <style>
   @media (max-width: 480px) {
@@ -2040,14 +1774,9 @@ shuffleArray(snap.docs).forEach(d => {
         </div>
         <div class="new-track-actions">
           <span class="new-track-duration">${formatDur(t.duration || 0)}</span>
-          <button class="new-track-btn like-btn" data-id="${d.id}" data-likes="${t.likes||0}">
-            <img src="assets/icons/like2.png" alt=""> <span>${t.likes||0}</span>
-          </button>
-          <button class="new-track-btn share-btn" data-url="${t.trackUrl||''}">
-            <img src="assets/icons/share.png" alt="">
-          </button>
-<button class="new-track-btn">
-            <img src="assets/icons/play.png" alt="" style="filter:invert(0.5);"> <span class="plays-count">${t.plays||0}</span>
+          <button class="new-track-btn download-btn" data-url="${t.trackUrl||''}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+            <span>Скачать</span>
           </button>
         </div>
         <div class="new-track-progress-wrap" style="display:none;">
@@ -2104,23 +1833,16 @@ currentAudio.play();
         if (currentAudio.duration) currentAudio.currentTime = ((e.clientX-rect.left)/rect.width)*currentAudio.duration;
       });
 
-      row.querySelector('.like-btn').addEventListener('click', async e => {
-        const btn = e.currentTarget;
-        const cur = parseInt(btn.dataset.likes)||0;
-        const isLiked = btn.classList.contains('liked');
-        const nv = isLiked ? cur-1 : cur+1;
-        btn.dataset.likes = nv; btn.querySelector('span').textContent = nv;
-        btn.querySelector('img').src = isLiked ? 'assets/icons/like2.png' : 'assets/icons/like.png';
-        btn.classList.toggle('liked');
-        await updateDoc(doc(db,'newReleases',d.id),{likes:nv});
-      });
-
-      row.querySelector('.share-btn').addEventListener('click', () => {
+      row.querySelector('.download-btn').addEventListener('click', () => {
         const url = t.trackUrl; if (!url) return;
-        if (navigator.share) navigator.share({title:t.title,url});
-        else { navigator.clipboard.writeText(url); }
+        const a = document.createElement('a');
+        a.href = url;
+        a.rel = 'noopener';
+        a.download = `${t.artist ? t.artist + ' - ' : ''}${t.title || 'track'} (by 992muz).mp3`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
       });
-
       fragment.appendChild(row);
     });
     grid.appendChild(fragment);
@@ -2342,14 +2064,9 @@ items.forEach(({ id, col, data: t }) => {
         </div>
         <div class="new-track-actions">
           <span class="new-track-duration">${formatDur(t.duration || 0)}</span>
-          <button class="new-track-btn like-btn" data-id="${d.id}" data-col="${collectionName}" data-likes="${t.likes||0}">
-            <img src="assets/icons/like2.png" alt=""> <span>${t.likes||0}</span>
-          </button>
-          <button class="new-track-btn share-btn" data-url="${t.trackUrl||''}">
-            <img src="assets/icons/share.png" alt="">
-          </button>
-          <button class="new-track-btn">
-            <img src="assets/icons/play.png" alt="" style="filter:invert(0.5);"> <span>${t.plays||0}</span>
+          <button class="new-track-btn download-btn" data-url="${t.trackUrl||''}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+            <span>Скачать</span>
           </button>
         </div>
         <div class="new-track-progress-wrap" style="display:none;">
@@ -2406,20 +2123,15 @@ window.setNowPlaying && window.setNowPlaying(currentAudio, t.title, t.artist, t.
         if (currentAudio.duration) currentAudio.currentTime = ((e.clientX-rect.left)/rect.width)*currentAudio.duration;
       });
 
-      row.querySelector('.like-btn').addEventListener('click', async e => {
-        const btn = e.currentTarget;
-        const cur = parseInt(btn.dataset.likes)||0;
-        const isLiked = btn.classList.contains('liked');
-        const nv = isLiked ? cur-1 : cur+1;
-        btn.dataset.likes = nv; btn.querySelector('span').textContent = nv;
-        btn.querySelector('img').src = isLiked ? 'assets/icons/like2.png' : 'assets/icons/like.png';
-        btn.classList.toggle('liked');
-        await updateDoc(doc(db, collectionName, d.id), {likes:nv});
-      });
-      row.querySelector('.share-btn').addEventListener('click', () => {
+      row.querySelector('.download-btn').addEventListener('click', () => {
         const url = t.trackUrl; if (!url) return;
-        if (navigator.share) navigator.share({title:t.title, url});
-        else navigator.clipboard.writeText(url);
+        const a = document.createElement('a');
+        a.href = url;
+        a.rel = 'noopener';
+        a.download = `${t.artist ? t.artist + ' - ' : ''}${t.title || 'track'} (by 992muz).mp3`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
       });
 
       fragment.appendChild(row);
@@ -2747,7 +2459,7 @@ function ftAttachHandlers() {
   const fill = document.getElementById('ftProgressFill');
   const timeCur = document.getElementById('ftTimeCur');
   const timeDur = document.getElementById('ftTimeDur');
-  const shareBtn = document.getElementById('ftShareBtn');
+    const downloadBtn = document.getElementById('ftDownloadBtn');
 
   coverWrap.addEventListener('click', () => {
     const t = ftTracks[ftIdx];
@@ -2796,22 +2508,16 @@ function ftAttachHandlers() {
     ftAudio.currentTime = ((e.clientX - rect.left) / rect.width) * ftAudio.duration;
   });
 
-  shareBtn.addEventListener('click', () => {
+  downloadBtn.addEventListener('click', () => {
     const t = ftTracks[ftIdx];
     if (!t || !t.trackUrl) return;
-    if (navigator.share) navigator.share({ title: `${t.title} — ${t.artist}`, url: t.trackUrl });
-    else navigator.clipboard.writeText(t.trackUrl);
-  });
-
-  const pinBtn = document.getElementById('ftPinBtn');
-  pinBtn?.addEventListener('click', () => {
-    const t = ftTracks[ftIdx];
-    if (!t) return;
-    const pageUrl = 'https://992muz.ru/';
-    const mediaUrl = t.coverUrl || 'https://992muz.ru/assets/og/og-cover.jpg';
-    const description = `${t.title || 'Трек'} — ${t.artist || '992MUZ'} | 992MUZ`;
-    const pinUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(pageUrl)}&media=${encodeURIComponent(mediaUrl)}&description=${encodeURIComponent(description)}`;
-    window.open(pinUrl, '_blank', 'width=750,height=550,noopener,noreferrer');
+    const a = document.createElement('a');
+    a.href = t.trackUrl;
+    a.rel = 'noopener';
+    a.download = `${t.artist ? t.artist + ' - ' : ''}${t.title || 'track'} (by 992muz).mp3`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   });
 }
 
@@ -2958,465 +2664,6 @@ window.closePlStripModal = function() {
 })();
 </script>
 <script type="module">
-import { db } from './js/config/firebase.js';
-import { collection, query, orderBy, getDocs, getDoc, doc, setDoc, serverTimestamp, where, Timestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-const RADIO_PLS = ['radio_lirika','radio_underground','radio_night','radio_club','radio_fity','radio_hooks','radio_aralash','radio_hits','radio_charts'];
-const RADIO_SOURCE_MAP_HOME = {
-  radio_lirika:      { type: 'block',    keys: ['lirika'] },
-  radio_underground: { type: 'playlist', keys: ['andergrand'] },
-  radio_club:        { type: 'playlist', keys: ['klubnye'] },
-  radio_fity:        { type: 'playlist', keys: ['fity'] },
-  radio_night:       { type: 'playlist', keys: ['pered-snom'] },
-  radio_hooks:       { type: 'playlist', keys: ['pripevy'] },
-  radio_aralash:     { type: 'mixed',    keys: [] },
-  radio_hits:        { type: 'manual',   keys: [] },
-  radio_charts:      { type: 'block',    keys: ['top50'] },
-};
-const RADIO_PL_LABELS_PRETTY = {
-  radio_lirika:      'Час лучшей лирики',
-  radio_underground: 'В эфире андеграунд',
-  radio_night:       'Ночной вайб',
-  radio_club:        'Клубный час',
-  radio_fity:        'Час совместных треков',
-  radio_hooks:       'Час убойных припевов',
-  radio_aralash:     'Всё вперемешку',
-  radio_hits:        'Час хитов',
-  radio_charts:      'Прямой эфир: Топ чарт',
-};
-
-// ── РЕАЛЬНЫЙ СЧЁТЧИК СЛУШАТЕЛЕЙ РАДИО ──
-function getRadioClientId() {
-  let id = localStorage.getItem('radioClientId');
-  if (!id) {
-    id = 'c_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
-    localStorage.setItem('radioClientId', id);
-  }
-  return id;
-}
-const RADIO_CLIENT_ID = getRadioClientId();
-
-// Реалистичная "живая" база слушателей — меняется по времени суток + плавный случайный
-// дрейф, чтобы цифра выглядела органично, а не как зафиксированное число
-const LISTENERS_MIN = 60;
-const LISTENERS_MAX = 950;
-// Коэффициент по часам (0-23, локальное время устройства) — глубокая яма ночью (3-4 утра),
-// плавный подъём весь день, пик вечером (21:00), спад к полуночи
-const HOURLY_CURVE = [0.35,0.22,0.14,0.09,0.07,0.10,0.15,0.22,0.30,0.38,0.45,0.50,0.55,0.58,0.60,0.62,0.65,0.70,0.78,0.88,0.97,1.00,0.90,0.60];
-
-// Небольшой случайный множитель "на сегодня" — у одинакового часа в разные дни
-// будет чуть разная величина (например, вечерний пик то ~820, то ~980), а не зазубренная копия изо дня в день
-function getDailyVarianceMultiplier() {
-  const daySeed = Math.floor(Date.now() / 86400000);
-  let seed = daySeed;
-  seed |= 0; seed = seed + 0x6D2B79F5 | 0;
-  let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
-  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-  const rand = ((t ^ t >>> 14) >>> 0) / 4294967296; // 0..1
-  return 0.85 + rand * 0.3; // множитель в диапазоне 0.85 - 1.15
-}
-const LISTENER_TIMEOUT_MS = 45000; // heartbeat не обновлялся 45 сек — считаем что человек ушёл
-
-let listenerHeartbeatInterval = null;
-let simulatedBase = null; // текущее "живое" значение базы, плавно двигается к целевому
-let currentListenersTotal = LISTENERS_MIN;
-
-function getHourlyTarget() {
-  const hour = new Date().getHours();
-  const mult = HOURLY_CURVE[hour] * getDailyVarianceMultiplier();
-  return Math.round(LISTENERS_MIN + (LISTENERS_MAX - LISTENERS_MIN) * Math.min(mult, 1.15));
-}
-
-// Плавно двигает базу к целевому значению по часовой кривой, с лёгким случайным шумом —
-// не прыгает резко, иногда чуть проседает, иногда чуть растёт, как будто это реальные люди
-function stepSimulatedBase() {
-  const target = getHourlyTarget();
-  if (simulatedBase === null) simulatedBase = target;
-  const gap = target - simulatedBase;
-  const move = gap * (0.08 + Math.random() * 0.07); // 8-15% дистанции до цели за тик
-  const noise = (Math.random() - 0.5) * 60; // случайный шум ±30
-  simulatedBase = Math.round(simulatedBase + move + noise);
-  simulatedBase = Math.max(LISTENERS_MIN - 500, Math.min(LISTENERS_MAX + 500, simulatedBase));
-  return simulatedBase;
-}
-// Отмечает этот браузер как активного слушателя прямо сейчас
-async function sendListenerHeartbeat() {
-  try {
-    await setDoc(doc(db, 'radioPresence', RADIO_CLIENT_ID), { ts: serverTimestamp() });
-  } catch(e) { console.error('RADIO PRESENCE WRITE ERROR:', e.code, e.message); }
-}
-// Запускает регулярные heartbeat'ы, пока радио реально играет у этого пользователя
-function startListenerHeartbeat() {
-  if (listenerHeartbeatInterval) return; // уже запущено
-  sendListenerHeartbeat();
-  listenerHeartbeatInterval = setInterval(sendListenerHeartbeat, 20000);
-}
-
-// Считает реально активных слушателей (heartbeat моложе 45 сек) по всему сайту
-function pollListenersCount() {
-  // ВРЕМЕННО отключено реальное чтение коллекции radioPresence (экономим дневной лимит Firestore) —
-  // используется только "живая" симулированная база: она сама плавно колеблется вверх/вниз
-  // с шумом (см. stepSimulatedBase выше), выглядит органично без единого запроса к базе.
-  currentListenersTotal = stepSimulatedBase();
-}
-pollListenersCount();
-let listenersPollInterval = setInterval(pollListenersCount, 20000);
-// На свёрнутой вкладке счётчик всё равно никто не видит — останавливаем таймер,
-// чтобы не тратить CPU/батарею впустую, и сразу освежаем значение при возврате
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    clearInterval(listenersPollInterval);
-  } else {
-    pollListenersCount();
-    listenersPollInterval = setInterval(pollListenersCount, 20000);
-  }
-});
-
-// Слайд-анимация бейджа: "Онлайн радио" ↔ "Сейчас слушают: N"
-(function() {
-  const el = document.getElementById('heroRadioBadgeText');
-  if (!el) return;
-  let showingListeners = false;
-  let badgeInterval = null;
-
-  function tick() {
-    el.classList.add('hrbr-out');
-    setTimeout(() => {
-      showingListeners = !showingListeners;
-      el.textContent = showingListeners
-        ? 'Сейчас слушают: ' + currentListenersTotal.toLocaleString('ru-RU')
-        : 'Онлайн радио';
-      el.classList.remove('hrbr-out');
-      el.classList.add('hrbr-in');
-      setTimeout(() => el.classList.remove('hrbr-in'), 350);
-    }, 350);
-  }
-
-  function startBadgeRotation() {
-    if (badgeInterval) return;
-    badgeInterval = setInterval(tick, 5000);
-  }
-  function stopBadgeRotation() {
-    clearInterval(badgeInterval);
-    badgeInterval = null;
-  }
-
-  startBadgeRotation();
-  // Пауза этой мелкой, но постоянной анимации на свёрнутой вкладке — незаметно для
-  // пользователя, но снимает лишнюю фоновую работу с процессора на слабых телефонах
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) stopBadgeRotation();
-    else startBadgeRotation();
-  });
-})();
-
-let radioTracks = [];
-let radioIdx = 0;
-let radioAudio = null;
-let heroCoverFrontIdx = 0; // какой из двух слоёв обложки сейчас виден (0 или 1)
-
-// Бегущая строка: короткий текст остаётся по центру, длинный (не помещается в контейнер)
-// плавно едет туда-обратно, не ломая вёрстку и не сдвигая соседние элементы
-function setMarqueeText(el, text) {
-  if (!el) return;
-  el.classList.remove('rt-marquee-active');
-  el.innerHTML = '';
-  var inner = document.createElement('span');
-  inner.className = 'rt-marquee-inner';
-  inner.textContent = text || '';
-  el.appendChild(inner);
-  requestAnimationFrame(function(){
-    var overflow = inner.scrollWidth > el.clientWidth + 1;
-    if (overflow) {
-      var distance = inner.scrollWidth - el.clientWidth + 6;
-      inner.style.setProperty('--rt-distance', (-distance) + 'px');
-      inner.style.setProperty('--rt-duration', Math.max(4, distance / 25) + 's');
-      el.classList.add('rt-marquee-active');
-    }
-  });
-}
-
-// Плавный кроссфейд обложки в hero-плеере при смене трека
-function crossfadeHeroCover(coverUrl) {
-  const wrap = document.querySelector('.hero-radio-current .radio-thumb-lg');
-  if (!wrap) return;
-  const layers = wrap.querySelectorAll('.radio-cover-layer');
-  if (layers.length < 2) return;
-
-  const visibleLayer = layers[heroCoverFrontIdx];
-  const hiddenLayer = layers[1 - heroCoverFrontIdx];
-
-  const isFallback = !coverUrl;
-  const compressedCoverUrl = coverUrl && window.cldImg ? window.cldImg(coverUrl, 320) : coverUrl;
-  const finalSrc = compressedCoverUrl || 'assets/icons/mountain.png';
-
-  // Если новая обложка совпадает с уже показанной — не гоняем анимацию зря
-  if (visibleLayer.getAttribute('data-cover') === finalSrc) return;
-
-  hiddenLayer.onerror = function() {
-    hiddenLayer.onerror = null;
-    hiddenLayer.src = 'assets/icons/mountain.png';
-    hiddenLayer.setAttribute('data-cover', 'assets/icons/mountain.png');
-    hiddenLayer.style.cssText = 'padding:12px;filter:invert(1);opacity:0;z-index:2;';
-  };
-
-  hiddenLayer.src = finalSrc;
-  hiddenLayer.setAttribute('data-cover', finalSrc);
-  hiddenLayer.style.cssText = isFallback
-    ? 'padding:12px;filter:invert(1);opacity:0;z-index:2;'
-    : 'padding:0;filter:none;opacity:0;z-index:2;';
-  visibleLayer.style.zIndex = '1';
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      hiddenLayer.style.opacity = isFallback ? '0.6' : '1';
-    });
-  });
-
-  heroCoverFrontIdx = 1 - heroCoverFrontIdx;
-}
-
-// Детерминированный генератор случайных чисел (даёт одинаковую последовательность у всех при одном seed)
-function mulberry32(seed) {
-  return function() {
-    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
-    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
-    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
-  };
-}
-
-// Разносит подряд идущие треки одного артиста дальше друг от друга — эфир звучит вразброс
-function deClumpByArtist(arr) {
-  for (let i = 1; i < arr.length; i++) {
-    if (arr[i].artist && arr[i].artist === arr[i-1].artist) {
-      for (let j = i + 1; j < arr.length; j++) {
-        if (arr[j].artist !== arr[i-1].artist && arr[j].artist !== arr[i].artist) {
-          [arr[i], arr[j]] = [arr[j], arr[i]];
-          break;
-        }
-      }
-    }
-  }
-  return arr;
-}
-
-// Вычисляет какой трек сейчас "играет в эфире" и на какой секунде — одинаково для всех пользователей
-function computeRadioSync() {
-  const EPOCH = Date.UTC(2026, 0, 1, 0, 0, 0) / 1000; // точка отсчёта эфира
-  const totalDur = radioTracks.reduce((s, t) => s + (t.duration || 180), 0) || 1;
-  let elapsed = (Math.floor(Date.now() / 1000) - EPOCH) % totalDur;
-  if (elapsed < 0) elapsed += totalDur;
-  let acc = 0;
-  for (let i = 0; i < radioTracks.length; i++) {
-    const d = radioTracks[i].duration || 180;
-    if (elapsed < acc + d) return { idx: i, offset: elapsed - acc };
-    acc += d;
-  }
-  return { idx: 0, offset: 0 };
-}
-
-let radioSyncInterval = null;
-
-// Раз в минуту сверяет реальную позицию плеера с расчётной эфирной позицией.
-// Если разошлось больше чем на 4 секунды — подправляет (лаг сети, фоновая вкладка, заикание аудио).
-function startRadioSyncWatcher() {
-  if (radioSyncInterval) clearInterval(radioSyncInterval);
-  radioSyncInterval = setInterval(() => {
-    if (!radioAudio || !radioTracks.length) return;
-    const sync = computeRadioSync();
-    if (sync.idx !== radioIdx) {
-      // Расчётный трек вообще другой — переключаемся на актуальный
-      playRadioTrack(sync.idx, sync.offset);
-      return;
-    }
-    if (radioAudio.duration && isFinite(radioAudio.duration)) {
-      const drift = Math.abs(radioAudio.currentTime - sync.offset);
-      if (drift > 4) {
-        radioAudio.currentTime = Math.min(sync.offset, radioAudio.duration - 0.5);
-      }
-    }
-  }, 60000);
-}
-
-// Когда вкладка возвращается из фона — сразу проверяем синхронизацию,
-// не дожидаясь следующего тика интервала (браузер мог "заморозить" аудио надолго)
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden && radioAudio && radioTracks.length) {
-    const sync = computeRadioSync();
-    if (sync.idx !== radioIdx) {
-      playRadioTrack(sync.idx, sync.offset);
-    } else if (radioAudio.paused && !radioAudio.muted) {
-      radioAudio.play().catch(() => {});
-    }
-  }
-});
-
-window.startRadio = async function() {
-  if (radioTracks.length > 0) {
-    const sync = computeRadioSync();
-    playRadioTrack(sync.idx, sync.offset);
-    startRadioSyncWatcher();
-    return;
-  }
-  try {
-let orderSnap = await getDoc(doc(db,'settings','radioPlOrder'));
-    let pls = (orderSnap.exists() && orderSnap.data().order) ? orderSnap.data().order : RADIO_PLS;
-    // Добавляем недостающие плейлисты (например "Хиты"), которых нет в сохранённом порядке
-    const missingPls = RADIO_PLS.filter(pl => !pls.includes(pl));
-    if (missingPls.length) pls = [...pls, ...missingPls];
-    try {
-      const enSnap = await getDoc(doc(db,'settings','radioPlEnabled'));
-      const enabledMap = enSnap.exists() ? (enSnap.data() || {}) : {};
-      pls = pls.filter(pl => enabledMap[pl] !== false);
-    } catch(e) {}
-  const tracksSnap = await getDocs(collection(db, 'tracks'));
-    const allTracks = tracksSnap.docs.map(d => ({ _id: d.id, ...d.data() })).filter(t => t.trackUrl)
-      .sort((a, b) => a._id.localeCompare(b._id)); // стабильный порядок — одинаковый у всех пользователей
-
-let excluded = {};
-    try {
-      const exSnap = await getDoc(doc(db, 'settings', 'radioExcluded'));
-      excluded = exSnap.exists() ? (exSnap.data() || {}) : {};
-    } catch(e) {}
-    let manualLists = {};
-    try {
-      const manSnap = await getDoc(doc(db, 'settings', 'radioManualLists'));
-      manualLists = manSnap.exists() ? (manSnap.data() || {}) : {};
-    } catch(e) {}
-
-for (const pl of pls) {
-      const src = RADIO_SOURCE_MAP_HOME[pl] || { type: 'mixed', keys: [] };
-      if (src.type === 'manual') {
-        const ids = manualLists[pl] || [];
-        ids.map(id => allTracks.find(t => t._id === id)).filter(Boolean).forEach(t => radioTracks.push({ ...t, _radioPl: pl }));
-        continue;
-      }
-      const hidden = new Set(excluded[pl] || []);
-      let list;
-      if (src.type === 'block') list = allTracks.filter(t => (t.blocks||[]).some(b => src.keys.includes(b)));
-      else if (src.type === 'playlist') list = allTracks.filter(t => (t.playlists||[]).some(p => src.keys.includes(p)));
-      else list = allTracks;
-      list.filter(t => !hidden.has(t._id)).forEach(t => radioTracks.push({ ...t, _radioPl: pl }));
-    }
-const daySeed = Math.floor(Date.now() / 86400000); // один и тот же порядок треков у всех в течение суток
-    const rand = mulberry32(daySeed);
-    for (let i = radioTracks.length - 1; i > 0; i--) {
-      const j = Math.floor(rand() * (i + 1));
-      [radioTracks[i], radioTracks[j]] = [radioTracks[j], radioTracks[i]];
-    }
-    deClumpByArtist(radioTracks);
-const sync = computeRadioSync();
-    if (radioTracks.length) {
-      playRadioTrack(sync.idx, sync.offset);
-      startRadioSyncWatcher();
-    }
-  } catch(e) { console.error(e); }
-};
-function playRadioTrack(idx, startOffset) {
-  radioIdx = idx;
-  const t = radioTracks[idx];
-  if (!t) return;
-if (radioAudio) {
-    radioAudio.pause();
-    // Явно освобождаем буфер предыдущего трека — иначе на слабых Android
-    // браузер может подолгу держать декодированные аудиоданные в памяти
-    radioAudio.src = '';
-    radioAudio.load();
-  }
-  radioAudio = new Audio(t.trackUrl);
-
-  radioAudio.addEventListener('loadedmetadata', function onMeta(){
-    // Подхватываем реальную длительность трека — если в базе она отсутствует/неверна,
-    // это не даст расписанию эфира постепенно "уплыть" у всех пользователей
-    if (radioAudio.duration && isFinite(radioAudio.duration)) {
-      const realDur = radioAudio.duration;
-      if (!t.duration || Math.abs(t.duration - realDur) > 2) {
-        radioTracks[idx].duration = realDur;
-      }
-    }
-    if (startOffset && startOffset > 0) {
-      radioAudio.currentTime = Math.min(startOffset, (radioAudio.duration || startOffset + 1) - 0.5);
-    }
-    radioAudio.removeEventListener('loadedmetadata', onMeta);
-  });
-
-  // Если трек не смог загрузиться (битая ссылка/удалён) — сразу переходим к следующему,
-  // чтобы радио не "зависало" в тишине у всех пользователей
-  radioAudio.addEventListener('error', function onErr(){
-    console.warn('Радио: ошибка загрузки трека, переключаю на следующий:', t.title);
-    radioAudio.removeEventListener('error', onErr);
-    if (radioIdx + 1 < radioTracks.length) {
-      playRadioTrack(radioIdx + 1);
-    } else if (radioTracks.length) {
-      playRadioTrack(0);
-    }
-  });
-
-radioAudio.play().catch(() => {});
-startListenerHeartbeat();
- window.setNowPlayingRadio && window.setNowPlayingRadio(radioAudio, t.title, t.artist, t.coverUrl);
-  window.gp.setQueue(radioTracks.map((_, i) => ({ play: () => playRadioTrack(i) })), idx);
-document.getElementById('radioPulseDot').style.display = 'block';
-  // Обновляем hero — текущий трек
-  const nameEl = document.querySelector('.radio-track-name.lg');
-  const artistEl = document.querySelector('.radio-track-artist');
-  setMarqueeText(nameEl, t.title || 'Трек');
-  setMarqueeText(artistEl, t.artist || 'Артист');
-
- const hourLabelEl = document.getElementById('radioHourLabel');
-  if (hourLabelEl) hourLabelEl.textContent = RADIO_PL_LABELS_PRETTY[t._radioPl] || '';
-
-crossfadeHeroCover(t.coverUrl);
-  // Обновляем превью предыдущего и следующего треков — реальные соседи по очереди эфира
-  const totalRadio = radioTracks.length;
-  if (totalRadio > 0) {
-    const prevT = radioTracks[(radioIdx - 1 + totalRadio) % totalRadio];
-    const nextT = radioTracks[(radioIdx + 1) % totalRadio];
-
-    const prevImg = document.querySelector('.hero-radio-prev .radio-thumb-sm img');
-    const prevNameEl = document.querySelector('.hero-radio-prev .radio-track-name');
-    if (prevImg) {
-      if (prevT?.coverUrl) { prevImg.src = window.cldImg ? window.cldImg(prevT.coverUrl, 120) : prevT.coverUrl; prevImg.style = ''; }
-      else { prevImg.src = 'assets/icons/mountain.png'; prevImg.style = 'padding:8px;filter:invert(1);opacity:0.5;'; }
-    }
-    setMarqueeText(prevNameEl, prevT?.title || 'Предыдущий');
-
-    const nextImg = document.querySelector('.hero-radio-next .radio-thumb-sm img');
-    const nextNameEl = document.querySelector('.hero-radio-next .radio-track-name');
-    if (nextImg) {
-      if (nextT?.coverUrl) { nextImg.src = window.cldImg ? window.cldImg(nextT.coverUrl, 120) : nextT.coverUrl; nextImg.style = ''; }
-      else { nextImg.src = 'assets/icons/mountain.png'; nextImg.style = 'padding:8px;filter:invert(1);opacity:0.5;'; }
-    }
-   setMarqueeText(nextNameEl, nextT?.title || 'Следующий');
-  }
-radioAudio.addEventListener('ended', () => {
-    if (radioIdx + 1 < radioTracks.length) playRadioTrack(radioIdx + 1);
-    else if (radioTracks.length) playRadioTrack(0); // плейлист закончился — начинаем заново
-  });
-  radioAudio.addEventListener('timeupdate', () => {
-    if (!radioAudio.duration) return;
-    const pct = (radioAudio.currentTime / radioAudio.duration * 100) + '%';
-    const pFill = document.querySelector('.progress-fill');
-    if (pFill) pFill.style.width = pct;
-    const times = document.querySelectorAll('.player-time');
-    if (times[0]) { const m=Math.floor(radioAudio.currentTime/60),s=Math.floor(radioAudio.currentTime%60).toString().padStart(2,'0'); times[0].textContent=`${m}:${s}`; }
-    if (times[1]) { const m=Math.floor(radioAudio.duration/60),s=Math.floor(radioAudio.duration%60).toString().padStart(2,'0'); times[1].textContent=`${m}:${s}`; }
-  });
-  // Обновляем нижний player bar
-  const pName = document.querySelector('.player-track-name');
-  const pArtist = document.querySelector('.player-track-artist');
-  const pThumb = document.querySelector('.player-thumb-img');
-  if (pName) pName.textContent = t.title || 'Трек';
-  if (pArtist) pArtist.textContent = t.artist || 'Артист';
-if (pThumb) {
-    pThumb.onerror = function(){ this.onerror=null; this.src='assets/icons/mountain.png'; this.style='width:100%;height:100%;object-fit:contain;object-position:center;padding:8px;filter:invert(0.7);'; };
-    if (t.coverUrl) { pThumb.src = window.cldImg ? window.cldImg(t.coverUrl, 100) : t.coverUrl; pThumb.style = 'width:100%;height:100%;object-fit:contain;object-position:center;'; }
-    else { pThumb.src = 'assets/icons/mountain.png'; pThumb.style = 'width:100%;height:100%;object-fit:contain;object-position:center;padding:8px;filter:invert(0.7);'; }
-  }
-const pBtn = document.getElementById('radioMuteBtn');
-  if (pBtn) { pBtn.onclick = () => { radioAudio.muted = !radioAudio.muted; gpSyncRadioMuteUI(radioAudio.muted); }; }
-}
 // ─── ГОЛОСОВАНИЕ ───
 (async function initVote() {
   const { getFirestore, collection, getDocs, doc, updateDoc, increment }
@@ -4167,93 +3414,6 @@ async function loadNavbarFanStats() {
     }
   }
   loadNavbarFanStats();
-</script>
-<div class="insta-intro-overlay" id="instaIntroOverlay">
-  <div class="insta-intro-card" id="introCard">
-    <button class="insta-intro-close" onclick="closeInstaIntro()">&times;</button>
-    <div id="introMediaWrap"></div>
-    <a class="insta-intro-btn" href="https://instagram.com/992muz" target="_blank" onclick="closeInstaIntro()">Подписаться</a>
-    <div class="insta-intro-sub">Каждую неделю дарим подарки музыкантам <img src="assets/images/Verification Badge.gif" style="width:16px; height:16px; object-fit:contain; flex-shrink:0;"></div>
-    <label class="insta-intro-dontshow">
-      <input type="checkbox" id="introDontShowCheckbox">
-      Больше не показывать
-    </label>
-  </div>
-</div>
-<script>
-  function closeInstaIntro() {
-    document.getElementById('instaIntroOverlay').classList.add('hidden');
-    // Останавливаем видео при закрытии попапа — иначе оно продолжает играть
-    // (и звучать) в фоне, пока страница не будет обновлена
-    var introVideo = document.getElementById('introVideoEl');
-    if (introVideo) {
-      introVideo.pause();
-      introVideo.currentTime = 0;
-    }
-    // Если пользователь поставил галочку "Больше не показывать" — запоминаем это
-    // в localStorage, чтобы попап больше не появлялся при следующих заходах на сайт
-    var dontShowCheckbox = document.getElementById('introDontShowCheckbox');
-    if (dontShowCheckbox && dontShowCheckbox.checked) {
-      localStorage.setItem('instaIntroDontShow_v1', '1');
-    }
-  }
-  document.getElementById('instaIntroOverlay').addEventListener('click', function(e) {
-    if (e.target === this) closeInstaIntro();
-  });
-   (function() {
-    // Если пользователь ранее поставил галочку "Больше не показывать" — не показываем попап вообще
-    if (localStorage.getItem('instaIntroDontShow_v1') === '1') {
-      document.getElementById('instaIntroOverlay').classList.add('hidden');
-      return;
-    }
-    var introOptions = [
-      { type: 'insta' },
-      { type: 'video', src: 'assets/video/a1.mp4' },
-      { type: 'video', src: 'assets/video/a2.mp4' },
-      { type: 'video', src: 'assets/video/a3.mp4' },
-      { type: 'video', src: 'assets/video/a4.mp4' },
-      { type: 'video', src: 'assets/video/a5.mp4' }
-    ];
-     var lowPower = window.isLowPowerDevice;
-    // На слабых устройствах/медленном интернете видео вообще не выбираем — сразу показываем лёгкий вариант с Instagram
-    var pool = lowPower ? introOptions.filter(function(o){ return o.type === 'insta'; }) : introOptions;
-    var chosen = pool[Math.floor(Math.random() * pool.length)];
-    var wrap = document.getElementById('introMediaWrap');
-    if (!wrap) return;
-    if (chosen.type === 'insta') {
-      wrap.innerHTML = '<div class="insta-intro-title"><img class="insta-intro-title-icon" src="assets/images/instintro.gif" alt="">Подписаны на нас<br>в Instagram?</div>';
-    } else {
-      // Видео НЕ запускается автоматически — только по нажатию пользователя. Это полностью
-      // исключает "плавающее окно" на Xiaomi/Redmi и других Android-телефонах, так как
-      // эта функция телефона срабатывает только на видео, запущенное автоматически без участия человека.
-      wrap.innerHTML = '<div class="insta-intro-video-wrap">' +
-        '<video class="insta-intro-video" id="introVideoEl" src="' + chosen.src + '" muted loop playsinline webkit-playsinline="true" x5-playsinline="true" x5-video-player-type="h5" x5-video-player-fullscreen="false" preload="metadata" disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false"></video>' +
-        '<button class="insta-intro-video-play-btn" id="introVideoPlayBtn" type="button" aria-label="Воспроизвести">' +
-          '<svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>' +
-        '</button>' +
-        '<button class="insta-intro-unmute-btn" id="introUnmuteBtn" type="button" style="display:none;">🔇</button>' +
-        '</div>';
-      var videoEl = document.getElementById('introVideoEl');
-      var unmuteBtn = document.getElementById('introUnmuteBtn');
-      var playBtn = document.getElementById('introVideoPlayBtn');
-      if (playBtn && videoEl) {
-        playBtn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          videoEl.muted = false;
-          videoEl.play();
-          playBtn.style.display = 'none';
-          if (unmuteBtn) unmuteBtn.style.display = 'flex';
-        });
-      }
-      if (unmuteBtn && videoEl) {
-        unmuteBtn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          videoEl.muted = !videoEl.muted;
-          unmuteBtn.textContent = videoEl.muted ? '🔇' : '🔊';
-        });
-      }
-    }
-  })();
 </script>
 </body>
 </html>

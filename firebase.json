@@ -36,12 +36,7 @@
           { "key": "Cache-Control", "value": "public, max-age=604800" }
         ]
       },
-      {
-        "source": "/js/pages/chat.js",
-        "headers": [
-          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
-        ]
-      },
+
 {
         "source": "**/*.@(png|jpg|jpeg|gif|webp|svg|ico|woff|woff2|otf|ttf|mp4|webm|mp3)",
         "headers": [
