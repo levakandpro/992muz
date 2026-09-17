@@ -115,6 +115,55 @@
     -webkit-backdrop-filter: none !important;
   }
 
+  /* Индикатор "сейчас играет" — подсветка активной строки трека, только пока трек реально играет */
+  .new-track-row.now-playing{background:rgba(139,26,47,0.06);position:relative;border-radius:10px;}
+  .new-track-row.now-playing::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,#8B1A2F,#c2185b);}
+  .new-track-row.now-playing .new-track-name{color:#8B1A2F;}
+
+  /* Кольцо-прогресс вокруг кнопки "наверх" — видно только когда играет трек */
+
+  #scrollTopBtn::after{
+    content:'';
+    position:absolute;
+    inset:-4px;
+    border-radius:50%;
+    background:conic-gradient(#8B1A2F calc(var(--scroll-pct,0) * 1%), rgba(255,255,255,0.18) 0);
+    -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+    mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+    opacity:0;
+    transition:opacity .3s ease;
+    pointer-events:none;
+  }
+  #scrollTopBtn.show-progress::after{opacity:1;}
+
+  /* Кнопка "к текущему треку" — появляется рядом с кнопкой "наверх",
+     только пока играет трек И его строка не видна на экране */
+  #scrollToTrackBtn{
+    position:fixed;
+    bottom:90px;
+    right:70px;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:var(--accent,#8B1A2F);
+    color:#fff;
+    border:none;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:var(--shadow,0 4px 16px rgba(0,0,0,0.12));
+    opacity:0;
+    transform:translateY(8px);
+    pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+    z-index:999;
+  }
+  #scrollToTrackBtn.visible{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:all;
+  }
 
   </style>
  
@@ -1548,8 +1597,10 @@ function closeHomeAboutFilm(e, force){
     .section-title-row{display:flex;align-items:center;gap:8px;}
     .info-tip{position:relative;display:inline-flex;}
     .info-tip-icon{width:18px;height:18px;border-radius:50%;background:var(--bg3,#eee);color:var(--text3,#888);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;border:1px solid rgba(0,0,0,0.08);}
-    .info-tip-box{display:none;position:absolute;top:26px;left:0;z-index:30;width:260px;background:#1a1a1a;color:#fff;font-size:12px;line-height:1.5;font-weight:400;padding:12px 14px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.25);}
+     .info-tip-box{display:none;position:absolute;top:26px;left:0;z-index:30;width:260px;max-width:calc(100vw - 32px);background:#1a1a1a;color:#fff;font-size:12px;line-height:1.5;font-weight:400;padding:12px 14px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.25);}
     .info-tip-box::before{content:'';position:absolute;top:-6px;left:12px;width:12px;height:12px;background:#1a1a1a;transform:rotate(45deg);}
+    .info-tip-box.js-fixed{position:fixed;top:auto;}
+    .info-tip-box.js-fixed::before{display:none;}
     .info-tip.open .info-tip-box{display:block;}
     .info-tip-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 12px;border-radius:100px;background:linear-gradient(90deg,#8B1A2F,#c2185b);color:#fff;font-size:11px;font-weight:700;text-decoration:none;letter-spacing:0.02em;transition:opacity .2s ease,transform .2s ease;}
     .info-tip-link:hover{opacity:0.88;transform:translateY(-1px);}
@@ -1648,6 +1699,20 @@ function closeHomeAboutFilm(e, force){
       white-space:nowrap;
       scroll-snap-align:start;
     }
+  }
+</style>
+<style>
+  .tracks-hub-tabs{
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    flex-wrap:nowrap !important;
+  }
+  .tracks-hub-tabs::-webkit-scrollbar{ display:none; }
+  .tracks-hub-tabs .tracks-hub-tab{
+    flex:0 0 auto !important;
+    white-space:nowrap !important;
   }
 </style>
 <section class="section" id="tracks-hub">
@@ -2075,7 +2140,7 @@ mobileOverlay.addEventListener('click',closeBurger);
 // работает надёжно на всех мобильных браузерах, где одного CSS оказалось недостаточно.
 // Внутри специальных горизонтальных каруселей (хиты, плейлисты) свайп вбок
 // по-прежнему разрешён и работает как обычно.
-(function() {  var HORIZONTAL_SCROLL_SELECTORS = '.random-hits-strip-wrap, .items-grid.scrollable, .pl-strip-wrap, .new-tracks-list, .tracks-hub-tabs'; var HORIZONTAL_SCROLL_SELECTORS = '.random-hits-strip-wrap, .items-grid.scrollable, .pl-strip-wrap, .new-tracks-list';
+(function() {  var HORIZONTAL_SCROLL_SELECTORS = '.random-hits-strip-wrap, .items-grid.scrollable, .pl-strip-wrap, .new-tracks-list, .tracks-hub-tabs';
   var startX = 0, startY = 0, lockedHorizontal = false, insideAllowedArea = false;
 
   document.addEventListener('touchstart', function(e) {
@@ -2207,6 +2272,38 @@ mobileOverlay.addEventListener('click',closeBurger);
 <button class="scroll-top-btn" id="scrollTopBtn" title="Наверх">
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
 </button>
+<button id="scrollToTrackBtn" title="К текущему треку">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13" stroke-width="2"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+</button>
+<script>
+(function(){
+  var trackBtn=document.getElementById('scrollToTrackBtn');
+  var rowObserver=null;
+  // Начинаем следить, видна ли на экране строка играющего трека.
+  // Если не видна — показываем кнопку.
+  window.gpWatchRow=function(row){
+    if(rowObserver){rowObserver.disconnect();rowObserver=null;}
+    if(!row||!trackBtn)return;
+    rowObserver=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        trackBtn.classList.toggle('visible',!entry.isIntersecting);
+      });
+    },{threshold:0});
+    rowObserver.observe(row);
+  };
+  // Прекращаем следить и прячем кнопку (пауза/конец трека).
+  window.gpUnwatchRow=function(){
+    if(rowObserver){rowObserver.disconnect();rowObserver=null;}
+    if(trackBtn)trackBtn.classList.remove('visible');
+  };
+  if(trackBtn){
+    trackBtn.addEventListener('click',function(){
+      var row=document.querySelector('.new-track-row.now-playing');
+      if(row)row.scrollIntoView({behavior:'smooth',block:'center'});
+    });
+  }
+})();
+</script>
 <script>
 (function(){
   // Только для мобильной версии: прячем кнопку "наверх", когда подвал
@@ -2256,6 +2353,11 @@ function updateOnScroll(){
 var hasTrack=window.gp&&window.gp.audio;
 if(player)player.classList.toggle('visible',hasTrack);
 if(btn)btn.classList.toggle('visible',window.scrollY>100);
+// Прогресс прокрутки страницы — используется кольцом вокруг кнопки "наверх",
+// но само кольцо показывается только пока реально играет трек (см. show-progress).
+var scrollableHeight=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+var scrollPct=scrollableHeight>0?Math.min(100,(window.scrollY/scrollableHeight*100)):0;
+if(btn)btn.style.setProperty('--scroll-pct',scrollPct);
 scrollTicking=false;
 }
 // Выставляем правильное состояние СРАЗУ при загрузке страницы,
@@ -2289,8 +2391,15 @@ if(!isPlaying)row.classList.add('playing');
 });
 });
 </script>
-</script>
 <script>
+// Экранирует спецсимволы HTML — обязателен перед вставкой любых данных из базы (Firestore)
+// внутрь innerHTML, чтобы название трека/имя артиста не могли выполнить произвольный HTML/JS (XSS).
+window.escapeHtml=function(str){
+  if(str===null||str===undefined)return '';
+  return String(str).replace(/[&<>"']/g,function(ch){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+  });
+};
 // Сжимает и конвертирует картинку "на лету" через Cloudinary (WebP/AVIF + нужный размер)
 window.cldImg=function(url,width){if(!url||!url.includes('res.cloudinary.com')||!url.includes('/upload/'))return url;return url.replace(/\/upload\/(?:[^\/]+\/)?(v\d+\/)/,`/upload/f_auto,q_auto,w_${width}/$1`);};
 // Квадратная обложка (для плеера, media session) - режет по центру, а не тянет пропорции.
@@ -2354,8 +2463,8 @@ else{thumbEl.src='assets/icons/mountain.png';thumbEl.style.padding='6px';thumbEl
 }
 document.querySelector('.player-bar')?.classList.add('visible');
 gpUpdateIcon(true);
-audio.addEventListener('pause',function(){if(window.gp.audio===audio){gpUpdateIcon(false);if(window.gp.overlayImg)window.gp.overlayImg.src='assets/icons/play.png';}});
-audio.addEventListener('play',function(){if(window.gp.audio===audio){gpUpdateIcon(true);if(window.gp.overlayImg)window.gp.overlayImg.src='assets/icons/pause.png';}});
+audio.addEventListener('pause',function(){if(window.gp.audio===audio){gpUpdateIcon(false);if(window.gp.overlayImg)window.gp.overlayImg.src='assets/icons/play.png';var prevRow=document.querySelector('.new-track-row.now-playing');if(prevRow)prevRow.classList.remove('now-playing');document.getElementById('scrollTopBtn')?.classList.remove('show-progress');window.gpUnwatchRow&&window.gpUnwatchRow();}});
+audio.addEventListener('play',function(){if(window.gp.audio===audio){gpUpdateIcon(true);if(window.gp.overlayImg)window.gp.overlayImg.src='assets/icons/pause.png';document.querySelectorAll('.new-track-row.now-playing').forEach(function(r){r.classList.remove('now-playing');});var activeRow=window.gp.overlayImg&&window.gp.overlayImg.closest('.new-track-row');if(activeRow)activeRow.classList.add('now-playing');document.getElementById('scrollTopBtn')?.classList.add('show-progress');window.gpWatchRow&&window.gpWatchRow(activeRow);}});
 var fill=document.querySelector('.player-bar .progress-fill'),times=document.querySelectorAll('.player-bar .player-time');
 function syncPlayerProgress(){
 if(window.gp.audio!==audio)return;
@@ -2392,8 +2501,12 @@ if(times[0])times[0].textContent='0:00';
 gpUpdateIcon(false);
 
 if(window.gp.overlayImg)window.gp.overlayImg.src='assets/icons/play.png';
-});
 
+document.querySelectorAll('.new-track-row.now-playing').forEach(function(r){r.classList.remove('now-playing');});
+document.getElementById('scrollTopBtn')?.classList.remove('show-progress');
+window.gpUnwatchRow&&window.gpUnwatchRow();
+gpGoTo(1);
+});
 syncPlayerProgress();
 };
 
@@ -2690,16 +2803,16 @@ shuffleArray(snap.docs).forEach(d => {
       row.innerHTML = `
         <span class="new-track-num">${i++}</span>
         <div class="new-track-cover-wrap">
-         <img class="new-track-cover" src="${cover}" alt="" ${coverStyle} loading="lazy">
+         <img class="new-track-cover" src="${escapeHtml(cover)}" alt="" ${coverStyle} loading="lazy">
           <div class="new-track-play-overlay"><img src="assets/icons/play.png" alt="" style="filter:invert(1);width:16px;height:16px;"></div>
         </div>
         <div class="new-track-info">
-          <div class="new-track-name">${t.title}</div>
-          <div class="new-track-artist">${t.artist || 'Артист'}</div>
+          <div class="new-track-name">${escapeHtml(t.title)}</div>
+          <div class="new-track-artist">${escapeHtml(t.artist || 'Артист')}</div>
         </div>
         <div class="new-track-actions">
           <span class="new-track-duration">${formatDur(t.duration || 0)}</span>
-          <button class="new-track-btn download-btn" data-url="${t.trackUrl||''}">
+          <button class="new-track-btn download-btn" data-url="${escapeHtml(t.trackUrl||'')}">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
             <span>Скачать</span>
           </button>
@@ -2829,11 +2942,11 @@ return {
       row.innerHTML = `
         <div class="chart-rank ${rankClass}">${rank}</div>
         <div class="chart-avatar">
-          <img src="${a.photo}" alt="" loading="lazy" onerror="this.src='assets/images/kartochki/vert.jpg'">
+          <img src="${escapeHtml(a.photo)}" alt="" loading="lazy" onerror="this.src='assets/images/kartochki/vert.jpg'">
           ${a.verified ? `<div class="chart-verified"><img src="assets/icons/verification.png" alt=""></div>` : ''}
         </div>
         <div class="chart-main">
-          <div class="chart-name">${a.name}</div>
+          <div class="chart-name">${escapeHtml(a.name)}</div>
           <div class="chart-bar-track"><div class="chart-bar-fill ${rankClass}" data-pct="${pct}"></div></div>
         </div>
         <div class="chart-subs"><img src="assets/icons/profile.png" alt="">${fmtCompactNum(a.subscribers)}</div>
@@ -2857,10 +2970,39 @@ loadTopArtists();
 
 document.getElementById('topArtistsInfo')?.addEventListener('click', function(e) {
   e.stopPropagation();
-  this.classList.toggle('open');
+  var tipEl = this;
+  var willOpen = !tipEl.classList.contains('open');
+  tipEl.classList.toggle('open');
+  var box = tipEl.querySelector('.info-tip-box');
+  if (willOpen && box && window.innerWidth <= 768) {
+    var iconRect = tipEl.getBoundingClientRect();
+    box.classList.add('js-fixed');
+    box.style.top = (iconRect.bottom + 8) + 'px';
+    var boxWidth = Math.min(260, window.innerWidth - 32);
+    box.style.width = boxWidth + 'px';
+    var left = iconRect.left;
+    var maxLeft = window.innerWidth - boxWidth - 16;
+    if (left > maxLeft) left = maxLeft;
+    if (left < 16) left = 16;
+    box.style.left = left + 'px';
+  } else if (box) {
+    box.classList.remove('js-fixed');
+    box.style.top = '';
+    box.style.left = '';
+    box.style.width = '';
+  }
 });
 document.addEventListener('click', function() {
-  document.getElementById('topArtistsInfo')?.classList.remove('open');
+  var tipEl = document.getElementById('topArtistsInfo');
+  if (!tipEl) return;
+  tipEl.classList.remove('open');
+  var box = tipEl.querySelector('.info-tip-box');
+  if (box) {
+    box.classList.remove('js-fixed');
+    box.style.top = '';
+    box.style.left = '';
+    box.style.width = '';
+  }
 });
 
 (function(){
@@ -2981,16 +3123,16 @@ items.forEach(({ id, col, data: t }) => {
       row.innerHTML = `
         <span class="new-track-num">${i++}</span>
         <div class="new-track-cover-wrap">
-          <img class="new-track-cover" src="${cover}" alt="" ${coverStyle} loading="lazy">
+          <img class="new-track-cover" src="${escapeHtml(cover)}" alt="" ${coverStyle} loading="lazy">
           <div class="new-track-play-overlay"><img src="assets/icons/play.png" alt="" style="filter:invert(1);width:16px;height:16px;"></div>
         </div>
         <div class="new-track-info">
-          <div class="new-track-name">${t.title || 'Без названия'}</div>
-          <div class="new-track-artist">${t.artist || 'Артист'}</div>
+          <div class="new-track-name">${escapeHtml(t.title || 'Без названия')}</div>
+          <div class="new-track-artist">${escapeHtml(t.artist || 'Артист')}</div>
         </div>
         <div class="new-track-actions">
           <span class="new-track-duration">${formatDur(t.duration || 0)}</span>
-          <button class="new-track-btn download-btn" data-url="${t.trackUrl||''}">
+          <button class="new-track-btn download-btn" data-url="${escapeHtml(t.trackUrl||'')}">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
             <span>Скачать</span>
           </button>
