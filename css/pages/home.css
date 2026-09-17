@@ -555,6 +555,38 @@
 }
 .new-track-progress-fill { height: 100%; background: var(--accent); width: 0%; border-radius: 100px; }
 .new-track-progress-time { font-size: 10px; color: var(--text3); white-space: nowrap; }
+
+/* ── ЕДИНЫЙ БЛОК ТРЕКОВ: Новинки / Old School / Лучшая лирика / Поп · Эстрада ── */
+.tracks-hub-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 20px;
+  padding-bottom: 2px;
+}
+.tracks-hub-tabs::-webkit-scrollbar { display: none; }
+.tracks-hub-tab {
+  flex-shrink: 0;
+  padding: 10px 18px;
+  border-radius: 100px;
+  background: var(--bg2);
+  box-shadow: var(--shadow-sm);
+  color: var(--text2);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+.tracks-hub-tab:hover { color: var(--accent); transform: translateY(-1px); }
+.tracks-hub-tab.active {
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(139,26,47,0.3);
+}
+@media (max-width: 768px) {
+  .tracks-hub-tab { padding: 8px 14px; font-size: 12px; }
+}
 /* ── PLAYER BAR ── */
 .player-bar {
   position: fixed; bottom: 0; left: 0; right: 0;
