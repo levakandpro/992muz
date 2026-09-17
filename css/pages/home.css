@@ -64,165 +64,6 @@
 .btn-login:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
 .btn-login img { width: 16px; height: 16px; filter: invert(0.4); }
 
-/* ── HERO / RADIO BLOCK ── */
-.hero-placeholder {
-  background: linear-gradient(135deg, #3d0a14 0%, #8B1A2F 50%, #2a0810 100%);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-lg);
-padding: 22px 20px;
-  color: #fff;
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 24px; margin: 24px 0;
-  position: relative; overflow: hidden;
-}
-.hero-placeholder::before,
-.hero-placeholder::after { display: none; }
-.hero-mountains-bg {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 100%;
-  background: url('../../assets/icons/mountain.png') no-repeat center bottom;
-  background-size: 60%;
-  opacity: 0.04;
-  filter: invert(1);
-  pointer-events: none;
-}
-.hero-text { position: relative; }
-.hero-text h1 { font-size: clamp(32px,5vw,56px); color: #fff; margin-bottom: 8px; }
-
-.hero-text p { font-size: 15px; color: rgba(255,255,255,0.65); max-width: 340px; }
-.hero-radio-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
-  text-transform: uppercase; color: rgba(255,255,255,0.5);
-  margin-bottom: 16px;
-}
-.hero-radio-badge .dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #4ade80;
-  box-shadow: 0 0 8px #4ade80;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-.hero-chat-btn {
-  display: inline-flex; align-items: center; gap: 5px;
-  margin-left: 8px;
-  font-size: 11px; font-weight: 700;
-  color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.1);
-  padding: 5px 12px; border-radius: 100px;
-  border: 1px solid rgba(255,255,255,0.25); cursor: pointer;
-  backdrop-filter: blur(8px);
-  transition: all 0.15s;
-  letter-spacing: 0.05em;
-}
-.hero-chat-btn:hover { background: rgba(255,255,255,0.18); transform: scale(1.06); color: #fff; }
-.hero-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  margin-top: 8px;
-  font-family: 'Syne', sans-serif;
-  font-size: 14px; font-weight: 700;
-  color: var(--accent); background: #fff;
-  padding: 13px 26px; border-radius: 100px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  transition: all 0.2s; position: relative;
-}
-.hero-btn:hover { transform: scale(1.04); box-shadow: 0 8px 32px rgba(0,0,0,0.35); }
-.hero-btn img { width: 18px; height: 18px; }
-
-.hero-visual {
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-}
-
-/* ── RADIO CARD ── */
-.hero-radio-info {
-  display: flex; align-items: center; gap: 20px;
-}
-.hero-radio-prev, .hero-radio-next {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  opacity: 0.35;
-  transform: scale(0.82);
-  transition: all 0.2s;
-}
-.hero-radio-prev:hover, .hero-radio-next:hover {
-  opacity: 0.6;
-  transform: scale(0.86);
-}
-.hero-radio-current {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  position: relative;
-}
-
-/* кольца — враппер вокруг обложки */
-.ring-wrap {
-  position: relative;
-  width: 110px; height: 110px;
-  display: flex; align-items: center; justify-content: center;
-}
-.ring {
-  position: absolute;
-  top: 0; left: 0;
-  width: 110px; height: 110px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.4);
-  animation: ring-out 2.4s ease-out infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-.ring:nth-child(1) { animation-delay: 0s; }
-.ring:nth-child(2) { animation-delay: 0.8s; }
-.ring:nth-child(3) { animation-delay: 1.6s; }
-@keyframes ring-out {
-  0%   { opacity: 0.5; transform: scale(1); }
-  100% { opacity: 0; transform: scale(2.2); }
-}
-
-.radio-thumb {
-  border-radius: 10px; overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-  background: rgba(255,255,255,0.1);
-  flex-shrink: 0;
-  position: relative; z-index: 1;
-}
-.radio-thumb-sm { width: 72px; height: 72px; }
-.radio-thumb-lg { width: 110px; height: 110px; }
-.radio-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.radio-play-overlay {
-  position: absolute; inset: 0;
-  background: rgba(0,0,0,0.35);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity 0.2s;
-  border-radius: 10px;
-}
-.radio-thumb-lg:hover .radio-play-overlay { opacity: 1; }
-
-.radio-track-name {
-  font-family: 'Rem', sans-serif;
-  font-size: 11px; font-weight: 700;
-  color: #fff; text-align: center;
-  white-space: nowrap; max-width: 90px;
-}
-.radio-track-name.lg {
-  font-size: 15px; max-width: 180px;
-  overflow: hidden;
-}
-.radio-track-name.lg.long {
-  animation: marquee 6s linear infinite;
-  display: inline-block;
-}
-@keyframes marquee {
-  0%  { transform: translateX(30%); }
-  100%{ transform: translateX(-100%); }
-}
-.radio-track-artist {
-  font-size: 12px; color: rgba(255,255,255,0.75);
-  text-align: center;
-  font-style: italic;
-  letter-spacing: 0.03em;
-}
-.radio-arrow { font-size: 18px; color: rgba(255,255,255,0.3); }
-
 /* ── SECTION ── */
 .section { margin-bottom: 32px; }
 .section-head {
@@ -240,7 +81,7 @@ padding: 22px 20px;
 #ringtones .section-head { border-left-color: #16a34a; }
 #pop .section-head { border-left-color: #db2777; }
 #lyrics .section-head { border-left-color: #6482ff; }
-#feat-requests .section-head { border-left-color: #e74c3c; }
+
 #top-video .section-head { border-left-color: #cc0000; }
 
 /* ── ТОПОВЫЕ ВИДЕО (главная) ── */
@@ -287,7 +128,7 @@ padding: 22px 20px;
   pointer-events: none;
 }
 
-/* Бейдж "случайный хит" — пульсирующая точка в духе радио-эфира сайта */
+/* Бейдж "случайный хит" — пульсирующая точка */
 .tv-badge {
   position: absolute; top: 14px; left: 14px;
   display: inline-flex; align-items: center; gap: 6px;
@@ -474,27 +315,7 @@ padding: 22px 20px;
   .tv-row .tv-card .tv-frame { aspect-ratio: 16/9; }
   .ta-card { flex: 1 1 100%; max-width: none; width: 100%; height: auto; aspect-ratio: 1/1; }
 }
-.feat-vote-btn:hover { opacity: 0.85; }
-.feat-vote-btn:disabled { opacity: 0.5; cursor: default; }
 
-#featArtist1, #featArtist2 {
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 36px !important;
-  color-scheme: dark;
-}
-#featArtist1:focus, #featArtist2:focus {
-  outline: none;
-  border-color: var(--accent) !important;
-}
-#featArtist1 option, #featArtist2 option {
-  background: #1a1a1a;
-  color: #e0e0e0;
-  padding: 8px;
-}
 #new-releases .section-head { border-left: none; padding-left: 0; }
 #top-artists .section-head { border-left: none; padding-left: 0; }
 
@@ -972,7 +793,7 @@ padding: 22px 20px;
   .player-bar-info .player-track-artist { max-width: 30vw !important; }
   .player-bar-time-left, .player-bar-time-right { min-width: 22px !important; font-size: 10px !important; }
   .player-bar-live { display: none !important; }
-  #radioMuteBtn, #playerPlayPauseBtn { width: 32px !important; height: 32px !important; flex-shrink: 0; }
+  #playerPlayPauseBtn { width: 32px !important; height: 32px !important; flex-shrink: 0; }
 }
 @media (max-width: 360px) {
   .player-bar-time-left { display: none !important; }
@@ -981,17 +802,7 @@ padding: 22px 20px;
 
 @media (max-width: 768px) {
   .navbar-nav { display: none; }
-  .hero-placeholder { flex-direction: column; padding: 20px 16px; gap: 16px; }
-  .hero-visual { display: flex; justify-content: center; }
-  .hero-radio-info { gap: 12px; }
-  .ring-wrap { width: 80px; height: 80px; }
-  .ring { width: 80px; height: 80px; }
-  .radio-thumb-lg { width: 80px; height: 80px; }
-  .radio-thumb-sm { width: 52px; height: 52px; }
-.radio-track-name.lg { font-size: 11px; max-width: 100px; overflow: hidden; text-overflow: ellipsis; }
-  .radio-arrow { font-size: 14px; }
- .hero-text h1 { font-size: 20px; white-space: normal; }
-  .hero-text { text-align: center; width: 100%; }
+
   .artists-grid, .items-grid { grid-template-columns: repeat(2, 1fr); }
   .top50-card { flex-direction: column; text-align: center; }
   .top50-btn { margin: 0 auto; }

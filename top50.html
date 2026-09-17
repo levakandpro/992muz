@@ -3,32 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Топ чарт - 992MUZ</title>
+  <title>992MUZ РЕКОМЕНДУЕТ - 992MUZ</title>
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/pages/home.css">
 <link rel="stylesheet" href="css/pages/top50.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <style>
-    .analytics-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);}
-    .analytics-overlay.open{display:flex;}
-    .analytics-modal{background:var(--card,#181818);border-radius:20px;padding:24px;width:100%;max-width:420px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
-    .analytics-close{position:absolute;top:14px;right:14px;background:none;border:none;color:#888;font-size:20px;cursor:pointer;z-index:2;}
-    .analytics-download{position:absolute;top:14px;right:48px;background:none;border:none;color:#888;cursor:pointer;z-index:2;padding:2px;display:flex;align-items:center;}
-    .analytics-download:hover{color:#fff;}
-    .analytics-card-inner{background:var(--card,#181818);border-radius:14px;padding:4px;}
-    .analytics-watermark{text-align:center;font-size:10px;color:#666;margin-top:14px;letter-spacing:.06em;}
-    .analytics-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
-    .analytics-cover{width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;}
-    .analytics-title{font-size:16px;font-weight:700;color:#fff;}
-    .analytics-artist{font-size:12px;color:#999;margin-top:2px;}
-    .analytics-stats{display:flex;gap:10px;margin-bottom:18px;}
-    .analytics-stat{flex:1;background:rgba(255,255,255,0.05);border-radius:12px;padding:10px;text-align:center;}
-    .analytics-stat-num{font-size:18px;font-weight:700;color:#fff;}
-    .analytics-stat-label{font-size:10px;color:#888;margin-top:2px;text-transform:uppercase;letter-spacing:.04em;}
-    .analytics-chart-wrap{background:rgba(255,255,255,0.03);border-radius:14px;padding:14px 10px 6px;}
-    .analytics-chart-title{font-size:11px;color:#888;margin-bottom:8px;padding:0 4px;}
-    .analytics-empty{text-align:center;padding:20px 10px;color:#777;font-size:12px;line-height:1.6;}
-  </style>
+
 </head>
 <body>
 
@@ -77,13 +56,9 @@
           <img src="assets/icons/crown.png" alt="">
         </div>
         <div>
-<div class="section-label" style="color:rgba(255,255,255,0.4); margin-bottom:8px;">Рейтинг недели <button class="top50-info-btn" onclick="toggleInfo()">?</button></div>
-          <div class="top50-info-modal" id="infoModal">
-            <p>Рейтинг обновляется каждый понедельник. Треки ранжируются по количеству прослушиваний за всё время. Стрелки показывают изменение позиции с прошлой недели.</p>
-<p style="margin-top:8px;">Прослушивание засчитывается только для авторизованных пользователей и только после полного прослушивания трека до конца - это защищает чарт от накрутки.</p>
-          </div>
-          <h1 class="top50-hero-title">Топ чарт</h1>
-          <p class="top50-hero-sub">Все треки платформы по количеству прослушиваний</p>
+<div class="section-label" style="color:rgba(255,255,255,0.4); margin-bottom:8px;">Подборка недели</div>
+          <h1 class="top50-hero-title">992MUZ РЕКОМЕНДУЕТ</h1>
+         <p class="top50-hero-sub">Треки, которые рекомендует 992MUZ</p>
         </div>
       </div>
       <div class="top50-hero-right">
@@ -91,17 +66,7 @@
           <img src="assets/icons/play.png" alt="">
           Слушать всё
         </button>
-        <div class="top50-hero-stats">
-<div class="top50-stat">
-            <span class="top50-stat-num" id="trackCountNum">-</span>
-            <span class="top50-stat-label">треков</span>
-          </div>
-          <div class="top50-stat-divider"></div>
-          <div class="top50-stat">
-            <span class="top50-stat-num" id="totalListens">-</span>
-            <span class="top50-stat-label">прослушиваний</span>
-          </div>
-        </div>
+
       </div>
     </div>
   </section>
@@ -114,8 +79,7 @@
       <span>#</span>
       <span></span>
       <span>Название</span>
-      <span class="col-plays">Прослушиваний</span>
-      <span class="col-trend">Тренд</span>
+      <span></span>
       <span></span>
     </div>
     <div class="tracks-card" id="top50-list">
@@ -207,33 +171,29 @@
   </div>
 </div>
 
-<div class="analytics-overlay" id="analyticsOverlay">
-<div class="analytics-modal">
-    <button class="analytics-close" id="analyticsClose">✕</button>
-    <button class="analytics-download" id="analyticsDownload" title="Скачать как картинку">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-    </button>
-    <div class="analytics-card-inner" id="analyticsCardInner">
-    <div class="analytics-head">
-      <img class="analytics-cover" id="analyticsCover" src="assets/icons/mountain2.png" alt="">
-      <div>
-        <div class="analytics-title" id="analyticsTitle">-</div>
-        <div class="analytics-artist" id="analyticsArtist">-</div>
-      </div>
-    </div>
-    <div class="analytics-stats">
-      <div class="analytics-stat"><div class="analytics-stat-num" id="analyticsPos">-</div><div class="analytics-stat-label">Сейчас</div></div>
-      <div class="analytics-stat"><div class="analytics-stat-num" id="analyticsPeak">-</div><div class="analytics-stat-label">Пик</div></div>
-      <div class="analytics-stat"><div class="analytics-stat-num" id="analyticsWeeks">-</div><div class="analytics-stat-label">Недель в чарте</div></div>
-    </div>
-<div class="analytics-chart-wrap">
-      <div class="analytics-chart-title">Позиция по неделям</div>
-      <div id="analyticsChart"></div>
-    </div>
-    <div class="analytics-watermark">992MUZ · TOP CHART</div>
-    </div>
-  </div>
-</div>
+<button class="now-playing-btn" id="nowPlayingBtn" title="К играющему треку">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+</button>
+<button class="scroll-top-btn" id="scrollTopBtn" title="Наверх">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+<script>
+(function(){
+var btn=document.getElementById('scrollTopBtn');
+var scrollTicking=false;
+function updateOnScroll(){
+if(btn)btn.classList.toggle('visible',window.scrollY>100);
+scrollTicking=false;
+}
+window.addEventListener('scroll',function(){
+if(!scrollTicking){
+requestAnimationFrame(updateOnScroll);
+scrollTicking=true;
+}
+},{passive:true});
+if(btn)btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+})();
+</script>
 <script src="js/pages/top50.js" type="module"></script>
 <script type="module" src="js/auth/session.js"></script>
 <script type="module" src="js/components/navbar.js"></script>

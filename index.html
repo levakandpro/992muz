@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>992MUZ - Таджикская музыка и рэп онлайн | №1 платформа хип-хоп индустрии Таджикистана</title>
-  <meta name="description" content="992MUZ — крупнейшая платформа таджикской музыки и рэпа. Слушай новые треки, топ чарт, плейлисты, радио и клипы таджикских артистов онлайн бесплатно.">
+    <meta name="description" content="992MUZ - крупнейшая платформа Таджикской музыки и рэпа. Слушай новые треки, топ чарт, плейлисты и клипы Таджикских артистов онлайн бесплатно.">
   <meta name="keywords" content="992muz, таджикская музыка, таджикский рэп, tj rap, музыка таджикистан, точикӣ мусиқӣ, слушать таджикскую музыку, топ таджикских артистов">
   <link rel="canonical" href="https://992muz.ru/">
   <meta property="og:title" content="992MUZ - Музыка Таджикистана">
@@ -121,41 +121,19 @@
     content-visibility: auto;
     contain-intrinsic-size: 900px;
   }
+  /* Небольшой ДОПОЛНИТЕЛЬНЫЙ отступ по бокам основного контента страницы.
+     В main.css у .wrap уже задано padding: 0 40px — здесь мы не уменьшаем,
+     а увеличиваем его специально для внешнего контентного блока страницы
+     (тот, что сразу после </nav>), не трогая .wrap внутри навбара и футера,
+     у которых своя отдельная вёрстка. */
+  body > .wrap {
+    padding-left: 64px !important;
+    padding-right: 64px !important;
+    box-sizing: border-box !important;
+  }
   </style>
 </head>
 <body>
-<div id="voteTip"></div>
-<div id="votePreviewModal" onclick="if(event.target===this)closeVotePreview()" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.75);z-index:99999;align-items:center;justify-content:center;">
-<div style="background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:24px;width:280px;text-align:center;position:relative;flex-shrink:0;">
-    <button onclick="closeVotePreview()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:#666;font-size:18px;cursor:pointer;">✕</button>
-    <img id="votePreviewImg" style="width:120px;height:120px;object-fit:cover;border-radius:12px;margin-bottom:12px;">
-    <div id="votePreviewPlace" style="font-size:11px;color:#888;margin-bottom:4px;"></div>
-    <div id="votePreviewName" style="font-size:18px;font-weight:700;color:#fff;margin-bottom:8px;"></div>
-    <div id="votePreviewVotes" style="font-size:12px;color:#888;margin-bottom:10px;"></div>
-    <div style="height:6px;background:#333;border-radius:4px;margin-bottom:16px;overflow:hidden;">
-      <div id="votePreviewBar" style="height:100%;background:#c0392b;border-radius:4px;transition:width .4s;width:0%"></div>
-    </div>
-    <button id="votePreviewBtn" style="width:100%;padding:10px;background:#c0392b;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;">🗳 Голосовать</button>
-  </div>
-</div>
-<div id="voteAuthRequiredModal" style="display:none;position:fixed;inset:0;z-index:999999;align-items:center;justify-content:center;">
-  <div class="modal-blur-veil" onclick="closeVoteAuthModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);"></div>
-  <div style="position:relative;background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:28px 24px;width:100%;max-width:320px;margin:20px;text-align:center;">
-    <div style="font-size:34px;margin-bottom:10px;">🔒</div>
-    <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:8px;">Войдите, чтобы проголосовать</div>
-    <div style="font-size:13px;color:#999;line-height:1.6;margin-bottom:18px;">Голосование доступно только авторизованным пользователям - это защищает от накрутки голосов.</div>
-    <a href="/login" style="display:block;padding:11px;border-radius:10px;background:#c0392b;color:#fff;text-decoration:none;font-size:14px;font-weight:700;margin-bottom:8px;">Войти</a>
-    <button onclick="closeVoteAuthModal()" style="width:100%;padding:9px;border-radius:10px;background:none;border:1px solid #333;color:#999;font-size:13px;cursor:pointer;">Не сейчас</button>
-  </div>
-</div>
-<div id="voteAlertModal" onclick="if(event.target===this)closeVoteAlert()" style="display:none;position:fixed;inset:0;z-index:999999;align-items:center;justify-content:center;">
-  <div class="modal-blur-veil" onclick="closeVoteAlert()" style="position:absolute;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);"></div>
-    <div id="voteAlertIcon" style="font-size:34px;margin-bottom:12px;">🗳</div>
-    <div id="voteAlertText" style="font-size:14px;color:#fff;line-height:1.6;margin-bottom:18px;"></div>
-    <button onclick="closeVoteAlert()" style="width:100%;padding:11px;border-radius:10px;background:#c0392b;color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;">Понятно</button>
-  </div>
-</div>
-
 <!-- NAVBAR -->
 <nav class="navbar">
   <div class="wrap">
@@ -365,210 +343,593 @@
 </style>
 <!-- ТРЕК ДНЯ -->
 <style>
+  #featured-track{
+    width:min(100%,900px);
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  #featured-track .section-head{
+    margin-bottom:18px;
+  }
+
+  #featured-track .section-label{
+    color:rgba(139,26,47,0.72);
+    letter-spacing:0.15em;
+  }
+
+  #featured-track h2{
+    font-size:clamp(25px,3vw,34px);
+    letter-spacing:-0.045em;
+  }
+
   .featured-track-section{
     display:flex;
     justify-content:center;
   }
+
   .featured-track-card{
+    position:relative;
     width:100%;
-    max-width:380px;
+    min-height:320px;
     display:flex;
-    flex-direction:column;
     align-items:center;
-    text-align:center;
+    gap:34px;
+    padding:28px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.14);
+    border-radius:24px;
+    background:
+      radial-gradient(circle at 9% 15%,rgba(157,28,54,0.45),transparent 34%),
+      radial-gradient(circle at 100% 100%,rgba(105,13,31,0.4),transparent 38%),
+      linear-gradient(135deg,#211015 0%,#130d10 52%,#0b0a0b 100%);
+    box-shadow:0 24px 56px rgba(25,8,13,0.26);
+    color:#fff;
+    transition:opacity .4s ease,transform .4s ease,box-shadow .25s ease;
   }
+
+  .featured-track-card::before{
+    content:"992";
+    position:absolute;
+    right:-20px;
+    bottom:-54px;
+    color:rgba(255,255,255,0.025);
+    font-size:220px;
+    font-weight:900;
+    line-height:1;
+    letter-spacing:-0.13em;
+    pointer-events:none;
+  }
+
+  .featured-track-card::after{
+    content:"НОВИНКА";
+    position:absolute;
+    top:20px;
+    right:24px;
+    padding:6px 10px;
+    border:1px solid rgba(255,255,255,0.16);
+    border-radius:100px;
+    background:rgba(255,255,255,0.06);
+    color:rgba(255,255,255,0.62);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:0.14em;
+    pointer-events:none;
+  }
+
+  .featured-track-card:hover{
+    box-shadow:0 28px 70px rgba(25,8,13,0.34);
+  }
+
+  .featured-track-card.ft-fade-out{
+    opacity:0;
+    transform:scale(0.97) translateY(8px);
+  }
+
+  .featured-track-card.ft-fade-in{
+    animation:ftFadeIn .5s ease forwards;
+  }
+
+  @keyframes ftFadeIn{
+    from{
+      opacity:0;
+      transform:scale(0.97) translateY(8px);
+    }
+
+    to{
+      opacity:1;
+      transform:scale(1) translateY(0);
+    }
+  }
+
   .ft-cover-wrap{
     position:relative;
-    width:220px;
-    height:220px;
-    border-radius:20px;
+    width:258px;
+    height:258px;
+    margin:0;
+    flex:0 0 258px;
     overflow:hidden;
-    background:#1a1a1a;
-    box-shadow:0 10px 30px rgba(0,0,0,0.35);
+    border:1px solid rgba(255,255,255,0.2);
+    border-radius:18px;
+    background:#191517;
+    box-shadow:0 18px 38px rgba(0,0,0,0.45);
     cursor:pointer;
-    margin-bottom:16px;
   }
+
+  .ft-cover-wrap::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.1);
+    pointer-events:none;
+  }
+
   .ft-cover-wrap img{
     width:100%;
     height:100%;
-    object-fit:cover;
     display:block;
+    object-fit:cover;
+    transition:transform .45s cubic-bezier(.22,1,.36,1);
   }
+
+  .ft-cover-wrap:hover img{
+    transform:scale(1.06);
+  }
+
   .ft-play-overlay{
     position:absolute;
     inset:0;
     display:flex;
     align-items:center;
     justify-content:center;
-    background:rgba(0,0,0,0.25);
+    background:linear-gradient(180deg,rgba(0,0,0,0.03),rgba(0,0,0,0.55));
     opacity:0;
-    transition:opacity .2s;
+    transition:opacity .22s ease;
   }
+
   .ft-cover-wrap:hover .ft-play-overlay,
   .ft-cover-wrap.playing .ft-play-overlay{
     opacity:1;
   }
-  .ft-play-overlay svg{ width:46px; height:46px; }
-  .ft-title{
-    font-size:17px;
-    font-weight:700;
-    color:var(--text,#111);
-    margin-bottom:4px;
-    max-width:100%;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
+
+  .ft-play-overlay svg{
+    width:58px;
+    height:58px;
+    padding:17px;
+    border:1px solid rgba(255,255,255,0.7);
+    border-radius:50%;
+    background:rgba(10,10,10,0.42);
+    box-shadow:0 8px 22px rgba(0,0,0,0.35);
   }
-  .ft-artist{
-    font-size:13.5px;
-    color:var(--text3,#888);
-    margin-bottom:14px;
-  }
-  .ft-progress-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    width:100%;
-  }
-  .ft-time{
-    font-size:11px;
-    color:var(--text3,#888);
-    min-width:32px;
-    font-variant-numeric:tabular-nums;
-  }
-  .ft-progress-bar{
+
+  .ft-content{
+    position:relative;
+    z-index:1;
     flex:1;
-    height:5px;
-    border-radius:100px;
-    background:var(--bg3,#eee);
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .ft-title{
+    max-width:calc(100% - 80px);
+    margin:0 0 5px;
     overflow:hidden;
-    cursor:pointer;
+    color:#fff;
+    font-size:clamp(26px,3.2vw,39px);
+    font-weight:800;
+    line-height:1.05;
+    letter-spacing:-0.05em;
+    text-overflow:ellipsis;
+    white-space:nowrap;
   }
-.ft-progress-fill{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg,var(--accent,#8B1A2F),#c0392b);
-    border-radius:100px;
-    transition:width .1s linear;
+
+  .ft-artist{
+    max-width:100%;
+    margin:0 0 20px;
+    overflow:hidden;
+    color:rgba(255,255,255,0.58);
+    font-size:15px;
+    font-weight:500;
+    text-overflow:ellipsis;
+    white-space:nowrap;
   }
-  .featured-track-card{
-    transition:opacity .4s ease, transform .4s ease;
-  }
-  .featured-track-card.ft-fade-out{
-    opacity:0;
-    transform:scale(0.94) translateY(6px);
-  }
-.featured-track-card.ft-fade-in{
-    animation:ftFadeIn .5s ease forwards;
-  }
-  @keyframes ftFadeIn{
-    from{ opacity:0; transform:scale(0.94) translateY(6px); }
-    to{ opacity:1; transform:scale(1) translateY(0); }
-  }
+
   .ft-meta-row{
     display:flex;
     align-items:center;
-    gap:8px;
-    margin-bottom:10px;
-    flex-wrap:wrap;
-    justify-content:center;
+    min-height:30px;
+    margin:0 0 20px;
   }
-  .ft-plays-today{
-    font-size:12px;
-    color:var(--text3,#888);
-    display:flex;
-    align-items:center;
-    gap:5px;
-  }
+
   .ft-artist-link{
-    font-size:12px;
-    font-weight:600;
-    color:var(--accent,#8B1A2F);
-    text-decoration:none;
     display:none;
     align-items:center;
-    gap:3px;
+    gap:5px;
+    padding:7px 11px;
+    border:1px solid rgba(255,255,255,0.14);
+    border-radius:100px;
+    background:rgba(255,255,255,0.06);
+    color:rgba(255,255,255,0.78);
+    font-size:12px;
+    font-weight:600;
+    text-decoration:none;
+    transition:background .18s ease,border-color .18s ease;
   }
-  .ft-artist-link:hover{ text-decoration:underline; }
+
+  .ft-artist-link:hover{
+    border-color:rgba(255,255,255,0.3);
+    background:rgba(255,255,255,0.12);
+    text-decoration:none;
+  }
+
+  .ft-progress-row{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .ft-time{
+    min-width:32px;
+    color:rgba(255,255,255,0.45);
+    font-size:11px;
+    font-variant-numeric:tabular-nums;
+  }
+
+  .ft-progress-bar{
+    flex:1;
+    height:5px;
+    overflow:hidden;
+    border-radius:100px;
+    background:rgba(255,255,255,0.14);
+    cursor:pointer;
+  }
+
+  .ft-progress-fill{
+    width:0%;
+    height:100%;
+    border-radius:100px;
+    background:linear-gradient(90deg,#9f1c36,#e34a65);
+    box-shadow:0 0 14px rgba(227,74,101,0.72);
+    transition:width .1s linear;
+  }
+
   .ft-actions-row{
     display:flex;
     align-items:center;
-    justify-content:center;
-    gap:10px;
-    margin-top:14px;
+    margin-top:22px;
   }
+
   .ft-action-btn{
     display:flex;
     align-items:center;
-    gap:6px;
-    background:var(--bg2,#fff);
-    border:1px solid var(--bg3,#eee);
+    gap:7px;
+    padding:10px 16px;
+    border:1px solid rgba(255,255,255,0.84);
     border-radius:100px;
-    padding:7px 14px;
+    background:#fff;
+    color:#171214;
     font-size:12.5px;
-    font-weight:600;
-    color:var(--text2,#555);
+    font-weight:750;
     cursor:pointer;
-    transition:background .15s, border-color .15s, color .15s;
+    transition:transform .18s ease,background .18s ease;
   }
-  .ft-action-btn:hover{ background:var(--bg3,#f3f3f3); }
-  .ft-action-btn.liked{
-    color:#e0245e;
-    border-color:rgba(224,36,94,0.3);
-    background:rgba(224,36,94,0.08);
+
+  .ft-action-btn:hover{
+    background:#f1e8eb;
+    transform:translateY(-1px);
   }
-  .ft-action-btn svg{ width:15px; height:15px; flex-shrink:0; }
+
+  .ft-action-btn svg{
+    width:15px;
+    height:15px;
+    flex-shrink:0;
+  }
+
+  @media (max-width:700px){
+    #featured-track .section-head{
+      margin-bottom:14px;
+    }
+
+    .featured-track-card{
+      min-height:0;
+      flex-direction:column;
+      gap:0;
+      padding:22px 18px 20px;
+      border-radius:20px;
+      text-align:center;
+    }
+
+    .featured-track-card::before{
+      right:-13px;
+      bottom:-22px;
+      font-size:138px;
+    }
+
+    .featured-track-card::after{
+      top:14px;
+      right:14px;
+      padding:5px 8px;
+      font-size:8px;
+    }
+
+    .ft-cover-wrap{
+      width:min(100%,250px);
+      height:auto;
+      aspect-ratio:1 / 1;
+      margin:4px auto 20px;
+      flex-basis:auto;
+    }
+
+    .ft-content{
+      width:100%;
+      align-items:center;
+    }
+
+    .ft-title{
+      max-width:calc(100% - 44px);
+      margin:0 0 5px;
+      font-size:28px;
+    }
+
+    .ft-artist{
+      max-width:calc(100% - 44px);
+      margin:0 0 18px;
+      font-size:14px;
+    }
+
+    .ft-meta-row,
+    .ft-actions-row{
+      justify-content:center;
+    }
+  }
 </style>
 <style>
-  .film-banner-section{ display:flex; justify-content:center; }
+    .film-banner-section{
+      display:flex;
+      justify-content:center;
+      align-items:stretch;
+      gap:14px;
+      width:calc(100vw - 128px);
+      max-width:calc(100vw - 128px);
+      margin-left:calc(-50vw + 50% + 64px);
+      margin-right:calc(-50vw + 50% + 64px);
+    }
+  .film-banner-side{
+    flex:1 1 0;
+    min-width:180px;
+    max-width:480px;
+    display:flex;
+    align-items:center;
+  }
+  .film-banner-side-item{
+    position:relative;
+    border-radius:16px;
+    overflow:hidden;
+    width:100%;
+    max-width:340px;
+    aspect-ratio:1/1;
+    flex-shrink:0;
+    background:#1a1a1a;
+    cursor:pointer;
+    box-shadow:0 10px 28px rgba(0,0,0,0.4);
+    transition:opacity .45s ease, transform .45s ease, box-shadow .2s ease, width .2s ease;
+  }
+  .film-banner-side-left{
+    justify-content:flex-end;
+  }
+  .film-banner-side-item:hover{
+    box-shadow:0 14px 36px rgba(0,0,0,0.55);
+    transform:scale(1.015);
+  }
+  .film-banner-side-item img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .film-banner-side-item .fbs-grad{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.05) 60%);
+  }
+  .film-banner-side-item .fbs-info{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    padding:6px 9px;
+  }
+  .film-banner-side-item .fbs-title{
+    font-size:15px;
+    font-weight:700;
+    color:#fff;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    text-shadow:0 2px 8px rgba(0,0,0,0.6);
+  }
+  .film-banner-side-item .fbs-artist{
+    font-size:12.5px;
+    color:rgba(255,255,255,0.75);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    margin-top:2px;
+  }
+  .film-banner-side-item .fbs-info{
+    padding:14px 16px;
+  }
+  .film-banner-side-item .fbs-play{
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.5);
+    backdrop-filter:blur(4px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    transition:opacity .2s ease;
+  }
+  .film-banner-side-item:hover .fbs-play{
+    opacity:1;
+  }
+  .film-banner-side-item.fbs-fade-out{
+    opacity:0;
+    transform:scale(0.92);
+  }
+  .film-banner-side-left .film-banner-side-item.fbs-fade-out{
+    transform:translateX(26px) scale(0.92);
+  }
+  .film-banner-side-right .film-banner-side-item.fbs-fade-out{
+    transform:translateX(-26px) scale(0.92);
+  }
+  .film-banner-side-item.fbs-fade-in{
+    animation:fbsFadeIn .55s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .film-banner-side-left .film-banner-side-item.fbs-fade-in{
+    animation-name:fbsFadeInLeft;
+  }
+  .film-banner-side-right .film-banner-side-item.fbs-fade-in{
+    animation-name:fbsFadeInRight;
+  }
+  .film-banner-side-item.fbs-fade-in::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(120deg, transparent 35%, rgba(212,168,67,0.45) 50%, transparent 65%);
+    background-size:260% 260%;
+    background-position:-120% -120%;
+    animation:fbsShimmer .9s ease forwards;
+    pointer-events:none;
+  }
+  @keyframes fbsFadeIn{
+    from{ opacity:0; transform:scale(0.92) translateY(6px); }
+    to{ opacity:1; transform:scale(1) translateY(0); }
+  }
+  @keyframes fbsFadeInLeft{
+    from{ opacity:0; transform:translateX(26px) scale(0.92); }
+    to{ opacity:1; transform:translateX(0) scale(1); }
+  }
+  @keyframes fbsFadeInRight{
+    from{ opacity:0; transform:translateX(-26px) scale(0.92); }
+    to{ opacity:1; transform:translateX(0) scale(1); }
+  }
+  @keyframes fbsShimmer{
+    from{ background-position:-120% -120%; }
+    to{ background-position:120% 120%; }
+  }
+  @media (max-width: 1700px){
+    .film-banner-side{ display:none; }
+  }
   .film-banner-card{
     position:relative;
     width:100%;
     max-width:900px;
+    flex:0 1 900px;
     border-radius:20px;
     overflow:hidden;
     background:#0a0a0a;
     box-shadow:0 16px 40px rgba(0,0,0,0.35);
   }
-  .film-banner-poster{
+  .film-banner-media{
+    position:relative;
     width:100%;
     aspect-ratio:16/9;
-    object-fit:contain;
+    overflow:hidden;
     background:#000;
+  }
+  .film-banner-bgvideo{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:0;
+  }
+  .film-banner-poster{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    background:transparent;
     display:block;
+    z-index:1;
   }
   .film-banner-grad{
     position:absolute;
     inset:0;
     background:linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0.05) 100%);
   }
-  .film-banner-badge{
-    position:absolute;
-    top:16px;
-    left:16px;
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    font-size:10.5px;
-    font-weight:700;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    color:#fff;
-    background:rgba(139,26,47,0.85);
-    padding:6px 12px;
-    border-radius:100px;
+
+  .film-banner-content-wrap{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows 0.5s cubic-bezier(0.16,1,0.3,1);
+    background:#0a0a0a;
+  }
+  .film-banner-card.expanded .film-banner-content-wrap{
+    grid-template-rows:1fr;
   }
   .film-banner-content{
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:0;
-    padding:24px;
+    position:relative;
+    overflow:hidden;
+    min-height:0;
+    padding:0 24px;
     display:flex;
     flex-direction:column;
     align-items:flex-start;
     gap:12px;
   }
+  .film-banner-card.expanded .film-banner-content{
+    padding:24px 214px 24px 24px;
+  }
+  .film-banner-logo-video-desktop{
+    position:absolute;
+    right:24px;
+    top:50%;
+    transform:translateY(-50%);
+    width:190px;
+    height:190px;
+    object-fit:contain;
+    pointer-events:none;
+    z-index:2;
+    opacity:0;
+    transition:opacity 0.5s ease 0.3s;
+    mix-blend-mode:screen;
+  }
+  .film-banner-card.expanded .film-banner-logo-video-desktop{
+    opacity:1;
+  }
+  .film-banner-logo-video-mobile{
+    display:none;
+  }
+  @media (max-width: 700px){
+    .film-banner-logo-video-desktop{
+      display:none;
+    }
+    .film-banner-logo-video-mobile{
+      display:inline-block;
+      vertical-align:middle;
+      width:30px;
+      height:30px;
+      margin-left:6px;
+      object-fit:contain;
+      pointer-events:none;
+      flex-shrink:0;
+      mix-blend-mode:screen;
+    }
+    .film-banner-card.expanded .film-banner-content{
+      padding:18px;
+    }
+  }
+
   .film-banner-title{
     font-family:'Rem', sans-serif;
     font-size:24px;
@@ -608,10 +969,6 @@
     border:1px solid rgba(255,255,255,0.25);
   }
   .film-banner-cast{
-    position:absolute;
-    top:16px;
-    left:16px;
-    margin-top:36px;
     display:flex;
     align-items:center;
   }
@@ -674,35 +1031,57 @@
   }
   @media (max-width: 640px){
     .film-banner-title{ font-size:19px; }
-    .film-banner-content{ padding:18px; }
-    .film-banner-cast{ margin-top:30px; }
+    .film-banner-card.expanded .film-banner-content{ padding:18px; }
     .film-cast-avatar, .film-cast-more{ width:28px; height:28px; font-size:9.5px; }
   }
   .film-banner-hide-item{
     opacity:0;
+    transform:translateY(16px);
     pointer-events:none;
-    transition:opacity 0.25s ease;
+    transition:opacity 0.35s ease, transform 0.45s cubic-bezier(0.16,1,0.3,1);
   }
   .film-banner-card.expanded .film-banner-hide-item{
     opacity:1;
+    transform:translateY(0);
     pointer-events:auto;
   }
+  .film-banner-grad.film-banner-hide-item,
+  .film-banner-card.expanded .film-banner-grad.film-banner-hide-item{
+    transform:none;
+    transition:opacity 0.45s ease;
+    pointer-events:none;
+  }
+
+  .film-banner-card.expanded img.film-banner-hide-item{ transition-delay:0.20s; }
+  .film-banner-content > div{
+    opacity:0;
+    transform:translateY(20px);
+    transition:opacity 0.4s ease, transform 0.55s cubic-bezier(0.16,1,0.3,1);
+  }
+  .film-banner-card.expanded .film-banner-content > div{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .film-banner-card.expanded .film-banner-content > div:nth-child(1){ transition-delay:0.18s; }
+  .film-banner-card.expanded .film-banner-content > div:nth-child(2){ transition-delay:0.26s; }
+  .film-banner-card.expanded .film-banner-content > div:nth-child(3){ transition-delay:0.34s; }
   .film-banner-toggle-grad{
     position:absolute;
     left:0;
     right:0;
-    bottom:0;
-    height:70px;
-    background:linear-gradient(0deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+    top:0;
+    height:96px;
+    background:linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
     pointer-events:none;
     z-index:2;
   }
   .film-banner-toggle-btn{
     position:absolute;
     left:50%;
-    bottom:14px;
+    top:14px;
+    bottom:auto;
     transform:translateX(-50%);
-    z-index:5;
+    z-index:6;
     display:flex;
     align-items:center;
     gap:6px;
@@ -716,57 +1095,54 @@
     font-size:12px;
     font-weight:600;
     cursor:pointer;
+    transition:background 0.2s ease;
+  }
+  .film-banner-toggle-btn:hover{
+    background:rgba(0,0,0,0.85);
   }
   .film-banner-toggle-btn svg{
-    transition:transform 0.25s ease;
-  }
-  .film-banner-card.expanded .film-banner-toggle-btn{
-    bottom:auto;
-    top:16px;
+    transition:transform 0.3s ease;
   }
   .film-banner-card.expanded .film-banner-toggle-btn svg{
     transform:rotate(180deg);
   }
+  @media (prefers-reduced-motion: reduce){
+    .film-banner-hide-item,
+    .film-banner-content > div{
+      transition:opacity 0.2s ease !important;
+      transform:none !important;
+    }
+  }
 </style>
 <section class="section" id="home-film-banner">
   <div class="film-banner-section">
+    <div class="film-banner-side film-banner-side-left" id="filmBannerSideLeft"></div>
     <div class="film-banner-card">
-      <img class="film-banner-poster" src="assets/images/skrini/pos.png" alt="992MUZ ХРОНИКИ | Истоки">
+      <div class="film-banner-media" id="filmBannerMedia">
+        <img class="film-banner-poster" src="assets/images/skrini/pos.png" alt="992MUZ ХРОНИКИ | Истоки">
+      </div>
       <div class="film-banner-grad film-banner-hide-item"></div>
       <div class="film-banner-toggle-grad"></div>
 
       <button type="button" class="film-banner-toggle-btn" onclick="toggleFilmBanner(this)">
-        <span>Показать</span>
+        <span>СМОТРЕТЬ</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
 
       <img class="film-banner-hide-item" src="assets/icons/new.png" alt="NEW" style="position:absolute;top:16px;right:16px;width:46px;height:auto;z-index:3;">
       <img class="film-banner-hide-item" src="assets/images/advisory/1 (4).png" alt="Parental Advisory" style="position:absolute;top:16px;right:70px;width:44px;height:auto;z-index:3;">
 
-      <div class="film-banner-badge film-banner-hide-item">Документальный фильм</div>
-
-      <div class="film-banner-cast film-banner-hide-item">
-        <a href="https://992muz.ru/artist/jaman-connection" title="Jaman Connection" class="film-cast-avatar">JC</a>
-        <a href="https://992muz.ru/artist/m-one-master-ismail" title="Master Ismail" class="film-cast-avatar">MI</a>
-        <a href="https://992muz.ru/artist/abada-harry-ray" title="Abada" class="film-cast-avatar">AB</a>
-        <a href="https://992muz.ru/artist/mr-slim-malim-chortuti" title="Mr Slim" class="film-cast-avatar">MS</a>
-        <span class="film-cast-more">+9</span>
-      </div>
-
-      <div class="film-banner-content film-banner-hide-item">
+      <div class="film-banner-content-wrap"><div class="film-banner-content">
+        <video class="film-banner-logo-video-desktop" src="assets/video/992.mp4" muted playsinline autoplay loop disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false"></video>
         <div>
           <div class="film-banner-title">992MUZ ХРОНИКИ | Истоки</div>
-          <div class="film-banner-sub" id="filmBannerViews">История таджикского рэпа · Глава I</div>
+          <div class="film-banner-sub" id="filmBannerViews">История таджикского рэпа · Глава I<video class="film-banner-logo-video-mobile" src="assets/video/992.mp4" muted playsinline autoplay loop disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false"></video></div>
         </div>
         <div class="film-banner-progress-wrap" id="filmBannerProgressWrap" style="display:none;">
           <div class="film-banner-progress-track"><div class="film-banner-progress-fill" id="filmBannerProgressFill"></div></div>
           <span class="film-banner-progress-label" id="filmBannerProgressLabel"></span>
         </div>
         <div class="film-banner-actions">
-          <a class="film-banner-btn primary" href="https://www.youtube.com/watch?v=kbx-Vx4byLo" target="_blank" onclick="markFilmWatched()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#111"><polygon points="5,3 19,12 5,21"/></svg>
-            Смотреть
-          </a>
           <button class="film-banner-btn secondary" onclick="openHomeAboutFilm()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
             О фильме
@@ -776,8 +1152,9 @@
           </button>
         </div>
       </div>
+    </div></div>
+    <div class="film-banner-side film-banner-side-right" id="filmBannerSideRight"></div>
     </div>
-  </div>
 </section>
 <script>
 (function(){
@@ -789,7 +1166,7 @@
     if (!stored) localStorage.setItem('filmViewsBoost_v1', String(boost));
     return VIEWS_BASE + boost;
   }
-  if (viewsEl) viewsEl.textContent = 'История таджикского рэпа · Глава I · ' + getFilmViews().toLocaleString('ru-RU') + ' просмотров';
+ 
 
   var progressWrap = document.getElementById('filmBannerProgressWrap');
   var progressFill = document.getElementById('filmBannerProgressFill');
@@ -800,13 +1177,86 @@
     progressFill.style.width = Math.min(pct,100) + '%';
     progressLabel.textContent = 'Досмотрено ' + Math.min(pct,100) + '%';
   }
+  function syncFilmBannerSideSquares(h){
+    if (!h) return;
+    // Запоминаем последнюю известную высоту фильма глобально — чтобы боковые
+    // карточки, которые появляются позже (после загрузки из Firebase) или
+    // подменяются при ротации, могли сразу подхватить правильный размер,
+    // не дожидаясь следующего срабатывания ResizeObserver.
+    window.filmBannerLastHeight = h;
+    var items = document.querySelectorAll('.film-banner-side-item');
+    if (!items.length) return;
+    // Передаём высоту фильма как верхнюю границу через CSS-переменную —
+    // саму ширину и квадратную форму уже считает CSS (width:min(100%, var(--film-h))
+    // + aspect-ratio:1/1), поэтому квадрат сам растягивается на весь доступный
+    // контейнер, но никогда не станет шире него и не потеряет форму.
+    items.forEach(function(el){
+      el.style.setProperty('--film-h', h + 'px');
+    });
+  }
+  window.syncFilmBannerSideSquares = syncFilmBannerSideSquares;
+  (function(){
+    var card = document.querySelector('.film-banner-card');
+    if (!card) return;
+    if ('ResizeObserver' in window) {
+      // Держит квадраты слева/справа синхронными с высотой баннера ТОЛЬКО пока
+      // карточка свёрнута. Разворачивание/сворачивание фильма (кнопка "СМОТРЕТЬ/Скрыть")
+      // намеренно игнорируется, чтобы боковые блоки не двигались вместе с ним.
+      var ro = new ResizeObserver(function(entries){
+        if (card.classList.contains('expanded')) return;
+        for (var i = 0; i < entries.length; i++) {
+          syncFilmBannerSideSquares(entries[i].contentRect.height);
+        }
+      });
+      ro.observe(card);
+    } else {
+      // Фолбэк для очень старых браузеров без ResizeObserver
+      if (!card.classList.contains('expanded')) syncFilmBannerSideSquares(card.offsetHeight);
+      window.addEventListener('resize', function(){
+        if (!card.classList.contains('expanded')) syncFilmBannerSideSquares(card.offsetHeight);
+      });
+    }
+  })();
+
+  var FILM_POSTER_HTML = '<img class="film-banner-poster" src="assets/images/skrini/pos.png" alt="992MUZ ХРОНИКИ | Истоки">';
+
+  // Вставляет реальный YouTube-плеер вместо статичной картинки-постера.
+  // autoplayFlag=true — сразу запускает воспроизведение (кнопка "Смотреть"),
+  // autoplayFlag=false — просто показывает плеер с его собственными
+  // кнопками play/pause, ничего не запуская самостоятельно (разворачивание блока).
+  function loadFilmVideo(autoplayFlag){
+    var media = document.getElementById('filmBannerMedia');
+    if (!media) return;
+    var existingIframe = media.querySelector('iframe');
+    if (existingIframe) return;
+    var autoplayParam = autoplayFlag ? '&autoplay=1' : '';
+    media.innerHTML = '<iframe src="https://www.youtube.com/embed/kbx-Vx4byLo?rel=0' + autoplayParam + '" title="992MUZ ХРОНИКИ | Истоки" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>';
+  }
+
+  // Полностью останавливает видео — убирает iframe и возвращает
+  // статичный постер (используется при сворачивании блока кнопкой "Скрыть").
+  function stopFilmVideo(){
+    var media = document.getElementById('filmBannerMedia');
+    if (!media) return;
+    if (media.querySelector('iframe')) {
+      media.innerHTML = FILM_POSTER_HTML;
+    }
+  }
+
   window.toggleFilmBanner = function(btn){
     var card = btn.closest('.film-banner-card');
     if (!card) return;
     var expanded = card.classList.toggle('expanded');
     var label = btn.querySelector('span');
-    if (label) label.textContent = expanded ? 'Скрыть' : 'Показать';
+    if (label) label.textContent = expanded ? 'Скрыть' : 'СМОТРЕТЬ';
+    if (expanded) {
+      loadFilmVideo(false);
+      markFilmWatched();
+    } else {
+      stopFilmVideo();
+    }
   };
+
   window.markFilmWatched = function(){
     var cur = parseInt(localStorage.getItem('filmWatchedPct_v1') || '0');
     var next = Math.min(cur + 25, 100);
@@ -858,7 +1308,7 @@
 
 Без спойлеров - просто нажми play и услышь то, что раньше нигде не звучало.
 
-Продюсер, режиссёр, монтаж, звук: Sbastian TeeJay
+Продюсер, режиссёр, монтаж, звук: Sibastian TeeJay
 Продакшн: LEVAKAND PRODUCTION
 При поддержке: 992MUZ</div>
   </div>
@@ -875,71 +1325,176 @@ function closeHomeAboutFilm(e, force){
   document.body.style.overflow='';
 }
 </script>
+
+<style>
+.home-editorial-divider{
+  width:min(100%,900px);
+  margin:12px auto 46px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  color:rgba(139,26,47,0.7);
+}
+
+.home-editorial-divider::before,
+.home-editorial-divider::after{
+  content:"";
+  height:1px;
+  flex:1;
+  background:linear-gradient(90deg,transparent,rgba(139,26,47,0.2),rgba(139,26,47,0.5));
+}
+
+.home-editorial-divider::after{
+  background:linear-gradient(90deg,rgba(139,26,47,0.5),rgba(139,26,47,0.2),transparent);
+}
+
+.home-editorial-divider-mark{
+  width:34px;
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(139,26,47,0.42);
+  border-radius:50%;
+  background:rgba(139,26,47,0.035);
+  box-shadow:0 0 0 5px rgba(139,26,47,0.025);
+  transform:rotate(45deg);
+  flex-shrink:0;
+}
+
+.home-editorial-divider-mark span{
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:0.08em;
+  color:#8B1A2F;
+  transform:rotate(-45deg);
+}
+
+@media (max-width:768px){
+  .home-editorial-divider{
+    margin:8px auto 32px;
+    gap:10px;
+  }
+
+  .home-editorial-divider-mark{
+    width:28px;
+    height:28px;
+  }
+
+  .home-editorial-divider-mark span{
+    font-size:8px;
+  }
+}
+</style>
+
+<div class="home-editorial-divider" aria-hidden="true">
+  <div class="home-editorial-divider-mark">
+    <span>992</span>
+  </div>
+</div>
+
 <section class="section" id="featured-track">
   <div class="section-head">
     <div>
-<div class="section-label">Рекомендуем</div>
+      <div class="section-label">Рекомендуем</div>
       <h2>Трек дня</h2>
     </div>
   </div>
+
   <div class="featured-track-section">
     <div class="featured-track-card" id="featuredTrackCard" style="display:none;">
       <div class="ft-cover-wrap" id="ftCoverWrap">
-        <img id="ftCoverImg" src="assets/icons/mountain.png" alt="">
+        <img id="ftCoverImg" src="assets/icons/mountain.png" alt="Обложка трека дня">
+
         <div class="ft-play-overlay">
-          <svg viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
+          <svg viewBox="0 0 24 24" fill="#fff">
+            <polygon points="5,3 19,12 5,21"></polygon>
+          </svg>
         </div>
       </div>
-<div class="ft-title" id="ftTitle">Название</div>
-      <div class="ft-artist" id="ftArtist">Артист</div>
-      <div class="ft-meta-row">
-        <a class="ft-artist-link" id="ftArtistLink" href="#">
-          Ещё треки артиста
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </div>
-      <div class="ft-progress-row">
-        <span class="ft-time" id="ftTimeCur">0:00</span>
-        <div class="ft-progress-bar" id="ftProgressBar"><div class="ft-progress-fill" id="ftProgressFill"></div></div>
-        <span class="ft-time" id="ftTimeDur">0:00</span>
-      </div>
-      <div class="ft-actions-row">
-        <button class="ft-action-btn" id="ftDownloadBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
-          Скачать
-        </button>
+
+      <div class="ft-content">
+        <div class="ft-title" id="ftTitle">Название</div>
+
+        <div class="ft-artist" id="ftArtist">Артист</div>
+
+        <div class="ft-meta-row">
+          <a class="ft-artist-link" id="ftArtistLink" href="#">
+            Ещё треки артиста
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M13 6l6 6-6 6"></path>
+            </svg>
+          </a>
+        </div>
+
+        <div class="ft-progress-row">
+          <span class="ft-time" id="ftTimeCur">0:00</span>
+
+          <div class="ft-progress-bar" id="ftProgressBar">
+            <div class="ft-progress-fill" id="ftProgressFill"></div>
+          </div>
+
+          <span class="ft-time" id="ftTimeDur">0:00</span>
+        </div>
+
+        <div class="ft-actions-row">
+          <button class="ft-action-btn" id="ftDownloadBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 3v12"></path>
+              <path d="M7 10l5 5 5-5"></path>
+              <path d="M5 21h14"></path>
+            </svg>
+            Скачать
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </section>
-<!-- СЛУЧАЙНЫЕ ХИТЫ (ВСЕГДА ИЗ TOP50) -->
-  <section class="section" id="random-hits">
-    <div class="section-head">
-      <div>
-        <div class="section-label">Топ чарт</div>
-        <h2>Случайные хиты</h2>
-      </div>
-    </div>
-    <div class="random-hits-strip-wrap">
-      <div class="random-hits-strip-track" id="randomHitsTrack">
-        <div style="padding:20px;color:#999;font-size:13px;">Загрузка...</div>
-      </div>
-    </div>
-  </section>
 
-<!-- ГОЛОСОВАНИЕ -->
-  <section class="section" id="vote-section">
-    <div class="section-head">
-      <div>
-        <div class="section-label">Народный выбор</div>
-       <h2 style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;"><img src="assets/icons/sstar.png" style="width:20px;height:20px;flex-shrink:0;">Кто заслужил корону этого месяца?</h2>
-      </div>
-      <div id="voteTimer" style="font-size:12px;color:#888;"></div>
-    </div>
-    <div id="voteGrid" class="vote-grid"></div>
-    <div id="voteResult" style="display:none;text-align:center;padding:12px 20px;margin-top:12px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;color:#aaa;font-size:13px;letter-spacing:.02em;"></div>
-  </section>
-  <!-- TOP 50 -->
+<style>
+.home-release-divider{
+  width:min(100%,900px);
+  margin:48px auto 42px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.home-release-divider::before,
+.home-release-divider::after{
+  content:"";
+  height:1px;
+  flex:1;
+  background:linear-gradient(90deg,transparent,rgba(139,26,47,0.28));
+}
+
+.home-release-divider::after{
+  background:linear-gradient(90deg,rgba(139,26,47,0.28),transparent);
+}
+
+.home-release-divider-mark{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#8B1A2F;
+  box-shadow:0 0 0 5px rgba(139,26,47,0.07);
+  flex-shrink:0;
+}
+
+@media (max-width:768px){
+  .home-release-divider{
+    margin:36px auto 30px;
+  }
+}
+</style>
+
+<div class="home-release-divider" aria-hidden="true">
+  <div class="home-release-divider-mark"></div>
+</div>
+
+<!-- TOP 50 -->
   <section class="section">
     <div class="top50-card">
       <div class="top50-icon">
@@ -1128,7 +1683,6 @@ function closeHomeAboutFilm(e, force){
 <div class="new-tracks-list" id="pop-grid" style="max-height:420px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(139,26,47,0.6) transparent;">
     </div>
   </section>
-
 </div>
 <style>
   @media (min-width: 901px){
@@ -1236,7 +1790,7 @@ function closeHomeAboutFilm(e, force){
       <h4 style="color:var(--text);">3. ЗАЩИТА И УДАЛЕНИЕ</h4>
       <p>2.1. Идентификация пользователей, обеспечение работы Личного кабинета и профилей артистов.</p>
       <p>2.2. Персонализация музыкальных рекомендаций, ведение статистики прослушиваний треков еженедельного чарта «Топ 50».</p>
-      <p>2.3. Обеспечение технической безопасности радио-чата.</p>
+
 
       <h4 style="color:var(--text);">3. ЗАЩИТА И УДАЛЕНИЕ</h4>
       <p>3.1. Мы не передаем ваши данные третьим лицам, за исключением официальных запросов правоохранительных органов РТ.</p>
@@ -1288,10 +1842,10 @@ mobileOverlay.addEventListener('click',closeBurger);
 <script>
 // Жёстко запрещаем горизонтальное "утягивание" всей страницы при свайпе пальцем —
 // работает надёжно на всех мобильных браузерах, где одного CSS оказалось недостаточно.
-// Внутри специальных горизонтальных каруселей (хиты, плейлисты, голосование) свайп вбок
+// Внутри специальных горизонтальных каруселей (хиты, плейлисты) свайп вбок
 // по-прежнему разрешён и работает как обычно.
 (function() {
-  var HORIZONTAL_SCROLL_SELECTORS = '.random-hits-strip-wrap, .vote-grid, .items-grid.scrollable, .pl-strip-wrap, .new-tracks-list';
+   var HORIZONTAL_SCROLL_SELECTORS = '.random-hits-strip-wrap, .items-grid.scrollable, .pl-strip-wrap, .new-tracks-list';
   var startX = 0, startY = 0, lockedHorizontal = false, insideAllowedArea = false;
 
   document.addEventListener('touchstart', function(e) {
@@ -1322,7 +1876,7 @@ mobileOverlay.addEventListener('click',closeBurger);
     </div>
 <div style="min-width:0;overflow:hidden;">
       <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">
-        <span id="radioPulseDot" style="width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;flex-shrink:0;display:none;"></span>
+       
         <div class="player-track-name" style="font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;"></div>
       </div>
       <div class="player-track-artist" style="font-size:11px;color:rgba(255,255,255,0.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;"></div>
@@ -1338,10 +1892,15 @@ mobileOverlay.addEventListener('click',closeBurger);
     <svg id="playerPlayIcon" width="16" height="16" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
     <svg id="playerPauseIcon" width="16" height="16" viewBox="0 0 24 24" fill="#fff" style="display:none;"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
   </button>
+  <button id="playerDownloadBtn" type="button" aria-label="Скачать трек" title="Скачать трек" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);cursor:pointer;display:none;align-items:center;justify-content:center;flex-shrink:0;">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3v12"></path>
+    <path d="m7 10 5 5 5-5"></path>
+    <path d="M5 21h14"></path>
+  </svg>
+</button>
   <span class="player-time player-bar-time-right" style="font-size:11px;color:rgba(255,255,255,0.35);flex-shrink:0;min-width:32px;">0:00</span>
-  <button id="radioMuteBtn" style="width:38px;height:38px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;display:none;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px rgba(139,26,47,0.5);">
-    <img id="radioMuteIcon" src="assets/icons/volume.png" alt="" style="width:18px;height:18px;filter:invert(1);">
-  </button>
+
 </div>
 <style>
   @media (max-width: 480px) {
@@ -1483,7 +2042,7 @@ if (window.isLowPowerDevice) {
 </script>
 <script>
 // ЕДИНЫЙ ПЛЕЕР - управляет паузой/воспроизведением независимо от прокрутки страницы
-window.gp={audio:null,overlayImg:null,isRadio:false};
+window.gp={audio:null,overlayImg:null};
 function gpUpdateIcon(playing){
 var playIcon=document.getElementById('playerPlayIcon'),pauseIcon=document.getElementById('playerPauseIcon');
 if('mediaSession' in navigator)navigator.mediaSession.playbackState=playing?'playing':'paused';
@@ -1491,25 +2050,22 @@ if(!playIcon||!pauseIcon)return;
 playIcon.style.display=playing?'none':'';
 pauseIcon.style.display=playing?'':'none';
 }
-// Синхронизирует иконки play/pause и volume/mute для радио — звук глушится, трек не останавливается
-function gpSyncRadioMuteUI(muted){
-gpUpdateIcon(!muted);
-var muteIcon=document.getElementById('radioMuteIcon');
-if(muteIcon)muteIcon.src=muted?'assets/icons/mute .png':'assets/icons/volume.png';
-}
-// Показывает кнопку play/pause только для обычных треков, скрывает для радио (там управляет radioMuteBtn)
+
 function gpSyncPlayBtnVisibility(){
-var btn=document.getElementById('playerPlayPauseBtn'),muteBtn=document.getElementById('radioMuteBtn');
-if(!btn)return;
-if(window.gp.isRadio){btn.style.display='none';if(muteBtn)muteBtn.style.display='flex';}
-else{btn.style.display='flex';if(muteBtn)muteBtn.style.display='none';}
+var playerButton=document.getElementById('playerPlayPauseBtn');
+if(!playerButton)return;
+playerButton.style.display=window.gp&&window.gp.audio?'flex':'none';
 }
 // Вызывается когда включают обычный трек (не радио)
 window.setNowPlaying=function(audio,title,artist,coverUrl,overlayImg){
 if(window.gp.audio&&window.gp.audio!==audio)window.gp.audio.pause();
 window.gp.audio=audio;
 window.gp.overlayImg=overlayImg||null;
-window.gp.isRadio=false;
+window.gp.title=title||'Трек';
+window.gp.artist=artist||'Артист';
+
+var downloadButton=document.getElementById('playerDownloadBtn');
+if(downloadButton)downloadButton.style.display='flex';
 gpSyncPlayBtnVisibility();
 window.gpUpdateMediaSession&&window.gpUpdateMediaSession(title,artist,window.cldImg?window.cldImg(coverUrl,500):coverUrl);
 var nameEl=document.querySelector('.player-track-name'),artistEl=document.querySelector('.player-track-artist'),thumbEl=document.querySelector('.player-thumb-img');
@@ -1525,35 +2081,69 @@ gpUpdateIcon(true);
 audio.addEventListener('pause',function(){if(window.gp.audio===audio){gpUpdateIcon(false);if(window.gp.overlayImg)window.gp.overlayImg.src='assets/icons/play.png';}});
 audio.addEventListener('play',function(){if(window.gp.audio===audio){gpUpdateIcon(true);if(window.gp.overlayImg)window.gp.overlayImg.src='assets/icons/pause.png';}});
 var fill=document.querySelector('.player-bar .progress-fill'),times=document.querySelectorAll('.player-bar .player-time');
-audio.addEventListener('timeupdate',function(){
-if(!audio.duration||window.gp.audio!==audio)return;
-if(fill)fill.style.width=(audio.currentTime/audio.duration*100)+'%';
-if(times[0]){var m=Math.floor(audio.currentTime/60),s=Math.floor(audio.currentTime%60).toString().padStart(2,'0');times[0].textContent=m+':'+s;}
-if(times[1]){var m2=Math.floor(audio.duration/60),s2=Math.floor(audio.duration%60).toString().padStart(2,'0');times[1].textContent=m2+':'+s2;}
+function syncPlayerProgress(){
+if(window.gp.audio!==audio)return;
+
+var duration=audio.duration;
+var currentTime=audio.currentTime;
+
+if(fill)fill.style.width=duration&&isFinite(duration)?(currentTime/duration*100)+'%':'0%';
+
+if(times[0]){
+var currentMinutes=Math.floor(currentTime/60);
+var currentSeconds=Math.floor(currentTime%60).toString().padStart(2,'0');
+times[0].textContent=currentMinutes+':'+currentSeconds;
+}
+
+if(times[1]){
+var durationMinutes=duration&&isFinite(duration)?Math.floor(duration/60):0;
+var durationSeconds=duration&&isFinite(duration)?Math.floor(duration%60).toString().padStart(2,'0'):'00';
+times[1].textContent=durationMinutes+':'+durationSeconds;
+}
+}
+
+audio.addEventListener('loadedmetadata',syncPlayerProgress);
+audio.addEventListener('durationchange',syncPlayerProgress);
+audio.addEventListener('timeupdate',syncPlayerProgress);
+
+audio.addEventListener('ended',function(){
+if(window.gp.audio!==audio)return;
+
+if(fill)fill.style.width='0%';
+
+if(times[0])times[0].textContent='0:00';
+
+gpUpdateIcon(false);
+
+if(window.gp.overlayImg)window.gp.overlayImg.src='assets/icons/play.png';
 });
+
+syncPlayerProgress();
 };
-// Вызывается когда включают радио
-window.setNowPlayingRadio=function(audio,title,artist,coverUrl){
-if(window.gp.audio&&window.gp.audio!==audio)window.gp.audio.pause();
-window.gp.audio=audio;
-window.gp.overlayImg=null;
-window.gp.isRadio=true;
-gpSyncPlayBtnVisibility();
-gpSyncRadioMuteUI(audio.muted);
-window.gpUpdateMediaSession&&window.gpUpdateMediaSession(title||'ЭФИР',artist||'992MUZ',coverUrl?(window.cldImg?window.cldImg(coverUrl,500):coverUrl):null);
-audio.addEventListener('pause',function(){if(window.gp.audio===audio)gpUpdateIcon(false);});
-audio.addEventListener('play',function(){if(window.gp.audio===audio)gpUpdateIcon(true);});
-};
+
 document.getElementById('playerPlayPauseBtn')?.addEventListener('click',function(){
 var a=window.gp.audio;
 if(!a)return;
-if(window.gp.isRadio){
-// Для радио пауза не останавливает трек (иначе слетит синхронизация по времени) — просто глушим звук
-a.muted=!a.muted;
-gpSyncRadioMuteUI(a.muted);
-}else{
 if(a.paused)a.play();else a.pause();
-}
+});
+document.getElementById('playerDownloadBtn')?.addEventListener('click',function(){
+var audio=window.gp&&window.gp.audio;
+if(!audio)return;
+
+var trackUrl=audio.currentSrc||audio.src;
+if(!trackUrl)return;
+
+var fileName=((window.gp.artist||'Артист')+' - '+(window.gp.title||'Трек')+' (by 992muz).mp3')
+.replace(/[\\/:*?"<>|]/g,'_');
+
+var downloadLink=document.createElement('a');
+downloadLink.href=trackUrl;
+downloadLink.rel='noopener';
+downloadLink.download=fileName;
+
+document.body.appendChild(downloadLink);
+downloadLink.click();
+downloadLink.remove();
 });
 // ─── ПЕРЕМОТКА ТРЕКА В НИЖНЕМ ПЛЕЕРЕ (клик и перетаскивание пальцем) ───
 (function(){
@@ -1570,8 +2160,6 @@ var fill=bar.querySelector('.progress-fill');
 if(fill)fill.style.width=(pct*100)+'%';
 }
 bar.addEventListener('pointerdown',function(e){
-// Радио не перематывается вручную — там фиксированное расписание эфира
-if(window.gp.isRadio)return;
 dragging=true;
 bar.setPointerCapture(e.pointerId);
 seekToPointer(e.clientX);
@@ -2248,9 +2836,9 @@ function shuffleArrayRH(arr) {
   return arr;
 }
 
-const RH_VISIBLE_COUNT = 15;      // сколько карточек показываем одновременно
-const RH_ROTATE_COUNT = 3;        // сколько карточек подменяем за один цикл
-const RH_ROTATE_INTERVAL = 6000;  // раз в сколько мс запускать подмену
+const RH_VISIBLE_COUNT = 2;       // по 1 карточке на каждую боковую колонку (лево+право)
+const RH_ROTATE_COUNT = 2;        // сколько карточек подменяем за один цикл
+const RH_ROTATE_INTERVAL = 5000;  // раз в сколько мс запускать подмену
 
 let rhAudio = null;
 let rhActiveItem = null;
@@ -2259,111 +2847,144 @@ let rhVisible = [];     // текущие показанные треки (об�
 let rhRotateTimer = null;
 
 function rhBuildCardHTML(t) {
-  const cover = window.cldImg ? window.cldImg(t.coverUrl, 380) : t.coverUrl;
+  const cover = window.cldImg ? window.cldImg(t.coverUrl, 500) : t.coverUrl;
   const coverSrc = cover || 'assets/icons/mountain.png';
-  const coverStyle = t.coverUrl ? '' : 'style="padding:28px;filter:invert(0.7);"';
+  const coverStyle = t.coverUrl ? '' : 'style="padding:20px;filter:invert(0.7);"';
   return `
-    <div class="rh-cover-wrap">
-      <img src="${coverSrc}" alt="" ${coverStyle} loading="lazy">
-      <div class="rh-play-overlay">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
-      </div>
+    <img src="${coverSrc}" alt="" ${coverStyle} loading="lazy">
+    <div class="fbs-grad"></div>
+    <div class="fbs-play">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
     </div>
-    <div class="rh-title">${t.title || 'Без названия'}</div>
-    <div class="rh-artist">${t.artist || 'Артист'}</div>
+    <div class="fbs-info">
+      <div class="fbs-title">${t.title || 'Без названия'}</div>
+      <div class="fbs-artist">${t.artist || 'Артист'}</div>
+    </div>
   `;
 }
+function rhAttachPlayHandler(item, t, allItems) {
+  const rhPlayIconHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>';
+  const rhPauseIconHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
 
-function rhAttachPlayHandler(item, t, track) {
-  item.querySelector('.rh-cover-wrap').addEventListener('click', () => {
+  function rhSetPlayIcon(el, isPlaying) {
+    const btn = el && el.querySelector('.fbs-play');
+    if (btn) btn.innerHTML = isPlaying ? rhPauseIconHTML : rhPlayIconHTML;
+  }
+
+  item.addEventListener('click', () => {
     const url = t.trackUrl;
     if (!url) return;
-    const overlaySvg = item.querySelector('.rh-play-overlay svg');
 
     if (rhAudio && rhActiveItem === item && !rhAudio.paused) {
       rhAudio.pause();
-      overlaySvg.innerHTML = '<polygon points="5,3 19,12 5,21"/>';
       return;
     }
 
+    // Сбрасываем иконку у карточки, которая играла раньше
+    if (rhActiveItem && rhActiveItem !== item) rhSetPlayIcon(rhActiveItem, false);
+
     if (rhAudio) {
-      rhAudio.pause();
       // Явно освобождаем буфер предыдущего трека — иначе на слабых Android
       // браузер может подолгу держать декодированные аудиоданные в памяти
+      rhAudio.pause();
       rhAudio.src = '';
       rhAudio.load();
-    }
-    if (rhActiveItem) {
-      const prevSvg = rhActiveItem.querySelector('.rh-play-overlay svg');
-      if (prevSvg) prevSvg.innerHTML = '<polygon points="5,3 19,12 5,21"/>';
     }
 
     rhAudio = new Audio(url);
     rhAudio.preload = 'auto';
     rhActiveItem = item;
-    overlaySvg.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
 
-    rhAudio.addEventListener('ended', () => {
-      overlaySvg.innerHTML = '<polygon points="5,3 19,12 5,21"/>';
-    });
+    // Иконка синхронизируется через реальные события play/pause/ended —
+    // так она обновится, даже если трек поставят на паузу из плеера внизу страницы
+    rhAudio.addEventListener('play', () => rhSetPlayIcon(item, true));
+    rhAudio.addEventListener('pause', () => rhSetPlayIcon(item, false));
+    rhAudio.addEventListener('ended', () => rhSetPlayIcon(item, false));
 
     rhAudio.play();
     window.setNowPlaying && window.setNowPlaying(rhAudio, t.title, t.artist, t.coverUrl, null);
 
-    const idx = Array.from(track.children).indexOf(item);
+    const idx = allItems.indexOf(item);
     window.gp.setQueue(rhVisible.map((tt, i) => ({
-      play: () => track.children[i]?.querySelector('.rh-cover-wrap')?.click()
+      play: () => allItems[i]?.click()
     })), idx);
   });
 }
-
 function rhRenderInitial() {
-  const track = document.getElementById('randomHitsTrack');
-  if (!track) return;
-  track.innerHTML = '';
-  const fragment = document.createDocumentFragment();
-  rhVisible.forEach((t) => {
-    const item = document.createElement('div');
-    item.className = 'rh-item';
-    item.innerHTML = rhBuildCardHTML(t);
-    rhAttachPlayHandler(item, t, track);
-    fragment.appendChild(item);
-  });
-  track.appendChild(fragment);
-}
-// Плавно заменяет несколько случайных видимых карточек на новые треки из пула,
-// которых сейчас нет на экране — создаёт эффект "живого" перемешивания без перезагрузки
-function rhRotateSome() {
-  const track = document.getElementById('randomHitsTrack');
-  if (!track || rhPool.length <= RH_VISIBLE_COUNT) return;
+  const left = document.getElementById('filmBannerSideLeft');
+  const right = document.getElementById('filmBannerSideRight');
+  if (!left || !right) return;
+  left.innerHTML = '';
+  right.innerHTML = '';
 
-  const domItems = Array.from(track.children);
-  if (!domItems.length) return;
+  const half = Math.ceil(rhVisible.length / 2);
+  const allItems = [];
+
+  rhVisible.forEach((t, i) => {
+    const item = document.createElement('div');
+    item.className = 'film-banner-side-item';
+    item.innerHTML = rhBuildCardHTML(t);
+    allItems.push(item);
+    (i < half ? left : right).appendChild(item);
+  });
+
+  allItems.forEach((item, i) => rhAttachPlayHandler(item, rhVisible[i], allItems));
+
+  // Карточки только что созданы асинхронно (после загрузки из Firebase) —
+  // сразу выставляем им правильный квадратный размер по высоте фильма,
+  // не дожидаясь нового срабатывания ResizeObserver.
+  if (window.syncFilmBannerSideSquares && window.filmBannerLastHeight) {
+    window.syncFilmBannerSideSquares(window.filmBannerLastHeight);
+  }
+}
+
+// Плавно заменяет несколько случайных видимых карточек на новые треки из пула,
+// которых сейчас нет на экране — эффект "живой" ленты, как на Netflix
+function rhRotateSome() {
+  const left = document.getElementById('filmBannerSideLeft');
+  const right = document.getElementById('filmBannerSideRight');
+  if (!left || !right || rhPool.length <= RH_VISIBLE_COUNT) return;
+
+  const allItems = [...left.children, ...right.children];
+  if (!allItems.length) return;
 
   const visibleIds = new Set(rhVisible.map(t => t.id));
   const candidates = shuffleArrayRH(rhPool.filter(t => !visibleIds.has(t.id)));
   if (!candidates.length) return;
 
-  const replaceCount = Math.min(RH_ROTATE_COUNT, candidates.length, domItems.length);
-  const indicesToReplace = shuffleArrayRH(domItems.map((_, i) => i)).slice(0, replaceCount);
+  // Карточка с треком, который сейчас играет, никогда не должна попадать
+  // под ротацию — иначе трек продолжает играть, а его карточка исчезает.
+  const replaceableIndices = allItems
+    .map((_, i) => i)
+    .filter(i => allItems[i] !== rhActiveItem);
+
+  const replaceCount = Math.min(RH_ROTATE_COUNT, candidates.length, replaceableIndices.length);
+  const indicesToReplace = shuffleArrayRH(replaceableIndices).slice(0, replaceCount);
 
   indicesToReplace.forEach((idx, n) => {
-    const oldItem = domItems[idx];
+    const oldItem = allItems[idx];
     const newTrack = candidates[n];
     if (!oldItem || !newTrack) return;
 
-    oldItem.classList.add('rh-fade-out');
+    oldItem.classList.add('fbs-fade-out');
 
     setTimeout(() => {
       const newItem = document.createElement('div');
-      newItem.className = 'rh-item rh-fade-in';
+      newItem.className = 'film-banner-side-item fbs-fade-in';
       newItem.innerHTML = rhBuildCardHTML(newTrack);
-      rhAttachPlayHandler(newItem, newTrack, track);
-
       oldItem.replaceWith(newItem);
       rhVisible[idx] = newTrack;
 
-      setTimeout(() => newItem.classList.remove('rh-fade-in'), 500);
+      const refreshedItems = [...left.children, ...right.children];
+      rhAttachPlayHandler(newItem, newTrack, refreshedItems);
+
+      // Новый элемент только что заменил старый в DOM — у него ещё нет
+      // выставленного размера, применяем ту же высоту/ширину сразу же.
+      if (window.syncFilmBannerSideSquares && window.filmBannerLastHeight) {
+        window.syncFilmBannerSideSquares(window.filmBannerLastHeight);
+      }
+
+      setTimeout(() => newItem.classList.remove('fbs-fade-in'), 500);
     }, 450);
   });
 }
@@ -2378,17 +2999,15 @@ function rhStopAutoRotate() {
 }
 
 async function loadRandomHits() {
-  const track = document.getElementById('randomHitsTrack');
-  if (!track) return;
+  const left = document.getElementById('filmBannerSideLeft');
+  const right = document.getElementById('filmBannerSideRight');
+  if (!left || !right) return;
   try {
     // ВСЕГДА берём треки только из коллекции top50
     const snap = await getDocs(collection(db, 'top50'));
     rhPool = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(t => t.trackUrl);
 
-    if (!rhPool.length) {
-      track.innerHTML = '<div style="padding:20px;color:#999;font-size:13px;">Треков пока нет</div>';
-      return;
-    }
+    if (!rhPool.length) return;
 
     rhVisible = shuffleArrayRH([...rhPool]).slice(0, Math.min(RH_VISIBLE_COUNT, rhPool.length));
     rhRenderInitial();
@@ -2406,7 +3025,6 @@ async function loadRandomHits() {
     });
   } catch(e) {
     console.error('Ошибка загрузки случайных хитов:', e);
-    track.innerHTML = '<div style="padding:20px;color:#999;font-size:13px;">Ошибка загрузки</div>';
   }
 }
 
@@ -2722,179 +3340,6 @@ window.closePlStripModal = function() {
   window.addEventListener('message', (e) => {
     if (e.data && e.data.type === 'closePlStripModal') closePlStripModal();
   });
-})();
-</script>
-<script type="module">
-// ─── ГОЛОСОВАНИЕ ───
-(async function initVote() {
-  const { getFirestore, collection, getDocs, doc, updateDoc, increment }
-    = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-  const { onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
-  const { auth: mainAuth, db: voteDb } = await import('./js/config/firebase.js');
-
-  const grid = document.getElementById('voteGrid');
-  const resultEl = document.getElementById('voteResult');
-  if (!grid) return;
-
-  // Реальная авторизация сайта (тот же аккаунт, что и на login.html) — не отдельный инстанс Firebase
-  let currentVoteUser = null;
-  onAuthStateChanged(mainAuth, (user) => { currentVoteUser = user; });
-
-  function requireVoteAuth() {
-    if (currentVoteUser) return true;
-    document.getElementById('voteAuthRequiredModal').style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    return false;
-  }
-  window.closeVoteAuthModal = () => {
-    document.getElementById('voteAuthRequiredModal').style.display = 'none';
-    document.body.style.overflow = '';
-  };
-window.showVoteAlert = (text, icon) => {
-    document.getElementById('voteAlertText').textContent = text;
-    document.getElementById('voteAlertIcon').textContent = icon || '🗳';
-    document.getElementById('voteAlertModal').style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  };
-  window.closeVoteAlert = () => {
-    document.getElementById('voteAlertModal').style.display = 'none';
-    document.body.style.overflow = '';
-  };
-  // Загрузить артистов из Firebase (коллекция voteArtists)
-  async function loadArtists() {
-    const snap = await getDocs(collection(voteDb, 'voteArtists'));
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }))
-      .sort((a,b) => (b.votes||0) - (a.votes||0));
-  }
-
-  // Проверить голосовал ли уже
-  function getVotedId() {
-    return localStorage.getItem('voteArtistId_v1') || null;
-  }
-  function setVotedId(id) {
-    localStorage.setItem('voteArtistId_v1', id);
-    localStorage.setItem('voteArtistTime_v1', Date.now());
-  }
-
-  async function render() {
-    const artists = await loadArtists();
-    if (!artists.length) { grid.innerHTML = '<div style="color:#555;padding:20px 0;">Голосование не запущено</div>'; return; }
-
-    const votedId = getVotedId();
-    const totalVotes = artists.reduce((s,a) => s + (a.votes||0), 0);
-    const maxVotes = Math.max(...artists.map(a => a.votes||0), 1);
-
-    grid.innerHTML = artists.map((a, i) => {
-      const pct = Math.round(((a.votes||0) / totalVotes) * 100) || 0;
-      const barW = Math.round(((a.votes||0) / maxVotes) * 100);
-      const isVoted = votedId === a.id;
-      const placeLabels = ['1 место - Лидер голосования', '2 место - Серебро', '3 место - Бронза'];
-return `<div class="vote-card${isVoted ? ' voted' : ''}" onclick="castVote('${a.id}')" onmousedown="startVoteHold(event,'${a.id}',${i})" onmouseup="clearVoteHold()" onmouseleave="clearVoteHold()" ontouchstart="startVoteHold(event,'${a.id}',${i})" ontouchend="clearVoteHold()">
-${i === 0 && (a.votes||0) > 0 ? `<div class="vote-place-badge" data-tip="${placeLabels[0]}" onmouseenter="showVoteTip(event,this)" onmouseleave="hideVoteTip()"><img src="assets/icons/cccrow.png" style="width:22px;height:22px;pointer-events:none;"></div>` : ''}
-${i === 1 && (a.votes||0) > 0 ? `<div class="vote-place-badge" data-tip="${placeLabels[1]}" onmouseenter="showVoteTip(event,this)" onmouseleave="hideVoteTip()"><img src="assets/icons/cccrow.png" style="width:22px;height:22px;pointer-events:none;"></div>` : ''}
-${i === 2 && (a.votes||0) > 0 ? `<div class="vote-place-badge" data-tip="${placeLabels[2]}" onmouseenter="showVoteTip(event,this)" onmouseleave="hideVoteTip()"><img src="assets/icons/cccrow.png" style="width:22px;height:22px;pointer-events:none;"></div>` : ''}
-        <img class="vote-card-img" src="${a.photoUrl ? (window.cldImg ? window.cldImg(a.photoUrl, 200) : a.photoUrl) : 'assets/icons/profile.png'}" alt="${a.name}" onerror="this.src='assets/icons/profile.png'">
-        <div class="vote-card-name">${a.name}</div>
-        <div class="vote-card-count">${a.votes||0} голосов · ${pct}%</div>
-        <div class="vote-bar"><div class="vote-bar-fill" style="width:${barW}%"></div></div>
-      </div>`;
-    }).join('');
-
-    if (votedId) {
-      resultEl.style.display = 'block';
-      const voted = artists.find(a => a.id === votedId);
-     resultEl.innerHTML = voted ? `<span style="color:#4caf50;font-size:16px;">✔</span> Вы поддержали <b style="color:#fff;">${voted.name}</b>` : '<span style="color:#4caf50;">✔</span> Вы уже проголосовали';
-    }
-  }
-
-  // Флаг устанавливается при долгом удержании (открытии превью) — гасит "фантомный"
-  // click, который браузер генерирует сразу после touchend на мобильных
-  let voteHoldTriggered = false;
-  // Блокировка от гонки при быстром двойном клике — вторая попытка игнорируется,
-  // пока первая ещё не долетела до сервера
-  let voteLock = false;
-
-  window.castVote = async (artistId) => {
-    if (voteHoldTriggered) { voteHoldTriggered = false; return; }
-    if (voteLock) return;
-
-const votedId = getVotedId();
-    if (votedId) {
-      const voted = (await loadArtists()).find(a => a.id === votedId);
-      showVoteAlert(voted ? `Вы уже голосовали за ${voted.name}` : 'Вы уже проголосовали', '✔');
-      return;
-    }
-    if (!requireVoteAuth()) return;
-
-    voteLock = true;
-    try {
-      await updateDoc(doc(voteDb, 'voteArtists', artistId), { votes: increment(1) });
-      setVotedId(artistId);
-      await render();
-    } catch(e) {
-      showVoteAlert('Ошибка: ' + e.message, '⚠️');
-    } finally {
-      voteLock = false;
-    }
-  };
-  let voteHoldTimer = null;
-  window.startVoteHold = (e, id, i) => {
-    voteHoldTriggered = false;
-    voteHoldTimer = setTimeout(async () => {
-      voteHoldTriggered = true;
-      const artists = await loadArtists();
-      const a = artists.find(x => x.id === id);
-      if (!a) return;
-      const total = artists.reduce((s,x) => s+(x.votes||0), 0);
-      const max = Math.max(...artists.map(x=>x.votes||0), 1);
-      a.pct = Math.round(((a.votes||0)/total)*100)||0;
-      a.barW = Math.round(((a.votes||0)/max)*100);
-      const placeText = i===0?'🥇 1 место':i===1?'🥈 2 место':i===2?'🥉 3 место':`#${i+1} место`;
-         document.getElementById('votePreviewImg').src = a.photoUrl ? (window.cldImg ? window.cldImg(a.photoUrl, 240) : a.photoUrl) : 'assets/icons/profile.png';
-      document.getElementById('votePreviewName').textContent = a.name;
-      document.getElementById('votePreviewPlace').textContent = placeText;
-      document.getElementById('votePreviewVotes').textContent = (a.votes||0) + ' голосов · ' + a.pct + '%';
-      document.getElementById('votePreviewBar').style.width = a.barW + '%';
-      document.getElementById('votePreviewBtn').onclick = () => {
-        closeVotePreview();
-        voteHoldTriggered = false; // явный клик по кнопке в модалке — это осознанное действие, не суппрессим
-        castVote(a.id);
-      };
-const modal = document.getElementById('votePreviewModal');
-document.body.appendChild(modal);
-modal.removeAttribute('style');
-modal.style.display = 'flex';
-modal.style.position = 'fixed';
-modal.style.inset = '0';
-modal.style.width = '100vw';
-modal.style.height = '100vh';
-modal.style.background = 'rgba(0,0,0,0.75)';
-modal.style.zIndex = '999999';
-modal.style.alignItems = 'center';
-modal.style.justifyContent = 'center';
-modal.style.margin = '0';
-modal.style.padding = '0';
-modal.style.transform = 'none';
-modal.style.left = '0';
-modal.style.top = '0';
-    }, 500);
-  };
-  window.clearVoteHold = () => clearTimeout(voteHoldTimer);
-window.closeVotePreview = () => {
-    document.getElementById('votePreviewModal').style.cssText = 'display:none;position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;z-index:999999;';
-  };
-window.showVoteTip = (e, el) => {
-    const tip = document.getElementById('voteTip');
-    tip.textContent = el.dataset.tip;
-    tip.style.display = 'block';
-    tip.style.left = (e.clientX + 10) + 'px';
-    tip.style.top = (e.clientY + 10) + 'px';
-  };
-  window.hideVoteTip = () => {
-    document.getElementById('voteTip').style.display = 'none';
-  };
-
-render();
 })();
 </script>
 <!-- МОДАЛКА "СКОРО" -->

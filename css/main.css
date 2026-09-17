@@ -251,27 +251,7 @@ button { cursor: pointer; border: none; background: none; color: inherit; font: 
   }
   .burger-btn { position: relative; z-index: 60; }
 }
-@keyframes radio-pulse { 0%,100%{opacity:1;box-shadow:0 0 6px #4ade80} 50%{opacity:0.4;box-shadow:none} }
-#radioPulseDot { animation: radio-pulse 2s infinite; }
 
-/* ── ПЕРЕВОРОТ РАДИО / ЧАТ ── */
-.hero-flip-scene { perspective: 1800px; }
-.hero-flip-card {
-  position: relative;
-  width: 100%;
-  transition: transform 0.6s cubic-bezier(0.4,0.2,0.2,1);
-  transform-style: preserve-3d;
-}
-.hero-flip-card.flipped { transform: rotateY(180deg); }
-.hero-flip-face {
-  backface-visibility: hidden;
-}
-.hero-flip-face--front { position: relative; }
-.hero-flip-face--back {
-  position: absolute;
-  inset: 0;
-  transform: rotateY(180deg);
-}
 /* NAVBAR ACTIONS */
 .navbar-actions {
   display: flex;
@@ -307,124 +287,7 @@ button { cursor: pointer; border: none; background: none; color: inherit; font: 
   border-radius: 50%;
   border: 1.5px solid var(--bg3);
 }
-/* ГОЛОСОВАНИЕ */
-.vote-grid {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 14px;
-  margin-bottom: 8px;
-  overflow-x: auto;
-  padding-bottom: 10px;
-}
-.vote-grid::-webkit-scrollbar { height: 4px; }
-.vote-grid::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
 
-.vote-card {
-  flex: 0 0 140px;
-  width: 140px;
-}
-.vote-card {
-  background: #1a1a1a;
-  border: 2px solid #222;
-  border-radius: 14px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: border-color .2s, transform .15s;
-  position: relative;
-  user-select: none;
-}
-.vote-card:hover { border-color: #c0392b; transform: translateY(-2px); }
-.vote-card.voted { border-color: #c0392b; }
-.vote-card.voted .vote-bar-fill { background: #c0392b; }
-.vote-card-img {
-  width: 100%;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  object-position: top;
-  display: block;
-}
-.vote-card-name {
-  font-size: 12px;
-  font-weight: 700;
-  color: #fff;
-  text-align: center;
-  padding: 8px 6px 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.vote-card-count {
-  font-size: 11px;
-  color: #888;
-  text-align: center;
-  padding-bottom: 6px;
-}
-.vote-bar {
-  height: 3px;
-  background: #333;
-  margin: 0 10px 10px;
-  border-radius: 2px;
-  overflow: hidden;
-}
-.vote-bar-fill {
-  height: 100%;
-  background: #555;
-  border-radius: 2px;
-  transition: width .4s;
-}
-.vote-winner-crown {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  font-size: 18px;
-  filter: drop-shadow(0 1px 3px #000);
-}
-.vote-place-badge {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  font-size: 20px;
-  cursor: pointer;
-  filter: drop-shadow(0 1px 3px #000);
-}
-#voteTip {
-  position: fixed;
-  background: #1a1a1a;
-  border: 1px solid #444;
-  color: #fff;
-  font-size: 11px;
-  white-space: normal;
-  max-width: 180px;
-  padding: 6px 12px;
-  border-radius: 6px;
-  z-index: 9999;
-  pointer-events: none;
-  display: none;
-  line-height: 1.4;
-}
-#votePreviewModal {
-  display: none;
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  z-index: 999999 !important;
-  background: rgba(0,0,0,0.75);
-  align-items: center;
-  justify-content: center;
-}
-#votePreviewModal.open {
-  display: flex !important;
-}
-#voteAuthRequiredModal {
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 20px;
-  box-sizing: border-box;
-}
 /* ── БУРГЕР (только мобильные) ── */
 .burger-btn {
   display: none;

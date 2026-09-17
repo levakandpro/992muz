@@ -94,70 +94,11 @@
   transform: translateY(-2px);
   box-shadow: 0 8px 28px rgba(0,0,0,0.35);
 }
-.top50-hero-stats {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-.top50-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-.top50-stat-num {
-  font-family: 'Rem', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: #fff;
-}
-.top50-stat-label {
-  font-size: 11px;
-  color: rgba(255,255,255,0.35);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.top50-stat-divider {
-  width: 1px;
-  height: 32px;
-  background: rgba(255,255,255,0.12);
-}
-
-/* ФИЛЬТРЫ */
-.top50-filters {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.top50-filter {
-  font-size: 12px;
-  font-weight: 500;
-  font-family: 'Inter', sans-serif;
-  padding: 6px 16px;
-  border-radius: 100px;
-  border: 1px solid rgba(0,0,0,0.08);
-  background: var(--bg2);
-  color: var(--text3);
-  cursor: pointer;
-  transition: all 0.15s;
-  box-shadow: none;
-}
-.top50-filter:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.top50-filter.active {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
-  box-shadow: 0 2px 8px rgba(139,26,47,0.2);
-}
 
 /* КОЛОНКИ ЗАГОЛОВКИ */
 .top50-col-headers {
   display: grid;
-  grid-template-columns: 44px 54px 1fr 140px 70px 80px;
+  grid-template-columns: 44px 54px 220px 1fr 56px;
   gap: 0 12px;
   padding: 0 16px 10px;
   font-size: 11px;
@@ -170,37 +111,63 @@
 /* СТРОКА ТРЕКА — расширяем стандартный .track-row */
 #top50-list .track-row {
   display: grid;
-  grid-template-columns: 44px 54px 1fr 140px 70px 80px;
+  grid-template-columns: 44px 54px 220px 1fr 56px;
   align-items: center;
   gap: 0 12px;
-  gap: 0 12px;
-  align-items: center;
   padding: 10px 16px;
 }
-
 /* Номер топ-3 */
 .track-num.gold { color: var(--gold); font-weight: 700; font-size: 15px; }
 .track-num.silver { color: #a0a0b0; font-weight: 700; font-size: 15px; }
 .track-num.bronze { color: #cd7f32; font-weight: 700; font-size: 15px; }
 
-/* Прослушивания */
-.track-plays {
-  font-size: 12px;
-  color: var(--text2);
-  font-weight: 500;
-}
-
-/* Тренд */
-.track-trend {
-  font-size: 12px;
-  font-weight: 600;
+/* Прогресс-бар воспроизведения в строке */
+.track-progress-wrap {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 10px;
+  min-width: 0;
+  width: 100%;
 }
-.track-trend.up { color: #16a34a; }
-.track-trend.down { color: #dc2626; }
-.track-trend.eq { color: var(--text3); }
+.track-progress-bar {
+  flex: 1;
+  height: 4px;
+  background: var(--bg3);
+  border-radius: 100px;
+  cursor: pointer;
+  position: relative;
+}
+.track-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 100px;
+}
+.track-progress-time {
+  font-size: 11px;
+  color: var(--text3);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+/* Кнопка скачать */
+.track-download-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text3);
+  transition: color 0.15s, background 0.15s;
+}
+.track-download-btn:hover {
+  color: var(--accent);
+  background: var(--accent-light);
+}
 
 /* Жанр бейдж в треке */
 .track-genre-badge {
@@ -213,10 +180,15 @@
   color: var(--text2);
 }
 
-/* Сейчас играет */
+/* Сейчас играет — трек чуть выезжает вперёд, без заливки и без свечения */
+.track-row {
+  transition: transform 0.2s ease;
+}
 .track-row.playing {
-  background: var(--accent-light);
-  border-left: 3px solid var(--accent);
+  position: relative;
+  z-index: 1;
+  transform: translateX(6px);
+  border-left: 2px solid var(--accent);
 }
 .track-row.playing .track-name {
   color: var(--accent);
@@ -224,14 +196,12 @@
 .track-row.playing .track-num {
   color: var(--accent);
 }
-
 /* Адаптив */
 @media (max-width: 1024px) {
   .top50-col-headers,
   #top50-list .track-row {
-    grid-template-columns: 36px 48px 1fr 70px 60px;
+    grid-template-columns: 36px 48px 170px 1fr 48px;
   }
-  .col-plays, .track-plays { display: none; }
 }
 @media (max-width: 768px) {
   .top50-hero { flex-direction: column; padding: 28px 24px; }
@@ -243,20 +213,13 @@
   }
   .top50-col-headers,
   #top50-list .track-row {
-    grid-template-columns: 26px 40px 1fr 40px 44px;
+    grid-template-columns: 26px 40px 110px 1fr 34px;
   }
   #top50-list .track-row {
     padding: 8px 10px;
     gap: 0 8px;
   }
-  .col-genre, .track-genre-badge, .col-trend, .track-trend { display: none; }
-  .col-plays { font-size: 0; }
-  .track-plays {
-    display: block;
-    text-align: right;
-    font-size: 11px;
-    color: var(--text3);
-  }
+  .track-progress-time { display: none; }
   .track-num { font-size: 12px; }
   .track-cover { width: 36px; height: 36px; }
   .track-name { font-size: 13px; }
@@ -264,14 +227,21 @@
   .track-btns { gap: 4px; }
   .track-btn-count { display: none; }
 }
-/* Бегущая строка для длинных названий (моб.) — переиспользует @keyframes marquee-scroll из main.css */
-.track-name.marquee {
+/* Однострочный артист с обрезкой — база для срабатывания бегущей строки (только на top50) */
+#top50-list .track-artist {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Бегущая строка для длинных имён артистов — переиспользует @keyframes marquee-scroll из main.css */
+.track-artist.marquee {
   display: flex;
   gap: 24px;
   overflow: hidden;
   white-space: nowrap;
 }
-.track-name.marquee span {
+.track-artist.marquee span {
   animation: marquee-scroll 6s linear infinite;
   white-space: nowrap;
 }
@@ -294,12 +264,6 @@
 .track-like-btn img { width: 16px; height: 16px; }
 .track-like-btn.liked img { content: url('assets/icons/like.png'); }
 
-.track-share-btn {
-  width: 32px; height: 32px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  background: none;
-}
-.track-share-btn img { width: 16px; height: 16px; filter: invert(0.6); }
 .track-btns {
   display: flex; align-items: center; gap: 8px; justify-content: flex-end;
 }
@@ -309,8 +273,7 @@
   font-weight: 500;
   margin-left: 3px;
 }
-.track-like-btn:hover .track-btn-count,
-.track-share-btn:hover .track-btn-count {
+.track-like-btn:hover .track-btn-count {
   color: var(--accent);
 }
 .top50-info-btn {
@@ -339,3 +302,40 @@
   z-index: 10;
 }
 .top50-info-modal.open { display: block; }
+
+/* Кнопка "к играющему треку" — рядом со scroll-top-btn, видна только когда трек реально играет */
+.now-playing-btn {
+  position: fixed;
+  bottom: 138px;
+  right: 24px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 999;
+}
+.now-playing-btn.visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: all;
+}
+
+/* Мигание строки трека при переходе к играющему (без свечения — просто фон-вспышка) */
+@keyframes trackRowFlash {
+  0%, 100% { background: transparent; }
+  50% { background: var(--accent-light); }
+}
+.track-row.flash {
+  animation: trackRowFlash 0.45s ease-in-out 3;
+}
