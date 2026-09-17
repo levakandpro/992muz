@@ -1628,6 +1628,28 @@ function closeHomeAboutFilm(e, force){
   </section>
 
 <!-- ТРЕКИ 992: Новинки / Old School / Лучшая лирика / Поп · Эстрада — один блок с табами -->
+ <style>
+  .tracks-hub-tabs{
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .tracks-hub-tabs::-webkit-scrollbar{ display:none; }
+  @media (max-width:768px){
+    .tracks-hub-tabs{
+      display:flex;
+      flex-wrap:nowrap;
+      gap:8px;
+      scroll-snap-type:x proximity;
+    }
+    .tracks-hub-tabs .tracks-hub-tab{
+      flex:0 0 auto;
+      white-space:nowrap;
+      scroll-snap-align:start;
+    }
+  }
+</style>
 <section class="section" id="tracks-hub">
   <div class="tracks-hub-tabs" id="tracksHubTabs">
     <button class="tracks-hub-tab active" type="button" data-panel="new-releases">Новинки</button>
@@ -2053,8 +2075,7 @@ mobileOverlay.addEventListener('click',closeBurger);
 // работает надёжно на всех мобильных браузерах, где одного CSS оказалось недостаточно.
 // Внутри специальных горизонтальных каруселей (хиты, плейлисты) свайп вбок
 // по-прежнему разрешён и работает как обычно.
-(function() {
-   var HORIZONTAL_SCROLL_SELECTORS = '.random-hits-strip-wrap, .items-grid.scrollable, .pl-strip-wrap, .new-tracks-list';
+(function() {  var HORIZONTAL_SCROLL_SELECTORS = '.random-hits-strip-wrap, .items-grid.scrollable, .pl-strip-wrap, .new-tracks-list, .tracks-hub-tabs'; var HORIZONTAL_SCROLL_SELECTORS = '.random-hits-strip-wrap, .items-grid.scrollable, .pl-strip-wrap, .new-tracks-list';
   var startX = 0, startY = 0, lockedHorizontal = false, insideAllowedArea = false;
 
   document.addEventListener('touchstart', function(e) {
