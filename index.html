@@ -213,6 +213,7 @@
       <span style="font-weight:600;font-size:9.5px;letter-spacing:.15px;opacity:.85;white-space:nowrap;line-height:1.25;color:var(--text2,#555);">платформа таджикской<br>хип-хоп индустрии</span>
       </a>
       <ul class="navbar-nav">
+      <ul class="navbar-nav">
         <li><a href="/" class="active">Главная</a></li>
         <li><a href="/artists">Артисты</a></li>
         <li><a href="/videos">Видео</a></li>
@@ -220,6 +221,10 @@
           <li><a href="/masterskaya">Мастерская</a></li>
         <li><button class="nav-soon-btn" id="navSoonBtn" type="button">СКОРО</button></li>
       </ul>
+      <div class="navbar-mini-video" id="navbarMiniVideo">
+        <video id="navbarMiniVideoEl" muted playsinline autoplay preload="metadata" disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false"></video>
+        <video id="navbarMiniVideoElNext" muted playsinline preload="none" disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false" style="position:absolute;inset:0;opacity:0;pointer-events:none;"></video>
+      </div>
  <div class="nav-search-wrap" id="navSearchWrap">
         <button class="nav-search-icon-btn" id="navSearchToggle">
           <img src="assets/icons/search.png" alt="">
@@ -246,11 +251,7 @@
         </button>
       </div>
     </div>
-    <div class="navbar-mobile-stats" id="navbarMobileStats">
-      <span><b id="nfsFansMobile">—</b> фанатов</span>
-      <span class="nfs-sep">·</span>
-      <span><b id="nfsArtistsMobile">—</b> артистов</span>
-    </div>
+
   </div>
 </nav>
 <div class="wrap" style="padding-top:20px; padding-bottom:100px;">
@@ -437,7 +438,7 @@
   }
 
   .featured-track-card::after{
-    content:"НОВИНКА";
+    content:"В ТОПЕ";
     position:absolute;
     top:20px;
     right:24px;
@@ -1591,93 +1592,6 @@ function closeHomeAboutFilm(e, force){
     </div>
   </section>
 
- <!-- ТОП 10 АРТИСТОВ -->
-  <style>
-    .section-head-top-artists{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-    .section-title-row{display:flex;align-items:center;gap:8px;}
-    .info-tip{position:relative;display:inline-flex;}
-    .info-tip-icon{width:18px;height:18px;border-radius:50%;background:var(--bg3,#eee);color:var(--text3,#888);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;border:1px solid rgba(0,0,0,0.08);}
-     .info-tip-box{display:none;position:absolute;top:26px;left:0;z-index:30;width:260px;max-width:calc(100vw - 32px);background:#1a1a1a;color:#fff;font-size:12px;line-height:1.5;font-weight:400;padding:12px 14px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.25);}
-    .info-tip-box::before{content:'';position:absolute;top:-6px;left:12px;width:12px;height:12px;background:#1a1a1a;transform:rotate(45deg);}
-    .info-tip-box.js-fixed{position:fixed;top:auto;}
-    .info-tip-box.js-fixed::before{display:none;}
-    .info-tip.open .info-tip-box{display:block;}
-    .info-tip-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 12px;border-radius:100px;background:linear-gradient(90deg,#8B1A2F,#c2185b);color:#fff;font-size:11px;font-weight:700;text-decoration:none;letter-spacing:0.02em;transition:opacity .2s ease,transform .2s ease;}
-    .info-tip-link:hover{opacity:0.88;transform:translateY(-1px);}
-    .info-tip-link img{width:13px;height:13px;filter:brightness(0) invert(1);}
-    .section-more-btn{font-size:13px;font-weight:600;color:var(--accent,#635bff);white-space:nowrap;text-decoration:none;padding:8px 16px;border:1px solid var(--bg3,#eee);border-radius:100px;transition:background .15s;}
-    .section-more-btn:hover{background:var(--bg3,#f3f3f3);}
-
-.chart-list{background:#fff;border-radius:18px;box-shadow:0 2px 14px rgba(0,0,0,.06);overflow:hidden;}
-    .chart-row{display:flex;align-items:center;gap:14px;padding:12px 16px;text-decoration:none;color:inherit;border-bottom:1px solid rgba(0,0,0,.05);transition:background .15s;}
-    .chart-row:last-child{border-bottom:none;}
-    .chart-row:hover{background:rgba(0,0,0,.025);}
-    .chart-rank{width:34px;flex:0 0 34px;font-size:20px;font-weight:800;font-style:italic;color:var(--text3,#b7bcc4);text-align:center;letter-spacing:-.5px;}
-    .chart-rank.r1{background:linear-gradient(135deg,#ffd76a,#ff8a00);-webkit-background-clip:text;background-clip:text;color:transparent;}
-    .chart-rank.r2{background:linear-gradient(135deg,#dfe4e9,#9aa4ad);-webkit-background-clip:text;background-clip:text;color:transparent;}
-    .chart-rank.r3{background:linear-gradient(135deg,#e3a670,#a15a26);-webkit-background-clip:text;background-clip:text;color:transparent;}
-    .chart-avatar{position:relative;width:44px;height:44px;flex:0 0 44px;border-radius:50%;overflow:hidden;background:var(--bg3,#eee);}
-    .chart-avatar img{width:100%;height:100%;object-fit:cover;display:block;}
-    .chart-verified{position:absolute;bottom:-2px;right:-2px;width:16px;height:16px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.25);}
-    .chart-verified img{width:10px;height:10px;}
-    .chart-main{flex:1;min-width:0;}
-    .chart-name{font-size:13.5px;font-weight:700;color:var(--text,#111);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px;}
-    .chart-bar-track{height:5px;border-radius:100px;background:var(--bg3,#eee);overflow:hidden;}
-    .chart-bar-fill{height:100%;border-radius:100px;width:0%;background:linear-gradient(90deg,var(--accent,#635bff),#8b7bff);transition:width 1s cubic-bezier(.2,.8,.2,1);}
-    .chart-bar-fill.r1{background:linear-gradient(90deg,#ffb238,#ff7a00);}
-    .chart-bar-fill.r2{background:linear-gradient(90deg,#c7ced4,#8b959e);}
-    .chart-bar-fill.r3{background:linear-gradient(90deg,#d98f52,#8a4a1c);}
-    .chart-subs{flex:0 0 auto;text-align:right;font-size:12.5px;font-weight:700;color:var(--text3,#8a8f98);display:flex;align-items:center;gap:4px;min-width:52px;justify-content:flex-end;}
-    .chart-subs img{width:11px;height:11px;opacity:.55;}
-    .chart-skel-row{display:flex;align-items:center;gap:14px;padding:12px 16px;}
-    .chart-skel-circle{width:44px;height:44px;border-radius:50%;background:linear-gradient(100deg,#eee 30%,#f6f6f6 50%,#eee 70%);background-size:200% 100%;animation:chartShimmer 1.2s infinite;flex:0 0 44px;}
-    .chart-skel-line{flex:1;height:10px;border-radius:6px;background:linear-gradient(100deg,#eee 30%,#f6f6f6 50%,#eee 70%);background-size:200% 100%;animation:chartShimmer 1.2s infinite;}
-   @keyframes chartShimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
-.top-artists-video-banner{position:relative;width:100%;border-radius:18px;overflow:hidden;background:#0a0a0a;aspect-ratio:1920/200;margin-bottom:10px;user-select:none;-webkit-user-select:none;}
-    .top-artists-video-banner video{width:100%;height:100%;object-fit:cover;display:block;background:#0a0a0a;transition:opacity .25s ease;}
-    .top-artists-expand-btn{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:26px;border:none;border-radius:100px;cursor:pointer;overflow:hidden;background:linear-gradient(90deg,rgba(139,26,47,0.12),rgba(139,26,47,0.45),rgba(139,26,47,0.12));margin-bottom:10px;padding:0;}
-    .top-artists-expand-shimmer{position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,0.25) 50%,transparent 70%);background-size:200% 100%;animation:topArtistsShimmer 2.2s infinite;}
-    .top-artists-expand-chevron{position:relative;z-index:2;color:#fff;opacity:.85;animation:topArtistsBounce 1.6s infinite;transition:transform .3s;}
-    .top-artists-expand-btn.open .top-artists-expand-chevron{transform:rotate(180deg);animation:none;}
-    @keyframes topArtistsShimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
-    @keyframes topArtistsBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(3px);}}
-  </style>
-<section class="section" id="top-artists">
-    <div class="section-head section-head-top-artists">
-      <div>
-        <div class="section-label">Рейтинг</div>
-        <div class="section-title-row">
-          <h2>Топ 10 артистов</h2>
-          <span class="info-tip" id="topArtistsInfo">
-            <span class="info-tip-icon">?</span>
-                       <span class="info-tip-box">
-              Топ формируется по голосованию в Instagram-сторис @992muz - туда попадают артисты, за которых проголосовали подписчики.
-              <a href="https://www.instagram.com/992muz/" target="_blank" rel="noopener" class="info-tip-link">
-                <img src="assets/icons/instagram.png" alt="">
-                Смотреть
-              </a>
-            </span>
-          </span>
-        </div>
-      </div>
-     <a href="/artists" class="section-more-btn">Смотреть все</a>
-    </div>
-
- <div class="top-artists-video-banner" id="topArtistsVideoBanner">
- <video id="topArtistsVideo" muted playsinline autoplay preload="metadata" disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false" poster="assets/icons/mountain.png"></video>
-      <video id="topArtistsVideoNext" muted playsinline preload="none" disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false" style="position:absolute;inset:0;opacity:0;pointer-events:none;"></video>
-    </div>
-
-    <button class="top-artists-expand-btn" id="topArtistsExpandBtn" aria-expanded="false">
-      <span class="top-artists-expand-shimmer"></span>
-      <svg class="top-artists-expand-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-    </button>
-
-    <div class="chart-list" id="top-artists-grid" style="display:none;">
-      <!-- JS заполняет -->
-    </div>
-  </section>
-
 <!-- ТРЕКИ 992: Новинки / Old School / Лучшая лирика / Поп · Эстрада — один блок с табами -->
  <style>
   .tracks-hub-tabs{
@@ -2136,6 +2050,49 @@ mobileOverlay.addEventListener('click',closeBurger);
 })();
 </script>
 <script>
+(function(){
+  var videos = ['assets/video/intro.mp4','assets/video/intro2.mp4','assets/video/intro3.mp4','assets/video/intro4.mp4'];
+  var vIdx = 0;
+  var vEl = document.getElementById('navbarMiniVideoEl');
+  var vElNext = document.getElementById('navbarMiniVideoElNext');
+  if (!vEl || !vElNext) return;
+
+  function nextIndex(i){ return (i + 1) % videos.length; }
+
+  function preloadNext(idx){
+    vElNext.src = videos[idx];
+    vElNext.load();
+  }
+
+  function swapToNext(){
+    vElNext.currentTime = 0;
+    vElNext.play().catch(function(){});
+    vElNext.style.opacity = '1';
+    vElNext.style.zIndex = '2';
+    vEl.style.zIndex = '1';
+
+    setTimeout(function(){
+      vEl.src = vElNext.src;
+      vEl.currentTime = vElNext.currentTime;
+      vEl.play().catch(function(){});
+      vEl.style.opacity = '1';
+      vEl.style.zIndex = '2';
+      vElNext.style.opacity = '0';
+      vElNext.style.zIndex = '1';
+
+      vIdx = nextIndex(vIdx);
+      preloadNext(nextIndex(vIdx));
+    }, 260);
+  }
+
+  vEl.addEventListener('ended', swapToNext);
+  vEl.preload = 'auto';
+  vEl.src = videos[vIdx];
+  vEl.play().catch(function(){});
+  preloadNext(nextIndex(vIdx));
+})();
+</script>
+<script>
 // Жёстко запрещаем горизонтальное "утягивание" всей страницы при свайпе пальцем —
 // работает надёжно на всех мобильных браузерах, где одного CSS оказалось недостаточно.
 // Внутри специальных горизонтальных каруселей (хиты, плейлисты) свайп вбок
@@ -2426,6 +2383,14 @@ if (window.isLowPowerDevice) {
 }
 </script>
 <script>
+// ВРЕМЕННЫЙ ДИАГНОСТИЧЕСКИЙ ХЕНДЛЕР — показывает alert с текстом ошибки,
+// если что-то падает при клике на трек. Убрать после того как найдём причину.
+window.addEventListener('error', function(e){
+  alert('JS ошибка: ' + e.message + '\nФайл: ' + e.filename + ':' + e.lineno);
+});
+window.addEventListener('unhandledrejection', function(e){
+  alert('Promise ошибка: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+});
 // ЕДИНЫЙ ПЛЕЕР - управляет паузой/воспроизведением независимо от прокрутки страницы
 window.gp={audio:null,overlayImg:null};
 function gpUpdateIcon(playing){
@@ -2860,7 +2825,9 @@ currentRow = row;
 currentAudio.addEventListener('ended', () => {
           overlay.src='assets/icons/play.png'; fill.style.width='0%'; prog.style.display='none';
         });
-currentAudio.play();
+currentAudio.play().catch(function(err){
+          alert('Ошибка play() [Новинки]: ' + err.name + ' — ' + err.message);
+        });
         window.setNowPlaying && window.setNowPlaying(currentAudio, t.title, t.artist, t.coverUrl, overlay);
         var qIdx = Array.from(grid.children).indexOf(row);
         window.gp.setQueue(Array.from(grid.children).map(r => ({ play: () => r.querySelector('.new-track-cover-wrap')?.click() })), qIdx);
@@ -2893,208 +2860,6 @@ currentAudio.play();
 // Загрузка "Новинок" теперь запускается из общего блока табов ниже —
 // сразу, если эта вкладка выпала случайной стартовой, либо лениво при клике на неё.
 
-function fmtCompactNum(n) {
-  n = n || 0;
-  if (n >= 1000000) return (n/1000000).toFixed(1).replace(/\.0$/,'') + 'M';
-  if (n >= 1000) return (n/1000).toFixed(1).replace(/\.0$/,'') + 'K';
-  return String(n);
-}
-
-function renderTopArtistsSkeletons() {
-  const grid = document.getElementById('top-artists-grid');
-  if (!grid) return;
-  let html = '';
-  for (let i = 0; i < 6; i++) {
-    html += `<div class="chart-skel-row"><div class="chart-skel-circle"></div><div class="chart-skel-line"></div></div>`;
-  }
-  grid.innerHTML = html;
-}
-
-async function loadTopArtists() {
-  const grid = document.getElementById('top-artists-grid');
-  if (!grid) return;
-  renderTopArtistsSkeletons();
-  try {
-    const q = query(collection(db, 'artistApplications'), where('status', '==', 'active'), orderBy('subscribersCount', 'desc'), limit(10));
-    const snap = await getDocs(q);
-    if (snap.empty) { grid.innerHTML = '<div style="padding:30px;color:#999;font-size:13px;">Артистов пока нет</div>'; return; }
-    const top10 = snap.docs.map(d => {
-      const a = d.data();
-return {
-        id: a.uid || d.id,
-        name: a.nickname || a.displayName || 'Артист',
-        photo: window.cldImg(a.avatarUrl, 80) || 'assets/images/kartochki/vert.jpg',
-        verified: a.verified || false,
-        subscribers: a.subscribersCount || 0
-      };
-    });
-    const maxSubs = Math.max(top10[0]?.subscribers || 1, 1);
-    grid.innerHTML = '';
-    const fills = [];
-    const fragment = document.createDocumentFragment();
-    top10.forEach((a, i) => {
-      const rank = i + 1;
-      const rankClass = rank === 1 ? 'r1' : rank === 2 ? 'r2' : rank === 3 ? 'r3' : '';
-      const pct = Math.max(4, Math.round((a.subscribers / maxSubs) * 100));
-      const row = document.createElement('a');
-      row.href = `artists.html?artist=${a.id}`;
-      row.className = 'chart-row';
-      row.innerHTML = `
-        <div class="chart-rank ${rankClass}">${rank}</div>
-        <div class="chart-avatar">
-          <img src="${escapeHtml(a.photo)}" alt="" loading="lazy" onerror="this.src='assets/images/kartochki/vert.jpg'">
-          ${a.verified ? `<div class="chart-verified"><img src="assets/icons/verification.png" alt=""></div>` : ''}
-        </div>
-        <div class="chart-main">
-          <div class="chart-name">${escapeHtml(a.name)}</div>
-          <div class="chart-bar-track"><div class="chart-bar-fill ${rankClass}" data-pct="${pct}"></div></div>
-        </div>
-        <div class="chart-subs"><img src="assets/icons/profile.png" alt="">${fmtCompactNum(a.subscribers)}</div>
-      `;
-      fragment.appendChild(row);
-      fills.push(row.querySelector('.chart-bar-fill'));
-    });
-    grid.appendChild(fragment);
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        fills.forEach(f => { f.style.width = f.dataset.pct + '%'; });
-      });
-    });
-  } catch(e) {
-    console.error(e);
-    grid.innerHTML = '<div style="padding:30px;color:#999;font-size:13px;">Ошибка загрузки</div>';
-  }
-}
-
-loadTopArtists();
-
-document.getElementById('topArtistsInfo')?.addEventListener('click', function(e) {
-  e.stopPropagation();
-  var tipEl = this;
-  var willOpen = !tipEl.classList.contains('open');
-  tipEl.classList.toggle('open');
-  var box = tipEl.querySelector('.info-tip-box');
-  if (willOpen && box && window.innerWidth <= 768) {
-    var iconRect = tipEl.getBoundingClientRect();
-    box.classList.add('js-fixed');
-    box.style.top = (iconRect.bottom + 8) + 'px';
-    var boxWidth = Math.min(260, window.innerWidth - 32);
-    box.style.width = boxWidth + 'px';
-    var left = iconRect.left;
-    var maxLeft = window.innerWidth - boxWidth - 16;
-    if (left > maxLeft) left = maxLeft;
-    if (left < 16) left = 16;
-    box.style.left = left + 'px';
-  } else if (box) {
-    box.classList.remove('js-fixed');
-    box.style.top = '';
-    box.style.left = '';
-    box.style.width = '';
-  }
-});
-document.addEventListener('click', function() {
-  var tipEl = document.getElementById('topArtistsInfo');
-  if (!tipEl) return;
-  tipEl.classList.remove('open');
-  var box = tipEl.querySelector('.info-tip-box');
-  if (box) {
-    box.classList.remove('js-fixed');
-    box.style.top = '';
-    box.style.left = '';
-    box.style.width = '';
-  }
-});
-
-(function(){
-  var videos = ['assets/video/intro.mp4','assets/video/intro2.mp4','assets/video/intro3.mp4','assets/video/intro4.mp4'];
-  var vIdx = 0;
-  var vEl = document.getElementById('topArtistsVideo');
-  var vElNext = document.getElementById('topArtistsVideoNext');
-  var banner = document.getElementById('topArtistsVideoBanner');
-  var isVisible = false;
-  var started = false;
-
-  if (vEl && vElNext && banner) {
-
-    function nextIndex(i){ return (i + 1) % videos.length; }
-
-    function preloadNext(idx){
-      vElNext.src = videos[idx];
-      vElNext.load();
-    }
-
-    function swapToNext(){
-      // следующий ролик уже прогружен — просто меняем местами без чёрного кадра
-      vElNext.currentTime = 0;
-      vElNext.play().catch(function(){});
-      vElNext.style.opacity = '1';
-      vElNext.style.zIndex = '2';
-      vEl.style.zIndex = '1';
-
-      setTimeout(function(){
-        // переносим "next" на главный слот
-        vEl.src = vElNext.src;
-        vEl.currentTime = vElNext.currentTime;
-        vEl.play().catch(function(){});
-        vEl.style.opacity = '1';
-        vEl.style.zIndex = '2';
-        vElNext.style.opacity = '0';
-        vElNext.style.zIndex = '1';
-
-        vIdx = nextIndex(vIdx);
-        var upcoming = nextIndex(vIdx);
-        if (isVisible) preloadNext(upcoming);
-      }, 260);
-    }
-
-    function startPlayback(){
-      if (started) return;
-      started = true;
-      vEl.preload = 'auto';
-      vEl.src = videos[vIdx];
-      vEl.play().catch(function(){});
-      preloadNext(nextIndex(vIdx));
-    }
-
-    function stopPlayback(){
-      started = false;
-      vEl.pause();
-      vElNext.pause();
-    }
-
-    vEl.addEventListener('ended', swapToNext);
-
-    // Грузим и играем только когда баннер реально виден — экономит батарею и трафик на слабых устройствах
-    if ('IntersectionObserver' in window) {
-      var observer = new IntersectionObserver(function(entries){
-        entries.forEach(function(entry){
-          isVisible = entry.isIntersecting;
-          if (isVisible) startPlayback();
-          else stopPlayback();
-        });
-      }, { threshold: 0.25 });
-      observer.observe(banner);
-    } else {
-      isVisible = true;
-      startPlayback();
-    }
-
-    // Пауза при уходе со вкладки — доп. экономия батареи
-    document.addEventListener('visibilitychange', function(){
-      if (document.hidden) { vEl.pause(); vElNext.pause(); }
-      else if (isVisible) { vEl.play().catch(function(){}); }
-    });
-  }
-  var expandBtn = document.getElementById('topArtistsExpandBtn');
-  var grid = document.getElementById('top-artists-grid');
-  if (expandBtn && grid) {
-    expandBtn.addEventListener('click', function(){
-      var isOpen = expandBtn.classList.toggle('open');
-      expandBtn.setAttribute('aria-expanded', isOpen);
-      grid.style.display = isOpen ? '' : 'none';
-    });
-  }
-})();
 
 async function loadBlock(collectionNames, gridId) {
   const grid = document.getElementById(gridId);
@@ -3180,7 +2945,9 @@ currentAudio.addEventListener('timeupdate', () => {
         currentAudio.addEventListener('ended', () => {
           overlay.src='assets/icons/play.png'; fill.style.width='0%'; prog.style.display='none';
         });
-        currentAudio.play();
+        currentAudio.play().catch(function(err){
+          alert('Ошибка play() [' + collectionName + ']: ' + err.name + ' — ' + err.message);
+        });
 window.setNowPlaying && window.setNowPlaying(currentAudio, t.title, t.artist, t.coverUrl, overlay);
         var qIdx = Array.from(grid.children).indexOf(row);
         window.gp.setQueue(Array.from(grid.children).map(r => ({ play: () => r.querySelector('.new-track-cover-wrap')?.click() })), qIdx);

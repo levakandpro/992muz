@@ -223,7 +223,7 @@ button { cursor: pointer; border: none; background: none; color: inherit; font: 
   .navbar-inner { gap: 8px; }
   #vidSearch { width: 110px !important; }
   #vidSearch:focus { width: 140px !important; }
-.navbar-logo { margin-right: auto !important; }
+.navbar-logo { margin-right: 10px !important; }
   .burger-btn { flex-shrink: 0; }
 
 .navbar-inner { position: relative; }
