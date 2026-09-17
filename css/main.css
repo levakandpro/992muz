@@ -217,7 +217,7 @@ button { cursor: pointer; border: none; background: none; color: inherit; font: 
   pointer-events: all;
 }
 @media (max-width: 768px) {
-  .wrap { padding: 0 16px; }
+  .wrap { padding: 0 8px; }
   .navbar-logo img { height: 60px !important; }
  .navbar-logo span { font-size: 7px !important; max-width: 70px; }
   .navbar-inner { gap: 8px; }
