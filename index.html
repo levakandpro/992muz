@@ -174,7 +174,7 @@
   <div class="wrap">
     <div class="navbar-inner">
       <button class="burger-btn" id="burgerBtn" aria-label="Меню">
-        <span></span><span></span><span></span>
+        <img class="burger-gif" id="burgerGif" src="assets/models/Menu loading.gif" alt="">
       </button>
       <div class="mobile-overlay" id="mobileOverlay"></div>
 <div class="mobile-menu" id="mobileMenu"><img src="assets/icons/logonew/zegr.png" alt="" class="mobile-menu-watermark">
@@ -415,10 +415,7 @@
     overflow:hidden;
     border:1px solid rgba(255,255,255,0.14);
     border-radius:24px;
-    background:
-      radial-gradient(circle at 9% 15%,rgba(157,28,54,0.45),transparent 34%),
-      radial-gradient(circle at 100% 100%,rgba(105,13,31,0.4),transparent 38%),
-      linear-gradient(135deg,#211015 0%,#130d10 52%,#0b0a0b 100%);
+    background: linear-gradient(135deg,#211015 0%,#130d10 52%,#0b0a0b 100%);
     box-shadow:0 24px 56px rgba(25,8,13,0.26);
     color:#fff;
     transition:opacity .4s ease,transform .4s ease,box-shadow .25s ease;
@@ -760,6 +757,21 @@
     .ft-actions-row{
       justify-content:center;
     }
+
+    .ft-action-btn{
+      padding:7px 12px;
+      font-size:11px;
+      gap:5px;
+    }
+
+    .ft-action-btn svg{
+      width:13px;
+      height:13px;
+    }
+
+    .featured-track-card{
+      box-shadow:0 8px 20px rgba(0,0,0,0.18);
+    }
   }
 </style>
 <style>
@@ -1011,6 +1023,10 @@
     .film-banner-card.expanded .film-banner-content{
       padding:18px;
     }
+
+    .film-banner-card{
+      box-shadow:0 6px 16px rgba(0,0,0,0.2);
+    }
   }
 
   .film-banner-title{
@@ -1116,6 +1132,10 @@
     .film-banner-title{ font-size:19px; }
     .film-banner-card.expanded .film-banner-content{ padding:18px; }
     .film-cast-avatar, .film-cast-more{ width:28px; height:28px; font-size:9.5px; }
+    .film-banner-actions{ gap:6px; flex-wrap:nowrap; }
+    .film-banner-actions .film-banner-btn{ padding:8px 12px; font-size:11.5px; gap:4px; white-space:nowrap; }
+    .film-banner-actions .film-banner-btn svg{ width:11px; height:11px; }
+    .film-banner-actions img[alt="Parental Advisory"]{ width:36px; flex-shrink:0; }
   }
   .film-banner-hide-item{
     opacity:0;
@@ -1186,6 +1206,10 @@
   .film-banner-toggle-btn svg{
     transition:transform 0.3s ease;
   }
+  .film-banner-card.expanded .film-banner-toggle-btn{
+    display:none;
+  }
+
   .film-banner-card.expanded .film-banner-toggle-btn svg{
     transform:rotate(180deg);
   }
@@ -1207,13 +1231,12 @@
       <div class="film-banner-grad film-banner-hide-item"></div>
       <div class="film-banner-toggle-grad"></div>
 
-      <button type="button" class="film-banner-toggle-btn" onclick="toggleFilmBanner(this)">
+      <button type="button" class="film-banner-toggle-btn film-toggle-btn" onclick="toggleFilmBanner(this)">
         <span>СМОТРЕТЬ</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
 
-      <img class="film-banner-hide-item" src="assets/icons/new.png" alt="NEW" style="position:absolute;top:16px;right:16px;width:46px;height:auto;z-index:3;">
-      <img class="film-banner-hide-item" src="assets/images/advisory/1 (4).png" alt="Parental Advisory" style="position:absolute;top:16px;right:70px;width:44px;height:auto;z-index:3;">
+       <img class="film-banner-hide-item" src="assets/icons/new.png" alt="NEW" style="position:absolute;top:16px;right:16px;width:46px;height:auto;z-index:3;">
 
       <div class="film-banner-content-wrap"><div class="film-banner-content">
         <video class="film-banner-logo-video-desktop" src="assets/video/992.mp4" muted playsinline autoplay loop disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false"></video>
@@ -1232,6 +1255,11 @@
           </button>
           <button class="film-banner-btn secondary" id="filmShareBtn" style="padding:11px 14px;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+          </button>
+          <img class="film-banner-hide-item" src="assets/images/advisory/1 (4).png" alt="Parental Advisory" style="width:44px;height:auto;align-self:center;">
+            <button type="button" class="film-banner-btn secondary film-banner-hide-item film-toggle-btn" onclick="toggleFilmBanner(this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            <span>Скрыть</span>
           </button>
         </div>
       </div>
@@ -1330,8 +1358,9 @@
     var card = btn.closest('.film-banner-card');
     if (!card) return;
     var expanded = card.classList.toggle('expanded');
-    var label = btn.querySelector('span');
-    if (label) label.textContent = expanded ? 'Скрыть' : 'СМОТРЕТЬ';
+    card.querySelectorAll('.film-toggle-btn span').forEach(function(label){
+      label.textContent = expanded ? 'Скрыть' : 'СМОТРЕТЬ';
+    });
     if (expanded) {
       loadFilmVideo(false);
       markFilmWatched();
@@ -2043,7 +2072,17 @@ document.querySelectorAll('.modal-overlay').forEach(function(m){m.addEventListen
 var burgerBtn=document.getElementById('burgerBtn'),mobileMenu=document.getElementById('mobileMenu'),mobileOverlay=document.getElementById('mobileOverlay'),mobileMenuClose=document.getElementById('mobileMenuClose');
 if(!burgerBtn||!mobileMenu||!mobileOverlay)return;
 function openBurger(){burgerBtn.classList.add('open');mobileMenu.classList.add('open');mobileOverlay.classList.add('open');document.body.style.overflow='hidden';}
-function closeBurger(){burgerBtn.classList.remove('open');mobileMenu.classList.remove('open');mobileOverlay.classList.remove('open');document.body.style.overflow='';}
+function closeBurger(){
+  burgerBtn.classList.remove('open');
+  mobileMenu.classList.remove('open');
+  mobileOverlay.classList.remove('open');
+  document.body.style.overflow='';
+  var gif=document.getElementById('burgerGif');
+  if(gif){
+    var baseSrc=gif.getAttribute('src').split('?')[0];
+    gif.src=baseSrc+'?t='+Date.now();
+  }
+}
 burgerBtn.addEventListener('click',openBurger);
 if(mobileMenuClose)mobileMenuClose.addEventListener('click',closeBurger);
 mobileOverlay.addEventListener('click',closeBurger);
@@ -2382,15 +2421,102 @@ if (window.isLowPowerDevice) {
   document.documentElement.classList.add('low-power');
 }
 </script>
+<style>
+  .toast992{
+    position:fixed;
+    left:50%;
+    bottom:84px;
+    transform:translateX(-50%) translateY(16px);
+    max-width:min(92vw,380px);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#1a1a1a;
+    border:1px solid rgba(139,26,47,0.5);
+    border-radius:100px;
+    padding:12px 18px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.45);
+    color:#fff;
+    font-size:13px;
+    font-weight:600;
+    z-index:99999;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .toast992.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+    pointer-events:auto;
+  }
+  .toast992-icon{
+    width:20px;
+    height:20px;
+    flex-shrink:0;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .toast992.error .toast992-icon{
+    background:rgba(139,26,47,0.25);
+    color:#e34a65;
+  }
+  .toast992.info .toast992-icon{
+    background:rgba(139,26,47,0.18);
+    color:var(--gold,#d4a843);
+  }
+  @media (max-width:480px){
+    .toast992{ bottom:78px; font-size:12.5px; padding:11px 16px; }
+  }
+</style>
 <script>
-// ВРЕМЕННЫЙ ДИАГНОСТИЧЕСКИЙ ХЕНДЛЕР — показывает alert с текстом ошибки,
-// если что-то падает при клике на трек. Убрать после того как найдём причину.
-window.addEventListener('error', function(e){
-  alert('JS ошибка: ' + e.message + '\nФайл: ' + e.filename + ':' + e.lineno);
-});
-window.addEventListener('unhandledrejection', function(e){
-  alert('Promise ошибка: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
-});
+// ЕДИНЫЙ TOAST В СТИЛЕ 992MUZ — заменяет alert() на аккуратное уведомление снизу экрана.
+// Использование: showToast('Текст сообщения', 'error' | 'info')
+(function(){
+  var toastEl = null;
+  var toastTimer = null;
+
+  function ensureToast(){
+    if (toastEl) return toastEl;
+    toastEl = document.createElement('div');
+    toastEl.innerHTML = '<span class="toast992-icon"></span><span class="toast992-text"></span>';
+    document.body.appendChild(toastEl);
+    return toastEl;
+  }
+
+  var ICON_ERROR = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  var ICON_INFO = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+  window.showToast = function(message, type){
+    type = type === 'info' ? 'info' : 'error';
+    var el = ensureToast();
+    el.className = 'toast992 ' + type;
+    el.querySelector('.toast992-text').textContent = message;
+    el.querySelector('.toast992-icon').innerHTML = type === 'info' ? ICON_INFO : ICON_ERROR;
+    requestAnimationFrame(function(){ el.classList.add('show'); });
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 4000);
+  };
+
+  // Разрыв/восстановление интернет-соединения — единственное, о чём стоит
+  // сообщать пользователю напрямую (а не молча писать в консоль).
+  window.addEventListener('offline', function(){
+    showToast('Нет соединения с интернетом', 'error');
+  });
+  window.addEventListener('online', function(){
+    showToast('Соединение восстановлено', 'info');
+  });
+
+  // Тихое логирование непойманных JS-ошибок — только в консоль для разработчика.
+  // Раньше здесь был alert() с сырым текстом ошибки на каждого пользователя сайта — убрано.
+  window.addEventListener('error', function(e){
+    console.error('JS ошибка:', e.message, 'Файл:', e.filename + ':' + e.lineno);
+  });
+  window.addEventListener('unhandledrejection', function(e){
+    console.error('Promise ошибка:', e.reason);
+  });
+})();
 // ЕДИНЫЙ ПЛЕЕР - управляет паузой/воспроизведением независимо от прокрутки страницы
 window.gp={audio:null,overlayImg:null};
 function gpUpdateIcon(playing){
@@ -2826,7 +2952,8 @@ currentAudio.addEventListener('ended', () => {
           overlay.src='assets/icons/play.png'; fill.style.width='0%'; prog.style.display='none';
         });
 currentAudio.play().catch(function(err){
-          alert('Ошибка play() [Новинки]: ' + err.name + ' — ' + err.message);
+          console.error('Ошибка play() [Новинки]:', err);
+          showToast('Не удалось запустить трек. Проверьте соединение.', 'error');
         });
         window.setNowPlaying && window.setNowPlaying(currentAudio, t.title, t.artist, t.coverUrl, overlay);
         var qIdx = Array.from(grid.children).indexOf(row);
@@ -2945,8 +3072,9 @@ currentAudio.addEventListener('timeupdate', () => {
         currentAudio.addEventListener('ended', () => {
           overlay.src='assets/icons/play.png'; fill.style.width='0%'; prog.style.display='none';
         });
-        currentAudio.play().catch(function(err){
-          alert('Ошибка play() [' + collectionName + ']: ' + err.name + ' — ' + err.message);
+currentAudio.play().catch(function(err){
+          console.error('Ошибка play() [' + collectionName + ']:', err);
+          showToast('Не удалось запустить трек. Проверьте соединение.', 'error');
         });
 window.setNowPlaying && window.setNowPlaying(currentAudio, t.title, t.artist, t.coverUrl, overlay);
         var qIdx = Array.from(grid.children).indexOf(row);

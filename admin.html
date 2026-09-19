@@ -179,7 +179,9 @@ select.btn{padding:5px 8px}
       <h1>Сообщение всем пользователям</h1>
       <div id="msgResult" class="msg"></div>
 <div class="form-row">
-        <div class="field"><label>Текст сообщения</label><textarea id="msgText" rows="4" style="width:100%;resize:vertical;"></textarea></div>
+              <div class="field"><label>Текст сообщения</label><textarea id="msgText" rows="4" style="width:100%;resize:vertical;"></textarea>
+          <input id="pinnedMsgYoutube" placeholder="YouTube ссылка (необязательно)..." style="width:100%;margin-top:8px;">
+        </div>
       </div>
       <div class="form-row">
         <div class="field"><label>Тип сообщения</label>
@@ -1216,10 +1218,8 @@ async function cldUpload(file, folder) {
 }
 // ─── R2 (Cloudflare) — для новых треков, вместо Cloudinary ───
 const R2_CONFIG = {
-  workerUrl: 'https://white-fog-aa2c992muzmedia.levakandproduction.workers.dev',
-  uploadSecret: 'r2upload_992muz_9f3kd82jz7Q'
+  workerUrl: 'https://white-fog-aa2c992muzmedia.levakandproduction.workers.dev'
 };
-
 function getAudioDuration(file) {
   return new Promise((resolve) => {
     const url = URL.createObjectURL(file);
@@ -1239,14 +1239,15 @@ function getAudioDuration(file) {
 }
 
 async function r2Upload(file, folder, trackTitle) {
+  if (!auth.currentUser) throw new Error('Нужно войти в админку');
+  const idToken = await auth.currentUser.getIdToken();
   const fd = new FormData();
   fd.append('file', file);
   fd.append('folder', folder);
-  fd.append('secret', R2_CONFIG.uploadSecret);
   if (trackTitle) fd.append('trackTitle', trackTitle);
   const r = await fetch(R2_CONFIG.workerUrl, {
     method: 'POST',
-    headers: { 'X-Upload-Secret': R2_CONFIG.uploadSecret },
+    headers: { 'Authorization': 'Bearer ' + idToken },
     body: fd
   });
   const d = await r.json();
@@ -1255,7 +1256,6 @@ async function r2Upload(file, folder, trackTitle) {
   }
   return d;
 }
-
 // ─── ТОП ЧАРТ: еженедельный снимок прослушиваний для стрелок тренда ───
 function getMondayKey(d = new Date()) {
   const date = new Date(d);
@@ -1326,7 +1326,6 @@ onAuthStateChanged(auth, u => {
 if (u) {
     loadUsers();
     loadStudiosAdmin();
-    loadVoteArtists();
     loadArtists();
     loadApplications();
 loadTracks();
@@ -1339,9 +1338,13 @@ loadTracks();
 loadGrefUsers();
     loadGrefsLog();
     loadPayouts();
-    loadRestoreArtists();
+loadRestoreArtists();
 loadCreatorsAdmin();
-    initAdminChat();
+    loadAdminMessages();
+    loadUsersForSelect();
+    loadRules();
+    loadLogs();
+    loadBlockCollections();
   }
 });
 // NAV
@@ -1414,7 +1417,7 @@ window.unblock = async (id) => {
   loadUsers();
 };
 window.softDelete = async (id) => {
-if (!await showConfirm('Удалить трек?')) return;
+  if (!await showConfirm('Удалить пользователя? Он переместится в «Удалённые», его можно будет восстановить.')) return;
   await updateDoc(doc(db,'users',id), {deleted:true, deletedAt:{seconds:Math.floor(Date.now()/1000),nanoseconds:0}});
   await logAction('delete', 'Пользователь ' + id);
   loadUsers();

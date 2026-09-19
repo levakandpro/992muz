@@ -405,128 +405,6 @@ grid-template-columns: 1fr 380px;
 .vid-scroll-arrow-right { right: -16px; }
 
 /* ══════════════════════════════════════
-   БЛОК 4 — КЛИПЫ МЕСЯЦА
-══════════════════════════════════════ */
-.vid-month-row {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding-bottom: 12px;
-  padding-top: 12px;
-  margin-top: -12px;
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: var(--bg3) transparent;
-}
-.vid-month-row::-webkit-scrollbar { height: 4px; }
-.vid-month-row::-webkit-scrollbar-track { background: transparent; }
-.vid-month-row::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
-
-.vid-month-card {
-  flex-shrink: 0;
-  width: 280px;
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: var(--bg2);
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.vid-month-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-.vid-month-video {
-  position: relative;
-  aspect-ratio: 16/9;
-  background: #000;
-  overflow: hidden;
-}
-
-.vid-month-video iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  pointer-events: none;
-}
-
-.vid-month-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-}
-
-.vid-month-card:hover .vid-month-overlay { background: rgba(0,0,0,0.35); }
-
-.vid-month-play {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: scale(0.8);
-  transition: opacity 0.2s, transform 0.2s;
-  box-shadow: 0 4px 16px rgba(139,26,47,0.5);
-}
-
-.vid-month-card:hover .vid-month-play {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.vid-month-rank {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: auto;
-  height: 22px;
-  border-radius: 100px;
-  padding: 0 8px;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: 800;
-  color: #fff;
-  white-space: nowrap;
-}
-
-.vid-month-rank.top3 {
-  background: var(--gold);
-  color: #000;
-}
-.vid-month-info {
-  padding: 12px 14px;
-}
-
-.vid-month-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.vid-month-artist {
-  font-size: 12px;
-  color: var(--text3);
-  margin-bottom: 10px;
-}
-
-/* ══════════════════════════════════════
    БЛОК 5 — 992MUZLIVE
 ══════════════════════════════════════ */
 .vid-live-row {
@@ -692,13 +570,10 @@ grid-template-columns: 1fr 380px;
   .vid-hero-wrap { grid-template-columns: 1fr; }
   .vid-hero-sidebar { max-height: 260px; }
   .vid-legend-card { width: 280px; }
-  .vid-month-card { width: 240px; }
   .vid-live-card { width: 250px; }
 }
-
 @media (max-width: 540px) {
   .vid-short-card { width: 130px; }
-  .vid-month-card { width: 210px; }
   .vid-section-title { font-size: 20px; }
 }
 .vid-section-head > div {
@@ -712,18 +587,6 @@ grid-template-columns: 1fr 380px;
   width: 100%;
   margin-bottom: -6px;
 }
-.vid-comments-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  transition: opacity 0.15s;
-}
-
-.vid-comments-btn:hover img { opacity: 1 !important; }
-
 .vid-stat-btn, .vid-stat-view {
   display: inline-flex;
   align-items: center;
@@ -742,35 +605,3 @@ grid-template-columns: 1fr 380px;
 }
 .vid-stat-btn:hover { border-color: rgba(255,59,92,0.5); transform: scale(1.05); }
 .vid-stat-view { cursor: default; }
-.vid-top-comment {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--text2);
-  max-width: 340px;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-.vid-top-comment.vtc-in {
-  opacity: 1;
-  transform: translateY(0);
-}
-.vtc-heart {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text);
-}
-.vtc-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-style: italic;
-  color: var(--text3);
-}

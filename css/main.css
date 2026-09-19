@@ -219,13 +219,12 @@ button { cursor: pointer; border: none; background: none; color: inherit; font: 
 @media (max-width: 768px) {
   .wrap { padding: 0 8px; }
   .navbar-logo img { height: 60px !important; }
- .navbar-logo span { font-size: 7px !important; max-width: 70px; }
+ .navbar-logo span { font-size: 10px !important; max-width: 110px; opacity: 1 !important; color: var(--text) !important; }
   .navbar-inner { gap: 8px; }
   #vidSearch { width: 110px !important; }
   #vidSearch:focus { width: 140px !important; }
 .navbar-logo { margin-right: 10px !important; }
-  .burger-btn { flex-shrink: 0; }
-
+  .burger-btn { flex-shrink: 0; margin-left: auto; }
 .navbar-inner { position: relative; }
   .nav-search-wrap.open {
     position: absolute !important;
@@ -291,9 +290,8 @@ button { cursor: pointer; border: none; background: none; color: inherit; font: 
 /* ── БУРГЕР (только мобильные) ── */
 .burger-btn {
   display: none;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 5px;
   width: 38px;
   height: 38px;
   background: none;
@@ -306,17 +304,13 @@ button { cursor: pointer; border: none; background: none; color: inherit; font: 
 .burger-btn.open {
   visibility: hidden;
 }
-.burger-btn span {
+.burger-gif {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  pointer-events: none;
   display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--accent);
-  border-radius: 2px;
-  transition: all 0.3s;
 }
-.burger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.burger-btn.open span:nth-child(2) { opacity: 0; }
-.burger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 .mobile-overlay {
   display: none;

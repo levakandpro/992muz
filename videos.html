@@ -3,17 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>992MUZ - Видео</title>
+   <title>992MUZ - Видео</title>
+  <meta name="description" content="Смотри клипы, шортсы, легендарные работы и живые выступления таджикского рэпа на 992MUZ - платформе таджикской хип-хоп индустрии.">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/pages/home.css">
 <link rel="stylesheet" href="css/pages/videos.css">
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#eb5a5a">
-<script type="module">
-    import { initComments } from './js/components/comments-section.js';
-    window.initComments = initComments;
-  </script>
-  <script type="module" src="js/config/firebase.js"></script>
+<script type="module" src="js/config/firebase.js"></script>
 </head>
 <body>
 
@@ -69,13 +66,12 @@
       <div>
         <div class="section-label">Популярное</div>
         <h2 class="vid-section-title">Топовые клипы</h2>
-       <button class="vid-comments-btn" onclick="openComments('top_clips')"><img src="assets/icons/comment.png" style="width:20px;height:20px;opacity:0.6;"></button>
-       <div class="vid-top-comment" id="topComment_top_clips"></div>
+
       </div>
     </div>
     <div class="vid-hero-wrap">
       <div class="vid-hero-main">
-        <iframe id="heroIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+           <iframe id="heroIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"></iframe>а
       </div>
 <div class="vid-hero-sidebar" id="heroSidebar">
         <div style="padding:40px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
@@ -97,8 +93,7 @@
       <div>
         <div class="section-label">Короткие видео</div>
         <h2 class="vid-section-title">Шортсы</h2>
-        <button class="vid-comments-btn" onclick="openComments('shorts')"><img src="assets/icons/comment.png" style="width:20px;height:20px;opacity:0.6;"></button>
-        <div class="vid-top-comment" id="topComment_shorts"></div>
+
       </div>
     </div>
     <div class="vid-scroll-wrap">
@@ -141,14 +136,13 @@
     </div>
   </section>
 
-  <!-- ══ БЛОК 3: ЛЕГЕНДАРНЫЕ РАБОТЫ ══ -->а
+  <!-- ══ БЛОК 3: ЛЕГЕНДАРНЫЕ РАБОТЫ ══ -->
   <section class="vid-section">
     <div class="vid-section-head">
       <div>
         <div class="section-label">Классика жанра</div>
         <h2 class="vid-section-title">Легендарные работы</h2>
-       <button class="vid-comments-btn" onclick="openComments('legends')"><img src="assets/icons/comment.png" style="width:20px;height:20px;opacity:0.6;"></button>
-        <div class="vid-top-comment" id="topComment_legends"></div>
+
       </div>
     </div>
     <div class="vid-scroll-wrap">
@@ -172,36 +166,7 @@
     </div>
   </section>
 
-  <!-- ══ БЛОК 4: КЛИПЫ МЕСЯЦА ══ -->
-  <section class="vid-section">
-    <div class="vid-section-head">
-      <div>
-        <div class="section-label">Голосование</div>
-        <h2 class="vid-section-title">Клипы месяца</h2>
-        <button class="vid-comments-btn" onclick="openComments('month_clips')"><img src="assets/icons/comment.png" style="width:20px;height:20px;opacity:0.6;"></button>
-        <div class="vid-top-comment" id="topComment_month_clips"></div>
-      </div>
-    </div>
-    <div class="vid-scroll-wrap">
-      <button class="vid-scroll-arrow vid-scroll-arrow-left" onclick="scrollRow('monthRow', -1)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <button class="vid-scroll-arrow vid-scroll-arrow-right" onclick="scrollRow('monthRow', 1)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
-    <div class="vid-month-row" id="monthRow">
-<div style="padding:40px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
-  <div class="tajrap-loader">
-    <svg width="54" height="54" viewBox="0 0 54 54" fill="none">
-      <circle cx="27" cy="27" r="22" stroke="var(--bg3)" stroke-width="3"/>
-      <circle cx="27" cy="27" r="22" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-dasharray="30 110"/>
-    </svg>
-    <span>TAJRAP</span>
-  </div>
-</div>
-    </div>
 
-  </section>
 
   <!-- ══ БЛОК 5: 992 LIVE ══ -->
   <section class="vid-section">
@@ -209,8 +174,7 @@
       <div>
         <div class="section-label">Живые выступления</div>
         <h2 class="vid-section-title">992 Live</h2>
-        <button class="vid-comments-btn" onclick="openComments('992_live')"><img src="assets/icons/comment.png" style="width:20px;height:20px;opacity:0.6;"></button>
-        <div class="vid-top-comment" id="topComment_992_live"></div>
+
       </div>
     </div>
     <div class="vid-scroll-wrap">
@@ -235,18 +199,7 @@
 
 </div>
 
-<!-- COMMENTS MODAL -->
-<div id="vidCommentsModal" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;" onclick="closeComments(event)">
-  <div style="background:var(--bg2);border-radius:20px;width:90%;max-width:560px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.3);">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px 14px;border-bottom:1px solid var(--bg3);flex-shrink:0;">
-  <span style="font-family:'Rem',sans-serif;font-size:16px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;">Комментарии <button onclick="document.getElementById('vidCommentsBody').querySelector('.pn-info-btn')?.click()" style="width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(0,0,0,0.2);background:none;color:var(--text3);font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">?</button></span>
-      <button onclick="closeComments(null,true)" style="width:32px;height:32px;border-radius:50%;background:var(--bg3);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div id="vidCommentsBody" style="flex:1;overflow-y:auto;padding:16px 22px;"></div>
-  </div>
-</div>
+
 
 <!-- SCROLL TOP -->
 <button class="scroll-top-btn" id="scrollTopBtn" title="Наверх">
@@ -261,7 +214,7 @@
     </button>
     <button id="shortPrev" onclick="switchShort(-1)" style="display:none;position:absolute;top:-48px;left:50%;transform:translateX(-50%);width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.15);border:none;cursor:pointer;align-items:center;justify-content:center;color:#fff;font-size:18px;">▲</button>
     <div id="vidModalWrap" style="aspect-ratio:16/9;border-radius:16px;overflow:hidden;">
-      <iframe id="vidModalIframe" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="display:block;"></iframe>
+         <iframe id="vidModalIframe" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen" style="display:block;"></iframe>
     </div>
     <button id="shortNext" onclick="switchShort(1)" style="display:none;position:absolute;bottom:-48px;left:50%;transform:translateX(-50%);width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.15);border:none;cursor:pointer;align-items:center;justify-content:center;color:#fff;font-size:18px;">▼</button>
   </div>
@@ -282,7 +235,7 @@
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, query, where, orderBy, getDocs, doc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, query, where, orderBy, getDocs, doc, updateDoc, increment, limit } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 import { getApps } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 const app = getApps().length ? getApps()[0] : initializeApp({
@@ -294,6 +247,10 @@ const app = getApps().length ? getApps()[0] : initializeApp({
   appId: "1:556501098729:web:2952079224ab1319731078"
 });
 const db = getFirestore(app);
+window._fsDb = db;
+window._fsDoc = doc;
+window._fsUpdateDoc = updateDoc;
+window._fsIncrement = increment;
 
 const EMPTY = '<div style="padding:30px;text-align:center;color:var(--text3);font-size:13px;">Видео пока нет</div>';
 
@@ -317,7 +274,7 @@ async function loadTop() {
     <div class="vid-sidebar-item ${i===0?'active':''}" onclick="switchHero(this,'${v.ytId}')">
       <span class="vid-sidebar-num">${i+1}</span>
       <div class="vid-sidebar-thumb">
-        <img src="${v.thumb || `https://img.youtube.com/vi/${v.ytId}/mqdefault.jpg`}" alt="">
+           <img src="${v.thumb || `https://img.youtube.com/vi/${v.ytId}/mqdefault.jpg`}" alt="" loading="lazy" decoding="async">
         <div class="vid-sidebar-thumb-play"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
       </div>
       <div class="vid-sidebar-info">
@@ -345,7 +302,7 @@ window._shortsList.push(v.ytId);
    window._shortsIds.push(d.id);
    el.onclick = () => openVideo(v.ytId, true, d.id);
     el.innerHTML = `
-      <div class="vid-short-frame"><img src="${thumb}" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+         <div class="vid-short-frame"><img src="${thumb}" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async"></div>
 <div class="vid-short-overlay"><div class="vid-short-title">${v.title||'Шортс'}</div></div>
      <div class="vid-short-play-overlay"><div class="vid-short-play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div></div>
 <div style="position:absolute;top:10px;right:8px;display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
@@ -370,7 +327,7 @@ async function loadLegends() {
     el.onclick = () => openVideo(v.ytId, false, d.id);
     el.innerHTML = `
       <div class="vid-legend-video">
-        <img src="${thumb}" alt="" style="width:100%;height:100%;object-fit:cover;">
+        <img src="${thumb}" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async">
         <div class="vid-legend-grad"></div>
         <div class="vid-legend-play"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div>
       </div>
@@ -387,51 +344,6 @@ async function loadLegends() {
   });
 }
 
-// ── КЛИПЫ МЕСЯЦА ──
-async function loadMonth() {
-  const snap = await loadBlock('monthClips');
-  const row = document.getElementById('monthRow');
-  if (snap.empty) { row.innerHTML = EMPTY; return; }
-row.innerHTML = '';
-  const monthDocs = [];
-  snap.forEach(d => monthDocs.push(d));
-  monthDocs.sort(() => Math.random() - 0.5);
-  let i = 1;
-  monthDocs.forEach(d => {
-    const v = d.data();
-    const thumb = v.thumb || `https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg`;
-    const rankClass = i <= 3 ? 'top3' : '';
-    const rankLabel = i <= 3 ? `${i} место` : String(i);
-    const likes = v.likes || 0;
-    const dislikes = v.dislikes || 0;
-    const total = likes + dislikes;
-    const pct = total > 0 ? Math.round(likes/total*100) : 50;
-    const el = document.createElement('div');
-    el.className = 'vid-month-card';
-    el.innerHTML = `
-      <div class="vid-month-video" onclick="openVideo('${v.ytId}', false, '${d.id}')">
-        <img src="${thumb}" alt="" style="width:100%;height:100%;object-fit:cover;">
-        <div class="vid-month-overlay"><div class="vid-month-play"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-<div class="vid-month-rank ${rankClass}">${rankLabel}</div>
-        <div style="position:absolute;bottom:8px;left:10px;display:flex;align-items:center;gap:4px;color:#fff;font-size:11px;font-weight:500;opacity:0.85;">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          <span>${v.views||0}</span>
-        </div>
-      </div>
-      <div class="vid-month-info">
-        <div class="vid-month-title">${v.title||'Без названия'}</div>
-        <div class="vid-month-artist">${v.artist||'992MUZ'}</div>
-
-        <div class="vid-vote">
-       <button class="vid-vote-btn vid-vote-like" onclick="vote(this,'like')"><img src="assets/icons/cool.png" style="width:16px;height:16px;"> <span>${likes}</span></button>
-          <div class="vid-vote-bar"><div class="vid-vote-fill" style="width:${pct}%"></div><div class="vid-vote-glow"></div></div>
-          <button class="vid-vote-btn vid-vote-dislike" onclick="vote(this,'dislike')"><img src="assets/icons/cooldown.png" style="width:16px;height:16px;"> <span>${dislikes}</span></button>
-        </div>
-      </div>`;
-    row.appendChild(el);
-    i++;
-  });
-}
 
 // ── 992 LIVE ──
 async function loadLive() {
@@ -449,8 +361,8 @@ const liveDocs = [];
     el.className = 'vid-live-card';
     el.onclick = () => openVideo(v.ytId, false, d.id);
     el.innerHTML = `
-      <div class="vid-live-video">
-        <img src="${thumb}" alt="" style="width:100%;height:100%;object-fit:cover;">
+         <div class="vid-live-video">
+        <img src="${thumb}" alt="" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async">
         <div class="vid-live-badge"><span class="vid-live-dot"></span> LIVE</div>
         <div class="vid-live-overlay"><div class="vid-live-play"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg></div></div>
       </div>
@@ -466,8 +378,79 @@ const liveDocs = [];
   });
 }
 
+// ── SEO: открытие видео по прямой ссылке /video/slug ──
+async function initVideoFromSlug() {
+  const path = window.location.pathname;
+  if (!path.startsWith('/video/')) return;
+  const slug = decodeURIComponent(path.replace('/video/', '').replace(/\/$/, ''));
+  if (!slug) return;
+  try {
+    const q = query(collection(db, 'videos'), where('slug', '==', slug), limit(1));
+    const snap = await getDocs(q);
+    if (snap.empty) { console.warn('Видео со slug не найдено:', slug); return; }
+    const docSnap = snap.docs[0];
+    const v = docSnap.data();
+    updateVideoSeo(v);
+    openVideo(v.ytId, v.block === 'shorts', docSnap.id);
+  } catch (e) {
+    console.error('Ошибка загрузки видео по slug:', e);
+  }
+}
+
+function updateVideoSeo(v) {
+  const title = `${v.title || 'Видео'} — ${v.artist || '992MUZ'} | 992MUZ`;
+  const description = `Смотри «${v.title || 'видео'}» — ${v.artist || '992MUZ'} на 992MUZ. Клипы, шортсы и живые выступления таджикского рэпа.`;
+  const thumb = v.thumb || `https://img.youtube.com/vi/${v.ytId}/maxresdefault.jpg`;
+  const url = window.location.href;
+
+  document.title = title;
+
+  function setMeta(attrName, attrValue, content) {
+    let el = document.querySelector(`meta[${attrName}="${attrValue}"]`);
+    if (!el) {
+      el = document.createElement('meta');
+      el.setAttribute(attrName, attrValue);
+      document.head.appendChild(el);
+    }
+    el.setAttribute('content', content);
+  }
+
+  setMeta('name', 'description', description);
+  setMeta('property', 'og:title', title);
+  setMeta('property', 'og:description', description);
+  setMeta('property', 'og:image', thumb);
+  setMeta('property', 'og:url', url);
+  setMeta('property', 'og:type', 'video.other');
+
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    document.head.appendChild(canonical);
+  }
+  canonical.setAttribute('href', url);
+
+  let ld = document.getElementById('videoJsonLd');
+  if (!ld) {
+    ld = document.createElement('script');
+    ld.type = 'application/ld+json';
+    ld.id = 'videoJsonLd';
+    document.head.appendChild(ld);
+  }
+  ld.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": v.title || 'Видео',
+    "description": description,
+    "thumbnailUrl": thumb,
+    "embedUrl": `https://www.youtube.com/embed/${v.ytId}`,
+    "contentUrl": `https://www.youtube.com/watch?v=${v.ytId}`
+  });
+}
+
 // Грузим все блоки
-Promise.all([loadTop(), loadShorts(), loadLegends(), loadMonth(), loadLive()])
+Promise.all([loadTop(), loadShorts(), loadLegends(), loadLive()])
+  .then(initVideoFromSlug)
   .catch(e => console.error('Ошибка загрузки видео:', e));
 
 // Делаем функции глобальными
@@ -513,7 +496,7 @@ function renderFilms() {
     return `
     <div class="vid-film-card" ${clickAttr}>
       <div class="vid-film-poster">
-        <img src="${f.poster}" alt="${f.title}">
+            <img src="${f.poster}" alt="${f.title}" loading="lazy" decoding="async">
         <div class="vid-film-play"><div class="vid-film-play-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="#111"><polygon points="5,3 19,12 5,21"/></svg></div></div>
         ${aboutBtn}
       </div>
@@ -575,8 +558,8 @@ function openVideo(videoId, isShort, docId) {
   document.getElementById('vidModalIframe').src = `https://www.youtube.com/embed/${videoId}?rel=0&autoplay=1`;
 document.getElementById('vidModal').style.display = 'flex';
   document.body.style.overflow = 'hidden';
-  window._currentDocId = docId || null;
-  if (docId) import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js').then(({getFirestore,doc,updateDoc,increment})=>updateDoc(doc(getFirestore(),'videos',docId),{views:increment(1)}));
+   window._currentDocId = docId || null;
+  if (docId) window._fsUpdateDoc(window._fsDoc(window._fsDb,'videos',docId),{views:window._fsIncrement(1)});
 }
 function switchShort(dir) {
   _shortIndex += dir;
@@ -585,7 +568,7 @@ function switchShort(dir) {
   document.getElementById('vidModalIframe').src = `https://www.youtube.com/embed/${window._shortsList[_shortIndex]}?rel=0&autoplay=1`;
   const _did = window._shortsIds?.[_shortIndex];
   window._currentDocId = _did || null;
-  if (_did) import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js').then(({getFirestore,doc,updateDoc,increment})=>updateDoc(doc(getFirestore(),'videos',_did),{views:increment(1)}));
+  if (_did) window._fsUpdateDoc(window._fsDoc(window._fsDb,'videos',_did),{views:window._fsIncrement(1)});
 }
 let _touchStartY = 0;
 document.getElementById('vidModal').addEventListener('touchstart', e => {
@@ -610,27 +593,7 @@ function closeVideoModal(e, force) {
 function scrollRow(id, dir) {
   document.getElementById(id).scrollBy({ left: dir * 420, behavior: 'smooth' });
 }
-function vote(btn, type) {
-  const voteWrap = btn.closest('.vid-vote');
-  const likeBtn = voteWrap.querySelector('.vid-vote-like');
-  const dislikeBtn = voteWrap.querySelector('.vid-vote-dislike');
-  const fill = voteWrap.querySelector('.vid-vote-fill');
-  let likes = parseInt(likeBtn.querySelector('span').textContent);
-  let dislikes = parseInt(dislikeBtn.querySelector('span').textContent);
-  const wasLiked = likeBtn.classList.contains('voted');
-  const wasDisliked = dislikeBtn.classList.contains('voted');
-  likeBtn.classList.remove('voted'); dislikeBtn.classList.remove('voted');
-  if (type === 'like') {
-    if (wasLiked) { likes--; } else { likes++; if (wasDisliked) dislikes--; btn.classList.add('voted'); }
-  } else {
-    if (wasDisliked) { dislikes--; } else { dislikes++; if (wasLiked) likes--; btn.classList.add('voted'); }
-  }
-  likeBtn.querySelector('span').textContent = likes;
-  dislikeBtn.querySelector('span').textContent = dislikes;
-  const total = likes + dislikes;
-fill.style.width = total > 0 ? Math.round(likes/total*100)+'%' : '50%';
-  if (window._currentDocId) import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js').then(({getFirestore,doc,updateDoc})=>updateDoc(doc(getFirestore(),'videos',window._currentDocId),{likes,dislikes}));
-}
+
 const scrollBtn = document.getElementById('scrollTopBtn');
 window.addEventListener('scroll', () => scrollBtn.classList.toggle('visible', window.scrollY > 200));
 scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
@@ -641,28 +604,9 @@ function vidLike(btn, docId) {
   const nv = isLiked ? cur-1 : cur+1;
   btn.classList.toggle('liked');
   btn.innerHTML = `❤️ ${nv}`;
-  import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js').then(({getFirestore,doc,updateDoc,increment})=>updateDoc(doc(getFirestore(),'videos',docId),{likes:increment(isLiked?-1:1)}));
+  window._fsUpdateDoc(window._fsDoc(window._fsDb,'videos',docId),{likes:window._fsIncrement(isLiked?-1:1)});
 }
-function openComments(sectionId) {
-  const modal = document.getElementById('vidCommentsModal');
-  const body = document.getElementById('vidCommentsBody');
-  body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:13px;">Загрузка комментариев...</div>';
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-  initComments(sectionId, 'vidCommentsBody');
-}
-function closeComments(e, force) {
-  if (!force && e && e.target !== document.getElementById('vidCommentsModal')) return;
-  document.getElementById('vidCommentsModal').style.display = 'none';
-  document.body.style.overflow = '';
-}
-function toggleExpand(rowId, btn) {
-  const row = document.getElementById(rowId);
-  const expanded = row.classList.toggle('expanded');
-  btn.innerHTML = expanded
-    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg> Свернуть'
-    : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg> Смотреть все';
-}
+
 function initVidSearch() {
   const vidSearchInput = document.getElementById('vidSearch');
   const vidSearchClear = document.getElementById('vidSearchClear');
@@ -672,11 +616,11 @@ function initVidSearch() {
     const q = this.value.trim().toLowerCase();
     vidSearchClear.style.display = q ? 'block' : 'none';
     vidSearchInfo.style.display = q ? 'block' : 'none';
-    const cards = document.querySelectorAll('.vid-month-card, .vid-legend-card, .vid-live-card, .vid-short-card, .vid-sidebar-item');
+     const cards = document.querySelectorAll('.vid-legend-card, .vid-live-card, .vid-short-card, .vid-sidebar-item');
     let found = 0;
     cards.forEach(card => {
-      const title = (card.querySelector('.vid-month-title, .vid-legend-title, .vid-live-title, .vid-short-title, .vid-sidebar-title') || {}).textContent || '';
-      const artist = (card.querySelector('.vid-month-artist, .vid-legend-sub, .vid-live-sub, .vid-sidebar-meta') || {}).textContent || '';
+      const title = (card.querySelector('.vid-legend-title, .vid-live-title, .vid-short-title, .vid-sidebar-title') || {}).textContent || '';
+      const artist = (card.querySelector('.vid-legend-sub, .vid-live-sub, .vid-sidebar-meta') || {}).textContent || '';
       const match = !q || title.toLowerCase().includes(q) || artist.toLowerCase().includes(q);
       card.style.display = match ? '' : 'none';
       if (match) found++;
@@ -692,35 +636,10 @@ window.clearSearch = function() {
   vidSearchInput.value = '';
   vidSearchClear.style.display = 'none';
   vidSearchInfo.style.display = 'none';
-  document.querySelectorAll('.vid-month-card, .vid-legend-card, .vid-live-card, .vid-short-card, .vid-sidebar-item').forEach(c => c.style.display = '');
+   document.querySelectorAll('.vid-legend-card, .vid-live-card, .vid-short-card, .vid-sidebar-item').forEach(c => c.style.display = '');
 }
 </script>
-<script type="module">
-import { getFirestore, collection, getDocs, query, orderBy, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-async function loadTopComment(sectionId) {
-  const el = document.getElementById('topComment_' + sectionId);
-  if (!el) return;
-  const db = getFirestore();
-  const snap = await getDocs(query(collection(db, 'comments', sectionId, 'messages'), orderBy('likes','desc')));
-  const comments = [];
-  snap.forEach(d => { const data = d.data(); if ((data.likes||0) >= 50) comments.push(data); });
-  if (!comments.length) return;
-  let idx = 0;
-  function show() {
-    const c = comments[idx % comments.length];
-    el.innerHTML = `<span class="vtc-heart"><img src="assets/icons/com.png" style="width:12px;height:12px;vertical-align:middle;"> ${c.likes||0}</span><span class="vtc-text">${c.displayName||'Аноним'}: ${c.text||''}</span>`;
-    el.classList.remove('vtc-in');
-    void el.offsetWidth;
-    el.classList.add('vtc-in');
-    idx++;
-  }
-  show();
-  setInterval(show, 4000);
-}
-
-['top_clips','shorts','legends','month_clips','992MUZ'].forEach(loadTopComment);
-</script>
 <style>
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 .tajrap-loader {

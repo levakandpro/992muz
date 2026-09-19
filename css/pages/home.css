@@ -89,13 +89,7 @@
 }
 @media (max-width: 768px) {
   .navbar-mini-video {
-    display: block !important;
-    flex: 0 0 72px !important;
-    width: 72px !important;
-    min-width: 72px !important;
-    height: 38px;
-    margin: 0 10px;
-    border-radius: 8px;
+    display: none !important;
   }
 }
 /* ── SECTION ── */

@@ -45,7 +45,8 @@
       }
     ],
     "rewrites": [
-      { "source": "/artist/**", "destination": "/artists.html" }
+      { "source": "/artist/**", "destination": "/artists.html" },
+      { "source": "/video/**", "destination": "/videos.html" }
     ]
   }
 }
