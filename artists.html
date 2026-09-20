@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+ 
   <style>
     @font-face {
       font-family: 'BioFont';
@@ -393,45 +393,7 @@ body {
     .mini-btn .count { font-size: 11px; font-weight: 500; color: var(--text3); }
     .mini-btn:hover { background: var(--bg2); color: var(--accent); }
     .mini-btn:hover svg { opacity: 1; }
-/* ASK QUESTION BUTTON + TOOLTIP */
-    .drawer-ask-wrap { position: relative; display: inline-flex; }
-    .drawer-ask-tip {
-      position: absolute;
-      bottom: calc(100% + 10px);
-      left: 50%;
-      transform: translateX(-50%) translateY(4px);
-      background: #111;
-      color: #fff;
-      font-size: 11.5px;
-      font-weight: 600;
-      line-height: 1.5;
-      white-space: normal;
-      width: 200px;
-      text-align: center;
-      padding: 10px 12px;
-      border-radius: 10px;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity .18s ease, transform .18s ease;
-      pointer-events: none;
-      z-index: 30;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    }
-    .drawer-ask-tip b { color: #ff5a5a; }
-    .drawer-ask-tip::after {
-      content: '';
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 6px solid transparent;
-      border-top-color: #111;
-    }
-    .drawer-ask-wrap:hover .drawer-ask-tip {
-      opacity: 1;
-      visibility: visible;
-      transform: translateX(-50%) translateY(0);
-    }
+
     /* BIO */
 .drawer-bio {
       font-size: 13px; color: var(--text2); line-height: 1.7;
@@ -439,7 +401,8 @@ body {
       background: var(--bg); border-radius: 10px;
       flex: 1; overflow-y: auto;
       font-family: 'BioFont', 'Inter', sans-serif;
-    }wer-bio:empty { display: none; }
+    }
+    .drawer-bio:empty { display: none; }
 
     /* SOCIALS */
 .drawer-socials {
@@ -578,27 +541,7 @@ body {
     }
    .scroll-top-btn.visible { display: flex; }
 
- @keyframes floatUp {
-      0%   { transform: translateY(0) scale(1); opacity: 1; }
-      80%  { opacity: 0.8; }
-      100% { transform: translateY(-220px) scale(1.3); opacity: 0; }
-    }
 
-    /* STORY RING on hero */
-    .story-ring {
-      position:absolute;top:12px;left:12px;z-index:10;
-      width:52px;height:52px;border-radius:50%;
-      background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
-      padding:2.5px;cursor:pointer;
-      box-shadow:0 2px 10px rgba(0,0,0,0.3);
-      transition:transform .2s;
-    }
-    .story-ring:hover { transform:scale(1.08); }
-    .story-ring-inner {
-      width:100%;height:100%;border-radius:50%;
-      border:2.5px solid #fff;overflow:hidden;
-    }
-    .story-ring-inner img { width:100%;height:100%;object-fit:cover;object-position:center top; }
     /* VOTE MODAL (локальные стили, независимые от home.css) */
     .vote-grid {
       display: grid;
@@ -652,125 +595,10 @@ body {
       .drawer-stats { flex-wrap: wrap; gap: 10px 16px; }
       .drawer-stats > div[style*="margin-left"] { margin-left: 0 !important; flex-basis: 100%; }
       .drawer-stats #drawerFollowBtn { width: 100%; justify-content: center; }
-
-/* На мобильном "Задать вопрос" — компактная кнопка прямо в строке статистики */
-      #drawerAskBtnMobile { display: inline-flex !important; }
-      .drawer-ask-wrap { display: none !important; }
     }
 
 
-.action-btn.gref-cta {
-  background: #27ae60;
-  border-color: #27ae60;
-  color: #fff;
-}
-.action-btn.gref-cta:hover { background:#219150; border-color:#219150; color:#fff; }
-.action-btn.gref-cta .count { color: rgba(255,255,255,0.85); }
-.gref-option-btn { transition: border-color .18s, background .18s; }
 
-/* ВАЖНЫЕ ФАНАТЫ — витрина активных (последние 30 дней) фанатов на видном месте карточки артиста */
-.fans-showcase-wrap {
-  display: flex; align-items: center; gap: 8px;
-  padding: 9px 12px; background: linear-gradient(135deg,#fff5f6,#fff);
-  border: 1px solid #ffd9df; border-radius: 12px; margin-top: -2px; margin-bottom: 2px;
-  cursor: pointer; transition: border-color .18s;
-}
-.fans-showcase-wrap:hover { border-color: var(--accent); }
-.fans-showcase-label { font-size: 10.5px; font-weight: 800; color: var(--accent); white-space: nowrap; flex-shrink:0; letter-spacing:.03em; display:flex; align-items:center; gap:5px; }
-.fans-showcase-label img { width: 14px; height: 14px; flex-shrink: 0; }
-.fans-showcase-avatars { display: flex; align-items: center; flex-shrink: 0; }
-.fans-showcase-avatar {
-  width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff;
-  background: #f2f2f2;
-  display: flex; align-items: center; justify-content: center;
-  text-decoration: none; overflow: hidden;
-  margin-left: -9px; box-shadow: 0 2px 5px rgba(0,0,0,0.15); transition: transform .15s;
-  position: relative; z-index: 1;
-}
-.fans-showcase-avatar model-viewer { width: 100%; height: 100%; background: transparent; pointer-events: none; }
-.fans-showcase-avatar:first-child { margin-left: 0; }
-.fans-showcase-avatar:hover { transform: translateY(-3px) scale(1.08); z-index: 5; }
-.fans-showcase-more {
-  width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff;
-  background: #f0f0f0; color: #888; font-size: 9.5px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center; margin-left: -9px;
-}
-.fans-showcase-text { font-size: 11px; color: #a04050; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.fans-showcase-btn {
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  width: 100%; height: 36px; padding: 0 14px; border-radius: 10px;
-  border: 1px solid var(--bg3); background: #fff;
-  font-size: 13px; font-weight: 600; color: var(--text2);
-  cursor: pointer; transition: all .18s; white-space: nowrap;
-  box-sizing: border-box;
-}
-.fans-showcase-btn:hover { border-color: var(--accent); color: var(--accent); }
-.fans-showcase-btn-icon { width: 16px; height: 16px; flex-shrink: 0; border-radius: 50%; object-fit: cover; }
-/* Список фанатов внутри модалки — минималистичный, без рамок и эмодзи */
-.fan-tier-title { font-size: 11px; font-weight: 700; letter-spacing:.08em; text-transform:uppercase; color: var(--text3); margin: 18px 0 10px; padding-top: 10px; border-top: 1px solid var(--bg3); }
-.fan-tier-title:first-child { margin-top: 0; padding-top: 0; border-top: none; }
-.fan-row-expired { opacity: 0.5; }
-.fan-row-minimal {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 2px; border-bottom: 1px solid var(--bg);
-}
-.fan-row-minimal:last-child { border-bottom: none; }
-.fan-row-avatar {
-  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
-  background: var(--bg); color: var(--text2);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 13px;
-  overflow: hidden;
-}
-.fan-row-avatar model-viewer { width: 100%; height: 100%; background: transparent; pointer-events: none; }
-/* ПЛАВАЮЩИЕ ВАЖНЫЕ ФАНАТЫ — декоративные пузырьки в пустой зоне слева от дровера */
-.drawer-floating-fans {
-  position: fixed; top: 0; bottom: 0; right: 480px; width: 140px;
-  z-index: 502; pointer-events: none; display: none;
-}
-@media (min-width: 901px) { .drawer-floating-fans.active { display: block; } }
-@media (max-width: 900px) { .drawer-floating-fans { display: none !important; } }
-@media (min-width: 901px) { .hero-fan-slot { display: none !important; } }
-.fan-bubble {
-  position: absolute; pointer-events: all; cursor: pointer; text-decoration: none;
-  width: 56px; height: 56px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  background: #fff; border: 2px solid #ffd9df;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-  animation: fanBubbleFloat 3.8s ease-in-out infinite;
-  transition: transform .2s;
-  overflow: hidden;
-}
-.fan-bubble:hover { transform: scale(1.12) !important; z-index: 5; }
-.fan-bubble model-viewer { width: 100%; height: 100%; background: transparent; pointer-events: none; }
-.fan-bubble-tag {
-  position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%);
-  font-size: 10px; font-weight: 700; color: #fff; background: rgba(0,0,0,0.65);
-  padding: 3px 8px; border-radius: 100px; white-space: nowrap;
-  opacity: 0; visibility: hidden; transition: opacity .18s ease;
-}
-.fan-bubble:hover .fan-bubble-tag { opacity: 1; visibility: visible; }
-@keyframes fanBubbleFloat {
-  0%, 100% { transform: translateY(0) rotate(-3deg); }
-  50% { transform: translateY(-16px) rotate(3deg); }
-}
-
-/* Слот важного фаната прямо в шапке — между именем и кнопками лайк/коммент/share.
-   Если фанатов несколько, они по очереди сменяют друг друга с эффектом вращения. */
-.hero-fan-slot {
-  width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
-  margin-right: 6px; cursor: pointer; text-decoration: none;
-  background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.7);
-  overflow: hidden; display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
-}
-.hero-fan-slot .hero-fan-bubble-inline { display: block; width: 100%; height: 100%; }
-.hero-fan-slot model-viewer { width: 100%; height: 100%; background: transparent; pointer-events: none; }
-.hero-fan-slot.spin-in model-viewer { animation: heroFanSpinIn .5s ease; }
-@keyframes heroFanSpinIn {
-  0% { transform: scale(0.4) rotate(-140deg); opacity: 0; }
-  100% { transform: scale(1) rotate(0deg); opacity: 1; }
-}
   </style>
 </head>
 <body>
@@ -909,89 +737,7 @@ body {
     <button onclick="closeVoteAlert()" style="width:100%;padding:11px;border-radius:10px;background:#c0392b;border:none;color:#fff;font-size:14px;font-weight:700;cursor:pointer;">Понятно</button>
   </div>
 </div>
-<!-- FIT INTEREST MODAL -->
-<div id="fitInterestModal" style="position:fixed;inset:0;z-index:950;display:none;align-items:center;justify-content:center;">
-  <div onclick="closeFitInterestModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);"></div>
-  <div style="position:relative;background:#fff;border-radius:20px;width:100%;max-width:400px;margin:20px;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-    <div id="fitInterestSuccess" style="display:none;padding:40px 24px;text-align:center;">
-      <div style="font-size:48px;margin-bottom:16px;">⏳</div>
-      <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;">Заявка отправлена!</div>
-      <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:20px;">Ожидайте - <b id="fitInterestArtistNameSuccess"></b> рассмотрит вашу заявку в ближайшее время.<br><br>Если артист одобрит - вы получите уведомление в профиле и сможете отправить трек.</div>
-      <button onclick="closeFitInterestModal()" style="padding:10px 28px;border-radius:10px;background:var(--bg);border:none;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);">Закрыть</button>
-    </div>
-    <div id="fitInterestForm">
-      <div style="padding:24px 24px 0;display:flex;align-items:center;justify-content:space-between;">
-        <div>
-          <div style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;">Хочу фит</div>
-          <div style="font-size:20px;font-weight:700;color:var(--text);" id="fitInterestArtistName">Артист</div>
-        </div>
-        <button onclick="closeFitInterestModal()" style="width:36px;height:36px;border-radius:50%;border:none;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div style="padding:16px 24px 24px;display:flex;flex-direction:column;gap:12px;">
-        <div style="padding:12px 14px;background:var(--bg);border-radius:10px;font-size:12px;color:var(--text2);line-height:1.6;">🎤 Отправьте заявку на совместную работу. Артист рассмотрит её и примет решение - только после одобрения вы сможете отправить трек.</div>
-        <div>
-          <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;">Псевдоним *</div>
-          <input id="fitInterestName" type="text" placeholder="Как тебя называть?" style="width:100%;padding:10px 14px;border:1px solid var(--bg3);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;transition:border .2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--bg3)'">
-        </div>
-        <div>
-          <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;">Почему хочешь фит с этим артистом? *</div>
-          <textarea id="fitInterestWhy" placeholder="Расскажи об идее, концепции, почему именно этот артист..." style="width:100%;padding:10px 14px;border:1px solid var(--bg3);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;resize:none;height:80px;transition:border .2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--bg3)'"></textarea>
-        </div>
-        <div>
-          <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;">Telegram для связи *</div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <img src="assets/icons/telegram.png" style="width:20px;height:20px;flex-shrink:0;">
-            <input id="fitInterestTg" type="text" placeholder="@username" style="flex:1;padding:10px 12px;border:1px solid var(--bg3);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border .2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--bg3)'">
-          </div>
-        </div>
-        <button onclick="submitFitInterest()" style="width:100%;padding:13px;border-radius:12px;background:linear-gradient(135deg,#cc0000,#ff4444);border:none;cursor:pointer;font-size:14px;font-weight:700;color:#fff;box-shadow:0 6px 20px rgba(204,0,0,0.35);">Отправить заявку</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- ASK QUESTION MODAL -->
-<div id="askQuestionModal" style="position:fixed;inset:0;z-index:950;display:none;align-items:center;justify-content:center;">
-  <div onclick="closeAskQuestionModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);"></div>
-  <div style="position:relative;background:#fff;border-radius:20px;width:100%;max-width:400px;margin:20px;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-    <div id="askQuestionSuccess" style="display:none;padding:40px 24px;text-align:center;">
-      <div style="font-size:48px;margin-bottom:16px;">🎙️</div>
-      <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;">Вопрос отправлен!</div>
-      <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:20px;">Мы передадим твой вопрос <b id="askQuestionArtistNameSuccess"></b> и зададим его от твоего имени в следующем интервью.</div>
-      <button onclick="closeAskQuestionModal()" style="padding:10px 28px;border-radius:10px;background:var(--bg);border:none;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);">Закрыть</button>
-    </div>
-<div id="askQuestionAlreadyBlock" style="display:none;padding:24px;text-align:center;">
-      <div style="font-size:40px;margin-bottom:12px;">🔒</div>
-      <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">Вопрос уже отправлен</div>
-      <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px;">С этого аккаунта можно задать только один вопрос за всё время. Ты уже воспользовался этой возможностью.</div>
-      <button onclick="closeAskQuestionModal()" style="padding:10px 28px;border-radius:10px;background:var(--bg);border:none;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);">Понятно</button>
-    </div>
-    <div id="askQuestionForm">
-      <div style="padding:24px 24px 0;display:flex;align-items:center;justify-content:space-between;">
-        <div>
-          <div style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;">Вопрос артисту</div>
-          <div style="font-size:20px;font-weight:700;color:var(--text);" id="askQuestionArtistName">Артист</div>
-        </div>
-        <button onclick="closeAskQuestionModal()" style="width:36px;height:36px;border-radius:50%;border:none;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div style="padding:16px 24px 24px;display:flex;flex-direction:column;gap:12px;">
-        <div style="padding:12px 14px;background:var(--bg);border-radius:10px;font-size:12px;color:var(--text2);line-height:1.6;">🎤 Задай вопрос, а мы озвучим его артисту в новом интервью - от твоего имени.<<b style="color:var(--accent);">⚠️ Внимание: этому артисту можно задать вопрос только один раз, навсегда.</b>br></div>
-        <div>
-          <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;">Твой вопрос *</div>
-          <textarea id="askQuestionText" placeholder="Что хочешь спросить у артиста?" style="width:100%;padding:10px 14px;border:1px solid var(--bg3);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;resize:none;height:90px;transition:border .2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--bg3)'"></textarea>
-        </div>
-        <div>
-          <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;">Псевдоним <span style="font-weight:400;color:var(--text3);">(необязательно)</span></div>
-          <input id="askQuestionName" type="text" placeholder="Как подписать вопрос?" style="width:100%;padding:10px 14px;border:1px solid var(--bg3);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;transition:border .2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--bg3)'">
-        </div>
-        <button onclick="submitAskQuestion()" style="width:100%;padding:13px;border-radius:12px;background:linear-gradient(135deg,#cc0000,#ff4444);border:none;cursor:pointer;font-size:14px;font-weight:700;color:#fff;box-shadow:0 6px 20px rgba(204,0,0,0.35);">Отправить вопрос</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 <!-- AUTH REQUIRED MODAL -->
 <div id="authRequiredModal" style="position:fixed;inset:0;z-index:960;display:none;align-items:center;justify-content:center;">
   <div onclick="closeAuthRequiredModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);"></div>
@@ -1004,264 +750,6 @@ body {
   </div>
 </div>
 
-<!-- FIT MODAL -->
-<div id="fitModal" style="position:fixed;inset:0;z-index:950;display:none;align-items:center;justify-content:center;">
-  <div onclick="closeFitModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);"></div>
- <div style="position:relative;background:#fff;border-radius:20px;width:100%;max-width:520px;max-height:95vh;overflow-y:auto;margin:20px;box-shadow:0 20px 60px rgba(0,0,0,0.3);scrollbar-width:none;">
-    
-    <!-- header -->
-    <div style="padding:24px 24px 0;display:flex;align-items:center;justify-content:space-between;">
-      <div>
-        <div style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;">Заявка на фит</div>
-        <div style="font-size:20px;font-weight:700;color:var(--text);" id="fitModalArtistName">Артист</div>
-      </div>
-      <button onclick="closeFitModal()" style="width:36px;height:36px;border-radius:50%;border:none;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-
-    <!-- правила -->
-<div style="margin:12px 24px;padding:10px 14px;background:#fff8f0;border:1px solid #ffe0b2;border-radius:10px;display:flex;gap:10px;align-items:flex-start;">
-      <div style="font-size:16px;flex-shrink:0;">⚠️</div>
-      <div style="font-size:11px;color:#bf360c;line-height:1.6;">
-        Не более 1 трека · Только MP3 · Строго своя работа · Укажите соцсети для связи
-      </div>
-    </div>
-
-    <!-- форма -->
-   <div style="padding:0 24px 20px;display:flex;flex-direction:column;gap:10px;">
-
-      <!-- имя -->
-      <div>
-        <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;">Псевдоним *</div>
-        <input id="fitName" type="text" placeholder="Как тебя называть?" style="width:100%;padding:10px 14px;border:1px solid var(--bg3);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;transition:border .2s;"
-          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--bg3)'">
-      </div>
-
-      <!-- mp3 -->
-      <div>
-        <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;">Трек MP3 *</div>
-        <label id="fitFileLabel" style="display:flex;align-items:center;gap:10px;padding:12px 14px;border:2px dashed var(--bg3);border-radius:10px;cursor:pointer;transition:all .2s;" 
-          onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor=document.getElementById('fitFile').files.length?'var(--accent)':'var(--bg3)'">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent);flex-shrink:0;">
-            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-          </svg>
-          <div>
-            <div id="fitFileName" style="font-size:13px;font-weight:500;color:var(--text);">Выбрать MP3 файл</div>
-            <div style="font-size:11px;color:var(--text3);">Только .mp3 • Макс. 20MB</div>
-          </div>
-          <input id="fitFile" type="file" accept=".mp3,audio/mpeg" style="display:none;" onchange="handleFitFile(this)">
-        </label>
-      </div>
-
-      <!-- youtube -->
-      <div>
-        <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;">Ссылка на демо YouTube <span style="font-weight:400;color:var(--text3);">(необязательно)</span></div>
-        <div style="position:relative;">
-          <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#ff0000;" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/>
-          </svg>
-          <input id="fitYoutube" type="url" placeholder="https://youtube.com/watch?v=..." style="width:100%;padding:10px 14px 10px 36px;border:1px solid var(--bg3);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;transition:border .2s;"
-            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--bg3)'">
-        </div>
-      </div>
-
-      <!-- голосовое -->
-      <div>
-        <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;">Голосовое сообщение <span style="font-weight:400;color:var(--text3);">(необязательно)</span></div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <button id="fitVoiceBtn" onclick="toggleVoiceRecord()" style="
-            display:flex;align-items:center;gap:8px;padding:10px 16px;
-            border:1px solid var(--bg3);border-radius:10px;background:#fff;
-            font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>
-              <line x1="8" y1="23" x2="16" y2="23"/>
-            </svg>
-            <span id="fitVoiceBtnText">Записать</span>
-          </button>
-          <div id="fitVoiceTimer" style="font-size:13px;color:var(--accent);font-weight:600;display:none;">⏺ 0:00</div>
-          <audio id="fitVoicePlayback" controls style="display:none;height:36px;flex:1;"></audio>
-        </div>
-      </div>
-
-      <!-- комментарий -->
-      <div>
-        <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;">Комментарий <span style="font-weight:400;color:var(--text3);">(необязательно)</span></div>
-       <textarea id="fitComment" placeholder="Расскажи об идее фита, концепции трека..." style="width:100%;padding:10px 14px;border:1px solid var(--bg3);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;resize:none;height:60px;transition:border .2s;"
-          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--bg3)'"></textarea>
-      </div>
-
-      <!-- соцсети -->
-      <div>
-        <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;">Соцсети для связи *</div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <img src="assets/icons/telegram.png" style="width:20px;height:20px;flex-shrink:0;">
-            <input id="fitTelegram" type="text" placeholder="@username" style="flex:1;padding:9px 12px;border:1px solid var(--bg3);border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border .2s;"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--bg3)'">
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <img src="assets/icons/instagram.png" style="width:20px;height:20px;flex-shrink:0;">
-            <input id="fitInstagram" type="text" placeholder="@username" style="flex:1;padding:9px 12px;border:1px solid var(--bg3);border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border .2s;"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--bg3)'">
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <img src="assets/icons/telegram.png" style="width:20px;height:20px;flex-shrink:0;opacity:0;pointer-events:none;">
-            <div style="display:flex;gap:8px;flex:1;">
-              <div style="display:flex;align-items:center;gap:6px;flex:1;">
-                <img src="assets/icons/gmail.png" style="width:20px;height:20px;flex-shrink:0;">
-                <input id="fitGmail" type="email" placeholder="Gmail" style="flex:1;padding:9px 12px;border:1px solid var(--bg3);border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border .2s;"
-                  onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--bg3)'">
-              </div>
-              <div style="display:flex;align-items:center;gap:6px;flex:1;">
-                <img src="assets/icons/mail.png" style="width:20px;height:20px;flex-shrink:0;">
-                <input id="fitMail" type="email" placeholder="Mail" style="flex:1;padding:9px 12px;border:1px solid var(--bg3);border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border .2s;"
-                  onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--bg3)'">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- кнопка -->
-<button onclick="submitFit()" style="
-        width:100%;padding:12px;border-radius:12px;
-        background:linear-gradient(135deg,#cc0000,#ff4444);
-        border:none;cursor:pointer;
-        font-size:14px;font-weight:700;color:#fff;
-        box-shadow:0 6px 20px rgba(204,0,0,0.35);
-        transition:opacity .2s;">
-        🎤 Отправить заявку на фит
-      </button>
-
-    </div>
-  </div>
-</div>
-<!-- GREF'S VIEW MODAL -->
-<div id="grefsViewModal" style="position:fixed;inset:0;z-index:960;display:none;align-items:center;justify-content:center;padding:16px;">
-  <div onclick="closeGrefsViewModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);"></div>
-  <div style="position:relative;background:#fff;border-radius:20px;width:100%;max-width:420px;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-    <div style="position:sticky;top:0;background:#fff;padding:20px 20px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bg3);z-index:2;">
-      <div style="display:flex;align-items:center;gap:8px;">
-      <img src="assets/icons/fans.png" style="width:20px;height:20px;">
-        <div style="font-size:16px;font-weight:700;color:var(--text);">ФАНАТЫ - <span id="grefsViewCount">0</span></div>
-      </div>
-      <button onclick="closeGrefsViewModal()" style="width:32px;height:32px;border-radius:50%;border:none;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div id="grefsViewList" style="padding:12px 16px 20px;display:flex;flex-direction:column;gap:8px;">
-      <div style="text-align:center;padding:30px 0;color:var(--text3);font-size:13px;">Загрузка...</div>
-    </div>
-  </div>
-</div>
-
-<!-- SEND GREF MODAL -->
-<div id="sendGrefModal" style="position:fixed;inset:0;z-index:960;display:none;align-items:center;justify-content:center;padding:16px;">
-  <div onclick="closeSendGrefModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);"></div>
-  <div style="position:relative;background:#fff;border-radius:20px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-    <div style="padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between;">
-      <div style="font-size:16px;font-weight:700;color:var(--text);">Подарить GREF</div>
-      <button onclick="closeSendGrefModal()" style="width:32px;height:32px;border-radius:50%;border:none;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div style="padding:16px 20px 20px;">
-      <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;">Выбери свой GREF</div>
-   <div id="sendGrefOptions" style="display:flex;gap:10px;margin-bottom:16px;"></div>
-      <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;">Сколько GREF потратить (1 реклама = 10 GREF)</div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-        <button type="button" id="grefQtyMinus" style="width:36px;height:36px;border-radius:10px;border:1px solid var(--bg3);background:var(--bg);font-size:16px;font-weight:700;color:var(--text);cursor:pointer;">−</button>
-        <input id="sendGrefQty" type="number" value="10" min="10" step="10" style="flex:1;text-align:center;padding:10px;border:1px solid var(--bg3);border-radius:10px;font-size:14px;font-weight:700;outline:none;">
-        <button type="button" id="grefQtyPlus" style="width:36px;height:36px;border-radius:10px;border:1px solid var(--bg3);background:var(--bg);font-size:16px;font-weight:700;color:var(--text);cursor:pointer;">+</button>
-      </div>
-      <div id="sendGrefQtyHint" style="font-size:11px;color:var(--text3);margin-bottom:14px;">Будет создана 1 реклама</div>
-   <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
-        <span style="font-size:12px;font-weight:600;color:var(--text2);">Твой Instagram *</span>
-        <button type="button" onclick="toggleGrefInfoTip(event)" style="width:16px;height:16px;border-radius:50%;border:1px solid var(--bg3);background:var(--bg);color:var(--text2);font-size:10px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1;">?</button>
-      </div>
-      <div id="sendGrefInfoTip" style="display:none;background:#fff8f0;border:1px solid #ffe0b2;border-radius:10px;padding:10px 12px;font-size:11px;color:#8a5a00;line-height:1.6;margin-bottom:12px;">
-     Ваша реклама показывается в карточке артиста 7 дней, после чего она перестаёт показываться на видном месте, но остаётся в разделе «Фанаты» - оттуда она не удаляется.
-      </div>
-   <input id="sendGrefInstagram" type="text" placeholder="@username или полная ссылка на YouTube-видео" style="width:100%;padding:10px 14px;border:1px solid var(--bg3);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box;margin-bottom:16px;">
-<button id="sendGrefConfirmBtn" style="width:100%;padding:12px;border-radius:12px;background:#27ae60;border:none;cursor:pointer;font-size:14px;font-weight:700;color:#fff;">Сделать GREF</button>
-    </div>
-  </div>
-</div>
-<!-- GIFT SUCCESS MODAL -->
-<div id="giftGrefSuccessModal" style="position:fixed;inset:0;z-index:970;display:none;align-items:center;justify-content:center;padding:16px;">
-  <div onclick="closeGiftGrefSuccessModal()" style="position:absolute;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);"></div>
-  <div style="position:relative;background:#fff;border-radius:20px;width:100%;max-width:360px;box-shadow:0 20px 60px rgba(0,0,0,0.35);text-align:center;overflow:hidden;">
-    <button onclick="closeGiftGrefSuccessModal()" style="position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(0,0,0,0.06);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-    <div style="padding:32px 24px 20px;">
-      <img src="assets/models/podarok.gif" alt="" style="width:110px;height:110px;object-fit:contain;margin:0 auto 16px;display:block;">
-      <div style="font-size:18px;font-weight:800;color:#27ae60;margin-bottom:8px;">ТАБРИК! 🎉</div>
-      <div id="giftGrefSuccessText" style="font-size:14px;font-weight:500;color:#333;line-height:1.6;margin-bottom:22px;"></div>
-    </div>
-    <div style="background:#f7f7f7;padding:18px 20px 22px;border-top:1px solid #eee;">
-      <div style="font-size:12.5px;font-weight:700;color:#555;margin-bottom:14px;line-height:1.5;">Подпишись на нас и раз в неделю мы случайно дарим 100 GREF нашим подписчикам!</div>
-      <div style="display:flex;justify-content:center;gap:14px;">
-        <a href="https://instagram.com/992muz" target="_blank" style="display:block;"><img src="assets/models/instagram.gif" style="width:40px;height:40px;object-fit:contain;"></a>
-        <a href="https://t.me/tg992muz" target="_blank" style="display:block;"><img src="assets/models/telegram.gif" style="width:40px;height:40px;object-fit:contain;"></a>
-        <a href="https://vk.com/vk992muz" target="_blank" style="display:block;"><img src="assets/models/vk.gif" style="width:40px;height:40px;object-fit:contain;"></a>
-        <a href="https://tiktok.com/@992muz" target="_blank" style="display:block;"><img src="assets/models/tiktok.gif" style="width:40px;height:40px;object-fit:contain;"></a>
-        <a href="https://www.youtube.com/@992MUZ" target="_blank" style="display:block;"><img src="assets/models/you.gif" style="width:40px;height:40px;object-fit:contain;"></a>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- STORY MODAL -->
-<div id="storyModal" style="
-  position:fixed;inset:0;z-index:900;
-  background:#000;
-  display:none;flex-direction:column;
-  align-items:center;justify-content:center;">
-
-<!-- прогресс бар: по сегменту на каждую активную сторис -->
-  <div id="storyProgressContainer" style="position:absolute;top:calc(16px + env(safe-area-inset-top));left:16px;right:16px;display:flex;gap:4px;"></div>
-
-  <!-- закрыть -->
-<button onclick="closeStory()" style="
-    position:absolute;top:calc(28px + env(safe-area-inset-top));right:16px;
-    background:rgba(255,255,255,0.15);backdrop-filter:blur(6px);
-    border:none;cursor:pointer;color:#fff;
-    width:36px;height:36px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-    </svg>
-  </button>
-
-  <!-- артист инфо -->
-  <div style="position:absolute;top:calc(36px + env(safe-area-inset-top));left:16px;display:flex;align-items:center;gap:10px;">
-    <img id="storyArtistPhoto" src="" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #fff;">
-    <div>
-<div id="storyArtistName" style="font-size:13px;font-weight:700;color:#fff;"></div>
-      <div id="storyViews" style="font-size:11px;color:rgba(255,255,255,0.6);">👁 0 просмотров</div>
-    <div id="storyReactionsTotal" style="display:none;align-items:center;gap:6px;margin-top:4px;"></div>
-    </div>
-  </div>
-
-  <!-- контент -->
-  <div id="storyContent" style="width:100%;max-width:400px;padding:0 20px;text-align:center;"></div>
-
-  <!-- реакции -->
-  <div id="storyReactions" style="
-    position:absolute;bottom:24px;left:0;right:0;
-    display:flex;justify-content:center;gap:12px;flex-wrap:wrap;padding:0 20px;">
-  </div>
-
-<!-- зоны навигации: тап слева — предыдущая сторис, справа — следующая -->
-  <div onclick="prevStory()" style="position:absolute;top:0;bottom:0;left:0;width:35%;z-index:-1;"></div>
-  <div onclick="nextStory()" style="position:absolute;top:0;bottom:0;right:0;width:65%;z-index:-1;"></div>
-  <!-- контейнер летящих эмодзи -->
-  <div id="floatingEmojis" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div>
-</div>
-<div class="drawer-floating-fans" id="drawerFloatingFans"></div>
 
 <!-- ARTIST DRAWER -->
 <div class="artist-drawer" id="artistDrawer">
@@ -1274,16 +762,12 @@ body {
 <div class="drawer-hero">
       <img class="drawer-hero-photo" id="drawerPhoto" src="assets/images/kartochki/kvadr.jpg" alt="">
       <div class="drawer-hero-gradient"></div>
-<div id="drawerStoryRing" class="story-ring" onclick="openStory()" style="display:none;">
-        <div class="story-ring-inner">
-          <img id="drawerStoryThumb" src="">
-        </div>
-      </div>
+
 <div class="drawer-hero-info">
         <div class="drawer-artist-name">
           <span id="drawerName">Артист</span>
       <img src="assets/icons/verification.png" id="drawerVerified" alt="" style="display:none;">
-          <div class="hero-fan-slot" id="heroFanSlot" style="display:none;"></div>
+
           <div class="drawer-mini-actions" style="margin:0 0 0 auto;">
             <button class="mini-btn" id="drawerLikeBtn" style="color:#fff;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1327,14 +811,7 @@ body {
           <div class="drawer-stat-num" id="drawerStatSubs">0</div>
           <div class="drawer-stat-label">подписчиков</div>
         </div>
-<button id="drawerAskBtnMobile" style="display:none;flex-shrink:0;align-items:center;gap:4px;padding:4px 10px;border-radius:100px;border:1px solid var(--bg3);background:#fff;font-size:11px;font-weight:600;color:var(--text2);cursor:pointer;white-space:nowrap;">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;">
-    <circle cx="12" cy="12" r="10"/>
-    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/>
-    <line x1="12" y1="17" x2="12" y2="17.01"/>
-  </svg>
-  Вопрос
-</button>
+
 <div style="flex-shrink:0; margin-left: auto;">
           <button class="action-btn primary" id="drawerFollowBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;" id="drawerFollowIcon">
@@ -1346,7 +823,7 @@ body {
           </button>
         </div>
       </div>
-
+      <div class="drawer-actions"></div>
         <button class="action-btn" id="btnTracks">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
@@ -1373,23 +850,8 @@ body {
           </svg>
           Био
         </button>
-<button class="action-btn" id="drawerGrefsBtn">
-          <img src="assets/icons/game-coin.png" style="width:15px;height:15px;">
-          <span id="drawerGrefsLabel">GREF'S</span> <span class="count" id="drawerGrefsCount">0</span>
-        </button>
-        <div id="drawerFansShowcase" style="display:none;"></div>
-   <button class="action-btn" id="drawerFeatBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 8v4l3 3"/>
-            <line x1="18" y1="2" x2="22" y2="2"/><line x1="22" y1="2" x2="22" y2="6"/>
-            <line x1="17" y1="7" x2="22" y2="2"/>
-          </svg>
-          Хочу фит <span class="count" id="drawerFeatCount">0</span>
-        </button>
-    <button class="action-btn" id="drawerStoryBtn" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);border-color:transparent;color:#fff;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
-          Сторис
-        </button>
+
+
 <div id="drawerCollabs" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"></div>
       </div>
 
@@ -1563,8 +1025,6 @@ verified: data.verified || false,
     demoVideos: [],
     featWants: 0,
     collabs: [],
-    stories: [],
-    story: null,
   };
 }
 
@@ -1700,23 +1160,6 @@ featWants: 124,
     collabs: [
      { id: 'artist_1', name: 'Рустам', photo: 'assets/images/kartochki/vert.png' }
     ],
-    story: {
-      type: 'track',
-      trackId: 't3',
-      expires: Date.now() + 86400000,
-      views: 284,
-      reactions: {
-        'fire': 47,
-        'love': 32,
-        'star-struck': 18,
-        'hot-face': 9,
-        'cool': 5,
-        'partying-face': 12,
-        'exploding-head': 7,
-        'enraged-face-emoji': 3,
-        'rolling-on-the-floor-laughing': 21
-      }
-    }
   },
 ];
 
@@ -2114,14 +1557,7 @@ const genre = currentArtist?.genre || '';
           ${genre ? `<span style="padding:3px 10px;background:#fff0f0;border-radius:20px;font-size:11px;font-weight:600;color:#cc0000;">🎵 ${genre}</span>` : ''}
           ${listeners ? `<span style="padding:3px 10px;background:#f0f7ff;border-radius:20px;font-size:11px;font-weight:600;color:#1a6cc8;">👥 ${fmtNum(listeners)} слушателей</span>` : ''}
           ${tracks ? `<span style="padding:3px 10px;background:#f3fff3;border-radius:20px;font-size:11px;font-weight:600;color:#2e7d32;">🎧 ${tracks} треков</span>` : ''}
-         <button id="drawerAskBtn" onclick="if(!requireAuth())return;closeBioModal();openAskQuestionModal();" style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;color:var(--text2);background:#fff;border:1px solid #eee;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/>
-              <line x1="12" y1="17" x2="12" y2="17.01"/>
-            </svg>
-            Задать вопрос
-          </button>
+
         </div>
       </div>
 
@@ -2141,86 +1577,7 @@ window.closeBioModal = function() {
   document.body.style.overflow = '';
 }
 // ===== GRID =====
-function hasActiveStory(artist) {
-  return (artist.stories && artist.stories.length > 0) || (artist.story && artist.story.expires > Date.now());
-}
 
-// Раньше был постоянный realtime-канал (onSnapshot) — держал открытое подключение
-// к базе у каждого посетителя всё время, пока открыта вкладка, и тратил дневной лимит
-// чтений даже без единого клика. Теперь — обычная проверка раз в пару минут по таймеру.
-const STORIES_POLL_INTERVAL = 120000; // 2 минуты
-
-async function checkStoriesOnce() {
-  try {
-    const snap = await getDocs(collection(db, 'stories'));
-    const now = Date.now();
-    const byUser = {};
-    snap.forEach(sd => {
-      const s = sd.data();
-      const expires = s.expiresAt || 0;
-      if (expires <= now) return;
-      const uid = s.userId;
-      if (!byUser[uid]) byUser[uid] = [];
-byUser[uid].push({
-        id: sd.id,
-        type: s.type || 'track',
-        trackId: s.trackId || '',
-        trackTitle: s.trackTitle || '',
-        trackUrl: s.trackUrl || '',
-        coverUrl: s.coverUrl || '',
-        ytId: s.ytId || '',
-        clipStart: s.clipStart || 0,
-        clipEnd: s.clipEnd || 0,
-        expires,
-        views: s.views || 0,
-        reactions: s.reactions || {},
-        avatarUrl: s.avatarUrl || '',
-        createdAtMs: s.createdAt?.seconds ? s.createdAt.seconds * 1000 : 0,
-      });
-    });
-
-    let gridNeedsUpdate = false;
-    ALL_ARTISTS.forEach(artist => {
-      const list = (byUser[artist.id] || []).sort((a, b) => a.createdAtMs - b.createdAtMs);
-      list.forEach(st => {
-        if (!st.coverUrl) st.coverUrl = artist.photo;
-        if (!st.avatarUrl) st.avatarUrl = artist.photo;
-      });
-      const hadStory = hasActiveStory(artist);
-      artist.stories = list;
-      artist.story = list[0] || null;
-      const hasStoryNow = hasActiveStory(artist);
-      if (hadStory !== hasStoryNow) gridNeedsUpdate = true;
-
-      // если карточка этого артиста открыта прямо сейчас — обновить кольцо/кнопку живьём
-      if (drawerOpen && currentArtist && currentArtist.id === artist.id) {
-        const ring = document.getElementById('drawerStoryRing');
-        const storyBtn = document.getElementById('drawerStoryBtn');
-        if (ring && storyBtn) {
-          if (hasStoryNow) {
-            document.getElementById('drawerStoryThumb').src = artist.photo;
-            ring.style.display = 'block';
-            storyBtn.style.opacity = '1';
-            storyBtn.style.pointerEvents = 'auto';
-          } else {
-            ring.style.display = 'none';
-            storyBtn.style.opacity = '0.45';
-            storyBtn.style.pointerEvents = 'none';
-          }
-        }
-      }
-    });
-
-    if (gridNeedsUpdate) applyFiltersAndRender();
-  } catch (e) {
-    console.warn('stories poll error', e);
-  }
-}
-
-function setupStoriesRealtime() {
-  checkStoriesOnce();
-  setInterval(checkStoriesOnce, STORIES_POLL_INTERVAL);
-}
 async function applyFiltersAndRender() {
   // Пока идёт поиск — ищем по ПОЛНОМУ списку активных артистов, а не только
   // по уже подгруженной странице ALL_ARTISTS (иначе не находились артисты,
@@ -2272,24 +1629,13 @@ function resetArtistFilters() {
   resetAndRenderArtists();
 }
 function buildArtistCardHTML(artist) {
-  const storyActive = hasActiveStory(artist);
   return `
       <div class="artist-card-photo-wrap">
        <img class="artist-card-photo" src="${optimizeImg(artist.photo, 400)}" alt="${artist.name}" loading="lazy" decoding="async" onerror="this.src='assets/images/kartochki/vert.png'">
        ${artist.verified ? `<div class="artist-card-verified"><img src="assets/icons/verification.png" alt=""><div class="artist-card-verified-tip">Верифицированный артист <b>992MUZ</b></div></div>` : ''}
       </div>
       <div class="artist-card-body">
-        <div style="display:flex;align-items:center;gap:8px;">
-      <div data-story="1" onclick="event.stopPropagation();currentArtist=ALL_ARTISTS.find(a=>a.id==='${artist.id}')||NEW_BLOOD_ARTISTS.find(a=>a.id==='${artist.id}');if(currentArtist&&currentArtist.story&&currentArtist.story.expires>Date.now()){openStory(currentArtist);}else{openDrawer(currentArtist);}" style="
-            flex-shrink:0;
-            width:36px;height:36px;border-radius:50%;
-            padding:2px;
-            background:${storyActive ? 'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)' : '#e0e0e0'};
-            cursor:pointer;">
- <div style="width:100%;height:100%;border-radius:50%;border:2px solid #fff;overflow:hidden;">
-              <img src="${optimizeImg(artist.photo, 80)}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;object-position:center top;">
-            </div>
-          </div>
+         <div style="display:flex;align-items:center;gap:8px;">
 <div class="artist-card-name-wrap"><div class="artist-card-name">${artist.name}</div></div>
         </div>
       </div>`;
@@ -2511,20 +1857,6 @@ document.getElementById('drawerCommentCount').textContent = artist.comments || 0
 renderCollabs(artist);
   renderSocials(artist);
 
-// story ring в дровере
-const ring = document.getElementById('drawerStoryRing');
-  const storyBtn = document.getElementById('drawerStoryBtn');
-  storyBtn.style.display = 'flex';
-  if (hasActiveStory(artist)) {
-    document.getElementById('drawerStoryThumb').src = artist.photo;
-    ring.style.display = 'block';
-    storyBtn.style.opacity = '1';
-    storyBtn.style.pointerEvents = 'auto';
-  } else {
-    ring.style.display = 'none';
-    storyBtn.style.opacity = '0.45';
-    storyBtn.style.pointerEvents = 'none';
-  }
 document.getElementById('drawerAnalyticsBtn').style.display =
     (currentUser && currentUser.uid === artist.id) ? 'flex' : 'none';
 
@@ -2536,16 +1868,6 @@ closeSidePanel();
   drawer.classList.add('open');
 document.body.style.overflow = 'hidden';
   drawerOpen = true;
-
-const fansShowcase = document.getElementById('drawerFansShowcase');
-  if (fansShowcase) { fansShowcase.style.display = 'none'; fansShowcase.innerHTML = ''; }
-  const floatingFans = document.getElementById('drawerFloatingFans');
-  if (floatingFans) { floatingFans.classList.remove('active'); floatingFans.innerHTML = ''; }
-  clearInterval(heroFanCycleTimer);
-  heroFanCycleTimer = null;
-  const heroSlot = document.getElementById('heroFanSlot');
-  if (heroSlot) { heroSlot.style.display = 'none'; heroSlot.innerHTML = ''; }
-  refreshGrefsButton(artist);
 
   // Реалтайм: треки, видео и сумма прослушиваний обновляются сами, без перезагрузки страницы
   subscribeArtistDetails(artist);
@@ -2561,12 +1883,6 @@ function closeDrawer(opts) {
   unsubscribeArtistDetails();
   document.body.style.overflow = '';
   drawerOpen = false;
-  const floatingFans = document.getElementById('drawerFloatingFans');
-  if (floatingFans) { floatingFans.classList.remove('active'); floatingFans.innerHTML = ''; }
-  clearInterval(heroFanCycleTimer);
-  heroFanCycleTimer = null;
-  const heroSlot = document.getElementById('heroFanSlot');
-  if (heroSlot) { heroSlot.style.display = 'none'; heroSlot.innerHTML = ''; }
 }
 // ===== SIDE PANEL =====
 function openSidePanel(type) {
@@ -3042,227 +2358,14 @@ document.getElementById('drawerShareBtn').addEventListener('click', () => {
   updateArtistNameTooltip(currentArtist);
   updateDoc(doc(db, 'artistApplications', currentArtist.id), { shares: currentArtist.shares }).catch(() => {});
 });
-let featState = false;
-document.getElementById('drawerFeatBtn').addEventListener('click', () => {
-  openFitInterestModal();
-});
-
-function openFitInterestModal() {
-  document.getElementById('fitInterestArtistName').textContent = currentArtist?.name || 'Артист';
-  document.getElementById('fitInterestArtistNameSuccess').textContent = currentArtist?.name || 'Артист';
-  document.getElementById('fitInterestForm').style.display = 'block';
-  document.getElementById('fitInterestSuccess').style.display = 'none';
-  document.getElementById('fitInterestName').value = '';
-  document.getElementById('fitInterestWhy').value = '';
-  document.getElementById('fitInterestTg').value = '';
-  document.getElementById('fitInterestModal').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-window.closeFitInterestModal = function() {
-  document.getElementById('fitInterestModal').style.display = 'none';
-  document.body.style.overflow = '';
-}
 
 window.closeAuthRequiredModal = function() {
   document.getElementById('authRequiredModal').style.display = 'none';
   document.body.style.overflow = '';
 }
-document.getElementById('drawerStoryBtn').addEventListener('click', () => {
-  openStory(currentArtist);
-});
-document.getElementById('drawerAskBtnMobile').addEventListener('click', async () => {
-  if (!requireAuth()) return;
-  await openAskQuestionModal();
-});
-window.openAskQuestionModal = openAskQuestionModal;
-async function openAskQuestionModal() {
-  document.getElementById('askQuestionArtistName').textContent = currentArtist?.name || 'Артист';
-  document.getElementById('askQuestionArtistNameSuccess').textContent = currentArtist?.name || 'Артист';
-  document.getElementById('askQuestionModal').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-
-  document.getElementById('askQuestionForm').style.display = 'none';
-  document.getElementById('askQuestionAlreadyBlock').style.display = 'none';
-  document.getElementById('askQuestionSuccess').style.display = 'none';
-
-let alreadyAsked = false;
-  try {
-    const existSnap = await getDocs(query(
-      collection(db, 'artistQuestions'),
-      where('uid', '==', currentUser.uid),
-      where('artistId', '==', currentArtist.id),
-      limit(1)
-    ));
-    alreadyAsked = !existSnap.empty;
-  } catch(e) { console.warn('question check error', e); }
-  if (alreadyAsked) {
-    document.getElementById('askQuestionAlreadyBlock').style.display = 'block';
-  } else {
-    document.getElementById('askQuestionText').value = '';
-    document.getElementById('askQuestionName').value = '';
-    document.getElementById('askQuestionForm').style.display = 'block';
-  }
-}
-window.closeAskQuestionModal = function() {
-  document.getElementById('askQuestionModal').style.display = 'none';
-  document.body.style.overflow = '';
-}
-
-window.submitAskQuestion = async function() {
-  const text = document.getElementById('askQuestionText').value.trim();
-  const name = document.getElementById('askQuestionName').value.trim();
-  if (!text) { alert('Напиши свой вопрос'); return; }
-  if (!currentArtist) return;
-  if (!requireAuth()) return;
-
-try {
-    const existSnap = await getDocs(query(
-      collection(db, 'artistQuestions'),
-      where('uid', '==', currentUser.uid),
-      where('artistId', '==', currentArtist.id),
-      limit(1)
-    ));
-    if (!existSnap.empty) {
-      document.getElementById('askQuestionForm').style.display = 'none';
-      document.getElementById('askQuestionAlreadyBlock').style.display = 'block';
-      return;
-    }
-  } catch(e) { console.warn('question re-check error', e); }
-
-  try {
-    const qRef = doc(collection(db, 'artistQuestions'));
-    await setDoc(qRef, {
-      artistId: currentArtist.id,
-      artistName: currentArtist.name,
-      question: text,
-      displayAs: name || '',
-      uid: currentUser.uid,
-      userEmail: currentUser.email || '',
-      userName: currentUser.displayName || currentUser.email || 'Пользователь',
-      userAvatar: currentUser.photoURL || '',
-      status: 'new',
-      createdAt: Date.now(),
-    });
-  } catch (e) {
-    console.warn('question save error', e);
-    alert('Не удалось отправить вопрос, попробуй ещё раз');
-    return;
-  }
-
-  document.getElementById('askQuestionForm').style.display = 'none';
-  document.getElementById('askQuestionSuccess').style.display = 'block';
-}
-window.submitFitInterest = function() {
-  const name = document.getElementById('fitInterestName').value.trim();
-  const why = document.getElementById('fitInterestWhy').value.trim();
-  const tg = document.getElementById('fitInterestTg').value.trim();
-  if (!name) { alert('Укажи псевдоним'); return; }
-  if (!why) { alert('Расскажи почему хочешь фит'); return; }
-  if (!tg) { alert('Укажи Telegram для связи'); return; }
-  document.getElementById('fitInterestForm').style.display = 'none';
-  document.getElementById('fitInterestSuccess').style.display = 'block';
-}
-
-window.openFitModal = function() {
-  document.getElementById('fitModalArtistName').textContent = currentArtist?.name || 'Артист';
-  document.getElementById('fitModal').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-
-window.closeFitModal = function() {
-  document.getElementById('fitModal').style.display = 'none';
-  document.body.style.overflow = '';
-  stopVoiceRecord();
-}
-
-function handleFitFile(input) {
-  const file = input.files[0];
-  if (!file) return;
-  if (file.size > 20 * 1024 * 1024) {
-    alert('Файл слишком большой. Максимум 20MB');
-    input.value = '';
-    return;
-  }
-  document.getElementById('fitFileName').textContent = file.name;
-  document.getElementById('fitFileLabel').style.borderColor = 'var(--accent)';
-  document.getElementById('fitFileLabel').style.background = 'var(--accent-light)';
-}
-
-// голосовое
-let mediaRecorder = null;
-let voiceChunks = [];
-let voiceTimer = null;
-let voiceSeconds = 0;
-
-async function toggleVoiceRecord() {
-  if (mediaRecorder && mediaRecorder.state === 'recording') {
-    stopVoiceRecord();
-    return;
-  }
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream);
-    voiceChunks = [];
-    voiceSeconds = 0;
-    mediaRecorder.ondataavailable = e => voiceChunks.push(e.data);
-    mediaRecorder.onstop = () => {
-      const blob = new Blob(voiceChunks, { type: 'audio/webm' });
-      const url = URL.createObjectURL(blob);
-      const playback = document.getElementById('fitVoicePlayback');
-      playback.src = url;
-      playback.style.display = 'block';
-      stream.getTracks().forEach(t => t.stop());
-    };
-    mediaRecorder.start();
-    document.getElementById('fitVoiceBtn').style.borderColor = 'var(--accent)';
-    document.getElementById('fitVoiceBtn').style.color = 'var(--accent)';
-    document.getElementById('fitVoiceBtnText').textContent = 'Стоп';
-    document.getElementById('fitVoiceTimer').style.display = 'block';
-    voiceTimer = setInterval(() => {
-      voiceSeconds++;
-      const m = Math.floor(voiceSeconds / 60);
-      const s = (voiceSeconds % 60).toString().padStart(2, '0');
-      document.getElementById('fitVoiceTimer').textContent = `⏺ ${m}:${s}`;
-    }, 1000);
-  } catch(e) {
-    alert('Нет доступа к микрофону');
-  }
-}
-
-function stopVoiceRecord() {
-  if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
-  clearInterval(voiceTimer);
-  document.getElementById('fitVoiceTimer').style.display = 'none';
-  document.getElementById('fitVoiceBtnText').textContent = 'Записать';
-  document.getElementById('fitVoiceBtn').style.borderColor = 'var(--bg3)';
-  document.getElementById('fitVoiceBtn').style.color = 'var(--text2)';
-}
-
-function submitFit() {
-  const name = document.getElementById('fitName').value.trim();
-  const file = document.getElementById('fitFile').files[0];
-  const tg = document.getElementById('fitTelegram').value.trim();
-  const ig = document.getElementById('fitInstagram').value.trim();
-  const gmail = document.getElementById('fitGmail').value.trim();
-  const mail = document.getElementById('fitMail').value.trim();
-
-  if (!name) { alert('Укажи псевдоним'); return; }
-  if (!file) { alert('Прикрепи MP3 файл'); return; }
-  if (!tg && !ig && !gmail && !mail) { alert('Укажи хотя бы одну соцсеть для связи'); return; }
-
-  const btn = event.target;
-  btn.textContent = '✅ Заявка отправлена!';
-  btn.style.background = 'linear-gradient(135deg,#2e7d32,#43a047)';
-  btn.disabled = true;
-  setTimeout(() => closeFitModal(), 2000);
-}
-
 function renderCollabs(artist) {
   const wrap = document.getElementById('drawerCollabs');
   const collabs = artist.collabs || [];
-  document.getElementById('drawerFeatCount').textContent = artist.featWants || 0;
-  featState = false;
-  document.getElementById('drawerFeatBtn').classList.remove('liked');
 
   if (!collabs.length) { wrap.innerHTML = ''; return; }
 
@@ -3275,414 +2378,7 @@ function renderCollabs(artist) {
         <span style="font-size:12px;font-weight:600;color:inherit;">${c.name}</span>
       </div>`).join('');
 }
-// ===== GREF'S =====
-let currentArtistGiftedByMe = false;
-let selectedGrefType = null;
-function trackAdView(g) {
-  try {
-    if (!currentArtist || !g || !g.fromUid) return;
-    const sessKey = `adview_${currentArtist.id}_${g.fromUid}`;
-    if (sessionStorage.getItem(sessKey)) return;
-    sessionStorage.setItem(sessKey, '1');
-    const ref = doc(db, 'fanAdViews', `${currentArtist.id}_${g.fromUid}`);
-    setDoc(ref, {
-      artistId: currentArtist.id,
-      artistName: currentArtist.name || '',
-      fromUid: g.fromUid,
-      fromInstagram: g.fromInstagram || '',
-      views: increment(1),
-      updatedAt: serverTimestamp()
-    }, { merge: true }).catch(() => {});
-  } catch (e) {}
-}
-function formatFanLink(raw) {
-  const val = (raw || '').trim();
-  if (/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//i.test(val)) {
-    return { url: val, label: 'YouTube' };
-  }
-  const handle = val.replace(/^@/, '');
-  return { url: `https://instagram.com/${handle}`, label: `@${handle || 'user'}` };
-}
-async function refreshGrefsButton(artist) {
-  const btn = document.getElementById('drawerGrefsBtn');
-  const label = document.getElementById('drawerGrefsLabel');
-  const countEl = document.getElementById('drawerGrefsCount');
-  if (!btn) return;
 
-  let total = 0;
-  try {
-    const snap = await getDocs(query(collection(db, 'artistGifts'), where('artistId', '==', artist.id), orderBy('giftedAt', 'desc')));
-    total = snap.size;
-    renderFansShowcase(snap.docs);
-  } catch(e) {
-    console.warn('grefs count error', e);
-    renderFansShowcase([]);
-  }
-  countEl.textContent = total;
-  countEl.title = 'Посмотреть фанатов';
-  countEl.style.cursor = 'pointer';
-  countEl.onclick = (e) => { e.stopPropagation(); openGrefsViewModal(artist); };
-
-  // Свою карточку — только просмотр списка, дарить себе нельзя
-  if (!currentUser || currentUser.uid === artist.id) {
-    btn.classList.remove('gref-cta');
-    label.textContent = "GREF'S";
-    btn.onclick = () => openGrefsViewModal(artist);
-    return;
-  }
-
-  // Дарить можно неограниченное количество раз — кнопка всегда ведёт на дарение
-  btn.classList.add('gref-cta');
-  label.textContent = 'Сделать GREF';
-  btn.onclick = () => openSendGrefModal(artist);
-}
-
-const FAN_ACTIVE_DAYS = 7;
-function getGiftMs(g) {
-  return g.giftedAt?.seconds ? g.giftedAt.seconds * 1000 : Date.now();
-}
-// Каждая покупка рекламы = отдельная запись, без объединения по нику —
-// у каждого пузыря своя история, сколько бы раз ни покупали
-function toFanEntries(docs) {
-  return docs.map(d => {
-    const g = d.data();
-    return { doc: d, data: g, ms: getGiftMs(g), count: 1 };
-  }).sort((a, b) => b.ms - a.ms);
-}
-// Группируем все подарки по нику фаната: если он дарил несколько раз,
-// в списке остаётся одна запись с суммарным количеством подарков (count)
-// и временем ПОСЛЕДНЕГО подарка — поэтому при повторном дарении фанат
-// заново "всплывает" наверх (сортировка идёт по времени последнего giftedAt).
-function groupFansByHandle(docs) {
-  const map = new Map();
-  docs.forEach(d => {
-    const g = d.data();
-    const handle = (g.fromInstagram || '').replace(/^@/, '').toLowerCase();
-    const key = handle || d.id;
-    const ms = getGiftMs(g);
-    if (!map.has(key)) map.set(key, { data: g, ms, count: 0 });
-    const entry = map.get(key);
-    entry.count += 1;
-    if (ms > entry.ms) { entry.data = g; entry.ms = ms; }
-  });
-  return [...map.values()].sort((a, b) => b.ms - a.ms);
-}
-
-function splitFanTiers(grouped) {
-  const cutoff = Date.now() - FAN_ACTIVE_DAYS * 24 * 60 * 60 * 1000;
-  const active = [], expired = [];
-  grouped.forEach(entry => (entry.ms >= cutoff ? active : expired).push(entry));
-  return { active, expired };
-}
-// Витрина активных (последние 30 дней) фанатов — их Instagram аккуратно рекламируется на видном месте карточки артиста
-function renderFansShowcase(docs) {
-  const wrap = document.getElementById('drawerFansShowcase');
-  if (!wrap) return;
-  if (!docs.length) {
-    wrap.style.display = 'none';
-    wrap.innerHTML = '';
-    renderFloatingFans([]);
-    renderHeroFanSlot([]);
-    return;
-  }
-
-const entries = toFanEntries(docs);
-  const { active } = splitFanTiers(entries);
-
-  wrap.innerHTML = `
-    <button class="action-btn fans-showcase-btn" onclick="openFansShowcaseModal()">
-      <img src="assets/models/star.gif" alt="" class="fans-showcase-btn-icon">
-      ФАНАТЫ <span class="count">${docs.length}</span>
-    </button>`;
-  wrap.style.display = 'block';
-
-  renderFloatingFans(active);
-  renderHeroFanSlot(active);
-}
-// Плавающие пузырьки в пустой зоне слева от дровера — декоративная реклама важных фанатов
-function renderFloatingFans(grouped) {
-  const container = document.getElementById('drawerFloatingFans');
-  if (!container) return;
-  if (!grouped.length) { container.classList.remove('active'); container.innerHTML = ''; return; }
-
-  // positions[0] — самая заметная позиция; grouped уже отсортирован
-  // по времени последнего подарка (сначала — кто дарил недавнее всех)
-  const positions = [
-    { top: '14%', left: '38%' },
-    { top: '30%', left: '8%'  },
-    { top: '48%', left: '55%' },
-    { top: '64%', left: '20%' },
-    { top: '80%', left: '45%' },
-    { top: '20%', left: '68%' },
-  ];
-
-  const shown = grouped.slice(0, positions.length);
-  container.innerHTML = shown.map((entry, i) => {
-    const g = entry.data;
-const { url: fanUrl, label: fanLabel } = formatFanLink(g.fromInstagram);
-    trackAdView(g);
-    const model = g.grefType === 'gold' ? 'assets/models/logo.glb' : 'assets/models/metal.glb';
-    const pos = positions[i];
-    const delay = (i * 0.45).toFixed(2);
-    const tag = entry.count > 1 ? `${fanLabel} ×${entry.count}` : fanLabel;
-    return `<a class="fan-bubble" href="${fanUrl}" target="_blank" rel="noopener"
-      style="top:${pos.top};left:${pos.left};animation-delay:${delay}s;">
-      <model-viewer src="${model}" auto-rotate camera-controls autoplay disable-zoom rotation-per-second="90deg"></model-viewer>
-      <span class="fan-bubble-tag">${tag}</span>
-    </a>`;
-  }).join('');
-  container.classList.add('active');
-}
-// Слот в шапке (между именем и кнопками лайк/коммент/share) — один значок,
-// который по очереди показывает всех важных фанатов с эффектом вращения при смене.
-let heroFanCycleTimer = null;
-let heroFanCycleList = [];
-let heroFanCycleIdx = 0;
-
-function renderHeroFanSlot(grouped) {
-  const slot = document.getElementById('heroFanSlot');
-  if (!slot) return;
-  clearInterval(heroFanCycleTimer);
-  heroFanCycleTimer = null;
-
-  if (!grouped.length) {
-    slot.style.display = 'none';
-    slot.innerHTML = '';
-    heroFanCycleList = [];
-    return;
-  }
-
-  heroFanCycleList = grouped;
-  heroFanCycleIdx = 0;
-  slot.style.display = 'flex';
-  showHeroFanAt(0);
-
-  if (grouped.length > 1) {
-    heroFanCycleTimer = setInterval(() => {
-      heroFanCycleIdx = (heroFanCycleIdx + 1) % heroFanCycleList.length;
-      showHeroFanAt(heroFanCycleIdx);
-    }, 2600);
-  }
-}
-
-function showHeroFanAt(idx) {
-  const slot = document.getElementById('heroFanSlot');
-  if (!slot || !heroFanCycleList[idx]) return;
-  const g = heroFanCycleList[idx].data;
-const { url: fanUrl, label: fanLabel } = formatFanLink(g.fromInstagram);
-  trackAdView(g);
-  const model = g.grefType === 'gold' ? 'assets/models/logo.glb' : 'assets/models/metal.glb';
-
-  slot.classList.remove('spin-in');
-  void slot.offsetWidth;
-  slot.innerHTML = `<a class="hero-fan-bubble-inline" href="${fanUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${fanLabel}">
-    <model-viewer src="${model}" auto-rotate camera-controls autoplay disable-zoom rotation-per-second="120deg"></model-viewer>
-  </a>`;
-  slot.classList.add('spin-in');
-}
-window.openFansShowcaseModal = function() {
-  if (currentArtist) openGrefsViewModal(currentArtist);
-};
-
-window.openGrefsViewModal = async function(artist) {
-  document.getElementById('grefsViewModal').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-  const list = document.getElementById('grefsViewList');
-  list.innerHTML = '<div style="text-align:center;padding:30px 0;color:var(--text3);font-size:13px;">Загрузка...</div>';
-  try {
-    const snap = await getDocs(query(collection(db, 'artistGifts'), where('artistId', '==', artist.id), orderBy('giftedAt', 'desc')));
-    document.getElementById('grefsViewCount').textContent = snap.size;
-    if (snap.empty) {
-      list.innerHTML = '<div style="text-align:center;padding:30px 0;color:var(--text3);font-size:13px;">Пока никто не подарил GREF</div>';
-      return;
-    }
-const { active, expired } = splitFanTiers(toFanEntries(snap.docs));
-
-function renderFanRow(entry, isExpired) {
-  const g = entry.data;
-      const { url: fanUrl, label: fanLabel } = formatFanLink(g.fromInstagram);
-      const dateStr = g.giftedAt?.seconds ? new Date(g.giftedAt.seconds * 1000).toLocaleDateString('ru') : '';
-      const model = g.grefType === 'gold' ? 'assets/models/logo.glb' : 'assets/models/metal.glb';
-      return `<div class="fan-row-minimal ${isExpired ? 'fan-row-expired' : ''}">
-        <div class="fan-row-avatar"><model-viewer src="${model}" auto-rotate camera-controls autoplay disable-zoom rotation-per-second="90deg"></model-viewer></div>
-        <div style="flex:1;min-width:0;">
-          <a href="${fanUrl}" target="_blank" rel="noopener" style="font-size:13px;font-weight:600;color:var(--text);text-decoration:none;">${fanLabel}</a>
-          <div style="font-size:11px;color:var(--text3);margin-top:2px;">${dateStr}</div>
-        </div>
-      </div>`;
-    }
-    let html = '';
-if (active.length) {
-      html += `<div class="fan-tier-title">Важные фанаты</div>`;
-      html += active.map(entry => renderFanRow(entry, false)).join('');
-    }
-    if (expired.length) {
-      html += `<div class="fan-tier-title">Все фанаты</div>`;
-      html += expired.map(entry => renderFanRow(entry, true)).join('');
-    }
-    list.innerHTML = html;
-  } catch(e) {
-    console.error(e);
-    list.innerHTML = '<div style="text-align:center;padding:30px 0;color:var(--text3);font-size:13px;">Не удалось загрузить</div>';
-  }
-};
-window.closeGrefsViewModal = function() {
-  document.getElementById('grefsViewModal').style.display = 'none';
-  document.body.style.overflow = '';
-};
-
-window.openSendGrefModal = async function(artist) {
-  if (!requireAuth()) return;
-  if (currentUser.uid === artist.id) return;
-
-  let nickel = 0, gold = 0;
-  try {
-    const uSnap = await getDoc(doc(db, 'users', currentUser.uid));
-    if (uSnap.exists()) {
-      const ud = uSnap.data();
-      nickel = ud.grefNickelCount || 0;
-      gold = ud.grefGoldCount || 0;
-    }
-  } catch(e) { console.warn('user gref load error', e); }
-
-  if (nickel <= 0 && gold <= 0) {
-    showVoteAlert('У тебя пока нет GREF. Получи первый в своём профиле!');
-    return;
-  }
-
-  selectedGrefType = null;
-  const optionsWrap = document.getElementById('sendGrefOptions');
-  optionsWrap.innerHTML = '';
-  if (gold > 0) {
-    optionsWrap.innerHTML += `<button class="gref-option-btn" data-type="gold" style="flex:1;padding:12px;border-radius:12px;border:2px solid var(--bg3);background:var(--bg);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
-      <img src="assets/icons/game-coin.png" style="width:28px;height:28px;">
-      <span style="font-size:11px;font-weight:600;color:var(--text);">Золотой (${gold})</span>
-    </button>`;
-  }
-  if (nickel > 0) {
-    optionsWrap.innerHTML += `<button class="gref-option-btn" data-type="nickel" style="flex:1;padding:12px;border-radius:12px;border:2px solid var(--bg3);background:var(--bg);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;">
-      <img src="assets/icons/silver-badge.png" style="width:28px;height:28px;">
-      <span style="font-size:11px;font-weight:600;color:var(--text);">Серебряный (${nickel})</span>
-    </button>`;
-  }
-  optionsWrap.querySelectorAll('.gref-option-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      optionsWrap.querySelectorAll('.gref-option-btn').forEach(b => { b.style.borderColor = 'var(--bg3)'; b.style.background = 'var(--bg)'; });
-      btn.style.borderColor = 'var(--accent)';
-      btn.style.background = 'var(--accent-light)';
-      selectedGrefType = btn.dataset.type;
-    });
-  });
-  if (optionsWrap.children.length === 1) optionsWrap.children[0].click();
-
-document.getElementById('sendGrefInstagram').value = '';
-  document.getElementById('sendGrefQty').value = 10;
-  document.getElementById('sendGrefQtyHint').textContent = 'Будет создана 1 реклама';
-  document.getElementById('sendGrefModal').dataset.artistId = artist.id;
-  document.getElementById('sendGrefModal').dataset.artistName = artist.name || '';
-  document.getElementById('sendGrefModal').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-};
-window.showGiftGrefSuccessModal = function(artistName) {
-  document.getElementById('giftGrefSuccessText').innerHTML = `Вы сделали GREF артисту <strong>${artistName || 'артисту'}</strong>! Теперь ваш Instagram и видео увидят миллионы пользователей 992MUZ.`;
-  document.getElementById('giftGrefSuccessModal').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-};
-window.closeGiftGrefSuccessModal = function() {
-  document.getElementById('giftGrefSuccessModal').style.display = 'none';
-  document.body.style.overflow = '';
-};
-window.closeSendGrefModal = function() {
-  document.getElementById('sendGrefModal').style.display = 'none';
-  document.body.style.overflow = '';
-  const tip = document.getElementById('sendGrefInfoTip');
-  if (tip) tip.style.display = 'none';
-};
-
-window.toggleGrefInfoTip = function(e) {
-  e.stopPropagation();
-  const tip = document.getElementById('sendGrefInfoTip');
-  if (!tip) return;
-  tip.style.display = tip.style.display === 'none' ? 'block' : 'none';
-};
-const GREF_PER_AD = 10;
-function updateGrefQtyHint() {
-  const qtyInput = document.getElementById('sendGrefQty');
-  const hint = document.getElementById('sendGrefQtyHint');
-  let qty = parseInt(qtyInput.value) || GREF_PER_AD;
-  qty = Math.max(GREF_PER_AD, Math.round(qty / GREF_PER_AD) * GREF_PER_AD);
-  qtyInput.value = qty;
-  const ads = qty / GREF_PER_AD;
-  hint.textContent = `Будет создан${ads === 1 ? 'а' : 'о'} ${ads} реклам${ads === 1 ? 'а' : 'ы'}`;
-}
-document.getElementById('grefQtyMinus').addEventListener('click', () => {
-  const input = document.getElementById('sendGrefQty');
-  input.value = Math.max(GREF_PER_AD, (parseInt(input.value) || GREF_PER_AD) - GREF_PER_AD);
-  updateGrefQtyHint();
-});
-document.getElementById('grefQtyPlus').addEventListener('click', () => {
-  const input = document.getElementById('sendGrefQty');
-  input.value = (parseInt(input.value) || 0) + GREF_PER_AD;
-  updateGrefQtyHint();
-});
-document.getElementById('sendGrefQty').addEventListener('change', updateGrefQtyHint);
-document.getElementById('sendGrefConfirmBtn').addEventListener('click', async () => {
-const artistId = document.getElementById('sendGrefModal').dataset.artistId;
-  const artistName = document.getElementById('sendGrefModal').dataset.artistName;
-  let handle = document.getElementById('sendGrefInstagram').value.trim();
-  const qty = parseInt(document.getElementById('sendGrefQty').value) || 0;
-  if (!selectedGrefType) return showVoteAlert('Выбери свой GREF');
-  if (qty < GREF_PER_AD || qty % GREF_PER_AD !== 0) return showVoteAlert(`Количество GREF должно быть кратно ${GREF_PER_AD}`);
-  if (!handle) return showVoteAlert('Укажи свой Instagram или ссылку на YouTube');
-
-  const isYoutube = /youtube\.com|youtu\.be/i.test(handle);
-  if (isYoutube) {
-    if (!/^https?:\/\//i.test(handle)) handle = 'https://' + handle;
-    const ytPattern = /^https?:\/\/(www\.)?(youtube\.com\/(watch\?v=[\w-]+|shorts\/[\w-]+|@[\w.-]+)|youtu\.be\/[\w-]+)/i;
-    if (!ytPattern.test(handle)) return showVoteAlert('Укажи корректную ссылку на YouTube-видео или канал');
-  } else {
-    if (!handle.startsWith('@')) handle = '@' + handle;
-    handle = handle.replace(/[^a-zA-Z0-9._@]/g, '');
-    if (handle.length < 2) return showVoteAlert('Укажи корректный Instagram ник');
-  }
-
-  const btn = document.getElementById('sendGrefConfirmBtn');
-  btn.disabled = true;
-  btn.textContent = 'Отправляем...';
-  try {
-    const userRef = doc(db, 'users', currentUser.uid);
-    const uSnap = await getDoc(userRef);
-    const ud = uSnap.data() || {};
-const field = selectedGrefType === 'gold' ? 'grefGoldCount' : 'grefNickelCount';
-    const current = ud[field] || 0;
-    if (current < qty) { showVoteAlert(`Не хватает GREF: нужно ${qty}, есть ${current}`); return; }
-
-    const adsCount = qty / GREF_PER_AD;
-    const batch = writeBatch(db);
-    batch.update(userRef, { [field]: current - qty });
-    for (let i = 0; i < adsCount; i++) {
-      const giftRef = doc(collection(db, 'artistGifts'));
-      batch.set(giftRef, {
-        artistId,
-        fromUid: currentUser.uid,
-        fromInstagram: handle,
-        grefType: selectedGrefType,
-        giftedAt: serverTimestamp(),
-      });
-    }
-    await batch.commit();
-
-closeSendGrefModal();
-    if (currentArtist && currentArtist.id === artistId) refreshGrefsButton(currentArtist);
-    showGiftGrefSuccessModal(artistName);
-  } catch(e) {
-    console.error(e);
-    showVoteAlert('Не удалось отправить GREF — баланс не списан (ошибка: ' + (e.code || e.message) + '), попробуй ещё раз');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'Сделать GREF';
-  }
-});
 // ===== PANEL BUTTONS =====
 document.getElementById('btnTracks').addEventListener('click', () => {
   if (currentPanel === 'tracks') { closeSidePanel(); return; }
@@ -3726,7 +2422,6 @@ window.addEventListener('popstate', () => {
 });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    if (document.getElementById('storyModal').style.display !== 'none') { closeStory(); return; }
     if (drawerOpen) closeDrawer();
   }
 });
@@ -3777,9 +2472,7 @@ document.getElementById('verifiedFilterBtn').addEventListener('click', () => {
 });
 
 loadArtists();
-setupStoriesRealtime();
 loadNewBloodArtists();
-
 let NEW_BLOOD_ARTISTS = [];
 
 async function loadNewBloodArtists() {
@@ -3814,280 +2507,7 @@ async function loadNewBloodArtists() {
     console.warn('loadNewBloodArtists error', e);
   }
 }
-// ===== STORY =====
-const REACTION_ICONS = [
-  { key: 'fire', file: 'icons8-fire-100 (2).png' },
-  { key: 'love', file: 'icons8-love-100.png' },
-  { key: 'star-struck', file: 'icons8-star-struck-100.png' },
-  { key: 'hot-face', file: 'icons8-hot-face-100.png' },
-  { key: 'cool', file: 'icons8-cool-100.png' },
-  { key: 'partying-face', file: 'icons8-partying-face-100.png' },
-  { key: 'exploding-head', file: 'icons8-exploding-head-100.png' },
-  { key: 'enraged-face-emoji', file: 'icons8-enraged-face-emoji-100.png' },
-{ key: 'rolling', file: 'icons8-rolling-on-the-floor-laughing-100.png' },
-];
 
-function renderStoryReactionsTotal(reactions) {
-  const el = document.getElementById('storyReactionsTotal');
-  if (!el) return;
-  const entries = Object.entries(reactions || {}).filter(([, v]) => v > 0);
-  if (!entries.length) { el.style.display = 'none'; el.innerHTML = ''; return; }
-  const iconMap = {};
-  REACTION_ICONS.forEach(r => iconMap[r.key] = r.file);
-  const total = entries.reduce((sum, [, v]) => sum + v, 0);
-  const top = entries.sort((a, b) => b[1] - a[1]).slice(0, 3);
-
-  const chips = top.map(([key, count]) => `
-    <span style="display:flex;align-items:center;gap:3px;background:rgba(255,255,255,0.12);border-radius:100px;padding:2px 7px 2px 4px;">
-      <img src="assets/icons/reac/${iconMap[key] || ''}" style="width:14px;height:14px;display:block;">
-      <span style="font-size:11px;font-weight:600;color:#fff;line-height:1;">${count}</span>
-    </span>`).join('');
-
-  el.style.display = 'flex';
-  el.innerHTML = `
-    ${chips}
-    <span style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1;white-space:nowrap;">${total} реакций</span>
-  `;
-}
-let currentStoryArtist = null;
-let currentStoryList = [];
-let currentStoryIndex = 0;
-let storyAdvanceTimer = null;
-
-function renderStorySegments() {
-  const container = document.getElementById('storyProgressContainer');
-  container.innerHTML = currentStoryList.map(() => `
-    <div style="flex:1;height:3px;background:rgba(255,255,255,0.3);border-radius:2px;overflow:hidden;">
-      <div class="story-segment-fill" style="height:100%;width:0%;background:#fff;border-radius:2px;"></div>
-    </div>`).join('');
-}
-
-function markSegmentsBeforeIndex(idx) {
-  const fills = document.querySelectorAll('#storyProgressContainer .story-segment-fill');
-  fills.forEach((fill, i) => {
-    fill.style.transition = 'none';
-    fill.style.width = i < idx ? '100%' : '0%';
-  });
-}
-
-function startSegmentProgress(idx) {
-  const fills = document.querySelectorAll('#storyProgressContainer .story-segment-fill');
-  const fill = fills[idx];
-  clearTimeout(storyAdvanceTimer);
-  if (!fill) return;
-  fill.style.transition = 'none';
-  fill.style.width = '0%';
-  setTimeout(() => {
-    fill.style.transition = 'width 15s linear';
-    fill.style.width = '100%';
-  }, 50);
-  storyAdvanceTimer = setTimeout(() => { nextStory(); }, 15050);
-}
-
-window.openStory = async function(artist) {
-  artist = artist || currentArtist || DEMO_ARTISTS[0];
-  if (!artist) return;
-  const list = (artist.stories && artist.stories.length) ? artist.stories : (artist.story ? [artist.story] : []);
-  if (!list.length) return;
-
-  currentStoryArtist = artist;
-  currentStoryList = list;
-  currentStoryIndex = 0;
-
-  const modal = document.getElementById('storyModal');
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-
-  renderStorySegments();
-  await showStoryAtIndex(0);
-};
-
-window.nextStory = function() {
-  if (currentStoryIndex < currentStoryList.length - 1) {
-    showStoryAtIndex(currentStoryIndex + 1);
-  } else {
-    closeStory();
-  }
-};
-
-window.prevStory = function() {
-  if (currentStoryIndex > 0) {
-    showStoryAtIndex(currentStoryIndex - 1);
-  } else {
-    showStoryAtIndex(0);
-  }
-};
-
-async function showStoryAtIndex(idx) {
-  clearTimeout(storyAdvanceTimer);
-  const audioPrev = document.getElementById('storyAudio');
-  if (audioPrev) audioPrev.pause();
-
-  currentStoryIndex = idx;
-  const artist = currentStoryArtist;
-  const story = currentStoryList[idx];
-  if (!story) return closeStory();
-
-  markSegmentsBeforeIndex(idx);
-
-  document.getElementById('storyArtistPhoto').src = story.avatarUrl || artist.photo || 'assets/images/ava.jpg';
-  document.getElementById('storyArtistName').textContent = artist.name;
-  document.getElementById('storyViews').textContent = `👁 ${story.views} просмотров`;
-
-  try {
-    if (story.id) {
-      await updateDoc(doc(db, 'stories', story.id), { views: (story.views || 0) + 1 });
-      story.views = (story.views || 0) + 1;
-      document.getElementById('storyViews').textContent = `👁 ${story.views} просмотров`;
-    }
-  } catch(e) {}
-
-  renderStoryReactionsTotal(story.reactions);
-
-  // контент
-  if (story.type === 'video' && story.ytId) {
-    const clipStart = story.clipStart || 0;
-    const clipEnd = story.clipEnd || (clipStart + 60);
-    document.getElementById('storyContent').innerHTML = `
-      <div style="width:100%;max-width:340px;border-radius:16px;overflow:hidden;margin-bottom:90px;box-shadow:0 12px 32px rgba(0,0,0,0.5);">
-        <div style="position:relative;padding-bottom:177.78%;height:0;background:#000;">
-          <iframe src="https://www.youtube.com/embed/${story.ytId}?autoplay=1&start=${clipStart}&end=${clipEnd}&controls=0&modestbranding=1&rel=0&playsinline=1" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-      </div>
-      <button onclick="window.open('https://www.youtube.com/watch?v=${story.ytId}&t=${clipStart}s','_blank')" style="position:fixed;bottom:104px;left:50%;transform:translateX(-50%);padding:11px 22px;border-radius:100px;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;z-index:5;white-space:nowrap;">▶ Смотреть полностью</button>
-    `;
-  } else {
-    const track = artist.demoTracks?.find(t => t.id === story.trackId);
-    const audioUrl = track?.audio || story.trackUrl || '';
-    document.getElementById('storyContent').innerHTML = `
-      <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:16px;padding:28px 24px;margin-bottom:80px;display:flex;flex-direction:column;align-items:center;width:100%;box-sizing:border-box;">
-        <div style="font-size:11px;color:rgba(255,255,255,0.6);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;">Новый трек</div>
-        <img src="${track?.cover || story.coverUrl || artist.photo || 'assets/images/kartochki/kvadr.jpg'}" style="width:150px;height:150px;border-radius:14px;object-fit:cover;margin-bottom:18px;box-shadow:0 12px 32px rgba(0,0,0,0.5);">
-        <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:20px;">${artist.name}</div>
-        ${audioUrl ? `
-        <audio id="storyAudio" src="${audioUrl}" preload="metadata"></audio>
-        <div style="width:100%;">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-            <span id="storyCurrentTime" style="font-size:11px;color:rgba(255,255,255,0.5);min-width:32px;">0:00</span>
-            <div id="storyProgressBar" onclick="seekAudio(event)" style="flex:1;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;cursor:pointer;position:relative;">
-              <div id="storyProgressFill" style="height:100%;background:#fff;border-radius:2px;width:0%;position:relative;transition:width .1s linear;">
-                <div style="position:absolute;right:-5px;top:50%;transform:translateY(-50%);width:10px;height:10px;background:#fff;border-radius:50%;box-shadow:0 0 6px rgba(255,255,255,0.6);"></div>
-              </div>
-            </div>
-            <span id="storyDuration" style="font-size:11px;color:rgba(255,255,255,0.5);min-width:32px;text-align:right;">${track?.duration || '0:00'}</span>
-          </div>
-          <div style="display:flex;justify-content:center;">
-            <button id="storyPlayBtn" onclick="toggleStoryAudio()" style="
-              width:56px;height:56px;border-radius:50%;
-              background:linear-gradient(135deg,#cc0000,#ff4444);
-              border:none;cursor:pointer;
-              display:flex;align-items:center;justify-content:center;
-              box-shadow:0 6px 20px rgba(204,0,0,0.5);
-              transition:transform .15s;">
-              <img id="storyPlayIcon" src="assets/icons/play.png" style="width:22px;height:22px;margin-left:3px;">
-            </button>
-          </div>
-        </div>` : `<div style="font-size:12px;color:rgba(255,255,255,0.3);">Аудио недоступно</div>`}
-      </div>`;
-
-    if (audioUrl) {
-      const audio = document.getElementById('storyAudio');
-      const clipStart = story.clipStart || 0;
-      const clipEnd = story.clipEnd || 0;
-      audio.addEventListener('loadedmetadata', () => {
-        if (clipStart) audio.currentTime = clipStart;
-      });
-      audio.addEventListener('timeupdate', () => {
-        if (clipEnd && audio.currentTime >= clipEnd) {
-          audio.pause();
-          document.getElementById('storyPlayIcon').src = 'assets/icons/play.png';
-          return;
-        }
-        const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
-        document.getElementById('storyProgressFill').style.width = pct + '%';
-        const m = Math.floor(audio.currentTime / 60);
-        const s = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
-        document.getElementById('storyCurrentTime').textContent = `${m}:${s}`;
-      });
-      audio.addEventListener('ended', () => {
-        document.getElementById('storyPlayIcon').src = 'assets/icons/play.png';
-      });
-    }
-  }
-
-  // реакции
-  document.getElementById('storyReactions').innerHTML = REACTION_ICONS.map(r => `
-    <button onclick="fireReaction('${r.file}','${r.key}')" style="
-      background:rgba(255,255,255,0.15);backdrop-filter:blur(6px);
-      border:none;cursor:pointer;border-radius:50%;
-      width:48px;height:48px;display:flex;align-items:center;justify-content:center;
-      transition:transform .15s;">
-      <img src="assets/icons/reac/${r.file}" style="width:28px;height:28px;">
-    </button>`).join('');
-
-  startSegmentProgress(idx);
-}
-
-window.closeStory = function() {
-  clearTimeout(storyAdvanceTimer);
-  const audio = document.getElementById('storyAudio');
-  if (audio) { audio.pause(); audio.currentTime = 0; }
-  document.getElementById('storyModal').style.display = 'none';
-  document.body.style.overflow = '';
-  document.getElementById('storyContent').innerHTML = '';
-  document.getElementById('storyProgressContainer').innerHTML = '';
-  currentStoryList = [];
-  currentStoryIndex = 0;
-}
-window.toggleStoryAudio = function() {
-  const audio = document.getElementById('storyAudio');
-  const icon = document.getElementById('storyPlayIcon');
-  if (!audio) return;
-  if (audio.paused) {
-    audio.play();
-    icon.src = 'assets/icons/pause.png';
-  } else {
-    audio.pause();
-    icon.src = 'assets/icons/play.png';
-  }
-}
-
-window.seekAudio = function(e) {
-  const audio = document.getElementById('storyAudio');
-  if (!audio) return;
-  const bar = document.getElementById('storyProgressBar');
-  const rect = bar.getBoundingClientRect();
-  const pct = (e.clientX - rect.left) / rect.width;
-  audio.currentTime = pct * audio.duration;
-}
-
-window.fireReaction = async function(file, key) {
-  const story = currentStoryList[currentStoryIndex];
-  if (key && story?.id) {
-    try {
-      const reactions = story.reactions || {};
-      reactions[key] = (reactions[key] || 0) + 1;
-      story.reactions = reactions;
-      renderStoryReactionsTotal(reactions);
-      await updateDoc(doc(db, 'stories', story.id), { reactions });
-    } catch(e) {}
-  }
-  const container = document.getElementById('floatingEmojis');
-  for (let i = 0; i < 8; i++) {
-    setTimeout(() => {
-      const el = document.createElement('img');
-      el.src = `assets/icons/reac/${file}`;
-      const x = 30 + Math.random() * 40;
-      el.style.cssText = `
-        position:absolute;bottom:80px;left:${x}%;
-        width:36px;height:36px;
-        animation:floatUp 1.4s ease-out forwards;
-        opacity:1;pointer-events:none;`;
-      container.appendChild(el);
-      setTimeout(() => el.remove(), 1500);
-    }, i * 80);
-  }
-}
 </script>
 
 <script src="js/auth/session.js" type="module"></script>
