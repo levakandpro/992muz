@@ -158,17 +158,10 @@ select.btn{padding:5px 8px}
       <a href="#" onclick="show('tracks',this)">🎵 Треки</a>
       <a href="#" onclick="show('videos',this)">🎬 Видео</a>
       <a href="#" onclick="show('artists',this)">🎤 Артисты</a>
-   <a href="#" onclick="show('applications',this)">📋 Заявки</a>
       <a href="#" onclick="show('questions',this)">❓ Вопросы</a>
       <a href="#" onclick="show('messages',this)">📢 Сообщения</a>
       <a href="#" onclick="show('rules',this)">📋 Правила</a>
-
       <a href="#" onclick="show('logs',this)">📋 Логи</a>
-
-      <a href="#" onclick="show('studios',this)">🎙️ Студии</a>
-      <a href="#" onclick="show('grefs',this)">🪙 GREF'S</a>
-<a href="#" onclick="show('payouts',this)">💸 Выплаты артистам</a>
-      <a href="#" onclick="show('creators',this)">🎨 Креаторы</a>
     </nav>
 
 <button class="signout" onclick="doSignout()">→ Выйти</button>
@@ -239,13 +232,7 @@ select.btn{padding:5px 8px}
         <tbody id="questionsBody"></tbody>
       </table>
     </div>
-    <!-- APPLICATIONS -->
-    <div class="section" id="sec-applications">
-      <h1>Заявки от артистов</h1>
-      <table><thead><tr><th>Имя / Email</th><th>Дата</th><th>Статус</th><th>Действия</th></tr></thead>
-        <tbody id="applicationsBody"></tbody>
-      </table>
-    </div>
+
     <!-- USERS -->
     <div class="section active" id="sec-users">
       <h1>Пользователи</h1>
@@ -295,32 +282,6 @@ select.btn{padding:5px 8px}
         <label><input type="checkbox" value="ringtones"> Рингтоны</label>
         <label><input type="checkbox" value="top50"> Топ 50</label>
       </div>
-
-      <div style="margin-bottom:8px;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Добавить в плейлисты:</div>
-      <div class="checkboxes" id="playlistChecks">
-        <label><input type="checkbox" value="medlyaki"> Медляки</label>
-        <label><input type="checkbox" value="klubnye"> Клубные</label>
-        <label><input type="checkbox" value="guitar"> Под гитару</label>
-        <label><input type="checkbox" value="pamirskie"> Памирские</label>
-        <label><input type="checkbox" value="fity"> Фиты</label>
-        <label><input type="checkbox" value="pered-snom"> Перед сном</label>
-        <label><input type="checkbox" value="andergrand"> Андерграунд</label>
-        <label><input type="checkbox" value="v-tachku"> В тачку</label>
-        <label><input type="checkbox" value="vayb-gor"> Вайб гор</label>
-        <label><input type="checkbox" value="redakciya"> Выбор редакции</label>
-        <label><input type="checkbox" value="arhivnyy"> Архивный</label>
-        <label><input type="checkbox" value="pripevy"> Припевы</label>
-       <label><input type="checkbox" value="russkiy"> Иранские</label>
-        <label><input type="checkbox" value="trap"> Trap / Drill</label>
-        <label><input type="checkbox" value="chernyy-rep"> Чёрный рэп</label>
-        <label><input type="checkbox" value="hiphop"> Хип-хоп</label>
-        <label><input type="checkbox" value="tancevalnye"> Танцевальные</label>
-        <label><input type="checkbox" value="zhenskiy"> Женский</label>
-        <label><input type="checkbox" value="legendy"> Легенды</label>
-        <label><input type="checkbox" value="deep-house"> Дип хаус</label>
-        <label><input type="checkbox" value="narodnye"> Народные</label>
-      </div>
-
       <div class="form-row">
         <div class="field">
           <label>Обложка</label>
@@ -365,7 +326,7 @@ select.btn{padding:5px 8px}
 <span id="trackCount" style="color:#555;font-size:12px;white-space:nowrap;"></span>
       </div><button class="btn btn-gray" style="margin-bottom:12px;" onclick="restoreOriginalArtists()">🛠 Восстановить оригинальные имена артистов</button>
       <button class="btn btn-red" style="margin-bottom:12px;margin-left:8px;" onclick="cleanupNonR2Tracks()">🧹 Удалить старые треки (не R2)</button>  <button class="btn btn-gray" style="margin-bottom:12px;" onclick="restoreOriginalArtists()">🛠 Восстановить оригинальные имена артистов</button>
-      <table><thead><tr><th>Название</th><th>Артист</th><th>Блоки</th><th>Плейлисты</th><th>Дата</th><th></th></tr></thead>
+    <table><thead><tr><th>Название</th><th>Артист</th><th>Блоки</th><th>Дата</th><th></th></tr></thead>
         <tbody id="tracksBody"></tbody>
       </table>
 
@@ -413,70 +374,13 @@ select.btn{padding:5px 8px}
           <label><input type="checkbox" value="ringtones"> Рингтоны</label>
           <label><input type="checkbox" value="top50"> Топ 50</label>
         </div>
-        <div style="margin-bottom:8px;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:.05em">Плейлисты:</div>
-        <div class="checkboxes" id="tePlaylistChecks" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;">
-          <label><input type="checkbox" value="medlyaki"> Медляки</label>
-          <label><input type="checkbox" value="klubnye"> Клубные</label>
-          <label><input type="checkbox" value="guitar"> Под гитару</label>
-          <label><input type="checkbox" value="pamirskie"> Памирские</label>
-          <label><input type="checkbox" value="fity"> Фиты</label>
-          <label><input type="checkbox" value="pered-snom"> Перед сном</label>
-          <label><input type="checkbox" value="andergrand"> Андерграунд</label>
-          <label><input type="checkbox" value="v-tachku"> В тачку</label>
-          <label><input type="checkbox" value="vayb-gor"> Вайб гор</label>
-          <label><input type="checkbox" value="redakciya"> Выбор редакции</label>
-          <label><input type="checkbox" value="arhivnyy"> Архивный</label>
-          <label><input type="checkbox" value="pripevy"> Припевы</label>
-          <label><input type="checkbox" value="russkiy"> Иранские</label>
-          <label><input type="checkbox" value="trap"> Trap / Drill</label>
-          <label><input type="checkbox" value="chernyy-rep"> Чёрный рэп</label>
-          <label><input type="checkbox" value="hiphop"> Хип-хоп</label>
-          <label><input type="checkbox" value="tancevalnye"> Танцевальные</label>
-          <label><input type="checkbox" value="zhenskiy"> Женский</label>
-          <label><input type="checkbox" value="legendy"> Легенды</label>
-          <label><input type="checkbox" value="deep-house"> Дип хаус</label>
-          <label><input type="checkbox" value="narodnye"> Народные</label>
-        </div>
+
         <div id="teMsg" class="msg"></div>
         <div style="display:flex;gap:8px;justify-content:flex-end;">
           <button class="btn btn-gray" onclick="closeTrackEdit()">Отмена</button>
           <button class="btn btn-red" onclick="saveTrackEdit()">💾 Сохранить</button>
         </div>
       </div>
-    </div>
-
-    <!-- ПЛЕЙЛИСТ-ЭДИТОР для уже загруженных треков -->
-    <div id="plEditorOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;align-items:center;justify-content:center;">
-      <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:24px;width:600px;max-width:95vw;max-height:90vh;overflow-y:auto;">
-        <div style="font-weight:700;margin-bottom:16px;font-size:15px;color:#fff;" id="plEditorTitle">Плейлисты трека</div>
-        <div class="checkboxes" id="plEditorChecks" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
-          <label><input type="checkbox" value="medlyaki"> Медляки</label>
-          <label><input type="checkbox" value="klubnye"> Клубные</label>
-          <label><input type="checkbox" value="guitar"> Под гитару</label>
-          <label><input type="checkbox" value="pamirskie"> Памирские</label>
-          <label><input type="checkbox" value="fity"> Фиты</label>
-          <label><input type="checkbox" value="pered-snom"> Перед сном</label>
-          <label><input type="checkbox" value="andergrand"> Андерграунд</label>
-          <label><input type="checkbox" value="v-tachku"> В тачку</label>
-          <label><input type="checkbox" value="vayb-gor"> Вайб гор</label>
-          <label><input type="checkbox" value="redakciya"> Выбор редакции</label>
-          <label><input type="checkbox" value="arhivnyy"> Архивный</label>
-          <label><input type="checkbox" value="pripevy"> Припевы</label>
-          <label><input type="checkbox" value="russkiy"> Иранские</label>
-          <label><input type="checkbox" value="trap"> Trap / Drill</label>
-          <label><input type="checkbox" value="chernyy-rep"> Чёрный рэп</label>
-          <label><input type="checkbox" value="hiphop"> Хип-хоп</label>
-          <label><input type="checkbox" value="tancevalnye"> Танцевальные</label>
-          <label><input type="checkbox" value="zhenskiy"> Женский</label>
-          <label><input type="checkbox" value="legendy"> Легенды</label>
-          <label><input type="checkbox" value="deep-house"> Дип хаус</label>
-          <label><input type="checkbox" value="narodnye"> Народные</label>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end">
-          <button class="btn btn-gray" onclick="closePlaylistEditor()">Отмена</button>
-          <button class="btn btn-red" onclick="savePlaylistEditor()">Сохранить</button>
-        </div>
-</div>
     </div>
 
     <!-- ARTIST TRACKS PICKER -->
@@ -559,355 +463,6 @@ select.btn{padding:5px 8px}
       </table>
     </div>
 
-<!-- GREF'S ВЫДАЧА -->
-    <div class="section" id="sec-grefs">
-      <h1>Выдать GREF пользователю</h1>
-      <div id="grefsMsg" class="msg"></div>
-      <div style="color:#666;font-size:12px;margin-bottom:14px;">Ищи аккаунт по email/имени, выбери его, укажи количество и тип GREF, нажми «Выдать» — после того как пользователь оплатил тебе на карту.</div>
-
-      <div class="form-row">
-        <div class="field">
-          <label>Поиск аккаунта</label>
-          <input id="grefSearch" placeholder="🔍 Email или имя..." autocomplete="off" oninput="renderGrefUserList()">
-        </div>
-      </div>
-      <div id="grefUserList" style="max-height:260px;overflow-y:auto;border:1px solid #2a2a2a;border-radius:8px;margin-bottom:16px;"></div>
-
-      <div id="grefSelectedBox" style="display:none;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:14px 16px;margin-bottom:16px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-          <div id="grefSelectedAvatar" style="width:36px;height:36px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;color:#888;overflow:hidden;flex-shrink:0;">👤</div>
-          <div>
-            <div id="grefSelectedName" style="color:#fff;font-weight:600;font-size:13px;"></div>
-            <div id="grefSelectedEmail" style="color:#666;font-size:11px;"></div>
-          </div>
-          <div style="margin-left:auto;color:#888;font-size:12px;" id="grefSelectedCurrent"></div>
-        </div>
-<div class="form-row">
-          <div class="field" style="min-width:220px;">
-            <label>Тариф (необязательно, только для подсказки)</label>
-            <select id="grefTariff" onchange="applyGrefTariff()" style="width:100%;">
-              <option value="">— Свободное количество —</option>
-              <option value="10:100">10 GREF — 100 TJS</option>
-              <option value="20:170">20 GREF — 170 TJS</option>
-              <option value="30:250">30 GREF — 250 TJS</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row" style="margin-bottom:0;">
-          <div class="field" style="min-width:160px;">
-            <label>Тип GREF</label>
-            <select id="grefType" style="width:100%;">
-              <option value="gold">🟡 Золотой</option>
-              <option value="nickel">⚪ Серебряный</option>
-            </select>
-          </div>
-          <div class="field" style="min-width:120px;">
-            <label>Количество</label>
-            <input id="grefQty" type="number" value="1" min="1" style="width:100%;">
-          </div>
-          <div class="field" style="min-width:120px;">
-            <label>Оплачено (TJS)</label>
-            <input id="grefAmount" type="number" placeholder="0" style="width:100%;">
-          </div>
-          <div class="field" style="flex:0;">
-            <button class="btn btn-green" style="padding:9px 20px;" onclick="grantGref()">✅ Выдать</button>
-          </div>
-        </div>
-      </div>
-
-<h1 style="margin-top:28px;">История выдач</h1>
-      <table><thead><tr><th>Кому</th><th>Тип</th><th>Кол-во</th><th>Оплачено</th><th>Дата</th></tr></thead>
-        <tbody id="grefsLogBody"></tbody>
-      </table>
-
-      <h1 style="margin-top:28px;">Восстановить рекламу артисту вручную</h1>
-      <div id="restoreGiftMsg" class="msg"></div>
-      <div style="color:#666;font-size:12px;margin-bottom:14px;">Используй, если фанат уже потратил GREF, а у артиста подарок/реклама не появились (сбой). Баланс фаната здесь НЕ трогается — только досоздаём запись подарка артисту. Instagram/YouTube фаната можно не указывать, если неизвестен.</div>
-
-      <div class="form-row">
-        <div class="field">
-          <label>Поиск артиста</label>
-          <input id="restoreArtistSearch" placeholder="🔍 Ник или имя артиста..." autocomplete="off" oninput="renderRestoreArtistList()">
-        </div>
-      </div>
-      <div id="restoreArtistList" style="max-height:220px;overflow-y:auto;border:1px solid #2a2a2a;border-radius:8px;margin-bottom:16px;"></div>
-
-      <div id="restoreArtistBox" style="display:none;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:14px 16px;margin-bottom:16px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-          <div id="restoreArtistAvatar" style="width:36px;height:36px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;color:#888;overflow:hidden;flex-shrink:0;">👤</div>
-          <div id="restoreArtistName" style="color:#fff;font-weight:600;font-size:13px;"></div>
-        </div>
-        <div class="form-row">
-          <div class="field" style="min-width:200px;">
-            <label>Instagram / YouTube фаната (необязательно)</label>
-            <input id="restoreFanHandle" placeholder="@nickname или ссылка YouTube — можно оставить пустым">
-          </div>
-          <div class="field" style="min-width:140px;">
-            <label>Тип GREF</label>
-            <select id="restoreGrefType" style="width:100%;">
-              <option value="gold">🟡 Золотой</option>
-              <option value="nickel">⚪ Серебряный</option>
-            </select>
-          </div>
-          <div class="field" style="min-width:140px;">
-            <label>Количество GREF (кратно 10)</label>
-            <input id="restoreGrefQty" type="number" value="10" min="10" step="10" style="width:100%;">
-          </div>
-          <div class="field" style="flex:0;">
-            <button class="btn btn-green" style="padding:9px 20px;" onclick="restoreArtistGift()">♻️ Восстановить</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- ВЫПЛАТЫ АРТИСТАМ -->
-<div class="section" id="sec-payouts">
-  <h1>Выплаты артистам</h1>
-  <div id="payoutsMsg" class="msg"></div>
-  <div style="color:#666;font-size:12px;margin-bottom:14px;">Артисты с активной карточкой: их реквизиты, баланс к выплате и сколько уже выплачено всего.</div>
-<table><thead><tr><th>Артист</th><th>Реквизиты</th><th>К выплате</th><th>Выплачено всего</th><th></th></tr></thead>
-    <tbody id="payoutsBody"></tbody>
-  </table>
-</div>
-
-<!-- КРЕАТОРЫ -->
-<div class="section" id="sec-creators">
-  <h1>Креаторы</h1>
-  <div id="creatorsMsg" class="msg"></div>
-<div class="tabs" id="creatorsAdminTabs">
-    <button class="tab active" data-type="studio" onclick="switchCreatorType('studio',this)">Студии</button>
-    <button class="tab" data-type="beatmaker" onclick="switchCreatorType('beatmaker',this)">Битмейкеры</button>
-    <button class="tab" data-type="designer" onclick="switchCreatorType('designer',this)">Дизайнеры</button>
-    <button class="tab" data-type="clipmaker" onclick="switchCreatorType('clipmaker',this)">Клипмейкеры</button>
-  </div>
-
-  <div class="creator-form" data-form="studio">
-<div class="form-row">
-      <div class="field"><label>Название студии</label><input id="crStudioName" placeholder="Название"></div>
-      <div class="field"><label>Telegram (для брони)</label><input id="crStudioTg" placeholder="https://t.me/..."></div>
-      <div class="field" style="max-width:170px;">
-        <label>Топ-позиция</label>
-        <select id="crStudioTop" style="width:100%;">
-          <option value="">— Нет —</option>
-          <option value="1">Топ 1</option>
-          <option value="2">Топ 2</option>
-          <option value="3">Топ 3</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="field"><label>Работали с (через запятую)</label><input id="crStudioWorked" placeholder="Master Ismail, Bakha 84"></div>
-    </div>
-    <div class="upload-area" onclick="document.getElementById('crStudioCoverFile').click()" style="max-width:220px;">
-      <img id="crStudioCoverPreview" class="avatar-preview" style="margin:0 auto 8px;border-radius:8px;">
-      <div id="crStudioCoverLabel">📷 Обложка (квадрат)</div>
-      <input type="file" id="crStudioCoverFile" accept="image/*" onchange="previewCreatorImg(this,'crStudioCoverPreview','crStudioCoverLabel')">
-    </div>
-    <div class="progress-bar" style="max-width:220px;"><div class="progress-fill" id="crStudioProgress"></div></div>
-    <br><button class="btn btn-red" onclick="addCreatorStudio()">➕ Добавить студию</button>
-  </div>
-
-  <div class="creator-form" data-form="beatmaker" style="display:none;">
-<div class="form-row">
-      <div class="field"><label>Имя битмейкера</label><input id="crBeatName" placeholder="Имя"></div>
-      <div class="field"><label>Telegram (заказать бит)</label><input id="crBeatTg" placeholder="https://t.me/..."></div>
-      <div class="field" style="max-width:170px;">
-        <label>Топ-позиция</label>
-        <select id="crBeatTop" style="width:100%;">
-          <option value="">— Нет —</option>
-          <option value="1">Топ 1</option>
-          <option value="2">Топ 2</option>
-          <option value="3">Топ 3</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="field">
-        <label>Обложка (квадрат)</label>
-        <div class="upload-area" onclick="document.getElementById('crBeatCoverFile').click()" style="max-width:220px;">
-          <img id="crBeatCoverPreview" class="avatar-preview" style="margin:0 auto 8px;border-radius:8px;">
-          <div id="crBeatCoverLabel">📷 Обложка</div>
-          <input type="file" id="crBeatCoverFile" accept="image/*" onchange="previewCreatorImg(this,'crBeatCoverPreview','crBeatCoverLabel')">
-        </div>
-      </div>
-      <div class="field">
-        <label>Аудио-пример работы</label>
-        <div class="upload-area" onclick="document.getElementById('crBeatAudioFile').click()" style="max-width:220px;">
-          <div id="crBeatAudioLabel">🎵 Выбрать аудио</div>
-          <input type="file" id="crBeatAudioFile" accept="audio/*" onchange="labelFile(this,'crBeatAudioLabel')">
-        </div>
-      </div>
-    </div>
-    <div class="progress-bar" style="max-width:220px;"><div class="progress-fill" id="crBeatProgress"></div></div>
-    <br><button class="btn btn-red" onclick="addCreatorBeatmaker()">➕ Добавить битмейкера</button>
-  </div>
-
-  <div class="creator-form" data-form="designer" style="display:none;">
-<div class="form-row">
-      <div class="field"><label>Имя дизайнера</label><input id="crDesName" placeholder="Имя"></div>
-      <div class="field"><label>Telegram (заказать дизайн)</label><input id="crDesTg" placeholder="https://t.me/..."></div>
-      <div class="field" style="max-width:170px;">
-        <label>Топ-позиция</label>
-        <select id="crDesTop" style="width:100%;">
-          <option value="">— Нет —</option>
-          <option value="1">Топ 1</option>
-          <option value="2">Топ 2</option>
-          <option value="3">Топ 3</option>
-        </select>
-      </div>
-    </div>
-    <div style="margin-bottom:8px;color:#888;font-size:11px;">3 обложки (будут анимированно чередоваться)</div>
-    <div class="form-row">
-      <div class="field">
-        <div class="upload-area" onclick="document.getElementById('crDesCover1').click()">
-          <img id="crDesCover1Preview" style="width:80px;height:80px;object-fit:cover;border-radius:8px;display:none;margin:0 auto 6px;">
-          <div id="crDesCover1Label">📷 Обложка 1</div>
-          <input type="file" id="crDesCover1" accept="image/*" onchange="previewStPhoto(this,'crDesCover1Preview','crDesCover1Label')">
-        </div>
-      </div>
-      <div class="field">
-        <div class="upload-area" onclick="document.getElementById('crDesCover2').click()">
-          <img id="crDesCover2Preview" style="width:80px;height:80px;object-fit:cover;border-radius:8px;display:none;margin:0 auto 6px;">
-          <div id="crDesCover2Label">📷 Обложка 2</div>
-          <input type="file" id="crDesCover2" accept="image/*" onchange="previewStPhoto(this,'crDesCover2Preview','crDesCover2Label')">
-        </div>
-      </div>
-      <div class="field">
-        <div class="upload-area" onclick="document.getElementById('crDesCover3').click()">
-          <img id="crDesCover3Preview" style="width:80px;height:80px;object-fit:cover;border-radius:8px;display:none;margin:0 auto 6px;">
-          <div id="crDesCover3Label">📷 Обложка 3</div>
-          <input type="file" id="crDesCover3" accept="image/*" onchange="previewStPhoto(this,'crDesCover3Preview','crDesCover3Label')">
-        </div>
-      </div>
-    </div>
-    <div class="progress-bar" style="max-width:220px;"><div class="progress-fill" id="crDesProgress"></div></div>
-    <br><button class="btn btn-red" onclick="addCreatorDesigner()">➕ Добавить дизайнера</button>
-  </div>
-
-  <div class="creator-form" data-form="clipmaker" style="display:none;">
-<div class="form-row">
-      <div class="field"><label>Имя (продакшн)</label><input id="crClipName" placeholder="Имя"></div>
-      <div class="field"><label>YouTube ссылка или ID</label><input id="crClipYt" placeholder="https://youtube.com/watch?v=..."></div>
-      <div class="field"><label>Telegram (Хочу клип)</label><input id="crClipTg" placeholder="https://t.me/..."></div>
-      <div class="field" style="max-width:170px;">
-        <label>Топ-позиция</label>
-        <select id="crClipTop" style="width:100%;">
-          <option value="">— Нет —</option>
-          <option value="1">Топ 1</option>
-          <option value="2">Топ 2</option>
-          <option value="3">Топ 3</option>
-        </select>
-      </div>
-    </div>
-    <button class="btn btn-red" onclick="addCreatorClipmaker()">➕ Добавить клипмейкера</button>
-  </div>
-
-<h1 style="margin-top:28px;">Все креаторы</h1>
-  <table><thead><tr><th>Тип</th><th>Превью</th><th>Имя</th><th></th></tr></thead>
-    <tbody id="creatorsBody"></tbody>
-  </table>
-</div>
-
-<!-- РЕДАКТОР КРЕАТОРА -->
-<div id="creatorEditModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:1000;align-items:center;justify-content:center;">
-  <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:28px;width:480px;max-width:95vw;max-height:90vh;overflow-y:auto;position:relative;">
-    <button onclick="closeCreatorEdit()" style="position:absolute;top:12px;right:12px;background:none;border:none;color:#666;font-size:18px;cursor:pointer;">✕</button>
-    <h2 style="color:#fff;margin-bottom:20px;font-size:15px;">✏️ Редактировать креатора</h2>
-    <input id="ceId" type="hidden">
-    <input id="ceType" type="hidden">
-    <input id="ceExistingCovers" type="hidden">
-
-    <div class="form-row">
-      <div class="field"><label>Имя</label><input id="ceName" style="width:100%"></div>
-    </div>
- <div class="form-row">
-      <div class="field"><label>Telegram</label><input id="ceTg" style="width:100%"></div>
-    </div>
-    <div class="form-row">
-      <div class="field" style="max-width:200px;">
-        <label>Топ-позиция</label>
-        <select id="ceTop" style="width:100%;">
-          <option value="">— Нет —</option>
-          <option value="1">Топ 1</option>
-          <option value="2">Топ 2</option>
-          <option value="3">Топ 3</option>
-        </select>
-      </div>
-    </div>
-    <div class="ce-field" data-type="studio" style="display:none;">
-      <div class="form-row"><div class="field"><label>Работали с</label><input id="ceWorked" style="width:100%"></div></div>
-    </div>
-
-    <div class="ce-field" data-type="studio beatmaker" style="display:none;">
-      <div class="upload-area" onclick="document.getElementById('ceCoverFile').click()" style="max-width:220px;">
-        <img id="ceCoverPreview" class="avatar-preview" style="margin:0 auto 8px;border-radius:8px;">
-        <div id="ceCoverLabel">📷 Сменить обложку</div>
-        <input type="file" id="ceCoverFile" accept="image/*" onchange="previewCreatorImg(this,'ceCoverPreview','ceCoverLabel')">
-      </div>
-    </div>
-
-    <div class="ce-field" data-type="beatmaker" style="display:none;">
-      <div class="upload-area" onclick="document.getElementById('ceAudioFile').click()" style="max-width:220px;">
-        <div id="ceAudioLabel">🎵 Сменить аудио</div>
-        <input type="file" id="ceAudioFile" accept="audio/*" onchange="labelFile(this,'ceAudioLabel')">
-      </div>
-    </div>
-
-    <div class="ce-field" data-type="designer" style="display:none;">
-      <div style="margin-bottom:8px;color:#888;font-size:11px;">3 обложки</div>
-      <div class="form-row">
-        <div class="field">
-          <div class="upload-area" onclick="document.getElementById('ceCover1').click()">
-            <img id="ceCover1Preview" style="width:70px;height:70px;object-fit:cover;border-radius:8px;display:none;margin:0 auto 6px;">
-            <div id="ceCover1Label">📷 Обложка 1</div>
-            <input type="file" id="ceCover1" accept="image/*" onchange="previewStPhoto(this,'ceCover1Preview','ceCover1Label')">
-          </div>
-        </div>
-        <div class="field">
-          <div class="upload-area" onclick="document.getElementById('ceCover2').click()">
-            <img id="ceCover2Preview" style="width:70px;height:70px;object-fit:cover;border-radius:8px;display:none;margin:0 auto 6px;">
-            <div id="ceCover2Label">📷 Обложка 2</div>
-            <input type="file" id="ceCover2" accept="image/*" onchange="previewStPhoto(this,'ceCover2Preview','ceCover2Label')">
-          </div>
-        </div>
-        <div class="field">
-          <div class="upload-area" onclick="document.getElementById('ceCover3').click()">
-            <img id="ceCover3Preview" style="width:70px;height:70px;object-fit:cover;border-radius:8px;display:none;margin:0 auto 6px;">
-            <div id="ceCover3Label">📷 Обложка 3</div>
-            <input type="file" id="ceCover3" accept="image/*" onchange="previewStPhoto(this,'ceCover3Preview','ceCover3Label')">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="ce-field" data-type="clipmaker" style="display:none;">
-      <div class="form-row"><div class="field"><label>YouTube ссылка или ID</label><input id="ceYt" style="width:100%"></div></div>
-    </div>
-
-    <div class="progress-bar" style="margin-bottom:12px;"><div class="progress-fill" id="ceProgress"></div></div>
-    <div id="ceMsg" class="msg"></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn btn-gray" onclick="closeCreatorEdit()">Отмена</button>
-      <button class="btn btn-red" onclick="saveCreatorEdit()">💾 Сохранить</button>
-    </div>
-  </div>
-</div>
-
-<div id="payModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1001;align-items:center;justify-content:center;">
-  <div style="background:#181818;border:1px solid #2a2a2a;border-radius:14px;padding:22px;width:100%;max-width:360px;">
-    <h3 style="margin-bottom:10px;color:#fff;">Выплатить артисту</h3>
-    <div id="payModalArtistName" style="color:#aaa;font-size:13px;margin-bottom:12px;"></div>
-    <div id="payModalRequisites" style="background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:10px 12px;margin-bottom:14px;color:#ccc;font-size:12.5px;"></div>
-    <div class="field" style="margin-bottom:14px;">
-      <label>Сумма (TJS)</label>
-      <input id="payModalAmount" type="number" style="width:100%;">
-    </div>
-    <div style="color:#888;font-size:11px;margin-bottom:14px;line-height:1.6;">Отправляй, только когда реально перевёл деньги артисту. После нажатия артисту придёт уведомление проверить поступление и подтвердить.</div>
-    <div style="display:flex;gap:8px;">
-      <button class="btn btn-gray" style="flex:1;" onclick="document.getElementById('payModal').style.display='none'">Отмена</button>
-      <button class="btn btn-green" style="flex:1;" onclick="confirmPayout()">✅ Отправил, уведомить</button>
-    </div>
-  </div>
-</div>
 <!-- СТИЛИЗОВАННЫЕ CONFIRM / ALERT / PROMPT -->
 <div id="uiConfirmModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;align-items:center;justify-content:center;padding:16px;">
   <div style="background:#181818;border:1px solid #2a2a2a;border-radius:14px;padding:22px;width:100%;max-width:380px;">
@@ -936,211 +491,8 @@ select.btn{padding:5px 8px}
     </div>
   </div>
 </div>
-<!-- STUDIOS -->
-<div class="section" id="sec-studios">
-  <h1>Добавить студию</h1>
-  <div id="studioMsg" class="msg"></div>
 
-<div class="form-row">
-    <div class="field"><label>Название студии</label><input id="stName" placeholder="Название"></div>
-    <div class="field" style="flex:0;min-width:160px;">
-      <label>Верификация</label>
-      <label style="display:flex;align-items:center;gap:8px;margin-top:8px;cursor:pointer;">
-        <input type="checkbox" id="stVerified" style="accent-color:#c0392b;width:16px;height:16px;">
-        <img src="assets/icons/verification.png" style="width:18px;height:18px;object-fit:contain;">
-        Верифицирована
-      </label>
-    </div>
-<div class="field"><label>Страна</label>
-      <select id="stCountry" onchange="toggleStudioCityField()" style="width:100%;background:#1e1e1e;border:1px solid #333;color:#e0e0e0;border-radius:6px;padding:7px 10px;">
-        <option value="TJ">🇹🇯 Таджикистан</option>
-        <option value="RU">🇷🇺 Россия</option>
-        <option value="KZ">🇰🇿 Казахстан</option>
-        <option value="KG">🇰🇬 Кыргызстан</option>
-        <option value="UZ">🇺🇿 Узбекистан</option>
-        <option value="UA">🇺🇦 Украина</option>
-        <option value="AE">🇦🇪 ОАЭ</option>
-        <option value="TR">🇹🇷 Турция</option>
-        <option value="US">🇺🇸 США</option>
-        <option value="GB">🇬🇧 Великобритания</option>
-        <option value="DE">🇩🇪 Германия</option>
-        <option value="OTHER">🌍 Другая</option>
-      </select>
-    </div>
-<div class="field" id="stCityWrap" style="display:none;min-width:160px;">
-      <label>Город</label>
-      <select id="stCity" style="width:100%;background:#1e1e1e;border:1px solid #333;color:#e0e0e0;border-radius:6px;padding:7px 10px;">
-        <option value="Душанбе">Душанбе</option>
-        <option value="Худжанд">Худжанд</option>
-        <option value="Куляб">Куляб</option>
-        <option value="Бохтар (Курган-Тюбе)">Бохтар (Курган-Тюбе)</option>
-        <option value="Истаравшан">Истаравшан</option>
-        <option value="Канибадам">Канибадам</option>
-        <option value="Турсунзаде">Турсунзаде</option>
-        <option value="Пенджикент">Пенджикент</option>
-        <option value="Гарм">Гарм</option>
-        <option value="Хорог">Хорог</option>
-      </select>
-    </div>
-    <div class="field" id="stCityOtherWrap" style="display:none;min-width:160px;">
-      <label>Город</label>
-      <input id="stCityOther" placeholder="Введите город">
-    </div>
-</div>
-  <div class="form-row" style="background:#161616;border:1px solid #2a2a2a;border-radius:10px;padding:12px;">
-    <div class="field" style="flex:0;min-width:160px;">
-      <label>Статус студии</label>
-      <select id="stStatus" onchange="toggleStudioStatusFields()" style="width:100%;background:#1e1e1e;border:1px solid #333;color:#e0e0e0;border-radius:6px;padding:7px 10px;">
-        <option value="open">✅ Работает</option>
-        <option value="closed">⛔ Временно/постоянно закрыто</option>
-      </select>
-    </div>
-    <div class="field" id="stClosedReasonWrap" style="display:none;min-width:180px;">
-      <label>Причина</label>
-      <select id="stClosedReason" style="width:100%;background:#1e1e1e;border:1px solid #333;color:#e0e0e0;border-radius:6px;padding:7px 10px;">
-        <option value="renovation">🛠 Идёт ремонт</option>
-        <option value="moved">📦 Переехали</option>
-        <option value="forever">⛔ Закрыто навсегда</option>
-        <option value="none">⏸ Временно закрыто</option>
-      </select>
-    </div>
-    <div class="field" id="stClosedFromWrap" style="display:none;min-width:150px;">
-      <label>Закрыто с</label>
-      <input id="stClosedFrom" type="date" style="width:100%;">
-    </div>
-<div class="field" id="stClosedUntilWrap" style="display:none;min-width:150px;">
-      <label>Откроется (необязательно)</label>
-      <input id="stClosedUntil" type="date" style="width:100%;">
-    </div>
-  </div>
-
-  <div class="form-row" style="background:#1e1500;border:1px solid #3a2a00;border-radius:10px;padding:12px;">
-    <div class="field" style="flex:0;min-width:220px;">
-      <label>🔥 Акция / скидка</label>
-      <select id="stPromoType" onchange="toggleStudioPromoFields()" style="width:100%;background:#1e1e1e;border:1px solid #333;color:#e0e0e0;border-radius:6px;padding:7px 10px;">
-        <option value="">Нет акции</option>
-        <option value="gift4">Запиши 3 — 4-й трек в подарок</option>
-        <option value="ep6">EP — 6 треков по цене 4</option>
-        <option value="album20">Альбом — 20 треков по цене 16</option>
-        <option value="percent">Скидка в процентах</option>
-      </select>
-    </div>
-    <div class="field" id="stPromoPercentWrap" style="display:none;min-width:140px;">
-      <label>Размер скидки</label>
-      <select id="stPromoPercent" style="width:100%;background:#1e1e1e;border:1px solid #333;color:#e0e0e0;border-radius:6px;padding:7px 10px;">
-        <option value="10">-10%</option>
-        <option value="20">-20%</option>
-        <option value="30">-30%</option>
-        <option value="40">-40%</option>
-        <option value="50">-50%</option>
-        <option value="60">-60%</option>
-        <option value="70">-70%</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="field"><label>Описание</label><textarea id="stDesc" rows="3" style="width:100%;resize:vertical;background:#1e1e1e;border:1px solid #333;color:#e0e0e0;border-radius:6px;padding:7px 10px;font-family:inherit;font-size:13px;outline:none;"></textarea></div>
-  </div>
-<div class="form-row">
-    <div class="field"><label>Адрес (необязательно)</label><input id="stAddress" placeholder="Например: г. Душанбе, ул. Рудаки 10"></div>
-    <div class="field"><label>Имя звукорежиссёра</label><input id="stEngineer" placeholder="Например: DJ Farid"></div>
-  </div>
-
-  <div class="form-row">
-    <div class="field"><label>Цена — Запись голоса</label><input id="stPriceVoice" type="number" placeholder="0"></div>
-    <div class="field"><label>Цена — Сведение</label><input id="stPriceMix" type="number" placeholder="0"></div>
-    <div class="field"><label>Цена — Мастеринг</label><input id="stPriceMaster" type="number" placeholder="0"></div>
-    <div class="field"><label>Цена — Всё включено</label><input id="stPriceFull" type="number" placeholder="0"></div>
-    <div class="field"><label>Валюта</label>
-      <select id="stCurrency" style="width:100%;background:#1e1e1e;border:1px solid #333;color:#e0e0e0;border-radius:6px;padding:7px 10px;">
-        <option value="TJS">с (TJS)</option>
-        <option value="RUB">₽ (RUB)</option>
-        <option value="USD">$ (USD)</option>
-        <option value="EUR">€ (EUR)</option>
-      </select>
-    </div>
-  </div>
-
-  <div style="margin-bottom:8px;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Фото студии (до 3 штук)</div>
-  <div class="form-row">
-    <div class="field">
-      <div class="upload-area" onclick="document.getElementById('stPhoto1').click()">
-        <img id="stPhoto1Preview" style="width:80px;height:80px;object-fit:cover;border-radius:8px;display:none;margin:0 auto 6px;">
-        <div id="stPhoto1Label">📷 Фото 1</div>
-        <input type="file" id="stPhoto1" accept="image/*" onchange="previewStPhoto(this,'stPhoto1Preview','stPhoto1Label')">
-      </div>
-    </div>
-    <div class="field">
-      <div class="upload-area" onclick="document.getElementById('stPhoto2').click()">
-        <img id="stPhoto2Preview" style="width:80px;height:80px;object-fit:cover;border-radius:8px;display:none;margin:0 auto 6px;">
-        <div id="stPhoto2Label">📷 Фото 2</div>
-        <input type="file" id="stPhoto2" accept="image/*" onchange="previewStPhoto(this,'stPhoto2Preview','stPhoto2Label')">
-      </div>
-    </div>
-    <div class="field">
-      <div class="upload-area" onclick="document.getElementById('stPhoto3').click()">
-        <img id="stPhoto3Preview" style="width:80px;height:80px;object-fit:cover;border-radius:8px;display:none;margin:0 auto 6px;">
-        <div id="stPhoto3Label">📷 Фото 3</div>
-        <input type="file" id="stPhoto3" accept="image/*" onchange="previewStPhoto(this,'stPhoto3Preview','stPhoto3Label')">
-      </div>
-    </div>
-  </div>
-
-<div style="margin-bottom:8px;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Примеры работ — треки (до 2)</div>
-  <div class="form-row">
-    <div class="field"><label>Трек 1 — Название</label><input id="stTrack1Title" placeholder="Название трека"></div>
-    <div class="field"><label>Трек 1 — Артист</label><input id="stTrack1Artist" placeholder="Артист"></div>
-  </div>
-  <div class="form-row">
-    <div class="field">
-      <label>Трек 1 — Аудио файл</label>
-      <div class="upload-area" onclick="document.getElementById('stTrack1AudioFile').click()">
-        <div id="stTrack1AudioLabel">🎵 Выбрать аудио</div>
-        <input type="file" id="stTrack1AudioFile" accept="audio/*" onchange="labelFile(this,'stTrack1AudioLabel')">
-      </div>
-    </div>
-
-  </div>
-  <div class="form-row">
-    <div class="field"><label>Трек 2 — Название</label><input id="stTrack2Title" placeholder="Название трека"></div>
-    <div class="field"><label>Трек 2 — Артист</label><input id="stTrack2Artist" placeholder="Артист"></div>
-  </div>
-  <div class="form-row">
-    <div class="field">
-      <label>Трек 2 — Аудио файл</label>
-      <div class="upload-area" onclick="document.getElementById('stTrack2AudioFile').click()">
-        <div id="stTrack2AudioLabel">🎵 Выбрать аудио</div>
-        <input type="file" id="stTrack2AudioFile" accept="audio/*" onchange="labelFile(this,'stTrack2AudioLabel')">
-      </div>
-    </div>
-
-  </div>
-
-  <div style="margin-bottom:8px;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Работали с нами (артисты через запятую)</div>
-<div class="form-row">
-  <div class="field">
-    <input id="stCollabs" placeholder="Например: Master Ismail, Bakha 84, Shon MC">
-  </div>
-</div>
-  <br>
-  <input type="hidden" id="stEditId">
-  <button class="btn btn-red" onclick="saveStudio()">💾 Сохранить студию</button>
-<button class="btn btn-gray" id="stCancelEdit" style="display:none;margin-left:8px;" onclick="cancelStudioEdit()">Отмена</button>
-
-<h1 style="margin-top:28px;">Все студии</h1>
-  <table>
-    <thead><tr><th>Название</th><th>Страна</th><th>Рейтинг</th><th>Фото</th><th>Владелец</th><th></th></tr></thead>
-    <tbody id="studiosAdminBody"></tbody>
-  </table>
-
-<h1 style="margin-top:28px;">🗑 Удалённые студии</h1>
-  <table>
-    <thead><tr><th>Название</th><th>Страна</th><th>Удалена</th><th></th></tr></thead>
-    <tbody id="studiosDeletedBody"></tbody>
-  </table>
-</div>
-<!-- ВЫБОР ВЛАДЕЛЬЦА СТУДИИ -->
+<!-- ВЫБОР АККАУНТА ДЛЯ КАРТОЧКИ АРТИСТА -->
 <div id="ownerPickModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center;">
   <div style="background:#1a1a1a;border:1px solid #333;border-radius:14px;padding:24px;width:420px;max-height:80vh;overflow-y:auto;position:relative;">
     <button onclick="closeOwnerPick()" style="position:absolute;top:12px;right:12px;background:none;border:none;color:#666;font-size:18px;cursor:pointer;">✕</button>
@@ -1194,28 +546,6 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const ADMIN_EMAIL = 'levakandproduction@gmail.com';
 
-// CLOUDINARY
-const CLD = { cloud:'waamiohc', preset:'992Muz' };
-
-
-
-async function cldUpload(file, folder) {
-  const fd = new FormData();
-  fd.append('file', file);
-  fd.append('upload_preset', CLD.preset);
-  fd.append('folder', folder);
-  const type = file.type.startsWith('audio') ? 'video' : 'image';
-  const r = await fetch(`https://api.cloudinary.com/v1_1/${CLD.cloud}/${type}/upload`, {method:'POST',body:fd});
-  const d = await r.json();
-  if (d.error) {
-    const msg = d.error.message || '';
-    if (msg.toLowerCase().includes('storage') || msg.toLowerCase().includes('limit') || msg.toLowerCase().includes('quota')) {
-      throw new Error('⛔ Хранилище Cloudinary заполнено! Зайди на cloudinary.com и создай новый бесплатный аккаунт, затем обнови CLD.cloud и CLD.preset в коде.');
-    }
-    throw new Error(msg);
-  }
-  return d;
-}
 // ─── R2 (Cloudflare) — для новых треков, вместо Cloudinary ───
 const R2_CONFIG = {
   workerUrl: 'https://white-fog-aa2c992muzmedia.levakandproduction.workers.dev'
@@ -1325,21 +655,11 @@ onAuthStateChanged(auth, u => {
   document.getElementById('app').style.display = u ? 'flex' : 'none';
 if (u) {
     loadUsers();
-    loadStudiosAdmin();
     loadArtists();
-    loadApplications();
 loadTracks();
     loadVideos();
     loadQuestions();
-    toggleStudioCityField();
-    toggleStudioStatusFields();
-    toggleStudioPromoFields();
     syncTop50WeeklySnapshot();
-loadGrefUsers();
-    loadGrefsLog();
-    loadPayouts();
-loadRestoreArtists();
-loadCreatorsAdmin();
     loadAdminMessages();
     loadUsersForSelect();
     loadRules();
@@ -1435,9 +755,7 @@ window.previewCover = (inp) => {
   p.src = URL.createObjectURL(f); p.style.display='block';
   document.getElementById('coverLabel').textContent = f.name;
 };
-window.labelFile = (inp, labelId) => {
-  if (inp.files[0]) document.getElementById(labelId).textContent = inp.files[0].name;
-};
+
 
 // ─── ОЧЕРЕДЬ ПАКЕТНОЙ ЗАГРУЗКИ ТРЕКОВ ───
 function parseTrackFilename(filename) {
@@ -1520,7 +838,6 @@ window.uploadTrack = async () => {
   }
 
   const blocks = [...document.querySelectorAll('#blockChecks input:checked')].map(c=>c.value);
-  const playlists = [...document.querySelectorAll('#playlistChecks input:checked')].map(c=>c.value);
   const coverFile = document.getElementById('coverFile').files[0];
 
 let sharedCoverUrl = '', sharedCoverPublicId = '';
@@ -1581,7 +898,7 @@ let sharedCoverUrl = '', sharedCoverPublicId = '';
         trackUrl: ar.secure_url || ar.url || '', trackPublicId: ar.key || ar.public_id || '',
         coverUrl: sharedCoverUrl, coverPublicId: sharedCoverPublicId,
         duration: duration||0,
-        blocks, playlists,
+        blocks,
         plays:0, likes:0,
         addedAt: serverTimestamp()
       };
@@ -1596,8 +913,6 @@ let sharedCoverUrl = '', sharedCoverPublicId = '';
         const blockRef = await addDoc(collection(db,b), { ...data, trackId: mainRef.id });
         blockDocIds[b] = blockRef.id;
       }
-      // Плейлисты копировать никуда не нужно — playlists.js читает их
-      // прямо из поля `playlists` в этом же документе (array-contains), без отдельных коллекций
       if (blocks.length) await updateDoc(mainRef, { blockDocIds });
 
       if (progEl) progEl.style.width = '100%';
@@ -1613,7 +928,7 @@ let sharedCoverUrl = '', sharedCoverPublicId = '';
 
   showMsg(msg, `Готово! Загружено: ${okCount}${errCount ? `, ошибок: ${errCount}` : ''}`, 'ok');
 
-  document.querySelectorAll('#blockChecks input,#playlistChecks input').forEach(c=>c.checked=false);
+   document.querySelectorAll('#blockChecks input').forEach(c=>c.checked=false);
   document.getElementById('audioFile').value='';
   document.getElementById('coverFile').value='';
   document.getElementById('coverPreview').style.display='none';
@@ -1680,44 +995,16 @@ window.filterTracks = () => {
   const countEl = document.getElementById('trackCount');
   if (countEl) countEl.textContent = list.length + ' треков';
 
-  document.getElementById('tracksBody').innerHTML = list.map(t => `<tr>
+   document.getElementById('tracksBody').innerHTML = list.map(t => `<tr>
       <td><b>${t.title}</b></td>
       <td>${t.artist}</td>
       <td style="color:#666;font-size:11px">${(t.blocks||[]).join(', ')||'—'}</td>
-      <td style="color:#666;font-size:11px">${(t.playlists||[]).join(', ')||'—'}</td>
       <td>${t._fmt}</td>
       <td style="white-space:nowrap">
         <button class="btn btn-yellow" onclick="openTrackEdit('${t._id}')">✏️</button>
-        <button class="btn btn-gray" onclick="openPlaylistEditor('${t._id}')">📋</button>
         <button class="btn btn-red" onclick="delTrack('${t._id}')">🗑</button>
       </td>
-    </tr>`).join('') || '<tr><td colspan="6" style="color:#555;text-align:center">Ничего не найдено</td></tr>';
-};
-let plEditorTrackId = null;
-
-window.openPlaylistEditor = async (id) => {
-  const snap = await getDoc(doc(db,'tracks',id));
-  if (!snap.exists()) return;
-  const t = snap.data();
-  plEditorTrackId = id;
-  document.getElementById('plEditorTitle').textContent = 'Плейлисты — ' + (t.title||'');
-  const current = t.playlists || [];
-  document.querySelectorAll('#plEditorChecks input').forEach(c => c.checked = current.includes(c.value));
-  document.getElementById('plEditorOverlay').style.display = 'flex';
-};
-
-window.closePlaylistEditor = () => {
-  document.getElementById('plEditorOverlay').style.display = 'none';
-  plEditorTrackId = null;
-};
-
-window.savePlaylistEditor = async () => {
-  if (!plEditorTrackId) return;
-  const id = plEditorTrackId;
-  const newPlaylists = [...document.querySelectorAll('#plEditorChecks input:checked')].map(c=>c.value);
-  await updateDoc(doc(db,'tracks',id), { playlists: newPlaylists });
-  closePlaylistEditor();
-  loadTracks();
+    </tr>`).join('') || '<tr><td colspan="5" style="color:#555;text-align:center">Ничего не найдено</td></tr>';
 };
 
 window.delTrack = async (id) => {
@@ -2097,66 +1384,7 @@ window.delArtist = async (id) => {
   await logAction('delete', `Артист: ${_aname}`);
   loadArtists();
 };
-// ─── APPLICATIONS ───
-async function loadApplications() {
-  const snap = await getDocs(query(collection(db,'artistApplications'), orderBy('createdAt','desc')));
-  const fmt = ts => ts?.seconds ? new Date(ts.seconds*1000).toLocaleDateString('ru') : '—';
-  document.getElementById('applicationsBody').innerHTML = snap.docs.map(d => {
-    const a = d.data();
-    const statusBadge = a.status === 'pending'
-      ? `<span class="badge" style="background:#3a2a00;color:#f0c040">Ожидает</span>`
-      : a.status === 'approved'
-      ? `<span class="badge badge-active">Одобрена</span>`
-      : `<span class="badge badge-blocked">Отклонена</span>`;
- const actions = a.status === 'pending' ? `
-      <button class="btn btn-green" onclick="approveApp('${d.id}','${a.uid}')">✅ Одобрить</button>
-      <button class="btn btn-red" onclick="rejectApp('${d.id}','${a.uid}')">✖ Отклонить</button>
-    ` : a.status === 'approved' ? `
-      <button class="btn btn-yellow" onclick="openCardForm('${d.id}')">📝 Создать карточку</button>
-    ` : a.status === 'active' ? `<span style="color:#4caf50">✅ В каталоге</span>` : '—';
-    return `<tr>
-      <td><b>${a.displayName||'—'}</b><br><span style="color:#666">${a.email||''}</span></td>
-      <td>${fmt(a.createdAt)}</td>
-      <td>${statusBadge}</td>
-      <td style="display:flex;gap:6px;flex-wrap:wrap">${actions}</td>
-    </tr>`;
-  }).join('') || '<tr><td colspan="4" style="color:#555;text-align:center">Заявок нет</td></tr>';
-}
 
-window.approveApp = async (appId, uid) => {
-  await logAction('approve', `Заявка: ${appId}`);
-  await updateDoc(doc(db,'artistApplications',appId), { status: 'approved' });
-  // Если пользователь уже заполнил псевдоним — сразу делаем active
-  const snap = await getDoc(doc(db,'artistApplications',appId));
-  if (snap.exists() && snap.data().nickname) {
-    await updateDoc(doc(db,'artistApplications',appId), { status: 'active' });
-  }
-  loadApplications();
-};
-window.rejectApp = async (appId, uid) => {
-  await logAction('reject', `Заявка: ${appId}`);
-  await updateDoc(doc(db,'artistApplications',appId), { status: 'rejected' });
-  loadApplications();
-};
-window.openCardForm = (appId) => {
-  document.getElementById('cfAppId').value = appId;
-  document.getElementById('cfNickname').value = '';
-  document.getElementById('cfNickname').disabled = false;
-  document.getElementById('cfNicknameHint').style.display = 'none';
-  document.getElementById('cfBio').value = '';
-  document.getElementById('cfInstagram').value = '';
-  document.getElementById('cfTiktok').value = '';
-  document.getElementById('cfTelegram').value = '';
-  document.getElementById('cfYoutube').value = '';
-  document.getElementById('cfVk').value = '';
-  document.getElementById('cfAvatarFile').value = '';
-  document.getElementById('cfAvatarPreview').style.display = 'none';
-  document.getElementById('cfAvatarPreview').src = '';
-document.getElementById('cfAvatarLabel').textContent = '👤 Сменить фото';
-  document.getElementById('cfVerified').checked = false;
-  document.getElementById('cfNewBlood').checked = false;
-  document.getElementById('cardFormModal').style.display = 'flex';
-};
 window.previewCardAvatar = (inp) => {
   const f = inp.files[0]; if (!f) return;
   const p = document.getElementById('cfAvatarPreview');
@@ -2247,7 +1475,6 @@ const verified = document.getElementById('cfVerified').checked;
     ...avatarUpdates,
   });
   document.getElementById('cardFormModal').style.display = 'none';
-  loadApplications();
   loadArtists();
 };
 // ─── ARTIST QUESTIONS ───
@@ -2468,11 +1695,9 @@ document.getElementById('teCoverLabel').textContent = '📷 Сменить об�
   document.getElementById('teCoverFile').value = '';
   document.getElementById('teProgress').style.width = '0%';
   document.getElementById('teMsg').className = 'msg';
-// Проставить галки блоков и плейлистов
+// Проставить галки блоков
   const teBlocks = t.blocks || [];
-  const tePlaylists = t.playlists || [];
   document.querySelectorAll('#teBlockChecks input').forEach(c => c.checked = teBlocks.includes(c.value));
-  document.querySelectorAll('#tePlaylistChecks input').forEach(c => c.checked = tePlaylists.includes(c.value));
   document.getElementById('teFeaturedHome').checked = !!t.featuredHome;
   document.getElementById('trackEditOverlay').style.display = 'flex';
 };
@@ -2494,9 +1719,8 @@ window.saveTrackEdit = async () => {
   try {
     prog.style.width = '30%';
 const newBlocks = [...document.querySelectorAll('#teBlockChecks input:checked')].map(c => c.value);
-  const newPlaylists = [...document.querySelectorAll('#tePlaylistChecks input:checked')].map(c => c.value);
 const featuredHome = document.getElementById('teFeaturedHome').checked;
-  const updates = { title, artist, blocks: newBlocks, playlists: newPlaylists, featuredHome };
+  const updates = { title, artist, blocks: newBlocks, featuredHome };
 
 if (coverFile) {
       prog.style.width = '50%';
@@ -2634,323 +1858,15 @@ function _radioSearchMatch(hayText, qWords) {
   return qWords.every(qw => hayTokens.some(tok => tok.startsWith(qw)));
 }
 
-window.toggleStudioStatusFields = () => {
-  const isClosed = document.getElementById('stStatus').value === 'closed';
-  document.getElementById('stClosedReasonWrap').style.display = isClosed ? 'block' : 'none';
-  document.getElementById('stClosedFromWrap').style.display = isClosed ? 'block' : 'none';
-  document.getElementById('stClosedUntilWrap').style.display = isClosed ? 'block' : 'none';
-};
-window.toggleStudioCityField = () => {
-  const isTJ = document.getElementById('stCountry').value === 'TJ';
-  document.getElementById('stCityWrap').style.display = isTJ ? 'block' : 'none';
-  document.getElementById('stCityOtherWrap').style.display = isTJ ? 'none' : 'block';
-};
-window.toggleStudioPromoFields = () => {
-  const isPercent = document.getElementById('stPromoType').value === 'percent';
-  document.getElementById('stPromoPercentWrap').style.display = isPercent ? 'block' : 'none';
-};
-// ─── STUDIOS ADMIN ───
-window.previewStPhoto = (inp, previewId, labelId) => {
-  const f = inp.files[0]; if (!f) return;
-  const p = document.getElementById(previewId);
-  p.src = URL.createObjectURL(f); p.style.display = 'block';
-  document.getElementById(labelId).textContent = f.name;
-};
-
-window.saveStudio = async () => {
-  const msg = document.getElementById('studioMsg');
-  const prog = { style: { width: '' } }; // заглушка, прогресс-бара нет в форме студий
-  const editId = document.getElementById('stEditId').value;
-
-const name = document.getElementById('stName').value.trim();
-  const country = document.getElementById('stCountry').value;
- const city = country === 'TJ' ? document.getElementById('stCity').value : document.getElementById('stCityOther').value.trim();
-  const desc = document.getElementById('stDesc').value.trim();
-const address = document.getElementById('stAddress').value.trim();
-  const priceVoice = parseFloat(document.getElementById('stPriceVoice').value) || 0;
-  const priceMix = parseFloat(document.getElementById('stPriceMix').value) || 0;
-  const priceMaster = parseFloat(document.getElementById('stPriceMaster').value) || 0;
-  const priceFull = parseFloat(document.getElementById('stPriceFull').value) || 0;
-  const currency = document.getElementById('stCurrency').value;
-
-  if (!name) { showMsg(msg, 'Введите название студии', 'err'); return; }
-
-  try {
-    prog.style.width = '10%';
-
-    // Если редактируем — подгружаем старые треки, чтобы не терять
-    // аудио/обложку, если новый файл не выбран
-    let existingTracks = [];
-    if (editId) {
-      const oldSnap = await getDoc(doc(db, 'studios', editId));
-      if (oldSnap.exists()) existingTracks = oldSnap.data().tracks || [];
-    }
-
-// Загружаем фото студии
-    let existingPhotos = [];
-    if (editId) {
-      const oldSnap2 = await getDoc(doc(db, 'studios', editId));
-      if (oldSnap2.exists()) existingPhotos = oldSnap2.data().photos || [];
-    }
-    const photos = [];
-    for (let i = 1; i <= 3; i++) {
-      const file = document.getElementById('stPhoto' + i).files[0];
-      if (file) {
-        prog.style.width = (10 + i * 15) + '%';
-        const r = await cldUpload(file, 'pamir-music/studios');
-        photos.push(r.secure_url);
-      } else if (existingPhotos[i-1]) {
-        photos.push(existingPhotos[i-1]);
-      }
-    }
-
-    // Треки — аудио и обложка грузятся в Cloudinary
-    const tracks = [];
-    for (let i = 1; i <= 2; i++) {
-      const title = document.getElementById('stTrack' + i + 'Title').value.trim();
-      const artist = document.getElementById('stTrack' + i + 'Artist').value.trim();
-      const audioFile = document.getElementById('stTrack' + i + 'AudioFile').files[0];
-     const coverFile = null;
-let audioUrl = existingTracks[i-1]?.audioUrl || '';
-
-      if (!title && !audioFile) continue;
-      let coverUrl = existingTracks[i-1]?.coverUrl || '';
-
-      if (audioFile) {
-        prog.style.width = (55 + i * 10) + '%';
-        const ar = await cldUpload(audioFile, 'pamir-music/studio-tracks');
-        audioUrl = ar.secure_url;
-      }
-      if (coverFile) {
-        prog.style.width = (75 + i * 5) + '%';
-        const cr = await cldUpload(coverFile, 'pamir-music/studio-tracks/covers');
-        coverUrl = cr.secure_url;
-      }
-      tracks.push({ title, artist, audioUrl, coverUrl });
-    }
-const engineer = document.getElementById('stEngineer').value.trim();
-const verified = document.getElementById('stVerified').checked;
-const collabs = document.getElementById('stCollabs').value.trim()
-      .split(',').map(s => s.trim()).filter(Boolean);
-
-const status = document.getElementById('stStatus').value;
-    const closedReason = status === 'closed' ? document.getElementById('stClosedReason').value : '';
-    const closedFromVal = document.getElementById('stClosedFrom').value;
-    const closedUntilVal = document.getElementById('stClosedUntil').value;
-
-    const promoType = document.getElementById('stPromoType').value;
-    const promoPercent = promoType === 'percent' ? parseInt(document.getElementById('stPromoPercent').value) : 0;
-
-const data = {
-name, country, city, description: desc, address, engineer, verified,
-      priceVoice, priceMix, priceMaster, priceFull, currency,
-      photos, tracks, collabs,
-      status,
-      closedReason,
-      closedFrom: status === 'closed' && closedFromVal ? closedFromVal : '',
-      closedUntil: status === 'closed' && closedUntilVal ? closedUntilVal : '',
-      promoType,
-      promoPercent,
-      updatedAt: serverTimestamp(),
-    };
-
-    prog.style.width = '90%';
-
-    if (editId) {
-      await updateDoc(doc(db, 'studios', editId), data);
-      showMsg(msg, 'Студия обновлена!', 'ok');
-      document.getElementById('stEditId').value = '';
-      document.getElementById('stCancelEdit').style.display = 'none';
-      document.getElementById('stVerified').checked = false;
-    } else {
-      data.rating = 0;
-      data.ratingCount = 0;
-      data.createdAt = serverTimestamp();
-      await addDoc(collection(db, 'studios'), data);
-      showMsg(msg, 'Студия добавлена!', 'ok');
-    }
-
-    prog.style.width = '100%';
-    // Очистка формы
-['stName','stDesc','stAddress','stPriceVoice','stPriceMix','stPriceMaster','stPriceFull',
-     'stTrack1Title','stTrack1Artist','stTrack2Title','stTrack2Artist','stCollabs','stEngineer',
-     'stClosedFrom','stClosedUntil'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
-    document.getElementById('stStatus').value = 'open';
-    toggleStudioStatusFields();
-    document.getElementById('stPromoType').value = '';
-    toggleStudioPromoFields();
-try {
-      for (let i = 1; i <= 3; i++) {
-        const photoEl = document.getElementById('stPhoto' + i);
-        const photoPreview = document.getElementById('stPhoto' + i + 'Preview');
-        const photoLabel = document.getElementById('stPhoto' + i + 'Label');
-        if (photoEl) photoEl.value = '';
-        if (photoPreview) photoPreview.style.display = 'none';
-        if (photoLabel) photoLabel.textContent = '📷 Фото ' + i;
-      }
-    } catch(e) {}
-try {
-      for (let i = 1; i <= 2; i++) {
-        const af = document.getElementById('stTrack' + i + 'AudioFile');
-        const al = document.getElementById('stTrack' + i + 'AudioLabel');
-        if (af) af.value = '';
-        if (al) al.textContent = '🎵 Выбрать аудио';
-      }
-    } catch(e) {}
-    setTimeout(() => prog.style.width = '0%', 1000);
-    loadStudiosAdmin();
-  } catch(e) { showMsg(msg, 'Ошибка: ' + e.message, 'err'); prog.style.width = '0%'; }
-};
-window.cancelStudioEdit = () => {
-  document.getElementById('stEditId').value = '';
-  document.getElementById('stCancelEdit').style.display = 'none';
-['stName','stDesc','stAddress','stPriceVoice','stPriceMix','stPriceMaster','stPriceFull',
-   'stTrack1Title','stTrack1Artist','stTrack2Title','stTrack2Artist','stCollabs','stEngineer',
-   'stClosedFrom','stClosedUntil'].forEach(id => document.getElementById(id).value = '');
-document.getElementById('stStatus').value = 'open';
-  toggleStudioStatusFields();
-  document.getElementById('stPromoType').value = '';
-  toggleStudioPromoFields();
-for (let i = 1; i <= 2; i++) {
-    document.getElementById('stTrack' + i + 'AudioFile').value = '';
-    document.getElementById('stTrack' + i + 'AudioLabel').textContent = '🎵 Выбрать аудио';
-  }
-};
-const COUNTRIES_MAP = { TJ:'🇹🇯 Таджикистан', RU:'🇷🇺 Россия', KZ:'🇰🇿 Казахстан', KG:'🇰🇬 Кыргызстан',
-  UZ:'🇺🇿 Узбекистан', UA:'🇺🇦 Украина', AE:'🇦🇪 ОАЭ', TR:'🇹🇷 Турция',
-  US:'🇺🇸 США', GB:'🇬🇧 Великобритания', DE:'🇩🇪 Германия', OTHER:'🌍 Другая' };
-
-async function loadStudiosAdmin() {
-  const snap = await getDocs(query(collection(db, 'studios'), orderBy('createdAt', 'desc')));
-  const active = snap.docs.filter(d => !d.data().deleted);
-  const deletedList = snap.docs.filter(d => d.data().deleted);
-
-  document.getElementById('studiosAdminBody').innerHTML = active.map(d => {
-    const s = d.data();
-    const thumb = s.photos?.[0]
-      ? `<img src="${s.photos[0]}" style="width:48px;height:36px;object-fit:cover;border-radius:6px;">`
-      : '—';
-const ownerLabel = s.ownerUid
-      ? `<span style="color:#4caf50;font-size:11px;">✓ ${s.ownerEmail || s.ownerUid.slice(0,8)}</span>`
-      : `<span style="color:#e74c3c;font-size:11px;">не привязан</span>`;
-    return `<tr>
-      <td><b>${s.name || '—'}</b><br><span style="color:#666;font-size:11px;">${s.address || ''}</span></td>
-      <td>${COUNTRIES_MAP[s.country] || s.country || '—'}</td>
-      <td>⭐ ${s.rating || 0} <span style="color:#555;font-size:11px;">(${s.ratingCount || 0})</span></td>
-      <td>${thumb}</td>
-      <td>${ownerLabel}</td>
-      <td style="white-space:nowrap;">
-        <button class="btn btn-yellow" onclick="editStudio('${d.id}')">✏️</button>
-        <button class="btn btn-gray" onclick="openOwnerPick('${d.id}','${(s.name||'').replace(/'/g,"\\'")}')">👤 Владелец</button>
-<button class="btn btn-red" onclick="delStudio('${d.id}','${(s.name||'').replace(/'/g,"\\'")}')">🗑</button>
-      </td>
-    </tr>`;
-  }).join('') || '<tr><td colspan="6" style="color:#555;text-align:center;">Студий нет</td></tr>';
-
-  document.getElementById('studiosDeletedBody').innerHTML = deletedList.map(d => {
-    const s = d.data();
-    const fmt = ts => ts?.seconds ? new Date(ts.seconds*1000).toLocaleDateString('ru') : '—';
-    return `<tr>
-      <td><b>${s.name || '—'}</b></td>
-      <td>${COUNTRIES_MAP[s.country] || s.country || '—'}</td>
-      <td>${fmt(s.deletedAt)}</td>
-      <td style="white-space:nowrap;">
-        <button class="btn btn-green" onclick="restoreStudio('${d.id}')">↩ Восстановить</button>
-        <button class="btn btn-red" onclick="hardDeleteStudio('${d.id}','${(s.name||'').replace(/'/g,"\\'")}')">🗑 Удалить навсегда</button>
-      </td>
-    </tr>`;
-  }).join('') || '<tr><td colspan="4" style="color:#555;text-align:center;">Корзина пуста</td></tr>';
-}
-
-window.delStudio = async (id, name) => {
- if (!await showConfirm(`Удалить студию «${name}»?\nОна переместится в корзину, её можно будет восстановить.`)) return;
-  await updateDoc(doc(db, 'studios', id), {
-    deleted: true,
-    deletedAt: { seconds: Math.floor(Date.now()/1000), nanoseconds: 0 },
-  });
-  await logAction('delete', `Студия: ${name}`);
-  loadStudiosAdmin();
-};
-
-window.restoreStudio = async (id) => {
-  await updateDoc(doc(db, 'studios', id), { deleted: false, deletedAt: null });
-  await logAction('restore', `Студия: ${id}`);
-  loadStudiosAdmin();
-};
-
-window.hardDeleteStudio = async (id, name) => {
-  if (!await showConfirm(`Удалить студию «${name}» НАВСЕГДА? Это действие нельзя отменить.`, 'Удалить навсегда')) return;
-  await deleteDoc(doc(db, 'studios', id));
-  await logAction('delete', `Студия (навсегда): ${name}`);
-  loadStudiosAdmin();
-};
-window.editStudio = async (id) => {
-  const snap = await getDoc(doc(db, 'studios', id));
-  if (!snap.exists()) return;
-  const s = snap.data();
-  document.getElementById('stEditId').value = id;
-  document.getElementById('stName').value = s.name || '';
-document.getElementById('stCountry').value = s.country || 'TJ';
-  toggleStudioCityField();
-document.getElementById('stCity').value = s.city || 'Душанбе';
-  document.getElementById('stCityOther').value = s.country !== 'TJ' ? (s.city || '') : '';
-  document.getElementById('stDesc').value = s.description || '';
-  document.getElementById('stAddress').value = s.address || '';
-  document.getElementById('stPriceVoice').value = s.priceVoice || '';
-  document.getElementById('stPriceMix').value = s.priceMix || '';
-  document.getElementById('stPriceMaster').value = s.priceMaster || '';
-  document.getElementById('stPriceFull').value = s.priceFull || '';
-  document.getElementById('stCurrency').value = s.currency || 'TJS';
-document.getElementById('stCollabs').value = (s.collabs || []).join(', ');
-  document.getElementById('stEngineer').value = s.engineer || '';
-  document.getElementById('stVerified').checked = s.verified || false;
-document.getElementById('stStatus').value = s.status === 'closed' ? 'closed' : 'open';
-  document.getElementById('stClosedReason').value = s.closedReason || 'renovation';
-  document.getElementById('stClosedFrom').value = s.closedFrom || '';
-  document.getElementById('stClosedUntil').value = s.closedUntil || '';
-  toggleStudioStatusFields();
-  document.getElementById('stPromoType').value = s.promoType || '';
-  document.getElementById('stPromoPercent').value = s.promoPercent || '10';
-  toggleStudioPromoFields();
-
-  const tracks = s.tracks || [];
-  for (let i = 0; i < 2; i++) {
-    const t = tracks[i] || {};
-    document.getElementById('stTrack' + (i+1) + 'Title').value = t.title || '';
-    document.getElementById('stTrack' + (i+1) + 'Artist').value = t.artist || '';
-    document.getElementById('stTrack' + (i+1) + 'AudioFile').value = '';
-    document.getElementById('stTrack' + (i+1) + 'AudioLabel').textContent =
-      t.audioUrl ? '🎵 Уже загружено (выбери файл чтобы заменить)' : '🎵 Выбрать аудио';
-  }
-
-  // Показываем фото которые уже загружены
-  const photos = s.photos || [];
-  for (let i = 1; i <= 3; i++) {
-    const prev = document.getElementById('stPhoto' + i + 'Preview');
-    const lbl = document.getElementById('stPhoto' + i + 'Label');
-    if (photos[i-1]) {
-      if (prev) { prev.src = photos[i-1]; prev.style.display = 'block'; }
-      if (lbl) lbl.textContent = '📷 Уже загружено (выбери чтобы заменить)';
-    } else {
-      if (prev) prev.style.display = 'none';
-      if (lbl) lbl.textContent = '📷 Фото ' + i;
-    }
-  }
-
-document.getElementById('stCancelEdit').style.display = 'inline-block';
-  document.getElementById('sec-studios').scrollTop = 0;
-  showMsg(document.getElementById('studioMsg'), 'Редактирование: ' + s.name, 'ok');
-};
-
-// ─── ВЛАДЕЛЕЦ СТУДИИ ───
+// ─── ПРИВЯЗКА АККАУНТА К КАРТОЧКЕ АРТИСТА ───
 let ownerPickStudioId = null;
-let ownerPickKind = 'studio';
+let ownerPickKind = 'artist';
 let ownerPickUsersCache = [];
 
 window.openOwnerPick = async (studioId, studioName, kind) => {
   ownerPickStudioId = studioId;
-  ownerPickKind = kind || 'studio';
-  document.getElementById('ownerPickStudioName').textContent = (ownerPickKind === 'artist' ? 'Артист: ' : 'Студия: ') + studioName;
+  ownerPickKind = kind || 'artist';
+  document.getElementById('ownerPickStudioName').textContent = 'Артист: ' + studioName;
   document.getElementById('ownerPickSearch').value = '';
 
   const snap = await getDocs(query(collection(db, 'users'), orderBy('createdAt', 'desc')));
@@ -2965,7 +1881,7 @@ window.openOwnerPick = async (studioId, studioName, kind) => {
 window.closeOwnerPick = () => {
   document.getElementById('ownerPickModal').style.display = 'none';
   ownerPickStudioId = null;
-  ownerPickKind = 'studio';
+  ownerPickKind = 'artist';
 };
 
 window.renderOwnerPickList = () => {
@@ -3020,16 +1936,9 @@ await Promise.all([
     loadArtists();
     return;
   }
-await setDoc(doc(db, 'studios', ownerPickStudioId), {
-    ownerUid: uid,
-    ownerEmail: email,
-  }, { merge: true });
-  await logAction('edit', 'Студия: ' + ownerPickStudioId, 'Привязан владелец: ' + email);
-  closeOwnerPick();
   } catch(e) {
     alert('Ошибка привязки: ' + e.message);
   }
-  loadStudiosAdmin();
 };
 window.linkTracksByName = async (artistId, artistName) => {
  if (!await showConfirm(`Найти и привязать к «${artistName}» ВСЕ треки с таким именем по всему сайту (основные + из блоков Топ 50, Новинки, Поп и т.д.)?`, 'Привязать')) return;
@@ -3080,7 +1989,6 @@ if (bt.trackId && knownTrackIds.has(bt.trackId)) {
         coverPublicId: bt.coverPublicId || '',
         duration: bt.duration || 0,
         blocks: [block],
-        playlists: [],
         plays: bt.plays || 0,
         likes: bt.likes || 0,
 artistId, userId: artistId,
@@ -3120,270 +2028,6 @@ const _artistsObserver = new MutationObserver(() => {
 });
 const _artistsBodyEl = document.getElementById('artistsBody');
 if (_artistsBodyEl) _artistsObserver.observe(_artistsBodyEl, { childList: true });
-
-// ─── GREF'S ВЫДАЧА ───
-let grefUsersCache = [];
-let grefSelectedUser = null;
-
-async function loadGrefUsers() {
-  const snap = await getDocs(query(collection(db, 'users'), orderBy('createdAt', 'desc')));
-  grefUsersCache = snap.docs.map(d => ({ _id: d.id, ...d.data() })).filter(u => !u.deleted);
-  renderGrefUserList();
-}
-
-window.renderGrefUserList = () => {
-  const q = (document.getElementById('grefSearch')?.value || '').toLowerCase().trim();
-  const list = document.getElementById('grefUserList');
-  if (!list) return;
-  if (!q) { list.innerHTML = ''; return; }
-
-  const filtered = grefUsersCache.filter(u =>
-    (u.email || '').toLowerCase().includes(q) ||
-    (u.displayName || '').toLowerCase().includes(q)
-  );
-
-  list.innerHTML = filtered.map(u => `
-    <div onclick="selectGrefUser('${u._id}')"
-      style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid #2a2a2a;cursor:pointer;"
-      onmouseover="this.style.background='#1e1e1e'" onmouseout="this.style.background=''">
-      <div style="width:30px;height:30px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;color:#888;font-size:12px;flex-shrink:0;overflow:hidden;">
-        ${u.avatarUrl ? `<img src="${u.avatarUrl}" style="width:100%;height:100%;object-fit:cover;">` : '👤'}
-      </div>
-      <div style="min-width:0;">
-        <div style="color:#e0e0e0;font-size:12px;font-weight:600;">${u.displayName || '—'}</div>
-        <div style="color:#666;font-size:11px;">${u.email || '—'} · 🟡${u.grefGoldCount||0} ⚪${u.grefNickelCount||0}</div>
-      </div>
-    </div>
-  `).join('') || '<div style="padding:12px;color:#555;font-size:12px;text-align:center;">Никого не найдено</div>';
-};
-
-window.selectGrefUser = (uid) => {
-  const u = grefUsersCache.find(x => x._id === uid);
-  if (!u) return;
-  grefSelectedUser = u;
-  document.getElementById('grefSelectedAvatar').innerHTML = u.avatarUrl
-    ? `<img src="${u.avatarUrl}" style="width:100%;height:100%;object-fit:cover;">` : '👤';
-  document.getElementById('grefSelectedName').textContent = u.displayName || '—';
-  document.getElementById('grefSelectedEmail').textContent = u.email || '—';
-  document.getElementById('grefSelectedCurrent').textContent = `Сейчас: 🟡 ${u.grefGoldCount||0} · ⚪ ${u.grefNickelCount||0}`;
-  document.getElementById('grefSelectedBox').style.display = 'block';
-  document.getElementById('grefTariff').value = '';
-  document.getElementById('grefQty').value = 1;
-  document.getElementById('grefAmount').value = '';
-};
-
-window.applyGrefTariff = () => {
-  const val = document.getElementById('grefTariff').value;
-  if (!val) return;
-  const [qty, amount] = val.split(':');
-  document.getElementById('grefQty').value = qty;
-  document.getElementById('grefAmount').value = amount;
-};
-
-// ─── ВОССТАНОВЛЕНИЕ РЕКЛАМЫ АРТИСТУ ВРУЧНУЮ ───
-let restoreArtistsCache = [];
-let restoreSelectedArtist = null;
-
-async function loadRestoreArtists() {
-  const snap = await getDocs(query(collection(db, 'artistApplications'), where('status', '==', 'active')));
-  restoreArtistsCache = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
-}
-
-window.renderRestoreArtistList = () => {
-  const q = (document.getElementById('restoreArtistSearch')?.value || '').toLowerCase().trim();
-  const list = document.getElementById('restoreArtistList');
-  if (!list) return;
-  if (!q) { list.innerHTML = ''; return; }
-  const filtered = restoreArtistsCache.filter(a =>
-    (a.nickname || '').toLowerCase().includes(q) ||
-    (a.displayName || '').toLowerCase().includes(q)
-  );
-  list.innerHTML = filtered.map(a => `
-    <div onclick="selectRestoreArtist('${a._id}')"
-      style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid #2a2a2a;cursor:pointer;"
-      onmouseover="this.style.background='#1e1e1e'" onmouseout="this.style.background=''">
-      <div style="width:30px;height:30px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;color:#888;font-size:12px;flex-shrink:0;overflow:hidden;">
-        ${a.avatarUrl ? `<img src="${a.avatarUrl}" style="width:100%;height:100%;object-fit:cover;">` : '👤'}
-      </div>
-      <div style="color:#e0e0e0;font-size:12px;font-weight:600;">${a.nickname || a.displayName || '—'}</div>
-    </div>
-  `).join('') || '<div style="padding:12px;color:#555;font-size:12px;text-align:center;">Никого не найдено</div>';
-};
-
-window.selectRestoreArtist = (id) => {
-  const a = restoreArtistsCache.find(x => x._id === id);
-  if (!a) return;
-  restoreSelectedArtist = a;
-  document.getElementById('restoreArtistAvatar').innerHTML = a.avatarUrl
-    ? `<img src="${a.avatarUrl}" style="width:100%;height:100%;object-fit:cover;">` : '👤';
-  document.getElementById('restoreArtistName').textContent = a.nickname || a.displayName || '—';
-  document.getElementById('restoreArtistBox').style.display = 'block';
-  document.getElementById('restoreFanHandle').value = '';
-};
-
-window.restoreArtistGift = async () => {
-  const msg = document.getElementById('restoreGiftMsg');
-  if (!restoreSelectedArtist) { showMsg(msg, 'Выбери артиста из списка', 'err'); return; }
-  const handle = document.getElementById('restoreFanHandle').value.trim() || '@восстановлено';
-  const type = document.getElementById('restoreGrefType').value;
-  const qty = parseInt(document.getElementById('restoreGrefQty').value) || 0;
-  if (qty < 10 || qty % 10 !== 0) { showMsg(msg, 'Количество GREF должно быть кратно 10', 'err'); return; }
-
-  const artistId = restoreSelectedArtist.uid || restoreSelectedArtist._id;
-  const adsCount = qty / 10;
-  try {
-    for (let i = 0; i < adsCount; i++) {
-      await addDoc(collection(db, 'artistGifts'), {
-        artistId,
-        fromUid: 'admin_restore',
-        fromInstagram: handle,
-        grefType: type,
-        giftedAt: serverTimestamp(),
-      });
-    }
-    await logAction('edit', `Восстановлена реклама артисту: ${restoreSelectedArtist.nickname || restoreSelectedArtist.displayName || artistId}`, `${type === 'gold' ? 'Золотой' : 'Серебряный'} × ${qty} GREF от ${handle}`);
-    showMsg(msg, `Готово: восстановлено ${adsCount} реклам(ы) артисту ${restoreSelectedArtist.nickname || restoreSelectedArtist.displayName}`, 'ok');
-    document.getElementById('restoreFanHandle').value = '';
-  } catch(e) {
-    showMsg(msg, 'Ошибка: ' + e.message, 'err');
-  }
-};
-
-window.grantGref = async () => {
-  const msg = document.getElementById('grefsMsg');
-  if (!grefSelectedUser) { showMsg(msg, 'Выбери пользователя из списка', 'err'); return; }
-  const type = document.getElementById('grefType').value;
-  const qty = parseInt(document.getElementById('grefQty').value) || 0;
-  const amount = parseFloat(document.getElementById('grefAmount').value) || 0;
-if (qty <= 0) { showMsg(msg, 'Укажи количество больше 0', 'err'); return; }
-
-  const confirmText = `Подтверди: пользователь ${grefSelectedUser.displayName || grefSelectedUser.email} заплатил ${amount || 0} TJS за ${qty} × ${type === 'gold' ? 'Золотой' : 'Серебряный'} GREF?`;
-  const confirmed = await showConfirm(confirmText, 'Да, оплата пришла');
-  if (!confirmed) { showMsg(msg, 'Отменено — GREF не выдан', 'err'); return; }
-
-const field = type === 'gold' ? 'grefGoldCount' : 'grefNickelCount';
-  try {
-    await updateDoc(doc(db, 'users', grefSelectedUser._id), { [field]: increment(qty) });
-    await addDoc(collection(db, 'grefGrants'), {
-      uid: grefSelectedUser._id,
-      email: grefSelectedUser.email || '',
-      displayName: grefSelectedUser.displayName || '',
-      type, qty, amount,
-      createdAt: serverTimestamp(),
-    });
-
- const typeLabel = type === 'gold' ? 'золотых' : 'серебряных';
-    const congratsText = `Поздравляем! Вы приобрели ${qty} ${typeLabel} GREF${amount ? ` за ${amount} TJS` : ''}. Теперь вы можете дарить их любимым артистам и рекламировать своё видео с YouTube или аккаунт в Instagram — реклама будет показана в карточке артиста на платформе 992MUZ.`;
-    await addDoc(collection(db, 'users', grefSelectedUser._id, 'adminMessages'), {
-      type: 'gref_purchase',
-      text: congratsText,
-      grefType: type,
-      qty, amount,
-      createdAt: serverTimestamp(),
-      read: false,
-    });
-
-    await logAction('edit', `GREF выдан: ${grefSelectedUser.email || grefSelectedUser._id}`, `${type === 'gold' ? 'Золотой' : 'Серебряный'} × ${qty}${amount ? ` за ${amount} TJS` : ''}`);
-    showMsg(msg, `Выдано: ${qty} × ${type === 'gold' ? 'Золотой' : 'Серебряный'} GREF пользователю ${grefSelectedUser.email || grefSelectedUser.displayName}`, 'ok');
-    await loadGrefUsers();
-    selectGrefUser(grefSelectedUser._id);
-    loadGrefsLog();
-  } catch(e) {
-    showMsg(msg, 'Ошибка: ' + e.message, 'err');
-  }
-};
-async function loadGrefsLog() {
-  const body = document.getElementById('grefsLogBody');
-  if (!body) return;
-  try {
-    const snap = await getDocs(query(collection(db, 'grefGrants'), orderBy('createdAt', 'desc')));
-    const fmt = ts => ts?.seconds ? new Date(ts.seconds * 1000).toLocaleString('ru') : '—';
-    body.innerHTML = snap.docs.map(d => {
-      const g = d.data();
-      return `<tr>
-        <td><b>${g.displayName || '—'}</b><br><span style="color:#666;font-size:11px;">${g.email || '—'}</span></td>
-        <td>${g.type === 'gold' ? '🟡 Золотой' : '⚪ Серебряный'}</td>
-        <td>${g.qty || 0}</td>
-        <td style="color:#4caf50;">${g.amount ? g.amount + ' TJS' : '—'}</td>
-        <td style="color:#666;font-size:11px;">${fmt(g.createdAt)}</td>
-      </tr>`;
-    }).join('') || '<tr><td colspan="5" style="color:#555;text-align:center;">Выдач ещё не было</td></tr>';
-} catch(e) { body.innerHTML = '<tr><td colspan="5" style="color:#555;text-align:center;">Ошибка загрузки</td></tr>'; }
-}
-
-// ─── ВЫПЛАТЫ АРТИСТАМ ───
-let _payoutRowsMap = {};
-
-async function loadPayouts() {
-  const tbody = document.getElementById('payoutsBody');
-  if (!tbody) return;
-  tbody.innerHTML = '<tr><td colspan="5" style="color:#555;text-align:center">Загрузка...</td></tr>';
-  try {
-    const appsSnap = await getDocs(collection(db, 'artistApplications'));
-    const activeArtists = appsSnap.docs.filter(d => d.data().status === 'active' && d.data().uid);
-    const giftsSnap = await getDocs(collection(db, 'artistGifts'));
-    _payoutRowsMap = {};
-    const rows = [];
-    for (const a of activeArtists) {
-      const app = a.data();
-      const uid = app.uid;
-      const uSnap = await getDoc(doc(db, 'users', uid));
-      const u = uSnap.exists() ? uSnap.data() : {};
-      const lastPayoutMs = u.lastPayoutAt?.seconds ? u.lastPayoutAt.seconds * 1000 : 0;
-      let balanceCount = 0;
-      giftsSnap.docs.forEach(g => {
-        const gd = g.data();
-        if (gd.artistId !== uid) return;
-        const ms = gd.giftedAt?.seconds ? gd.giftedAt.seconds * 1000 : 0;
-        if (ms > lastPayoutMs) balanceCount++;
-      });
-const balance = balanceCount * 5;
-      const totalPaid = u.totalPaid || 0;
-      const payoutReady = balance >= 100;
-      let requisites = 'не указаны';
-      if (u.payoutMethod === 'phone' && u.payoutPhone) requisites = `📱 ${u.payoutPhone} (D CITY)`;
-      else if (u.payoutMethod === 'qr' && u.payoutQrUrl) requisites = `<a href="${u.payoutQrUrl}" target="_blank" style="color:#4caf50;">🔗 Посмотреть QR</a>`;
-      rows.push({ uid, name: app.nickname || app.displayName || '—', requisites, balance, totalPaid, payoutReady });
-    }
-    rows.forEach(r => _payoutRowsMap[r.uid] = r);
-    tbody.innerHTML = rows.map(r => `<tr>
-        <td><b>${r.name}</b></td>
-        <td style="font-size:12px;">${r.requisites}</td>
-        <td style="color:${r.balance > 0 ? '#4caf50' : '#666'};font-weight:700;">${r.balance} TJS</td>
-        <td style="color:#888;">${r.totalPaid} TJS</td>
-       <td><button class="btn btn-green" ${!r.payoutReady ? 'disabled' : ''} onclick="openPayModal('${r.uid}')">${r.payoutReady ? '💸 Выплатить' : `⏳ ${r.balance}/100 TJS`}</button></td>
-      </tr>`).join('') || '<tr><td colspan="5" style="color:#555;text-align:center">Нет активных артистов</td></tr>';
-  } catch (e) {
-    tbody.innerHTML = '<tr><td colspan="5" style="color:#555;text-align:center">Ошибка загрузки</td></tr>';
-  }
-}
-
-window.openPayModal = (uid) => {
-  const r = _payoutRowsMap[uid];
-  if (!r) return;
-  document.getElementById('payModalArtistName').textContent = r.name;
-  document.getElementById('payModalRequisites').innerHTML = r.requisites;
-  document.getElementById('payModalAmount').value = r.balance;
-  document.getElementById('payModal').dataset.uid = uid;
-  document.getElementById('payModal').style.display = 'flex';
-};
-
-window.confirmPayout = async () => {
-  const uid = document.getElementById('payModal').dataset.uid;
-  const amount = Number(document.getElementById('payModalAmount').value);
-  const msgEl = document.getElementById('payoutsMsg');
-  if (!amount || amount <= 0) { showMsg(msgEl, 'Укажи корректную сумму', 'err'); return; }
-  try {
-    await addDoc(collection(db, 'payoutRequests'), {
-      userId: uid, amount, status: 'pending', createdAt: serverTimestamp()
-    });
-    document.getElementById('payModal').style.display = 'none';
-    showMsg(msgEl, `Уведомление о выплате ${amount} TJS отправлено артисту ✓`, 'ok');
-    loadPayouts();
-  } catch (e) {
-showMsg(msgEl, 'Ошибка: ' + e.message, 'err');
-  }
-};
 
 function _uiShow(id) { document.getElementById(id).style.display = 'flex'; }
 function _uiHide(id) { document.getElementById(id).style.display = 'none'; }
@@ -3425,265 +2069,6 @@ okBtn.onclick = () => cleanup(input.value);
   });
 }
 
-// ─── КРЕАТОРЫ ───
-window.switchCreatorType = (type, el) => {
-  document.querySelectorAll('#creatorsAdminTabs .tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('.creator-form').forEach(f => f.style.display = 'none');
-  document.querySelector(`.creator-form[data-form="${type}"]`).style.display = 'block';
-};
-
-window.previewCreatorImg = (inp, previewId, labelId) => {
-  const f = inp.files[0]; if (!f) return;
-  const p = document.getElementById(previewId);
-  p.src = URL.createObjectURL(f); p.style.display = 'block';
-  document.getElementById(labelId).textContent = f.name;
-};
-
-async function clearTopRankHolder(type, rank, excludeId = null) {
-  if (!rank) return;
-  const snap = await getDocs(query(collection(db,'creators'), where('type','==',type)));
-  for (const d of snap.docs) {
-    if (d.id === excludeId) continue;
-    if (d.data().topRank === rank) {
-      await updateDoc(doc(db,'creators',d.id), { topRank: null });
-    }
-  }
-}
-
-window.addCreatorStudio = async () => {
-  const name = document.getElementById('crStudioName').value.trim();
-  const telegram = document.getElementById('crStudioTg').value.trim();
-  const workedWith = document.getElementById('crStudioWorked').value.trim();
-  const coverFile = document.getElementById('crStudioCoverFile').files[0];
-  const msg = document.getElementById('creatorsMsg');
-  if (!name || !telegram) { showMsg(msg, 'Заполните название и Telegram', 'err'); return; }
-  const prog = document.getElementById('crStudioProgress');
-  try {
- let cover = '';
-    if (coverFile) { prog.style.width='50%'; const r = await cldUpload(coverFile, 'pamir-music/creators'); cover = r.secure_url; }
-    prog.style.width='100%';
-    const topRank = document.getElementById('crStudioTop').value ? parseInt(document.getElementById('crStudioTop').value) : null;
-    if (topRank) await clearTopRankHolder('studio', topRank);
-    const snap = await getDocs(query(collection(db,'creators'), where('type','==','studio')));
-    await addDoc(collection(db,'creators'), { type:'studio', name, telegram, workedWith, cover, topRank, order: snap.size, addedAt: serverTimestamp() });
-    showMsg(msg, 'Студия добавлена!', 'ok');
-    ['crStudioName','crStudioTg','crStudioWorked'].forEach(id => document.getElementById(id).value='');
-    document.getElementById('crStudioCoverFile').value='';
-    document.getElementById('crStudioCoverPreview').style.display='none';
-    document.getElementById('crStudioCoverLabel').textContent='📷 Обложка (квадрат)';
-    setTimeout(()=>prog.style.width='0%',800);
-    loadCreatorsAdmin();
-  } catch(e) { showMsg(msg,'Ошибка: '+e.message,'err'); prog.style.width='0%'; }
-};
-
-window.addCreatorBeatmaker = async () => {
-  const name = document.getElementById('crBeatName').value.trim();
-  const telegram = document.getElementById('crBeatTg').value.trim();
-  const coverFile = document.getElementById('crBeatCoverFile').files[0];
-  const audioFile = document.getElementById('crBeatAudioFile').files[0];
-  const msg = document.getElementById('creatorsMsg');
-  if (!name || !telegram) { showMsg(msg, 'Заполните имя и Telegram', 'err'); return; }
-  const prog = document.getElementById('crBeatProgress');
-  try {
-    let cover = '', audioUrl = '';
-    if (coverFile) { prog.style.width='30%'; const r = await cldUpload(coverFile, 'pamir-music/creators'); cover = r.secure_url; }
-    if (audioFile) { prog.style.width='70%'; const r = await cldUpload(audioFile, 'pamir-music/creators-audio'); audioUrl = r.secure_url; }
-   prog.style.width='100%';
-    const topRank = document.getElementById('crBeatTop').value ? parseInt(document.getElementById('crBeatTop').value) : null;
-    if (topRank) await clearTopRankHolder('beatmaker', topRank);
-    const snap = await getDocs(query(collection(db,'creators'), where('type','==','beatmaker')));
-    await addDoc(collection(db,'creators'), { type:'beatmaker', name, telegram, cover, audioUrl, topRank, order: snap.size, addedAt: serverTimestamp() });
-    showMsg(msg, 'Битмейкер добавлен!', 'ok');
-    ['crBeatName','crBeatTg'].forEach(id => document.getElementById(id).value='');
-    document.getElementById('crBeatCoverFile').value=''; document.getElementById('crBeatAudioFile').value='';
-    document.getElementById('crBeatCoverPreview').style.display='none';
-    document.getElementById('crBeatCoverLabel').textContent='📷 Обложка';
-    document.getElementById('crBeatAudioLabel').textContent='🎵 Выбрать аудио';
-    setTimeout(()=>prog.style.width='0%',800);
-    loadCreatorsAdmin();
-  } catch(e) { showMsg(msg,'Ошибка: '+e.message,'err'); prog.style.width='0%'; }
-};
-
-window.addCreatorDesigner = async () => {
-  const name = document.getElementById('crDesName').value.trim();
-  const telegram = document.getElementById('crDesTg').value.trim();
-  const msg = document.getElementById('creatorsMsg');
-  if (!name || !telegram) { showMsg(msg, 'Заполните имя и Telegram', 'err'); return; }
-  const prog = document.getElementById('crDesProgress');
-  try {
-    const covers = [];
-    for (let i=1;i<=3;i++) {
-      const f = document.getElementById('crDesCover'+i).files[0];
-      if (f) { prog.style.width=(i*30)+'%'; const r = await cldUpload(f, 'pamir-music/creators'); covers.push(r.secure_url); }
-    }
-    if (!covers.length) { showMsg(msg,'Загрузите хотя бы одну обложку','err'); prog.style.width='0%'; return; }
- prog.style.width='100%';
-    const topRank = document.getElementById('crDesTop').value ? parseInt(document.getElementById('crDesTop').value) : null;
-    if (topRank) await clearTopRankHolder('designer', topRank);
-    const snap = await getDocs(query(collection(db,'creators'), where('type','==','designer')));
-    await addDoc(collection(db,'creators'), { type:'designer', name, telegram, covers, topRank, order: snap.size, addedAt: serverTimestamp() });
-    ['crDesName','crDesTg'].forEach(id => document.getElementById(id).value='');
-    for (let i=1;i<=3;i++) {
-      document.getElementById('crDesCover'+i).value='';
-      document.getElementById('crDesCover'+i+'Preview').style.display='none';
-      document.getElementById('crDesCover'+i+'Label').textContent='📷 Обложка '+i;
-    }
-    setTimeout(()=>prog.style.width='0%',800);
-    loadCreatorsAdmin();
-  } catch(e) { showMsg(msg,'Ошибка: '+e.message,'err'); prog.style.width='0%'; }
-};
-
-function parseCreatorYtId(val) {
-  const m = val.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([A-Za-z0-9_-]{11})/);
-  return m ? m[1] : val.trim().slice(0,11);
-}
-
-window.addCreatorClipmaker = async () => {
-  const name = document.getElementById('crClipName').value.trim();
-  const ytRaw = document.getElementById('crClipYt').value.trim();
-  const telegram = document.getElementById('crClipTg').value.trim();
-  const msg = document.getElementById('creatorsMsg');
-  if (!name || !ytRaw || !telegram) { showMsg(msg, 'Заполните имя, YouTube и Telegram', 'err'); return; }
- const ytId = parseCreatorYtId(ytRaw);
-  const topRank = document.getElementById('crClipTop').value ? parseInt(document.getElementById('crClipTop').value) : null;
-  if (topRank) await clearTopRankHolder('clipmaker', topRank);
-  const snap = await getDocs(query(collection(db,'creators'), where('type','==','clipmaker')));
-  await addDoc(collection(db,'creators'), { type:'clipmaker', name, telegram, ytId, topRank, order: snap.size, addedAt: serverTimestamp() });
-  showMsg(msg, 'Клипмейкер добавлен!', 'ok');
-  ['crClipName','crClipYt','crClipTg'].forEach(id => document.getElementById(id).value='');
-  loadCreatorsAdmin();
-};
-
-const CREATOR_TYPE_LABELS = { studio:'Студия', beatmaker:'Битмейкер', designer:'Дизайнер', clipmaker:'Клипмейкер' };
-
-async function loadCreatorsAdmin() {
-  const body = document.getElementById('creatorsBody');
-  if (!body) return;
-  const snap = await getDocs(query(collection(db,'creators'), orderBy('addedAt','desc')));
-  body.innerHTML = snap.docs.map(d => {
-    const c = d.data();
-    const thumb = c.type === 'designer' && c.covers?.[0]
-      ? `<img src="${c.covers[0]}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;">`
-      : c.type === 'clipmaker'
-      ? `<img src="https://img.youtube.com/vi/${c.ytId}/default.jpg" style="width:40px;height:40px;object-fit:cover;border-radius:6px;">`
-      : c.cover
-      ? `<img src="${c.cover}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;">`
-      : '—';
-const topLabel = c.topRank ? ` <span style="color:#f0c040;font-size:11px;">★ Топ ${c.topRank}</span>` : '';
-    return `<tr>
-      <td>${CREATOR_TYPE_LABELS[c.type]||c.type}</td>
-      <td>${thumb}</td>
-      <td><b>${c.name||'—'}</b>${topLabel}</td>
-   <td style="white-space:nowrap;">
-        <button class="btn btn-yellow" onclick="editCreator('${d.id}')">✏️</button>
-        <button class="btn btn-red" onclick="delCreator('${d.id}')">🗑</button>
-      </td>
-    </tr>`;
-  }).join('') || '<tr><td colspan="4" style="color:#555;text-align:center">Креаторов пока нет</td></tr>';
-}
-
-window.delCreator = async (id) => {
-  if (!await showConfirm('Удалить креатора?')) return;
-  await deleteDoc(doc(db,'creators',id));
-  loadCreatorsAdmin();
-};
-
-window.editCreator = async (id) => {
-  const snap = await getDoc(doc(db,'creators',id));
-  if (!snap.exists()) return;
-  const c = snap.data();
-  document.getElementById('ceId').value = id;
-  document.getElementById('ceType').value = c.type;
-document.getElementById('ceName').value = c.name || '';
-  document.getElementById('ceTg').value = c.telegram || '';
-  document.getElementById('ceTop').value = c.topRank ? String(c.topRank) : '';
-  document.getElementById('ceMsg').className = 'msg';
-  document.getElementById('ceMsg').style.display = 'none';
-  document.getElementById('ceProgress').style.width = '0%';
-
-  document.querySelectorAll('.ce-field').forEach(el => {
-    const types = (el.dataset.type || '').split(' ');
-    el.style.display = types.includes(c.type) ? 'block' : 'none';
-  });
-
-  if (c.type === 'studio') {
-    document.getElementById('ceWorked').value = c.workedWith || '';
-    const p = document.getElementById('ceCoverPreview');
-    if (c.cover) { p.src = c.cover; p.style.display='block'; } else { p.style.display='none'; }
-    document.getElementById('ceCoverFile').value='';
-    document.getElementById('ceCoverLabel').textContent = '📷 Сменить обложку';
-  } else if (c.type === 'beatmaker') {
-    const p = document.getElementById('ceCoverPreview');
-    if (c.cover) { p.src = c.cover; p.style.display='block'; } else { p.style.display='none'; }
-    document.getElementById('ceCoverFile').value='';
-    document.getElementById('ceCoverLabel').textContent = '📷 Сменить обложку';
-    document.getElementById('ceAudioFile').value='';
-    document.getElementById('ceAudioLabel').textContent = c.audioUrl ? '🎵 Уже загружено (выбери чтобы заменить)' : '🎵 Выбрать аудио';
-  } else if (c.type === 'designer') {
-    const covers = c.covers || [];
-    document.getElementById('ceExistingCovers').value = JSON.stringify(covers);
-    for (let i=1;i<=3;i++) {
-      const p = document.getElementById('ceCover'+i+'Preview');
-      const l = document.getElementById('ceCover'+i+'Label');
-      document.getElementById('ceCover'+i).value='';
-      if (covers[i-1]) { p.src = covers[i-1]; p.style.display='block'; l.textContent='📷 Заменить'; }
-      else { p.style.display='none'; l.textContent='📷 Обложка '+i; }
-    }
-  } else if (c.type === 'clipmaker') {
-    document.getElementById('ceYt').value = c.ytId ? `https://youtu.be/${c.ytId}` : '';
-  }
-
-  document.getElementById('creatorEditModal').style.display = 'flex';
-};
-
-window.closeCreatorEdit = () => {
-  document.getElementById('creatorEditModal').style.display = 'none';
-};
-
-window.saveCreatorEdit = async () => {
-  const id = document.getElementById('ceId').value;
-  const type = document.getElementById('ceType').value;
-  const msg = document.getElementById('ceMsg');
-  const name = document.getElementById('ceName').value.trim();
-  const telegram = document.getElementById('ceTg').value.trim();
-  if (!name || !telegram) { showMsg(msg,'Заполните имя и Telegram','err'); return; }
-  const prog = document.getElementById('ceProgress');
-try {
-    const topRankVal = document.getElementById('ceTop').value;
-    const topRank = topRankVal ? parseInt(topRankVal) : null;
-    if (topRank) await clearTopRankHolder(type, topRank, id);
-    const updates = { name, telegram, topRank };
-
-    if (type === 'studio') {
-      updates.workedWith = document.getElementById('ceWorked').value.trim();
-      const f = document.getElementById('ceCoverFile').files[0];
-      if (f) { prog.style.width='60%'; const r = await cldUpload(f,'pamir-music/creators'); updates.cover = r.secure_url; }
-    } else if (type === 'beatmaker') {
-      const cf = document.getElementById('ceCoverFile').files[0];
-      const af = document.getElementById('ceAudioFile').files[0];
-      if (cf) { prog.style.width='40%'; const r = await cldUpload(cf,'pamir-music/creators'); updates.cover = r.secure_url; }
-      if (af) { prog.style.width='80%'; const r = await cldUpload(af,'pamir-music/creators-audio'); updates.audioUrl = r.secure_url; }
-    } else if (type === 'designer') {
-      const existing = JSON.parse(document.getElementById('ceExistingCovers').value || '[]');
-      const covers = [...existing];
-      for (let i=1;i<=3;i++) {
-        const f = document.getElementById('ceCover'+i).files[0];
-        if (f) { prog.style.width=(i*30)+'%'; const r = await cldUpload(f,'pamir-music/creators'); covers[i-1] = r.secure_url; }
-      }
-      updates.covers = covers.filter(Boolean);
-    } else if (type === 'clipmaker') {
-      const ytRaw = document.getElementById('ceYt').value.trim();
-      if (ytRaw) updates.ytId = parseCreatorYtId(ytRaw);
-    }
-
-    prog.style.width='100%';
-    await updateDoc(doc(db,'creators',id), updates);
-    showMsg(msg,'Сохранено!','ok');
-    setTimeout(() => { closeCreatorEdit(); loadCreatorsAdmin(); }, 800);
-    setTimeout(() => prog.style.width='0%', 1000);
-  } catch(e) { showMsg(msg,'Ошибка: '+e.message,'err'); prog.style.width='0%'; }
-};
 </script>
 
 </body>

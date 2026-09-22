@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>992MUZ - Таджикская музыка и рэп онлайн | №1 платформа хип-хоп индустрии Таджикистана</title>
     <meta name="description" content="992MUZ - крупнейшая платформа Таджикской музыки и рэпа. Слушай новые треки, топ чарт, плейлисты и клипы Таджикских артистов онлайн бесплатно.">
-  <meta name="keywords" content="992muz, таджикская музыка, таджикский рэп, tj rap, музыка таджикистан, точикӣ мусиқӣ, слушать таджикскую музыку, топ таджикских артистов">
+   <meta name="keywords" content="992muz, таджикская музыка, таджикский рэп, рэпи точики, репи точики, рэпи точик, таджикский реп, tajrap, tj rap, tajik rap, repi tojiki, tajrap 2026, олдскул таджикский рэп, музыка таджикистан, точикӣ мусиқӣ, слушать таджикскую музыку, топ таджикских артистов">
   <link rel="canonical" href="https://992muz.ru/">
   <meta property="og:title" content="992MUZ - Музыка Таджикистана">
 <meta property="og:description" content="Платформа таджикской хип-хоп индустрии">
@@ -39,7 +39,21 @@
     "alternateName": "992 MUZ",
     "url": "https://992muz.ru",
     "logo": "https://992muz.ru/assets/png/red.png",
-    "description": "Крупнейшая платформа таджикской музыки и хип-хоп индустрии",
+    "description": "992MUZ - музыкальная платформа №1 в Таджикистане и продюсерский центр таджикской хип-хоп индустрии. Официальный архив таджикского рэпа: треки, клипы, история жанра.",
+    "foundingDate": "2024",
+    "founder": {
+      "@type": "Person",
+      "name": "Sibastian TeeJay",
+      "jobTitle": "Основатель и продюсер",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "LEVAKAND PRODUCTION"
+      }
+    },
+    "parentOrganization": {
+      "@type": "Organization",
+      "name": "LEVAKAND PRODUCTION"
+    },
     "sameAs": [
       "https://www.youtube.com/@992MUZ",
       "https://t.me/tg992muz",
@@ -169,6 +183,7 @@
  
 </head>
 <body>
+<h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Таджикский рэп и таджикская музыка онлайн — рэпи точики, tajrap, tj rap на 992MUZ</h1>
 <!-- NAVBAR -->
 <nav class="navbar">
   <div class="wrap">
@@ -187,7 +202,7 @@
           <li><a href="/" class="active"><img src="assets/icons/site.png" alt="">Главная</a></li>
           <li><a href="/artists"><img src="assets/icons/profile.png" alt="">Артисты</a></li>
            <li><a href="/videos"><img src="assets/icons/video.png" alt="">Видео</a></li>
-<li><a href="/playlists"><img src="assets/icons/music.png" alt="">Плейлисты</a></li>
+
           <li><a href="/masterskaya"><img src="assets/icons/sstar.png" alt="">Мастерская</a></li>
           <li><button class="mobile-nav-soon-btn" id="mobileSoonBtn" type="button"><img src="assets/icons/announcement.png" alt="">СКОРО</button></li>
         </ul>
@@ -217,7 +232,7 @@
         <li><a href="/" class="active">Главная</a></li>
         <li><a href="/artists">Артисты</a></li>
         <li><a href="/videos">Видео</a></li>
-<li><a href="/playlists">Плейлисты</a></li>
+
           <li><a href="/masterskaya">Мастерская</a></li>
         <li><button class="nav-soon-btn" id="navSoonBtn" type="button">СКОРО</button></li>
       </ul>
@@ -1982,9 +1997,11 @@ function closeHomeAboutFilm(e, force){
     </div>
     <div class="modal-body">
       <h4>Что такое 992MUZ?</h4>
-      992MUZ - цифровая платформа таджикской хип-хоп индустрии, объединяющая артистов и слушателей со всего мира. Мы развиваем и продвигаем таджикскую музыкальную культуру.
+      992MUZ - музыкальная платформа №1 в Таджикистане, продюсерский центр и официальный архив таджикской хип-хоп индустрии. Здесь собраны треки, клипы и история таджикского рэпа с середины 2000-х — крупнейшая база жанра, объединяющая артистов и слушателей со всего мира.
+      <h4>Основатель</h4>
+      Платформу основал Sibastian TeeJay — продюсер и основатель лейбла LEVAKAND PRODUCTION, который стоит за развитием и продвижением 992MUZ.
       <h4>Наша миссия</h4>
-      Дать голос Таджикским артистам, создать пространство где рэп, народная музыка, поп и эстрада живут рядом - доступные каждому.
+      Дать голос таджикским артистам, создать пространство где рэп, народная музыка, поп и эстрада живут рядом - доступные каждому.
       <h4>Контакт</h4>
       levakandproduction@gmail.com
     </div>
@@ -2373,10 +2390,9 @@ if(player)player.classList.remove('visible');
 })();
 // Stats from Firebase — fallback to static if no DB
 (function(){
-var t=document.getElementById('statTracks'),a=document.getElementById('statArtists'),p=document.getElementById('statPlaylists');
+var t=document.getElementById('statTracks'),a=document.getElementById('statArtists');
 if(t)t.textContent='1 240 треков';
 if(a)a.textContent='87 артистов';
-if(p)p.textContent='12 плейлистов';
 })();
 document.querySelectorAll('.new-track-cover-wrap, .ringtone-play').forEach(function(btn){
 btn.addEventListener('click',function(){
@@ -2737,15 +2753,6 @@ let currentRow = null;
   document.addEventListener('click', (e) => {
     if (!wrap.contains(e.target)) { wrap.classList.remove('open','has-query'); }
   });
-  const PLAYLIST_LABELS = {
-    medlyaki:'Медляки', klubnye:'Клубные', guitar:'Под гитару', pamirskie:'Памирские',
-    fity:'Фиты', 'pered-snom':'Перед сном', andergrand:'Андерграунд', 'v-tachku':'В тачку',
-    'vayb-gor':'Вайб гор', redakciya:'Выбор редакции', arhivnyy:'Архивный', pripevy:'Припевы',
-    russkiy:'Иранские', trap:'Trap / Drill', 'chernyy-rep':'Чёрный рэп', hiphop:'Хип-хоп',
-    tancevalnye:'Танцевальные', zhenskiy:'Женский', legendy:'Легенды', 'deep-house':'Дип хаус',
-    narodnye:'Народные'
-  };
-
 let searchTimer = null;
   input.addEventListener('input', () => {
     clearTimeout(searchTimer);
@@ -2816,11 +2823,7 @@ matchedArtists.forEach(a => {
 matchedTracks.forEach(t => {
          const cover = window.cldImg(t.coverUrl, 80) || 'assets/icons/mountain.png';
           let badge = '', href = '#';
-          if (t.playlists && t.playlists.length) {
-            const pl = t.playlists[0];
-            badge = PLAYLIST_LABELS[pl] || pl;
-            href = `playlists.html?pl=${pl}`;
-          } else if (t.blocks && t.blocks.length) {
+          if (t.blocks && t.blocks.length) {
             badge = t.blocks[0];
             href = `index.html#${t.blocks[0]}`;
           }
@@ -3555,110 +3558,7 @@ const snap = await getDocs(query(collection(db, 'tracks'), where('featuredHome',
 loadFeaturedTrack();
 </script>
 
-<!-- УВЕЛИЧЕННОЕ ПРЕВЬЮ ОБЛОЖКИ (наведение / долгое нажатие) -->
-<div class="pl-strip-cover-preview" id="plStripCoverPreview" onclick="openHomePlaylist(plStripPreviewKey)">
-  <img id="plStripCoverPreviewImg" src="" alt="">
-  <div class="pl-strip-cover-preview-title" id="plStripCoverPreviewTitle"></div>
-</div>
 
-<!-- ПРЕВЬЮ ПЛЕЙЛИСТА (лента на главной) -->
-<div class="pl-strip-modal-overlay" id="plStripModalOverlay" onclick="if(event.target===this) closePlStripModal()">
-  <div class="pl-strip-modal-box">
-    <iframe id="plStripModalFrame" src="" style="width:100%;height:100%;border:none;"></iframe>
-    <button class="pl-strip-modal-close" id="plStripModalCloseBtn" type="button" aria-label="Закрыть">✕</button>
-  </div>
-</div>
-
-<script>
-(function() {
-  const HOME_PLAYLISTS = [
-    { key: 'medlyaki', title: 'Медляки', cover: 'assets/icons/med.jfif' },
-    { key: 'klubnye', title: 'Клубные', cover: 'assets/icons/cl.jfif' },
-    { key: 'guitar', title: 'Под гитару', cover: 'assets/icons/gui.jfif' },
-    { key: 'pamirskie', title: 'Памирские', cover: 'assets/icons/gbao.jfif' },
-    { key: 'fity', title: 'Фиты', cover: 'assets/icons/ft.jfif' },
-    { key: 'pered-snom', title: 'Перед сном', cover: 'assets/icons/son.jfif' },
-    { key: 'andergrand', title: 'Андерграунд', cover: 'assets/icons/under.jfif' },
-    { key: 'v-tachku', title: 'В тачку', cover: 'assets/icons/cd playlist cover.jfif' },
-    { key: 'vayb-gor', title: 'Вайб гор', cover: 'assets/icons/gor.jfif' },
-    { key: 'redakciya', title: 'Выбор редакции', cover: 'assets/icons/vib.jfif' },
-    { key: 'arhivnyy', title: 'Архивный', cover: 'assets/icons/pr.jfif' },
-    { key: 'pripevy', title: 'Припевы', cover: 'assets/icons/priv.jfif' },
-    { key: 'russkiy', title: 'Иранские', cover: 'assets/icons/iran.jfif' },
-    { key: 'trap', title: 'Trap / Drill', cover: 'assets/icons/trap.jfif' },
-    { key: 'chernyy-rep', title: 'Чёрный рэп', cover: 'assets/icons/DARK.jfif' },
-    { key: 'hiphop', title: 'Хип-хоп', cover: 'assets/icons/hiphop.jfif' },
-    { key: 'tancevalnye', title: 'Танцевальные', cover: 'assets/icons/tanc.jfif' },
-    { key: 'zhenskiy', title: 'Женский', cover: 'assets/icons/jen.jfif' },
-    { key: 'legendy', title: 'Легенды', cover: 'assets/icons/leg.jfif' },
-    { key: 'deep-house', title: 'Дип хаус', cover: 'assets/icons/deep.jfif' },
-    { key: 'narodnye', title: 'Народные', cover: 'assets/icons/nar.jfif' }
-  ];
-
-  const track = document.getElementById('plStripTrack');
-  if (track) {
-const itemsHtml = HOME_PLAYLISTS.map(pl => `
-      <div class="pl-strip-item"
-           onclick="openHomePlaylist('${pl.key}')"
-           onmouseenter="startPlStripPreview('${pl.key}','${pl.title.replace(/'/g,"\\'")}','${pl.cover}')"
-           onmouseleave="clearPlStripPreview()"
-           ontouchstart="startPlStripPreview('${pl.key}','${pl.title.replace(/'/g,"\\'")}','${pl.cover}')"
-           ontouchend="clearPlStripPreview()"
-           ontouchmove="clearPlStripPreview()">
-       <div class="pl-strip-cover"><img src="${pl.cover}" alt="${pl.title}" loading="lazy"></div>
-        <div class="pl-strip-title">${pl.title}</div>
-      </div>`).join('');
-    track.innerHTML = itemsHtml + itemsHtml;
-  }
-
-let plStripPreviewTimer = null;
-  window.plStripPreviewKey = null;
-
-  window.startPlStripPreview = function(key, title, cover) {
-    clearTimeout(plStripPreviewTimer);
-    plStripPreviewTimer = setTimeout(() => {
-      const box = document.getElementById('plStripCoverPreview');
-      const img = document.getElementById('plStripCoverPreviewImg');
-      const titleEl = document.getElementById('plStripCoverPreviewTitle');
-      if (!box || !img || !titleEl) return;
-      window.plStripPreviewKey = key;
-      img.src = cover;
-      titleEl.textContent = title;
-      box.classList.add('open');
-    }, 350);
-  };
-
-  window.clearPlStripPreview = function() {
-    clearTimeout(plStripPreviewTimer);
-    const box = document.getElementById('plStripCoverPreview');
-    if (box) box.classList.remove('open');
-  };
-
-  window.openHomePlaylist = function(key) {
-    clearPlStripPreview();
-    const overlay = document.getElementById('plStripModalOverlay');
-    const frame = document.getElementById('plStripModalFrame');
-    if (!overlay || !frame) return;
-    frame.src = 'playlists.html?pl=' + encodeURIComponent(key);
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  };
-window.closePlStripModal = function() {
-    const overlay = document.getElementById('plStripModalOverlay');
-    const frame = document.getElementById('plStripModalFrame');
-    if (overlay) overlay.classList.remove('open');
-    if (frame) frame.src = '';
-    document.body.style.overflow = '';
-  };
-
-  const plStripModalCloseBtn = document.getElementById('plStripModalCloseBtn');
-  if (plStripModalCloseBtn) plStripModalCloseBtn.addEventListener('click', closePlStripModal);
-
-  window.addEventListener('message', (e) => {
-    if (e.data && e.data.type === 'closePlStripModal') closePlStripModal();
-  });
-})();
-</script>
 <!-- МОДАЛКА "СКОРО" -->
 <style>
   .nav-soon-btn{
