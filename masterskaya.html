@@ -66,7 +66,7 @@
         </div>
       </div>
       <a href="index.html" class="navbar-logo" style="display:flex;flex-direction:row;align-items:center;gap:8px;">
-        <img src="assets/png/red.png" alt="992MUZ" style="height:110px;width:auto;object-fit:contain;display:block;">
+          <img src="assets/png/Дизайн%20без%20названия%20(16).png" alt="992MUZ" style="height:110px;width:auto;object-fit:contain;display:block;">
         <span style="font-weight:300;font-size:9px;letter-spacing:.2px;opacity:.6;white-space:nowrap;line-height:1.2;">платформа таджикской<br>хип-хоп индустрии</span>
       </a>
       <ul class="navbar-nav">
@@ -106,19 +106,41 @@
       </div>
     </div>
 </section>
-
+  <!-- ВКЛАДКИ ИНСТРУМЕНТОВ -->
+  <div class="ws-tabs" id="wsTabs" role="tablist">
+    <button type="button" class="ws-tab active" data-tab="editor">Фоторедактор</button>
+    <button type="button" class="ws-tab" data-tab="convert">Конвертер</button>
+    <button type="button" class="ws-tab" data-tab="trim">Нарезка</button>
+    <button type="button" class="ws-tab" data-tab="id3">Тегер</button>
+    <button type="button" class="ws-tab" data-tab="bpm">BPM и тональность</button>
+    <button type="button" class="ws-tab" data-tab="qr">QR-код</button>
+    <button type="button" class="ws-tab" data-tab="norm">Громкость</button>
+  </div>
   <!-- ФОТОРЕДАКТОР ОБЛОЖЕК -->
-  <section class="ws-section ws-editor">
+  <section class="ws-section ws-editor" data-tab="editor">
     <div class="ws-block-header ws-block-header--green">
       <span class="ws-block-eyebrow">Инструмент 01</span>
       <h2 class="ws-block-title">Фоторедактор обложек</h2>
     </div>
     <p class="ws-trim-subtitle">Фон, слои фото, текст и стикеры - собери обложку под трек, YouTube-превью или сторис. При смене формата холст очищается.</p>
 
-    <div class="ws-editor-formats">
-      <button class="ws-editor-format-btn active" data-format="square" data-w="1080" data-h="1080">Квадрат · Трек</button>
-      <button class="ws-editor-format-btn" data-format="horizontal" data-w="1280" data-h="720">Горизонталь · YouTube</button>
-      <button class="ws-editor-format-btn" data-format="vertical" data-w="1080" data-h="1920">Вертикаль · Сторис</button>
+       <div class="ws-editor-formats" id="wsEditorFormats">
+      <button class="ws-editor-format-btn" data-format="square" data-w="1080" data-h="1080" title="Квадрат · Трек" aria-label="Квадрат · Трек">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/></svg>
+      </button>
+      <button class="ws-editor-format-btn active" data-format="horizontal" data-w="1280" data-h="720" title="Горизонталь · YouTube" aria-label="Горизонталь · YouTube">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="2.5" y="6.5" width="19" height="11" rx="2.5"/></svg>
+      </button>
+      <button class="ws-editor-format-btn" data-format="vertical" data-w="1080" data-h="1920" title="Вертикаль · Сторис" aria-label="Вертикаль · Сторис">
+         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/></svg>
+      </button>
+      <span class="ws-editor-hist-sep"></span>
+      <button type="button" class="ws-editor-hist-btn" id="wsEditorUndoBtn" title="Отменить (Ctrl+Z)" aria-label="Отменить" disabled>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>
+      </button>
+      <button type="button" class="ws-editor-hist-btn" id="wsEditorRedoBtn" title="Повторить (Ctrl+Shift+Z)" aria-label="Повторить" disabled>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13"/></svg>
+      </button>
     </div>
 
     <div class="ws-editor-layout">
@@ -133,7 +155,7 @@
             <button class="ws-editor-sel-action ws-editor-sel-dup" id="wsEditorSelDup" title="Дублировать">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/></svg>
             </button>
-<button class="ws-editor-sel-action ws-editor-sel-del" id="wsEditorSelDel" title="Удалить">✕</button>
+            <button class="ws-editor-sel-action ws-editor-sel-del" id="wsEditorSelDel" title="Удалить">✕</button>
           </div>
 <div class="ws-editor-ctx-menu" id="wsEditorProps" style="display:none;">
             <div class="ws-editor-ctx-drag" id="wsEditorPropsDragHandle"><span></span><span></span><span></span></div>
@@ -145,7 +167,19 @@
               </div>
               <input type="range" id="wsEditorOpacityRange" min="10" max="100" value="100">
             </div>
-
+<div class="ws-editor-slider-row">
+              <div class="ws-editor-slider-row-head">
+                <label>Поворот, °</label>
+                <input type="text" class="ws-editor-value-box" id="wsEditorRotationValue" value="0" inputmode="numeric">
+              </div>
+              <input type="range" id="wsEditorRotationRange" min="-180" max="180" value="0">
+            </div>
+            <div class="ws-editor-format-row">
+              <button type="button" class="ws-fmt-btn" id="wsEditorRotLeftBtn" title="Повернуть на 90° влево">↺ 90°</button>
+              <button type="button" class="ws-fmt-btn" id="wsEditorRotRightBtn" title="Повернуть на 90° вправо">↻ 90°</button>
+              <button type="button" class="ws-fmt-btn" id="wsEditorFlipXBtn" title="Отразить по горизонтали">⇆</button>
+              <button type="button" class="ws-fmt-btn" id="wsEditorFlipYBtn" title="Отразить по вертикали">⇅</button>
+            </div>
 <div class="ws-editor-group" id="wsEditorGroupLight">
               <div class="ws-editor-group-title">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2.3h6c0-1.1.4-1.8 1-2.3A7 7 0 0 0 12 2Z"/></svg>
@@ -402,14 +436,14 @@
         </div>
         <div class="ws-editor-toolbar">
  <input type="file" id="wsEditorBgInput" accept="image/*" hidden>
-          <button class="ws-btn ws-btn-ghost" id="wsEditorBgBtn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-            Фон
+          <button class="ws-btn ws-btn-ghost" id="wsEditorBgBtn" title="Добавить основное фото на весь холст">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            Фото
           </button>
           <input type="file" id="wsEditorPhotoInput" accept="image/*" hidden>
-          <button class="ws-btn ws-btn-ghost" id="wsEditorPhotoBtn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M9 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/><path d="m4 15 4-4 4 4 4-6 4 6"/></svg>
-            Фото
+          <button class="ws-btn ws-btn-ghost" id="wsEditorPhotoBtn" title="Добавить ещё одно фото поверх основного">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="13" height="13" rx="2"/><path d="M8 21h11a2 2 0 0 0 2-2V8"/></svg>
+            Поверх
           </button>
 <button class="ws-btn ws-btn-ghost" id="wsEditorTextBtn">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"/><path d="M12 6v14"/><path d="M9 20h6"/></svg>
@@ -464,7 +498,7 @@
   </section>
 
   <!-- DROPZONE -->
-  <section class="ws-section">
+  <section class="ws-section ws-tab-hidden" data-tab="convert">
     <div class="ws-block-header ws-block-header--red">
       <span class="ws-block-eyebrow">Инструмент 02</span>
       <h2 class="ws-block-title">Конвертер форматов</h2>
@@ -519,7 +553,7 @@
   </section>
 
   <!-- INFO -->
-  <section class="ws-section ws-info">
+  <section class="ws-section ws-info ws-tab-hidden" data-tab="convert">
     <div class="ws-info-card">
       <div class="ws-info-num">01</div>
       <div class="ws-info-title">Всё локально</div>
@@ -538,7 +572,7 @@
   </section>
 
 <!-- ОБРЕЗКА ТРЕКА -->
-  <section class="ws-section ws-trim">
+  <section class="ws-section ws-trim ws-tab-hidden" data-tab="trim">
 <div class="ws-block-header ws-block-header--amber">
       <span class="ws-block-eyebrow">Инструмент 03</span>
       <h2 class="ws-block-title">Нарезка трека</h2>
@@ -612,7 +646,7 @@
   </section>
 
 <!-- ТЕГЕР МЕТАДАННЫХ (ID3) -->
-  <section class="ws-section ws-id3">
+  <section class="ws-section ws-id3 ws-tab-hidden" data-tab="id3">
 <div class="ws-block-header ws-block-header--green">
       <span class="ws-block-eyebrow">Инструмент 04</span>
       <h2 class="ws-block-title">Тегер метаданных</h2>
@@ -669,7 +703,7 @@
   </section>
 
   <!-- BPM & ТОНАЛЬНОСТЬ -->
-  <section class="ws-section ws-bpm">
+  <section class="ws-section ws-bpm ws-tab-hidden" data-tab="bpm">
 <div class="ws-block-header ws-block-header--amber">
       <span class="ws-block-eyebrow">Инструмент 05</span>
       <h2 class="ws-block-title">BPM и тональность</h2>
@@ -703,7 +737,7 @@
   </section>
 
   <!-- QR-КОД -->
-  <section class="ws-section ws-qr">
+  <section class="ws-section ws-qr ws-tab-hidden" data-tab="qr">
 <div class="ws-block-header ws-block-header--red">
       <span class="ws-block-eyebrow">Инструмент 06</span>
       <h2 class="ws-block-title">QR-код</h2>
@@ -758,7 +792,7 @@
   </section>
 
   <!-- ВЫРАВНИВАНИЕ ГРОМКОСТИ -->
-  <section class="ws-section ws-norm">
+  <section class="ws-section ws-norm ws-tab-hidden" data-tab="norm">
 <div class="ws-block-header ws-block-header--green">
       <span class="ws-block-eyebrow">Инструмент 07</span>
       <h2 class="ws-block-title">Выравнивание громкости</h2>
@@ -804,49 +838,224 @@
   </section>
 
 </div>
+<style>
+  /* ---- FOOTER: общая база ---- */
+  .footer{ margin-top:0 !important; }
+  .footer > .wrap{ padding-top:0 !important; padding-bottom:0 !important; }
+  #footerBottomBar{ display:flex; width:100%; margin:0; min-height:0; }
+
+  /* ---- FOOTER: десктоп ---- */
+  @media (min-width: 901px){
+    .footer{ padding:0 !important; }
+    #footerBottomBar{
+      flex-direction:row;
+      flex-wrap:nowrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
+      padding:14px 0;
+    }
+    #footerBottomLeft{
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      gap:16px;
+      flex-shrink:0;
+      width:auto;
+    }
+    #footerLinksRow{
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      gap:0;
+      white-space:nowrap;
+      flex-shrink:1;
+      overflow:hidden;
+      width:auto;
+      margin:0;
+      padding:0;
+    }
+    #footerCopyright{
+      flex-shrink:0;
+      white-space:nowrap;
+      width:auto;
+    }
+    #footerLogoToggle{ cursor:default; }
+    #footerLogoToggle .footer-logo-caret{ display:none; }
+  }
+
+  /* ---- FOOTER: мобильные ---- */
+  @media (max-width: 900px){
+    .footer{ padding:0 0 14px !important; }
+    #footerBottomBar{
+      flex-direction:column;
+      flex-wrap:nowrap;
+      align-items:center;
+      justify-content:flex-start;
+      gap:0;
+      row-gap:0;
+      text-align:center;
+      padding:16px 0 14px;
+    }
+    #footerBottomLeft{
+      order:1;
+      display:flex;
+      flex-direction:row;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      gap:0;
+      row-gap:10px;
+    }
+    #footerBottomLeft .footer-bottom-logo{
+      width:100% !important;
+      justify-content:center !important;
+      text-align:center !important;
+      margin:0 !important;
+    }
+    #footerBottomLeft .footer-socials{
+      width:100% !important;
+      justify-content:center !important;
+      flex-wrap:wrap !important;
+      gap:10px !important;
+      margin:0 !important;
+    }
+    #footerBottomLeft .footer-social{ padding:6px !important; }
+    #footerLinksRow{
+      order:2;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      gap:0 2px;
+      row-gap:6px;
+      white-space:normal;
+      overflow:visible;
+      margin:0;
+      padding:0;
+    }
+    #footerCopyright{
+      order:3;
+      width:100%;
+      text-align:center;
+      white-space:nowrap;
+    }
+
+    /* логотип = кнопка раскрытия */
+    #footerLogoToggle{
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+    #footerLogoToggle .footer-logo-caret{
+      display:block;
+      opacity:.55;
+      transition:transform .28s ease, opacity .2s ease;
+    }
+    #footerBottomBar.footer-open #footerLogoToggle .footer-logo-caret{
+      transform:rotate(180deg);
+      opacity:.9;
+    }
+
+    /* закрытое состояние */
+    #footerLinksRow,
+    #footerCopyright{
+      max-height:0;
+      opacity:0;
+      overflow:hidden;
+      pointer-events:none;
+      margin-top:0;
+      transition:max-height .32s ease, opacity .24s ease, margin-top .32s ease;
+    }
+
+    /* открытое состояние */
+    #footerBottomBar.footer-open #footerLinksRow{
+      max-height:200px;
+      opacity:1;
+      overflow:visible;
+      pointer-events:auto;
+      margin-top:14px;
+    }
+    #footerBottomBar.footer-open #footerCopyright{
+      max-height:60px;
+      opacity:1;
+      pointer-events:auto;
+      margin-top:12px;
+    }
+  }
+</style>
 <footer class="footer">
   <div class="wrap">
-    <div class="footer-bottom">
-      <div class="footer-row-top">
-        <div class="footer-bottom-left">
-          <div class="footer-bottom-logo">
-            <img src="assets/png/red.png" alt="">
-            <span>992MUZ</span>
-          </div>
-          <div class="footer-socials">
-            <a href="https://www.youtube.com/@992MUZ" target="_blank" class="footer-social"><img src="assets/icons/youtube.png" alt="YouTube"></a>
-            <a href="https://t.me/tg992muz" target="_blank" class="footer-social"><img src="assets/icons/telegram.png" alt="Telegram"></a>
-            <a href="https://vk.com/vk992muz" target="_blank" class="footer-social"><img src="assets/icons/vk.png" alt="VK"></a>
-            <a href="https://www.tiktok.com/@992muz" target="_blank" class="footer-social"><img src="assets/icons/tiktok.png" alt="TikTok"></a>
-            <a href="https://www.instagram.com/992muz/" target="_blank" class="footer-social"><img src="assets/icons/instagram.png" alt="Instagram"></a>
-            <a href="https://www.facebook.com/profile.php?id=61565029317185" target="_blank" class="footer-social"><img src="assets/icons/facebook.png" alt="Facebook"></a>
-          </div>
+    <div class="footer-bottom" id="footerBottomBar">
+      <div class="footer-bottom-left" id="footerBottomLeft">
+        <div class="footer-bottom-logo" id="footerLogoToggle" role="button" tabindex="0" aria-expanded="false" aria-controls="footerLinksRow" style="display:flex;align-items:center;gap:6px;white-space:nowrap;">
+          <img src="assets/png/red.png" alt="">
+          <span>992MUZ</span>
+          <svg class="footer-logo-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </div>
-        <span>© 2026 by 992MUZ</span>
-      </div>
-      <div class="footer-row-bottom">
-        <a href="#" class="footer-app-btn"><img src="assets/icons/AppStore.png" alt="App Store"><span>App Store</span></a>
-        <a href="#" class="footer-app-btn"><img src="assets/icons/googleplay.png" alt="Google Play"><span>Google Play</span></a>
-        <span class="footer-sep" style="margin:0 4px;">·</span>
-        <div class="footer-langs">
-          <button class="footer-lang active" onclick="setLang(this)">RU</button>
-          <button class="footer-lang" onclick="setLang(this)">TJ</button>
-          <button class="footer-lang" onclick="setLang(this)">EN</button>
-          <button class="footer-lang" onclick="setLang(this)">PAM</button>
-        </div>
-        <span class="footer-sep" style="margin:0 4px;">·</span>
-        <div class="footer-links">
-          <button class="footer-link-btn" onclick="openModal('modal-about')">О нас</button>
-          <span class="footer-sep">·</span>
-          <button class="footer-link-btn" onclick="openModal('modal-terms')">Условия</button>
-          <span class="footer-sep">·</span>
-          <button class="footer-link-btn" onclick="openModal('modal-privacy')">Конфиденциальность</button>
+        <div class="footer-socials" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <a href="https://www.youtube.com/@992MUZ" target="_blank" class="footer-social"><img src="assets/icons/youtube.png" alt="YouTube"></a>
+          <a href="https://t.me/tg992muz" target="_blank" class="footer-social"><img src="assets/icons/telegram.png" alt="Telegram"></a>
+          <a href="https://vk.com/vk992muz" target="_blank" class="footer-social"><img src="assets/icons/vk.png" alt="VK"></a>
+          <a href="https://www.tiktok.com/@992muz" target="_blank" class="footer-social"><img src="assets/icons/tiktok.png" alt="TikTok"></a>
+          <a href="https://www.instagram.com/992muz/" target="_blank" class="footer-social"><img src="assets/icons/instagram.png" alt="Instagram"></a>
+          <a href="https://www.facebook.com/profile.php?id=61565029317185" target="_blank" class="footer-social"><img src="assets/icons/facebook.png" alt="Facebook"></a>
+          <a href="https://pin.it/4J03PF7GM" target="_blank" class="footer-social" aria-label="Pinterest" style="display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="color:#fff;"><path d="M12.017 0C5.396 0 0 5.396 0 12.017c0 5.079 3.158 9.417 7.618 11.164-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.784c0-1.671.969-2.919 2.176-2.919 1.026 0 1.522.771 1.522 1.696 0 1.033-.658 2.577-.997 4.009-.283 1.199.601 2.176 1.783 2.176 2.14 0 3.783-2.257 3.783-5.514 0-2.883-2.072-4.9-5.029-4.9-3.428 0-5.437 2.572-5.437 5.232 0 1.037.399 2.148.898 2.752a.36.36 0 0 1 .083.345c-.09.375-.293 1.199-.334 1.366-.053.222-.174.269-.402.162-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378 0 0-.602 2.291-.748 2.853-.271 1.043-1.002 2.351-1.492 3.148C9.72 23.836 10.834 24 12.017 24c6.62 0 12.017-5.396 12.017-12.017C24.033 5.396 18.637 0 12.017 0z"/></svg>
+          </a>
+          <a href="https://992muz.ru/price" class="footer-social" aria-label="Прайс" style="display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41L11 3.83A2 2 0 0 0 9.59 3.24L4 3.24A2 2 0 0 0 2 5.24L2 10.83A2 2 0 0 0 2.59 12.24L12.17 21.83A2 2 0 0 0 15 21.83L20.59 16.24A2 2 0 0 0 20.59 13.41Z"/><line x1="7" y1="7.5" x2="7" y2="7.51"/></svg>
+          </a>
         </div>
       </div>
+      <div class="footer-links" id="footerLinksRow">
+        <button class="footer-link-btn" onclick="openModal('modal-about')">О нас</button>
+        <span class="footer-sep">·</span>
+        <button class="footer-link-btn" onclick="openModal('modal-terms')">Условия</button>
+        <span class="footer-sep">·</span>
+        <button class="footer-link-btn" onclick="openModal('modal-privacy')">Конфиденциальность</button>
+        <span class="footer-sep">·</span>
+        <button class="footer-link-btn" onclick="openModal('modal-dmca')">Правообладателям</button>
+      </div>
+      <span id="footerCopyright">© 2026 by 992MUZ</span>
     </div>
   </div>
 </footer>
+<script>
+(function(){
+  var bar  = document.getElementById('footerBottomBar');
+  var logo = document.getElementById('footerLogoToggle');
+  if (!bar || !logo) return;
 
+  var mq = window.matchMedia('(max-width: 900px)');
+
+  function toggleFooter(){
+    if (!mq.matches) return;
+    var opened = bar.classList.toggle('footer-open');
+    logo.setAttribute('aria-expanded', opened ? 'true' : 'false');
+  }
+
+  logo.addEventListener('click', toggleFooter);
+
+  logo.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
+      e.preventDefault();
+      toggleFooter();
+    }
+  });
+
+  function syncOnResize(){
+    if (!mq.matches){
+      bar.classList.remove('footer-open');
+      logo.setAttribute('aria-expanded', 'false');
+    }
+  }
+  if (mq.addEventListener) mq.addEventListener('change', syncOnResize);
+  else if (mq.addListener) mq.addListener(syncOnResize);
+})();
+</script>
 <script>
   function openModal(id){ var el=document.getElementById(id); if(el){ el.classList.add('open'); document.body.style.overflow='hidden'; } }
   function closeModal(id){ var el=document.getElementById(id); if(el){ el.classList.remove('open'); document.body.style.overflow=''; } }
@@ -871,7 +1080,7 @@
 </script>
 
 <script src="js/auth/session.js" type="module"></script>
-<script src="js/components/navbar.js" type="module"></script>
+
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -889,6 +1098,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" crossorigin="anonymous"></script>
 <!-- ffmpeg.wasm — для FLAC/OGG/OPUS/M4A, включится сам после деплоя с нужными заголовками -->
 <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js" crossorigin="anonymous"></script>
+<script>
+  (function () {
+    var tabs = document.querySelectorAll('.ws-tab');
+    var sections = document.querySelectorAll('.ws-section[data-tab]');
+    function showTab(name) {
+      tabs.forEach(function (t) { t.classList.toggle('active', t.dataset.tab === name); });
+      sections.forEach(function (s) { s.classList.toggle('ws-tab-hidden', s.dataset.tab !== name); });
+            document.body.classList.toggle('ws-fit', name === 'editor');
+                  var fb = document.getElementById('wsEditorFormats');
+      if (fb) fb.style.display = (name === 'editor') ? '' : 'none';
+      window.dispatchEvent(new Event('resize'));
+    }
+        var fmtBox = document.getElementById('wsEditorFormats');
+    var tabsBox = document.getElementById('wsTabs');
+    if (fmtBox && tabsBox) {
+      fmtBox.classList.add('ws-formats-in-tabs');
+      tabsBox.appendChild(fmtBox);
+    }
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () { showTab(t.dataset.tab); });
+    });
+        showTab('editor');
+  })();
+</script>
 <script src="js/pages/masterskaya.js" defer></script>
 
 </body>

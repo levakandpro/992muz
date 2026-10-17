@@ -156,6 +156,7 @@ select.btn{padding:5px 8px}
       <a href="#" onclick="show('blocked',this)">🔒 Заблокированные</a>
       <a href="#" onclick="show('deleted',this)">🗑 Удалённые</a>
       <a href="#" onclick="show('tracks',this)">🎵 Треки</a>
+            <a href="#" onclick="show('featured',this)">🌟 Трек дня</a>
       <a href="#" onclick="show('videos',this)">🎬 Видео</a>
       <a href="#" onclick="show('artists',this)">🎤 Артисты</a>
             <a href="#" onclick="show('talents',this)">👩 992W Девушки</a>
@@ -338,7 +339,21 @@ select.btn{padding:5px 8px}
       </div>
       <div id="blockCollectionsBox"></div>
     </div>
+    <!-- ТРЕК ДНЯ -->
+    <div class="section" id="sec-featured">
+      <h1>🌟 Трек дня <span id="featuredCount" style="color:#555;font-size:12px;font-weight:400"></span></h1>
+      <div style="color:#666;font-size:11px;margin-bottom:12px">
+        Здесь все треки, которые участвуют в ротации блока «Трек дня» на главной. «Убрать» снимает трек только из ротации, сам трек остаётся на сайте.
+      </div>
+      <table>
+        <thead><tr><th>Обложка</th><th>Название</th><th>Артист</th><th>Дата</th><th></th></tr></thead>
+        <tbody id="featuredBody"></tbody>
+      </table>
 
+      <h1 style="margin-top:28px">Добавить трек в «Трек дня»</h1>
+      <input id="featuredAddSearch" placeholder="🔍 Найти трек по названию или артисту..." autocomplete="off" oninput="renderFeaturedAddList()" style="width:100%;margin-bottom:12px;">
+      <div id="featuredAddList" style="border:1px solid #2a2a2a;border-radius:8px;max-height:340px;overflow-y:auto;"></div>
+    </div>
     <!-- РЕДАКТОР ТРЕКА -->
     <div id="trackEditOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:1000;align-items:center;justify-content:center;">
       <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:28px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;position:relative;">
@@ -1023,6 +1038,7 @@ async function loadTracks() {
     .map(d => ({ _id: d.id, _fmt: fmt(d.data().addedAt), ...d.data() }))
     .sort((a, b) => (b.addedAt?.seconds || 0) - (a.addedAt?.seconds || 0));
   filterTracks();
+  renderFeaturedTracks();
 }
 
 window.restoreOriginalArtists = async () => {
@@ -1098,7 +1114,65 @@ const _tsnap = await getDoc(doc(db,'tracks',id));
   await logAction('delete', `Трек: ${_ttitle}`);
   loadTracks();
 };
+// ─── ТРЕК ДНЯ ───
+function _fEsc(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;');
+}
 
+function renderFeaturedTracks() {
+  const body = document.getElementById('featuredBody');
+  if (!body) return;
+  const list = allTracksForTable.filter(t => t.featuredHome);
+  const countEl = document.getElementById('featuredCount');
+  if (countEl) countEl.textContent = '(' + list.length + ')';
+  body.innerHTML = list.map(t => `<tr>
+    <td><img src="${t.coverUrl || 'assets/icons/mountain.png'}" onerror="this.src='assets/icons/mountain.png'" style="width:44px;height:44px;border-radius:6px;object-fit:cover;background:#222"></td>
+    <td><b>${_fEsc(t.title)}</b></td>
+    <td>${_fEsc(t.artist)}</td>
+    <td>${t._fmt}</td>
+    <td style="white-space:nowrap">
+      <button class="btn btn-yellow" onclick="openTrackEdit('${t._id}')">✏️ Изменить</button>
+      <button class="btn btn-red" onclick="removeFeatured('${t._id}')">✖ Убрать</button>
+    </td>
+  </tr>`).join('') || '<tr><td colspan="5" style="color:#555;text-align:center">В «Трек дня» пока нет треков</td></tr>';
+  renderFeaturedAddList();
+}
+
+window.renderFeaturedAddList = () => {
+  const box = document.getElementById('featuredAddList');
+  if (!box) return;
+  const qWords = _radioSearchNormalize(document.getElementById('featuredAddSearch')?.value || '').split(' ').filter(Boolean);
+  let list = allTracksForTable.filter(t => !t.featuredHome);
+  if (qWords.length) {
+    list = list.filter(t => _radioSearchMatch(_radioSearchNormalize((t.title || '') + ' ' + (t.artist || '')), qWords));
+  }
+  list = list.slice(0, 30);
+  box.innerHTML = list.map(t => `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid #2a2a2a;">
+    <img src="${t.coverUrl || 'assets/icons/mountain.png'}" onerror="this.src='assets/icons/mountain.png'" style="width:32px;height:32px;object-fit:cover;border-radius:4px;flex-shrink:0;">
+    <div style="flex:1;min-width:0;">
+      <div style="color:#e0e0e0;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${_fEsc(t.title) || '—'}</div>
+      <div style="color:#888;font-size:11px;">${_fEsc(t.artist) || '—'}</div>
+    </div>
+    <button class="btn btn-green" onclick="addFeatured('${t._id}')">➕ В трек дня</button>
+  </div>`).join('') || '<div style="padding:14px;color:#666;font-size:12px;">Ничего не найдено</div>';
+};
+
+window.addFeatured = async (id) => {
+  await updateDoc(doc(db, 'tracks', id), { featuredHome: true });
+  const t = allTracksForTable.find(x => x._id === id);
+  if (t) t.featuredHome = true;
+  await logAction('edit', 'Трек дня: ' + (t?.title || id), 'добавлен в ротацию');
+  renderFeaturedTracks();
+};
+
+window.removeFeatured = async (id) => {
+  if (!await showConfirm('Убрать трек из «Трек дня»? Сам трек останется на сайте.', 'Убрать')) return;
+  await updateDoc(doc(db, 'tracks', id), { featuredHome: false });
+  const t = allTracksForTable.find(x => x._id === id);
+  if (t) t.featuredHome = false;
+  await logAction('edit', 'Трек дня: ' + (t?.title || id), 'убран из ротации');
+  renderFeaturedTracks();
+};
 // ─── СОДЕРЖИМОЕ БЛОКОВ (то, что реально читает сайт) ───
 const SITE_BLOCKS = ['newReleases','oldschool','pop','estrada','lirika','ringtones','top50'];
 const SITE_BLOCK_LABELS = {

@@ -282,7 +282,7 @@
            <li><a href="/videos"><img src="assets/icons/video.png" alt="">Видео</a></li>
 
           <li><a href="/masterskaya"><img src="assets/icons/sstar.png" alt="">Мастерская</a></li>
-          <li><button class="mobile-nav-soon-btn" id="mobileSoonBtn" type="button"><img src="assets/icons/announcement.png" alt="">СКОРО</button></li>
+       
         </ul>
         <div class="mobile-menu-actions">
           <a href="/login" class="btn-login" id="mobileLoginBtn">
@@ -312,7 +312,7 @@
         <li><a href="/videos">Видео</a></li>
 
           <li><a href="/masterskaya">Мастерская</a></li>
-        <li><button class="nav-soon-btn" id="navSoonBtn" type="button">СКОРО</button></li>
+
       </ul>
       <div class="navbar-mini-video" id="navbarMiniVideo">
         <video id="navbarMiniVideoEl" muted playsinline autoplay preload="metadata" disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" oncontextmenu="return false"></video>
@@ -1422,7 +1422,32 @@
     }
   })();
 
-  var FILM_POSTER_HTML = '<img class="film-banner-poster" src="assets/images/skrini/pos.png" alt="992MUZ ХРОНИКИ | Истоки">';
+  var filmSlides = [
+    {
+      type: 'film',
+      ytId: 'kbx-Vx4byLo',
+      title: '992MUZ ХРОНИКИ | Истоки',
+      sub: 'История таджикского рэпа · Глава I',
+      poster: 'assets/images/skrini/pos.png',
+      posterFallback: 'assets/images/skrini/pos.png',
+      shareText: 'Документальный фильм про историю таджикского рэпа'
+    },
+    {
+      type: 'clip',
+      ytId: 'leGti64WY2c',
+      title: 'Mastiffelty — How Are You',
+      sub: 'Официальный клип · Новинка',
+      poster: 'https://img.youtube.com/vi/leGti64WY2c/maxresdefault.jpg',
+      posterFallback: 'https://img.youtube.com/vi/leGti64WY2c/hqdefault.jpg',
+      shareText: 'Mastiffelty — How Are You (Official Video)'
+    }
+  ];
+  var filmSlideIdx = 0;
+
+  function filmPosterHTML() {
+    var s = filmSlides[filmSlideIdx];
+    return '<img class="film-banner-poster" src="' + s.poster + '" alt="' + s.title + '" onerror="this.onerror=null;this.src=\'' + s.posterFallback + '\'">';
+  }
 
   // Вставляет реальный YouTube-плеер вместо статичной картинки-постера.
   // autoplayFlag=true — сразу запускает воспроизведение (кнопка "Смотреть"),
@@ -1434,7 +1459,8 @@
     var existingIframe = media.querySelector('iframe');
     if (existingIframe) return;
     var autoplayParam = autoplayFlag ? '&autoplay=1' : '';
-    media.innerHTML = '<iframe src="https://www.youtube.com/embed/kbx-Vx4byLo?rel=0' + autoplayParam + '" title="992MUZ ХРОНИКИ | Истоки" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>';
+        var curSlide = filmSlides[filmSlideIdx];
+    media.innerHTML = '<iframe src="https://www.youtube.com/embed/' + curSlide.ytId + '?rel=0' + autoplayParam + '" title="' + curSlide.title + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>';
   }
 
   // Полностью останавливает видео — убирает iframe и возвращает
@@ -1443,7 +1469,7 @@
     var media = document.getElementById('filmBannerMedia');
     if (!media) return;
     if (media.querySelector('iframe')) {
-      media.innerHTML = FILM_POSTER_HTML;
+          media.innerHTML = filmPosterHTML();
     }
   }
 
@@ -1456,7 +1482,7 @@
     });
     if (expanded) {
       loadFilmVideo(false);
-      markFilmWatched();
+      if (filmSlides[filmSlideIdx].type === 'film') markFilmWatched();
     } else {
       stopFilmVideo();
     }
@@ -1469,14 +1495,51 @@
     var boost = parseInt(localStorage.getItem('filmViewsBoost_v1') || '0');
     localStorage.setItem('filmViewsBoost_v1', String(boost + 1));
   };
+  // ─── АВТОСМЕНА: ФИЛЬМ ↔ КЛИП ───
+  var FILM_SLIDE_INTERVAL = 8000;
 
+  function applyFilmSlide(idx) {
+    filmSlideIdx = idx;
+    var s = filmSlides[idx];
+    var media = document.getElementById('filmBannerMedia');
+    var titleEl = document.querySelector('.film-banner-title');
+    var subEl = document.getElementById('filmBannerViews');
+    var aboutBtn = document.querySelector('[onclick="openHomeAboutFilm()"]');
+    var wrap = document.getElementById('filmBannerProgressWrap');
+
+    if (media && !media.querySelector('iframe')) media.innerHTML = filmPosterHTML();
+    if (titleEl) titleEl.textContent = s.title;
+    if (subEl && subEl.firstChild && subEl.firstChild.nodeType === 3) subEl.firstChild.nodeValue = s.sub;
+    if (aboutBtn) aboutBtn.style.display = s.type === 'film' ? '' : 'none';
+    if (wrap) wrap.style.display = (s.type === 'film' && pct > 0) ? 'flex' : 'none';
+  }
+
+  function filmSlideTick() {
+    var card = document.querySelector('.film-banner-card');
+    var media = document.getElementById('filmBannerMedia');
+    if (!card || !media) return;
+    if (card.classList.contains('expanded')) return;
+    if (media.querySelector('iframe')) return;
+    if (document.hidden) return;
+
+    var next = (filmSlideIdx + 1) % filmSlides.length;
+    media.style.transition = 'opacity .35s ease';
+    media.style.opacity = '0';
+    setTimeout(function () {
+      applyFilmSlide(next);
+      media.style.opacity = '1';
+    }, 350);
+  }
+
+  setInterval(filmSlideTick, FILM_SLIDE_INTERVAL);
   var shareBtn = document.getElementById('filmShareBtn');
   if (shareBtn) {
     shareBtn.addEventListener('click', function(){
+      var shareSlide = filmSlides[filmSlideIdx];
       var shareData = {
-        title: '992MUZ ХРОНИКИ | Истоки',
-        text: 'Документальный фильм про историю таджикского рэпа',
-        url: 'https://www.youtube.com/watch?v=kbx-Vx4byLo'
+        title: shareSlide.title,
+        text: shareSlide.shareText,
+        url: 'https://www.youtube.com/watch?v=' + shareSlide.ytId
       };
       if (navigator.share) {
         navigator.share(shareData).catch(function(){});

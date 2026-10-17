@@ -1461,29 +1461,87 @@ function edSyncSidebarHeight() {
       new ResizeObserver(edSyncSidebarHeight).observe(edCanvasColEl);
     }
     setTimeout(edSyncSidebarHeight, 50);
+    
+    var edCanvasWrapEl = document.getElementById('wsEditorCanvasWrap');
+    function edFitCanvas() {
+      var fit = document.body.classList.contains('ws-fit') && window.innerWidth > 900;
+      if (!fit || !edCanvasWrapEl) {
+        edCanvas.style.width = '';
+        edCanvas.style.height = '';
+        edUpdateOverlay();
+        return;
+      }
+      var availW = edCanvasWrapEl.clientWidth;
+      var availH = edCanvasWrapEl.clientHeight;
+      if (availW < 10 || availH < 10) return;
+      var k = Math.min(availW / edW, availH / edH);
+      edCanvas.style.width = Math.floor(edW * k) + 'px';
+      edCanvas.style.height = Math.floor(edH * k) + 'px';
+      edUpdateOverlay();
+    }
 
     var edSelOverlay = document.getElementById('wsEditorSelOverlay');
     var edSelDelBtn  = document.getElementById('wsEditorSelDel');
     var edSelDupBtn  = document.getElementById('wsEditorSelDup');
     var edCornerDrag = null;
 
+    function edConfirmDialog(title, message, onOk) {
+      var overlay = document.createElement('div');
+      overlay.className = 'ws-confirm-overlay';
+      overlay.innerHTML =
+        '<div class="ws-confirm-box" role="dialog" aria-modal="true">' +
+          '<div class="ws-confirm-title">' + title + '</div>' +
+          '<div class="ws-confirm-text">' + message + '</div>' +
+          '<div class="ws-confirm-actions">' +
+            '<button type="button" class="ws-btn ws-btn-ghost ws-confirm-cancel">Отмена</button>' +
+            '<button type="button" class="ws-btn ws-btn-primary ws-confirm-ok">Продолжить</button>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      function onKey(e) { if (e.key === 'Escape') closeIt(); }
+      function closeIt() {
+        overlay.remove();
+        document.removeEventListener('keydown', onKey);
+      }
+      document.addEventListener('keydown', onKey);
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) closeIt(); });
+      overlay.querySelector('.ws-confirm-cancel').addEventListener('click', closeIt);
+      overlay.querySelector('.ws-confirm-ok').addEventListener('click', function () { closeIt(); onOk(); });
+    }
+
+    function edApplyFormat(btn) {
+      edFormatBtns.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      edW = parseInt(btn.dataset.w, 10);
+      edH = parseInt(btn.dataset.h, 10);
+       edCanvas.width = edW;
+      edCanvas.height = edH;
+      edFitCanvas();
+      edLayers = [];
+      edSelectedId = null;
+      edRender();
+      edRenderLayerList();
+      edUpdateProps();
+    }
+
     edFormatBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
-        if (edLayers.length && !confirm('Смена формата очистит текущую обложку. Продолжить?')) return;
-        edFormatBtns.forEach(function (b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        edW = parseInt(btn.dataset.w, 10);
-        edH = parseInt(btn.dataset.h, 10);
-        edCanvas.width = edW;
-        edCanvas.height = edH;
-        edLayers = [];
-        edSelectedId = null;
-        edRender();
-        edRenderLayerList();
-        edUpdateProps();
+        if (!edLayers.length) { edApplyFormat(btn); return; }
+        edConfirmDialog('Сменить формат?', 'Текущая обложка будет очищена. Продолжить?', function () { edApplyFormat(btn); });
       });
     });
 
+    (function edPickDefaultFormat() {
+      var isPhone = window.matchMedia('(max-width: 768px)').matches ||
+                    (window.matchMedia('(pointer: coarse)').matches && window.innerWidth <= 1024);
+      var wanted = isPhone ? 'vertical' : 'horizontal';
+      for (var i = 0; i < edFormatBtns.length; i++) {
+        if (edFormatBtns[i].dataset.format === wanted) {
+          edApplyFormat(edFormatBtns[i]);
+          break;
+        }
+      }
+    })();
 function edNewLayerBase() {
       return { id: 'l' + (++edIdSeq), x: edW / 2, y: edH / 2, scale: 1, opacity: 1, brightness: 0, contrastVal: 0, saturation: 0, warmth: 0, sharpen: 0, vignette: 0 };
     }
@@ -1628,14 +1686,45 @@ var edStickerHoldTimer = null;
         container.appendChild(btn);
       });
     }
+    function edPlacePopup(popup, btn) {
+      if (window.innerWidth <= 768) return; // на телефоне работает нижняя шторка из CSS
+      var r = btn.getBoundingClientRect();
+      var w = 280;
+      var spaceBelow = window.innerHeight - r.bottom - 16;
+      var spaceAbove = r.top - 16;
+      var openDown = spaceBelow >= 340 || spaceBelow >= spaceAbove;
+      var maxH = Math.max(160, Math.min(420, openDown ? spaceBelow : spaceAbove));
+      popup.style.position = 'fixed';
+      popup.style.width = w + 'px';
+      popup.style.margin = '0';
+      popup.style.right = 'auto';
+      popup.style.left = Math.min(Math.max(10, r.left), Math.max(10, window.innerWidth - w - 10)) + 'px';
+      if (openDown) {
+        popup.style.top = (r.bottom + 8) + 'px';
+        popup.style.bottom = 'auto';
+      } else {
+        popup.style.bottom = (window.innerHeight - r.top + 8) + 'px';
+        popup.style.top = 'auto';
+      }
+      var scrollEl = popup.querySelector('.ws-editor-sticker-scroll');
+      if (scrollEl) scrollEl.style.maxHeight = maxH + 'px';
+    }
 
+    window.addEventListener('scroll', function () {
+      if (edStickerPopup) edStickerPopup.style.display = 'none';
+      var ep = document.getElementById('wsEditorEffectsPopup');
+      if (ep) ep.style.display = 'none';
+    }, { passive: true });
 var edStickerGridAdvisory  = document.getElementById('wsEditorStickerGridAdvisory');
     var edStickerGridRapiconz  = document.getElementById('wsEditorStickerGridRapiconz');
     var edStickerBuilt = false;
 
     edStickerBtn.addEventListener('click', function () {
       var opening = edStickerPopup.style.display === 'none';
+      var otherPopup = document.getElementById('wsEditorEffectsPopup');
+      if (otherPopup) otherPopup.style.display = 'none';
       edStickerPopup.style.display = opening ? 'block' : 'none';
+      if (opening) edPlacePopup(edStickerPopup, edStickerBtn);
       if (opening && !edStickerBuilt) {
         edBuildStickerGrid(edStickerGridAdvisory, 'advisory', ADVISORY_FILES);
         edBuildStickerGrid(edStickerGridRapiconz, 'rapiconz', RAPICONZ_FILES);
@@ -1696,10 +1785,28 @@ function edSyncEffectButtons() {
 
     if (edEffectsBtn) {
       edEffectsBtn.addEventListener('click', function () {
-        edEffectsPopup.style.display = (edEffectsPopup.style.display === 'none') ? 'block' : 'none';
+        var opening = edEffectsPopup.style.display === 'none';
+        edStickerPopup.style.display = 'none';
+        edEffectsPopup.style.display = opening ? 'block' : 'none';
+        if (opening) edPlacePopup(edEffectsPopup, edEffectsBtn);
         edSyncEffectButtons();
       });
     }
+    document.addEventListener('pointerdown', function (e) {
+      if (edStickerPopup && edStickerPopup.style.display !== 'none' &&
+          !edStickerPopup.contains(e.target) && !(edStickerBtn && edStickerBtn.contains(e.target))) {
+        edStickerPopup.style.display = 'none';
+      }
+      if (edEffectsPopup && edEffectsPopup.style.display !== 'none' &&
+          !edEffectsPopup.contains(e.target) && !(edEffectsBtn && edEffectsBtn.contains(e.target))) {
+        edEffectsPopup.style.display = 'none';
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      if (edStickerPopup) edStickerPopup.style.display = 'none';
+      if (edEffectsPopup) edEffectsPopup.style.display = 'none';
+    });
     function edGetLayer(id) {
       return edLayers.filter(function (l) { return l.id === id; })[0];
     }
@@ -2221,15 +2328,11 @@ var gap = lineHeightPx * (0.55 + 0.65 * t);
       }
       edCtx.restore();
     }
-var edSelOverlay = document.getElementById('wsEditorSelOverlay');
-    var edSelDelBtn  = document.getElementById('wsEditorSelDel');
-    var edSelDupBtn  = document.getElementById('wsEditorSelDup');
-    var edCornerDrag = null;
-
     function edUpdateOverlay() {
       if (!edSelOverlay) return;
       var layer = edGetLayer(edSelectedId);
-      if (!layer) { edSelOverlay.style.display = 'none'; return; }
+      if (typeof edEditBar !== 'undefined' && edEditBar) edEditBar.style.display = layer ? 'flex' : 'none';
+            if (!layer) { edSelOverlay.style.display = 'none'; return; }
       var b = edLayerBounds(layer);
       var canvasRect = edCanvas.getBoundingClientRect();
       var wrapRect = edCanvas.parentElement.getBoundingClientRect();
@@ -2242,19 +2345,24 @@ var edSelOverlay = document.getElementById('wsEditorSelOverlay');
       edSelOverlay.style.top = top + 'px';
       edSelOverlay.style.width = (b.w * scaleX) + 'px';
       edSelOverlay.style.height = (b.h * scaleY) + 'px';
+            edSelOverlay.style.transformOrigin = '50% 50%';
+      edSelOverlay.style.transform = layer.rotation ? 'rotate(' + layer.rotation + 'deg)' : '';
+      edSelOverlay.classList.toggle('is-locked', !!layer.locked);
     }
-
     function edDeleteSelectedLayer() {
+      var edDelTarget = edGetLayer(edSelectedId);
+      if (edDelTarget && edDelTarget.locked) return;
       edLayers = edLayers.filter(function (l) { return l.id !== edSelectedId; });
       edSelectedId = null;
       edRender(); edRenderLayerList(); edUpdateProps();
     }
-
     function edDuplicateSelectedLayer() {
       var layer = edGetLayer(edSelectedId);
       if (!layer) return;
       var copy = Object.assign({}, layer);
       copy.id = 'l' + (++edIdSeq);
+            copy.locked = false;
+      copy.hidden = false;
       copy.x = layer.x + edW * 0.03;
       copy.y = layer.y + edW * 0.03;
       edLayers.push(copy);
@@ -2263,7 +2371,26 @@ var edSelOverlay = document.getElementById('wsEditorSelOverlay');
     }
 
     if (edSelDelBtn) edSelDelBtn.addEventListener('click', function (e) { e.stopPropagation(); edDeleteSelectedLayer(); });
+        var edSelEditBtn = document.getElementById('wsEditorSelEdit');
+    if (edSelEditBtn) edSelEditBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var r = edSelEditBtn.getBoundingClientRect();
+      edOpenCtxMenu(r.left, r.bottom + 8);
+    });
     if (edSelDupBtn) edSelDupBtn.addEventListener('click', function (e) { e.stopPropagation(); edDuplicateSelectedLayer(); });
+        var edToolbarEl = document.querySelector('.ws-editor-toolbar');
+    var edEditBar = document.createElement('button');
+    edEditBar.type = 'button';
+    edEditBar.id = 'wsEditorEditBar';
+    edEditBar.className = 'ws-btn ws-btn-primary';
+    edEditBar.style.cssText = 'display:none;width:100%;justify-content:center;align-items:center;gap:8px;margin-bottom:10px;min-height:46px;';
+    edEditBar.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Редактировать выбранный слой';
+    if (edToolbarEl && edToolbarEl.parentNode) edToolbarEl.parentNode.insertBefore(edEditBar, edToolbarEl);
+    edEditBar.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var r = edEditBar.getBoundingClientRect();
+      edOpenCtxMenu(r.left, r.top);
+    });
 
     document.querySelectorAll('.ws-editor-sel-handle').forEach(function (handle) {
       handle.addEventListener('pointerdown', function (e) {
@@ -2331,7 +2458,9 @@ function edApplySharpen(layer, bounds) {
       edCtx.fillStyle = '#111';
       edCtx.fillRect(0, 0, edW, edH);
 edLayers.forEach(function (layer) {
+        if (layer.hidden) return;
         edCtx.save();
+        edApplyLayerTransform(layer);
         edCtx.globalAlpha = layer.opacity;
         var edB = 1 + (layer.brightness || 0) / 100;
         var edC = 1 + (layer.contrastVal || 0) / 100;
@@ -2348,9 +2477,10 @@ edLayers.forEach(function (layer) {
 
         if (layer.type === 'image') {
           var edBounds = edLayerBounds(layer);
-          if (layer.sharpen) edApplySharpen(layer, edBounds);
-          if (layer.warmth) {
+          if (layer.sharpen && !layer.rotation) edApplySharpen(layer, edBounds);
+           if (layer.warmth) {
             edCtx.save();
+            edApplyLayerTransform(layer);
             edCtx.beginPath();
             edCtx.rect(edBounds.x, edBounds.y, edBounds.w, edBounds.h);
             edCtx.clip();
@@ -2362,6 +2492,7 @@ edLayers.forEach(function (layer) {
           }
           if (layer.vignette) {
             edCtx.save();
+            edApplyLayerTransform(layer);
             edCtx.beginPath();
             edCtx.rect(edBounds.x, edBounds.y, edBounds.w, edBounds.h);
             edCtx.clip();
@@ -2379,14 +2510,12 @@ edLayers.forEach(function (layer) {
 if (layer.id === edSelectedId) {
           var b = edLayerBounds(layer);
           edCtx.save();
-          edCtx.strokeStyle = '#e8a33d';
-          edCtx.lineWidth = Math.max(2, edW * 0.003);
-          edCtx.setLineDash([edW * 0.012, edW * 0.008]);
-          edCtx.strokeRect(b.x, b.y, b.w, b.h);
+          // рамка выделения теперь рисуется через CSS (.ws-editor-sel-overlay)
           edCtx.restore();
         }
       });
       edUpdateOverlay();
+      edHistorySchedule();
     }
 var edLayerDrag = null;
 
@@ -2397,11 +2526,27 @@ var edLayerDrag = null;
           var row = document.createElement('div');
           row.className = 'ws-editor-layer-row' + (layer.id === edSelectedId ? ' active' : '');
           row.dataset.layerId = layer.id;
-          var label = layer.type === 'image' ? '🖼 Фото' : layer.text;
+          var label = layer.type === 'image' ? '🖼 Фото' : String(layer.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
           row.innerHTML =
             '<span class="ws-editor-layer-handle"><span></span><span></span><span></span></span>' +
             '<span>' + label + '</span>';
 
+          var thumb = document.createElement('div');
+          thumb.className = 'ws-editor-layer-thumb';
+          if (layer.type === 'image') {
+            var thumbImg = document.createElement('img');
+            thumbImg.src = layer.img.src;
+            thumbImg.alt = '';
+            thumbImg.draggable = false;
+            thumb.appendChild(thumbImg);
+          } else {
+            var thumbTxt = document.createElement('span');
+            thumbTxt.textContent = 'Аа';
+            thumbTxt.style.fontFamily = layer.font;
+            thumbTxt.style.color = layer.color;
+            thumb.appendChild(thumbTxt);
+          }
+          row.insertBefore(thumb, row.firstChild);
           row.addEventListener('click', function (e) {
             if (edLayerDrag && edLayerDrag.moved) return;
             edSelectedId = layer.id;
@@ -2409,7 +2554,27 @@ var edLayerDrag = null;
             edRenderLayerList();
             edUpdateProps();
           });
-
+          if (layer.hidden) row.classList.add('is-hidden');
+          if (layer.locked) row.classList.add('is-locked');
+          var actions = document.createElement('div');
+          actions.className = 'ws-editor-layer-actions';
+          actions.appendChild(edMakeLayerBtn(
+            layer.hidden ? 'Показать слой' : 'Скрыть слой',
+            layer.hidden ? ED_ICON_EYE_OFF : ED_ICON_EYE,
+            !!layer.hidden, '',
+            function () { layer.hidden = !layer.hidden; edRender(); edRenderLayerList(); }
+          ));
+          actions.appendChild(edMakeLayerBtn(
+            layer.locked ? 'Разблокировать слой' : 'Заблокировать слой',
+            layer.locked ? ED_ICON_LOCK : ED_ICON_UNLOCK,
+            !!layer.locked, '',
+            function () { layer.locked = !layer.locked; edRender(); edRenderLayerList(); }
+          ));
+          actions.appendChild(edMakeLayerBtn(
+            'Удалить слой', ED_ICON_TRASH, false, 'danger',
+            function () { edDeleteLayerById(layer.id); }
+          ));
+          row.appendChild(actions);
           var handle = row.querySelector('.ws-editor-layer-handle');
           handle.addEventListener('pointerdown', function (e) {
             e.preventDefault(); e.stopPropagation();
@@ -2598,6 +2763,7 @@ edVignetteRange.value = layer.vignette || 0;
       if (edFloorTiltValueEl) edFloorTiltValueEl.value = edFloorTiltRange.value;
       edWallTiltRange.value = layer.perspectiveWall || 0;
       if (edWallTiltValueEl) edWallTiltValueEl.value = edWallTiltRange.value;
+            edSyncXformControls(layer);
     }
     function edUpdateProps() {
       var layer = edGetLayer(edSelectedId);
@@ -2878,8 +3044,17 @@ function edCanvasPoint(clientX, clientY) {
 
     function edHitTest(pt) {
       for (var i = edLayers.length - 1; i >= 0; i--) {
-        var b = edLayerBounds(edLayers[i]);
-        if (pt.x >= b.x && pt.x <= b.x + b.w && pt.y >= b.y && pt.y <= b.y + b.h) return edLayers[i];
+        var l = edLayers[i];
+        if (l.hidden || l.locked) continue;
+        var b = edLayerBounds(l);
+        var px = pt.x, py = pt.y;
+        if (l.rotation) {
+          var a = -l.rotation * Math.PI / 180;
+          var ddx = pt.x - l.x, ddy = pt.y - l.y;
+          px = l.x + ddx * Math.cos(a) - ddy * Math.sin(a);
+          py = l.y + ddx * Math.sin(a) + ddy * Math.cos(a);
+        }
+        if (px >= b.x && px <= b.x + b.w && py >= b.y && py <= b.y + b.h) return l;
       }
       return null;
     }
@@ -2967,6 +3142,480 @@ var edRenderPending = false;
     edExportPng.addEventListener('click', function () { edExport('png'); });
     edExportJpg.addEventListener('click', function () { edExport('jpg'); });
 
+    // ===== ПРО-ФУНКЦИИ РЕДАКТОРА: история, горячие клавиши, слои, поворот, автосохранение =====
+    var ED_ICON_EYE = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
+    var ED_ICON_EYE_OFF = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 5.2A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1"/><path d="M6.6 6.6C3.7 8.4 2 12 2 12s3.5 7 10 7a9.7 9.7 0 0 0 4.4-1"/><path d="M14.1 14.1A3 3 0 0 1 9.9 9.9"/><path d="m2 2 20 20"/></svg>';
+    var ED_ICON_LOCK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+    var ED_ICON_UNLOCK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg>';
+    var ED_ICON_TRASH = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>';
+
+    function edMakeLayerBtn(title, iconSvg, isOn, extraClass, onClick) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ws-editor-layer-act' + (isOn ? ' on' : '') + (extraClass ? ' ' + extraClass : '');
+      btn.title = title;
+      btn.setAttribute('aria-label', title);
+      btn.innerHTML = iconSvg;
+      btn.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
+      btn.addEventListener('click', function (e) { e.stopPropagation(); onClick(); });
+      return btn;
+    }
+
+    function edDeleteLayerById(id) {
+      var target = edGetLayer(id);
+      if (!target || target.locked) return;
+      edLayers = edLayers.filter(function (l) { return l.id !== id; });
+      if (edSelectedId === id) edSelectedId = null;
+      edRender(); edRenderLayerList(); edUpdateProps();
+    }
+
+    function edApplyLayerTransform(layer) {
+      if (!layer.rotation && !layer.flipX && !layer.flipY) return;
+      edCtx.translate(layer.x, layer.y);
+      if (layer.rotation) edCtx.rotate(layer.rotation * Math.PI / 180);
+      edCtx.scale(layer.flipX ? -1 : 1, layer.flipY ? -1 : 1);
+      edCtx.translate(-layer.x, -layer.y);
+    }
+
+    function edNormAngle(a) {
+      return ((Math.round(a) % 360) + 540) % 360 - 180;
+    }
+
+    function edToast(msg) {
+      var t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:rgba(28,28,30,0.95);color:#fff;padding:10px 16px;border-radius:12px;font-size:13px;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,0.4);pointer-events:none;';
+      document.body.appendChild(t);
+      setTimeout(function () { t.remove(); }, 2600);
+    }
+
+    // ----- поворот и отражение -----
+    var edRotationRange   = document.getElementById('wsEditorRotationRange');
+    var edRotationValueEl = document.getElementById('wsEditorRotationValue');
+    var edRotLeftBtn      = document.getElementById('wsEditorRotLeftBtn');
+    var edRotRightBtn     = document.getElementById('wsEditorRotRightBtn');
+    var edFlipXBtn        = document.getElementById('wsEditorFlipXBtn');
+    var edFlipYBtn        = document.getElementById('wsEditorFlipYBtn');
+
+    function edSyncXformControls(layer) {
+      if (!edRotationRange) return;
+      edRotationRange.value = layer.rotation || 0;
+      if (edRotationValueEl) edRotationValueEl.value = layer.rotation || 0;
+      if (edFlipXBtn) edFlipXBtn.classList.toggle('active', !!layer.flipX);
+      if (edFlipYBtn) edFlipYBtn.classList.toggle('active', !!layer.flipY);
+    }
+
+    if (edRotationRange) {
+      edBindLayerSlider(edRotationRange, edRotationValueEl, 'rotation', -180, 180);
+      edRotLeftBtn.addEventListener('click', function () {
+        var layer = edGetLayer(edSelectedId);
+        if (!layer) return;
+        layer.rotation = edNormAngle((layer.rotation || 0) - 90);
+        edSyncXformControls(layer); edRender();
+      });
+      edRotRightBtn.addEventListener('click', function () {
+        var layer = edGetLayer(edSelectedId);
+        if (!layer) return;
+        layer.rotation = edNormAngle((layer.rotation || 0) + 90);
+        edSyncXformControls(layer); edRender();
+      });
+      edFlipXBtn.addEventListener('click', function () {
+        var layer = edGetLayer(edSelectedId);
+        if (!layer) return;
+        layer.flipX = !layer.flipX;
+        edSyncXformControls(layer); edRender();
+      });
+      edFlipYBtn.addEventListener('click', function () {
+        var layer = edGetLayer(edSelectedId);
+        if (!layer) return;
+        layer.flipY = !layer.flipY;
+        edSyncXformControls(layer); edRender();
+      });
+    }
+
+    // ----- история (Undo / Redo) -----
+    var edHistStack = [];
+    var edHistIdx = -1;
+    var edHistTimer = null;
+    var edHistReady = false;
+    var edHistLock = false;
+    var edImgSeq = 0;
+    var ED_HIST_MAX = 80;
+    var edUndoBtn = document.getElementById('wsEditorUndoBtn');
+    var edRedoBtn = document.getElementById('wsEditorRedoBtn');
+
+    function edLayerReplacer(key, value) {
+      if (key === '_pCache') return undefined;
+      if (key === 'img' && value) {
+        if (!value.__edid) value.__edid = ++edImgSeq;
+        return value.__edid;
+      }
+      return value;
+    }
+
+    function edHistSig() {
+      return JSON.stringify({ w: edW, h: edH, layers: edLayers }, edLayerReplacer);
+    }
+
+    function edHistSnapshot() {
+      return {
+        sig: edHistSig(),
+        w: edW,
+        h: edH,
+        layers: edLayers.map(function (l) {
+          var c = Object.assign({}, l);
+          delete c._pCache;
+          return c;
+        })
+      };
+    }
+
+    function edHistUpdateButtons() {
+      if (edUndoBtn) edUndoBtn.disabled = edHistIdx <= 0;
+      if (edRedoBtn) edRedoBtn.disabled = edHistIdx >= edHistStack.length - 1;
+    }
+
+    function edHistoryCommit() {
+      if (edHistTimer) { clearTimeout(edHistTimer); edHistTimer = null; }
+      if (!edHistReady || edHistLock) return;
+      var cur = edHistStack[edHistIdx];
+      if (cur && cur.sig === edHistSig()) return;
+      edHistStack.length = edHistIdx + 1;
+      edHistStack.push(edHistSnapshot());
+      if (edHistStack.length > ED_HIST_MAX) edHistStack.shift();
+      edHistIdx = edHistStack.length - 1;
+      edHistUpdateButtons();
+      edAutosaveSchedule();
+    }
+
+    function edHistorySchedule() {
+      if (!edHistReady || edHistLock) return;
+      if (edHistTimer) clearTimeout(edHistTimer);
+      edHistTimer = setTimeout(edHistoryCommit, 350);
+    }
+
+    function edHistRestore(snap) {
+      edHistLock = true;
+      if (snap.w !== edW || snap.h !== edH) {
+        edW = snap.w;
+        edH = snap.h;
+        edCanvas.width = edW;
+        edCanvas.height = edH;
+        edFormatBtns.forEach(function (b) {
+          b.classList.toggle('active', parseInt(b.dataset.w, 10) === edW && parseInt(b.dataset.h, 10) === edH);
+        });
+        edFitCanvas();
+      }
+      edLayers = snap.layers.map(function (l) { return Object.assign({}, l); });
+      if (!edGetLayer(edSelectedId)) edSelectedId = null;
+      edRender(); edRenderLayerList(); edUpdateProps();
+      edHistLock = false;
+    }
+
+    function edUndo() {
+      edHistoryCommit();
+      if (edHistIdx <= 0) return;
+      edHistIdx--;
+      edHistRestore(edHistStack[edHistIdx]);
+      edHistUpdateButtons();
+      edAutosaveSchedule();
+    }
+
+    function edRedo() {
+      edHistoryCommit();
+      if (edHistIdx >= edHistStack.length - 1) return;
+      edHistIdx++;
+      edHistRestore(edHistStack[edHistIdx]);
+      edHistUpdateButtons();
+      edAutosaveSchedule();
+    }
+
+    function edHistReset() {
+      edHistStack = [edHistSnapshot()];
+      edHistIdx = 0;
+      edHistUpdateButtons();
+    }
+
+    if (edUndoBtn) edUndoBtn.addEventListener('click', edUndo);
+    if (edRedoBtn) edRedoBtn.addEventListener('click', edRedo);
+
+    // ----- горячие клавиши -----
+    function edIsTypingTarget(t) {
+      if (!t) return false;
+      var tag = (t.tagName || '').toLowerCase();
+      return tag === 'input' || tag === 'textarea' || tag === 'select' || !!t.isContentEditable;
+    }
+
+    function edEditorActive() {
+      return !!edCanvas.offsetParent && !document.querySelector('.ws-confirm-overlay');
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (!edEditorActive() || edIsTypingTarget(e.target)) return;
+      var mod = e.ctrlKey || e.metaKey;
+
+      if (mod && e.code === 'KeyZ') { e.preventDefault(); if (e.shiftKey) edRedo(); else edUndo(); return; }
+      if (mod && e.code === 'KeyY') { e.preventDefault(); edRedo(); return; }
+      if (mod && e.code === 'KeyD') {
+        e.preventDefault();
+        if (edGetLayer(edSelectedId)) edDuplicateSelectedLayer();
+        return;
+      }
+      if (mod || e.altKey) return;
+
+      var layer = edGetLayer(edSelectedId);
+      if (!layer) return;
+
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        e.preventDefault();
+        edDeleteSelectedLayer();
+        return;
+      }
+
+      var step = e.shiftKey ? 10 : 1;
+      var dx = 0, dy = 0;
+      if (e.key === 'ArrowLeft') dx = -step;
+      else if (e.key === 'ArrowRight') dx = step;
+      else if (e.key === 'ArrowUp') dy = -step;
+      else if (e.key === 'ArrowDown') dy = step;
+      if (dx || dy) {
+        e.preventDefault();
+        if (layer.locked || layer.hidden) return;
+        layer.x += dx;
+        layer.y += dy;
+        edRender();
+        return;
+      }
+
+      if (e.code === 'BracketRight' || e.code === 'BracketLeft') {
+        e.preventDefault();
+        var from = edLayers.indexOf(layer);
+        var to = from + (e.code === 'BracketRight' ? 1 : -1);
+        if (to < 0 || to >= edLayers.length) return;
+        edLayers.splice(from, 1);
+        edLayers.splice(to, 0, layer);
+        edRender(); edRenderLayerList();
+      }
+    });
+
+    // ----- вставка из буфера обмена (Ctrl+V) -----
+    document.addEventListener('paste', function (e) {
+      if (!edEditorActive() || edIsTypingTarget(e.target)) return;
+      var cd = e.clipboardData;
+      if (!cd) return;
+      var items = cd.items || [];
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].kind === 'file' && items[i].type.indexOf('image/') === 0) {
+          var file = items[i].getAsFile();
+          if (file) {
+            e.preventDefault();
+            edAddImageLayer(file, !edLayers.length);
+            return;
+          }
+        }
+      }
+      var txt = cd.getData('text/plain');
+      if (txt && txt.trim()) {
+        e.preventDefault();
+        edAddTextLayer(txt.trim().slice(0, 200), 0.08);
+      }
+    });
+
+    // ----- масштаб колесом мыши -----
+    edCanvas.addEventListener('wheel', function (e) {
+      var layer = edGetLayer(edSelectedId);
+      if (!layer || layer.locked || layer.hidden) return;
+      if (edHitTest(edCanvasPoint(e.clientX, e.clientY)) !== layer) return;
+      e.preventDefault();
+      var dy = e.deltaY * (e.deltaMode === 1 ? 33 : 1);
+      layer.scale = Math.max(0.05, Math.min(6, layer.scale * Math.exp(-dy * 0.0015)));
+      edRenderThrottled();
+      edUpdateProps();
+    }, { passive: false });
+
+    // ----- масштаб и поворот двумя пальцами -----
+    var edPtrs = {};
+    var edPinch = null;
+    var edPinchTarget = null;
+
+    edCanvas.addEventListener('pointerdown', function (e) {
+      edPtrs[e.pointerId] = { x: e.clientX, y: e.clientY };
+      var ids = Object.keys(edPtrs);
+      if (ids.length === 1) {
+        var firstHit = edHitTest(edCanvasPoint(e.clientX, e.clientY));
+        edPinchTarget = firstHit ? firstHit.id : edSelectedId;
+      }
+    }, true);
+
+    edCanvas.addEventListener('pointerdown', function (e) {
+      var ids = Object.keys(edPtrs);
+      if (ids.length !== 2 || !edPinchTarget) return;
+      var layer = edGetLayer(edPinchTarget);
+      if (!layer || layer.locked || layer.hidden) return;
+      if (edCanvasHoldTimer) { clearTimeout(edCanvasHoldTimer); edCanvasHoldTimer = null; }
+      edDrag = null;
+      if (edSelectedId !== layer.id) {
+        edSelectedId = layer.id;
+        edRender(); edRenderLayerList(); edUpdateProps();
+      }
+      var a = edPtrs[ids[0]], b = edPtrs[ids[1]];
+      edPinch = {
+        layer: layer,
+        dist: Math.max(1, Math.hypot(b.x - a.x, b.y - a.y)),
+        ang: Math.atan2(b.y - a.y, b.x - a.x),
+        scale: layer.scale,
+        rot: layer.rotation || 0
+      };
+    });
+
+    edCanvas.addEventListener('pointermove', function (e) {
+      if (edPtrs[e.pointerId]) { edPtrs[e.pointerId].x = e.clientX; edPtrs[e.pointerId].y = e.clientY; }
+      if (!edPinch) return;
+      var ids = Object.keys(edPtrs);
+      if (ids.length < 2) return;
+      e.preventDefault();
+      var a = edPtrs[ids[0]], b = edPtrs[ids[1]];
+      var d = Math.max(1, Math.hypot(b.x - a.x, b.y - a.y));
+      var ang = Math.atan2(b.y - a.y, b.x - a.x);
+      edPinch.layer.scale = Math.max(0.05, Math.min(6, edPinch.scale * d / edPinch.dist));
+      edPinch.layer.rotation = edNormAngle(edPinch.rot + (ang - edPinch.ang) * 180 / Math.PI);
+      edRenderThrottled();
+      edUpdateProps();
+    });
+
+    function edPtrEnd(e) {
+      delete edPtrs[e.pointerId];
+      if (Object.keys(edPtrs).length < 2) edPinch = null;
+    }
+    edCanvas.addEventListener('pointerup', edPtrEnd);
+    edCanvas.addEventListener('pointercancel', edPtrEnd);
+
+    // ----- автосохранение проекта (IndexedDB) -----
+    var ED_DB_NAME = 'ws-editor';
+    var ED_DB_STORE = 'kv';
+    var ED_DB_KEY = 'project';
+    var edAutosaveEnabled = false;
+    var edAutosaveTimer = null;
+
+    function edDbOpen() {
+      return new Promise(function (resolve, reject) {
+        if (!window.indexedDB) { reject(new Error('IndexedDB недоступна')); return; }
+        var req = indexedDB.open(ED_DB_NAME, 1);
+        req.onupgradeneeded = function () { req.result.createObjectStore(ED_DB_STORE); };
+        req.onsuccess = function () { resolve(req.result); };
+        req.onerror = function () { reject(req.error); };
+      });
+    }
+
+    function edDbGet(key) {
+      return edDbOpen().then(function (db) {
+        return new Promise(function (resolve, reject) {
+          var r = db.transaction(ED_DB_STORE, 'readonly').objectStore(ED_DB_STORE).get(key);
+          r.onsuccess = function () { resolve(r.result); };
+          r.onerror = function () { reject(r.error); };
+        });
+      });
+    }
+
+    function edDbSet(key, value) {
+      return edDbOpen().then(function (db) {
+        return new Promise(function (resolve, reject) {
+          var tx = db.transaction(ED_DB_STORE, 'readwrite');
+          tx.objectStore(ED_DB_STORE).put(value, key);
+          tx.oncomplete = function () { resolve(); };
+          tx.onerror = function () { reject(tx.error); };
+        });
+      });
+    }
+
+    function edProjectData() {
+      return {
+        v: 1,
+        w: edW,
+        h: edH,
+        seq: edIdSeq,
+        layers: edLayers.map(function (l) {
+          var c = {};
+          Object.keys(l).forEach(function (k) {
+            if (k === 'img' || k === '_pCache') return;
+            c[k] = l[k];
+          });
+          if (l.type === 'image' && l.img) c._src = l.img.src;
+          return c;
+        })
+      };
+    }
+
+    function edAutosaveNow() {
+      if (!edAutosaveEnabled) return;
+      if (edAutosaveTimer) { clearTimeout(edAutosaveTimer); edAutosaveTimer = null; }
+      edDbSet(ED_DB_KEY, edProjectData()).catch(function () {});
+    }
+
+    function edAutosaveSchedule() {
+      if (!edAutosaveEnabled) return;
+      if (edAutosaveTimer) clearTimeout(edAutosaveTimer);
+      edAutosaveTimer = setTimeout(edAutosaveNow, 800);
+    }
+
+    function edAutosaveRestore() {
+      return edDbGet(ED_DB_KEY).then(function (data) {
+        if (!data || !data.layers || !data.layers.length) return false;
+        return Promise.all(data.layers.map(function (d) {
+          return new Promise(function (resolve) {
+            if (d.type !== 'image') { resolve(d); return; }
+            var img = new Image();
+            if (d._src && d._src.indexOf('data:') !== 0) img.crossOrigin = 'anonymous';
+            img.onload = function () { d.img = img; resolve(d); };
+            img.onerror = function () { resolve(null); };
+            img.src = d._src;
+          });
+        })).then(function (layers) {
+          layers = layers.filter(Boolean);
+          if (!layers.length) return false;
+          var maxId = data.seq || 0;
+          layers.forEach(function (l) {
+            delete l._src;
+            var n = parseInt(String(l.id).replace(/\D/g, ''), 10);
+            if (n > maxId) maxId = n;
+          });
+          edHistLock = true;
+          edW = data.w;
+          edH = data.h;
+          edCanvas.width = edW;
+          edCanvas.height = edH;
+          edFormatBtns.forEach(function (b) {
+            b.classList.toggle('active', parseInt(b.dataset.w, 10) === edW && parseInt(b.dataset.h, 10) === edH);
+          });
+          edFitCanvas();
+          edLayers = layers;
+          edIdSeq = maxId;
+          edSelectedId = null;
+          edRender(); edRenderLayerList(); edUpdateProps();
+          edHistLock = false;
+          edHistReset();
+          if (document.fonts && document.fonts.load) {
+            layers.forEach(function (l) {
+              if (l.type === 'text' && l.font) document.fonts.load('40px ' + l.font).then(edRender).catch(function () {});
+            });
+          }
+          return true;
+        });
+      });
+    }
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden') { edHistoryCommit(); edAutosaveNow(); }
+    });
+    window.addEventListener('pagehide', function () { edHistoryCommit(); edAutosaveNow(); });
+
+    edHistReset();
+    edHistReady = true;
+    edAutosaveRestore().then(function (restored) {
+      if (restored) edToast('Проект восстановлен');
+    }).catch(function () {}).then(function () {
+      edAutosaveEnabled = true;
+    });
 function edEnhanceColorInput(input) {
       if (!input || input.dataset.enhanced) return;
       input.dataset.enhanced = '1';
@@ -3165,5 +3814,11 @@ function edEnhanceColorInput(input) {
     });
 
     edRender();
+    edFitCanvas();
+    setTimeout(edFitCanvas, 80);
+    window.addEventListener('resize', edFitCanvas);
+    if (window.ResizeObserver && edCanvasWrapEl) {
+      new ResizeObserver(edFitCanvas).observe(edCanvasWrapEl);
+    }
   }
 })();
