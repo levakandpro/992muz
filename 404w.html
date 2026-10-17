@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<script>try{var d=document.documentElement,t=localStorage.getItem('tl_theme');if(t&&t!=='default')d.setAttribute('data-theme',t);if(localStorage.getItem('tl_anim')==='0')d.setAttribute('data-anim','off')}catch(e){}</script>
+<title>404 — 992women</title>
+<link rel="icon" href="/assets/992w/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/pages/talents.css">
+<style>
+.nf {
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: calc(24px + env(safe-area-inset-top, 0px)) 24px calc(24px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.nf-gif {
+  display: block;
+  width: 150px;
+  height: auto;
+  margin-bottom: 8px;
+}
+.nf-title {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.nf-text {
+  margin: 0 0 22px;
+  color: var(--tl-muted);
+  font-size: 15px;
+  font-weight: 500;
+}
+.nf-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 280px;
+}
+.nf-actions a {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+<main class="nf">
+<img class="nf-gif" src="/assets/992w/404%20error.%20oops%20page%20not%20found.gif" alt="404" width="150" height="150">
+  <h1 class="nf-title" id="nfTitle">Страница не найдена</h1>
+  <p class="nf-text" id="nfText">Такой страницы нет или она переехала.</p>
+  <div class="nf-actions">
+    <a class="tl-btn-main" id="nfHome" href="/">На главную</a>
+    <a class="tl-btn-ghost" id="nfList" href="/talents.html">Смотреть анкеты</a>
+  </div>
+</main>
+
+<script src="/js/shared/site.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = {
+    ru: { title: 'Страница не найдена', text: 'Такой страницы нет или она переехала.', home: 'На главную', list: 'Смотреть анкеты' },
+    en: { title: 'Page not found', text: 'This page does not exist or has moved.', home: 'Go home', list: 'Browse profiles' },
+    tj: { title: 'Саҳифа ёфт нашуд', text: 'Чунин саҳифа вуҷуд надорад ё кӯчонида шудааст.', home: 'Ба саҳифаи асосӣ', list: 'Дидани анкетаҳо' }
+  };
+  function apply(code) {
+    var d = T[code] || T.ru;
+    document.getElementById('nfTitle').textContent = d.title;
+    document.getElementById('nfText').textContent = d.text;
+    document.getElementById('nfHome').textContent = d.home;
+    document.getElementById('nfList').textContent = d.list;
+  }
+  apply(window.TLSite ? window.TLSite.lang() : 'ru');
+  document.addEventListener('tl:lang', function (e) { apply(e.detail); });
+})();
+</script>
+</body>
+</html>

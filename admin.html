@@ -158,6 +158,7 @@ select.btn{padding:5px 8px}
       <a href="#" onclick="show('tracks',this)">🎵 Треки</a>
       <a href="#" onclick="show('videos',this)">🎬 Видео</a>
       <a href="#" onclick="show('artists',this)">🎤 Артисты</a>
+            <a href="#" onclick="show('talents',this)">👩 992W Девушки</a>
       <a href="#" onclick="show('questions',this)">❓ Вопросы</a>
       <a href="#" onclick="show('messages',this)">📢 Сообщения</a>
       <a href="#" onclick="show('rules',this)">📋 Правила</a>
@@ -462,7 +463,81 @@ select.btn{padding:5px 8px}
         <tbody id="artistsBody"></tbody>
       </table>
     </div>
+<!-- 992W: ДЕВУШКИ -->
+    <div class="section" id="sec-talents">
+      <h1 id="talentFormTitle">Добавить анкету (992W)</h1>
+      <div id="talentMsg" class="msg"></div>
+      <input type="hidden" id="tlId">
+      <input type="hidden" id="tlPhotoUrl">
+      <div class="form-row">
+        <div class="field"><label>Имя</label><input id="tlName" placeholder="Имя"></div>
+        <div class="field"><label>Кто она</label><select id="tlRole"></select></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Страна</label><select id="tlCountry" onchange="tlCountryChange()"></select></div>
+        <div class="field"><label>Город</label>
+          <select id="tlCitySelect"></select>
+          <input id="tlCityText" placeholder="Город (например, Москва)" style="display:none">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Описание (bio)</label><textarea id="tlBio" rows="3" style="width:100%;resize:vertical"></textarea></div>
+      </div>
+      <div class="form-row">
+               <div class="field"><label>Ссылки на соцсети (каждая с новой строки, необязательно)</label><textarea id="tlLink" rows="3" placeholder="https://instagram.com/...&#10;https://t.me/...&#10;https://tiktok.com/@..." style="width:100%;resize:vertical"></textarea></div>
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer">
+         <input type="checkbox" id="tlVerified" style="accent-color:#c0392b;width:14px;height:14px"> Проверена (галочка)
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer">
+        <input type="checkbox" id="tlTop" style="accent-color:#c0392b;width:14px;height:14px"> 👑 Топовая (бейдж на карточке)
+      </label>
+      <div class="form-row">
+        <div class="field"><label>Ссылка на YouTube (необязательно, на карточке появится иконка)</label><input id="tlYoutube" placeholder="https://youtube.com/@..."></div>
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer">
+        <input type="checkbox" id="tlHidden" style="accent-color:#c0392b;width:14px;height:14px"> Скрыть с сайта
+      </label>
+            <div class="form-row">
+        <div class="field"><label>Тариф</label>
+          <select id="tlTariff" onchange="tlTariffChange()">
+            <option value="free">Free — 0 TJS</option>
+            <option value="pro">Pro — 80 TJS / месяц</option>
+            <option value="premium">Premium — 500 TJS / год</option>
+          </select>
+        </div>
+        <div class="field" id="tlMonthsWrap"><label>Срок / продлить на</label>
+          <select id="tlMonths" onchange="tlRecalcUntil()">
+            <option value="1">1 месяц</option>
+            <option value="2">2 месяца</option>
+            <option value="3">3 месяца</option>
+            <option value="6">6 месяцев</option>
+            <option value="12">12 месяцев</option>
+          </select>
+        </div>
+        <div class="field" id="tlUntilWrap"><label>Действует до</label><input type="date" id="tlUntil" oninput="tlUpdateInfo()"></div>
+      </div>
+      <div id="tlTariffInfo" style="color:#888;font-size:12px;margin-bottom:12px;"></div>
+           <div class="upload-area" id="tlDrop" onclick="document.getElementById('tlPhotoFile').click()" style="max-width:220px">
+        <img id="tlPhotoPreview" class="avatar-preview" style="margin:0 auto 8px;border-radius:8px;width:90px;height:120px">
+        <div id="tlPhotoLabel">📷 Фото анкеты</div>
+              <input type="file" id="tlPhotoFile" accept="image/*,.jfif" onchange="previewTalentPhoto(this)">
+      </div>
+          <div class="form-row">
+        <div class="field"><label>или ссылка на фото (прямая, правый клик по фото → «Копировать адрес изображения»)</label><input id="tlPhotoLink" placeholder="https://..." oninput="previewTalentLink(this.value)"></div>
+      </div>
+      <br>
+            <div class="progress-bar"><div class="progress-fill" id="tlProgress"></div></div>
+      <br>
+      <button class="btn btn-red" onclick="saveTalent()">💾 Сохранить анкету</button>
+      <button class="btn btn-gray" onclick="resetTalentForm()">Очистить форму</button>
+            <button class="btn btn-yellow" onclick="publishTalentsNow()">🌐 Опубликовать на сайт</button>
 
+      <h1 style="margin-top:28px">Все анкеты <span id="talentCount" style="color:#555;font-size:12px;font-weight:400"></span></h1>
+           <table><thead><tr><th>Фото</th><th>Имя</th><th>Кто</th><th>Где</th><th>Тариф</th><th>Проверена</th><th>На сайте</th><th></th></tr></thead>
+        <tbody id="talentsBody"></tbody>
+      </table>
+    </div>
 <!-- СТИЛИЗОВАННЫЕ CONFIRM / ALERT / PROMPT -->
 <div id="uiConfirmModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;align-items:center;justify-content:center;padding:16px;">
   <div style="background:#181818;border:1px solid #2a2a2a;border-radius:14px;padding:22px;width:100%;max-width:380px;">
@@ -663,6 +738,7 @@ loadTracks();
     loadAdminMessages();
     loadUsersForSelect();
     loadRules();
+        loadTalents().then(tlExpireTariffs);
     loadLogs();
     loadBlockCollections();
   }
@@ -1477,6 +1553,418 @@ const verified = document.getElementById('cfVerified').checked;
   document.getElementById('cardFormModal').style.display = 'none';
   loadArtists();
 };
+// ─── 992W: ДЕВУШКИ ───
+const TL_ROLES = {
+  singer:'Певица', poet:'Поэтесса', blogger:'Блогер', videocreator:'Видеокреатор',
+  influencer:'Инфлюенсер', personalblog:'Личный блог', model:'Модель', dancer:'Танцовщица',
+  actress:'Актриса', host:'Ведущая', comic:'Комик', artist:'Художница',
+  photographer:'Фотограф', talent:'Талант', makeup:'Визажист', stylist:'Стилист',
+  seamstress:'Швея', fitness:'Фитнес-тренер', athlete:'Спортсменка',
+  entrepreneur:'Предпринимательница', businesswoman:'Бизнесменка', brand:'Свой бренд',
+  teacher:'Учительница', cook:'Кулинарка', housewife:'Домохозяйка', mom:'Мама'
+};
+const TL_GROUPS = [
+  { title:'Музыка и слово', roles:['singer','poet'] },
+  { title:'Блог и медиа', roles:['blogger','videocreator','influencer','personalblog'] },
+  { title:'Сцена и экран', roles:['model','dancer','actress','host','comic'] },
+  { title:'Творчество', roles:['artist','photographer','talent'] },
+  { title:'Красота и стиль', roles:['makeup','stylist','seamstress'] },
+  { title:'Спорт', roles:['fitness','athlete'] },
+  { title:'Бизнес', roles:['entrepreneur','businesswoman','brand'] },
+  { title:'Дом и работа', roles:['teacher','cook','housewife','mom'] }
+];
+const TL_TJ_CITIES = [
+  'Душанбе','Худжанд','Бохтар','Куляб','Истаравшан','Исфара',
+  'Пенджикент','Турсунзода','Вахдат','Гиссар','Нурек','Канибадам',
+  'Бустон','Гафуров','Рогун','Хорог','Яван','Дангара',
+  'Шахритус','Сарбанд','Файзабад','Пяндж','Зафарабад','Айни','Гулистон'
+];
+const TL_COUNTRIES = { tj:'Таджикистан', ru:'Россия', uz:'Узбекистан', kz:'Казахстан', kg:'Киргизия' };
+let _tlCache = [];
+
+function tlInitForm() {
+  document.getElementById('tlRole').innerHTML = TL_GROUPS.map(g =>
+    `<optgroup label="${g.title}">${g.roles.map(k => `<option value="${k}">${TL_ROLES[k]}</option>`).join('')}</optgroup>`
+  ).join('');
+  document.getElementById('tlCountry').innerHTML = Object.keys(TL_COUNTRIES).map(k =>
+    `<option value="${k}">${TL_COUNTRIES[k]}</option>`
+  ).join('');
+  document.getElementById('tlCitySelect').innerHTML = TL_TJ_CITIES.map(c =>
+    `<option value="${c}">${c}</option>`
+  ).join('');
+  tlCountryChange();
+}
+
+window.tlCountryChange = () => {
+  const isTj = document.getElementById('tlCountry').value === 'tj';
+  document.getElementById('tlCitySelect').style.display = isTj ? '' : 'none';
+  document.getElementById('tlCityText').style.display = isTj ? 'none' : '';
+};
+
+window.previewTalentPhoto = (inp) => {
+  const f = inp.files[0]; if (!f) return;
+  const p = document.getElementById('tlPhotoPreview');
+  p.src = URL.createObjectURL(f); p.style.display = 'block';
+  document.getElementById('tlPhotoLabel').textContent = f.name;
+};
+window.previewTalentLink = (url) => {
+  const p = document.getElementById('tlPhotoPreview');
+  url = (url || '').trim();
+  if (!url) { p.style.display = 'none'; return; }
+  p.referrerPolicy = 'no-referrer';
+  p.src = url;
+  p.style.display = 'block';
+};
+window.resetTalentForm = () => {
+  document.getElementById('tlId').value = '';
+  document.getElementById('tlPhotoUrl').value = '';
+  document.getElementById('tlName').value = '';
+  document.getElementById('tlBio').value = '';
+  document.getElementById('tlLink').value = '';
+  document.getElementById('tlCityText').value = '';
+  document.getElementById('tlVerified').checked = false;
+  document.getElementById('tlHidden').checked = false;
+  document.getElementById('tlPhotoFile').value = '';
+  document.getElementById('tlPhotoPreview').style.display = 'none';
+    document.getElementById('tlPhotoLink').value = '';
+      document.getElementById('tlPhotoLabel').textContent = '📷 Фото анкеты';
+  document.getElementById('tlCountry').value = 'tj';
+  document.getElementById('tlCitySelect').value = TL_TJ_CITIES[0];
+  document.getElementById('tlRole').selectedIndex = 0;
+  document.getElementById('talentFormTitle').textContent = 'Добавить анкету (992W)';
+    _tlLoadedTariff = 'free';
+  _tlLoadedUntil = 0;
+  document.getElementById('tlTariff').value = 'free';
+  tlTariffChange();
+  tlCountryChange();
+};
+const TL_TARIFFS = { free: 'Free', pro: 'Pro', premium: 'Premium' };
+const TL_PRICES = { pro: 80, premium: 500 };
+let _tlLoadedTariff = 'free';
+let _tlLoadedUntil = 0;
+
+function tlEffTariff(t) {
+  if (t && t.tariff && t.tariff !== 'free' && t.tariffUntil && t.tariffUntil > Date.now()) return t.tariff;
+  return 'free';
+}
+
+function tlDateStr(ms) {
+  const d = new Date(ms);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function tlAddMonths(ms, n) {
+  const d = new Date(ms);
+  const day = d.getDate();
+  d.setDate(1);
+  d.setMonth(d.getMonth() + n);
+  const last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  d.setDate(Math.min(day, last));
+  return d.getTime();
+}
+
+function tlFormUntil() {
+  if (document.getElementById('tlTariff').value === 'free') return 0;
+  const v = document.getElementById('tlUntil').value;
+  return v ? new Date(v + 'T23:59:59').getTime() : 0;
+}
+
+function tlFormTariff() {
+  const t = document.getElementById('tlTariff').value;
+  return (t !== 'free' && tlFormUntil()) ? t : 'free';
+}
+
+function tlShowTariffFields() {
+  const tariff = document.getElementById('tlTariff').value;
+  document.getElementById('tlMonthsWrap').style.display = tariff === 'pro' ? '' : 'none';
+  document.getElementById('tlUntilWrap').style.display = tariff === 'free' ? 'none' : '';
+}
+
+window.tlUpdateInfo = () => {
+  const el = document.getElementById('tlTariffInfo');
+  const tariff = document.getElementById('tlTariff').value;
+  const until = document.getElementById('tlUntil').value;
+  if (tariff === 'free' || !until) { el.textContent = ''; return; }
+  const months = tariff === 'premium' ? 12 : (parseInt(document.getElementById('tlMonths').value, 10) || 1);
+  const price = tariff === 'premium' ? TL_PRICES.premium : TL_PRICES.pro * months;
+  const left = Math.ceil((new Date(until + 'T23:59:59').getTime() - Date.now()) / 86400000);
+  el.textContent = (left > 0 ? 'Осталось дней: ' + left : 'Срок уже истёк — анкета будет считаться Free') + ' · Сумма за выбранный срок: ' + price + ' TJS';
+};
+
+window.tlRecalcUntil = () => {
+  const tariff = document.getElementById('tlTariff').value;
+  if (tariff === 'free') { document.getElementById('tlUntil').value = ''; tlUpdateInfo(); return; }
+  const months = tariff === 'premium' ? 12 : (parseInt(document.getElementById('tlMonths').value, 10) || 1);
+  const now = Date.now();
+  const base = (tariff === _tlLoadedTariff && _tlLoadedUntil > now) ? _tlLoadedUntil : now;
+  document.getElementById('tlUntil').value = tlDateStr(tlAddMonths(base, months));
+  tlUpdateInfo();
+};
+
+window.tlTariffChange = () => {
+  const tariff = document.getElementById('tlTariff').value;
+  tlShowTariffFields();
+  if (tariff === 'pro') document.getElementById('tlMonths').value = '1';
+  tlRecalcUntil();
+};
+
+function tlTariffCell(t) {
+  const eff = tlEffTariff(t);
+  if (eff === 'free') return '<span style="color:#666">Free</span>';
+  const left = Math.ceil((t.tariffUntil - Date.now()) / 86400000);
+  const color = left <= 7 ? '#f0c040' : '#4caf50';
+  return '<b style="color:' + color + '">' + TL_TARIFFS[eff] + '</b><br><span style="color:#666;font-size:11px">до ' + new Date(t.tariffUntil).toLocaleDateString('ru') + ' (' + left + ' дн.)</span>';
+}
+
+function tlLinkForTariff(t, eff) {
+  const urls = String(t.link || '').split(/\s+/).filter(u => /^https?:\/\//i.test(u));
+  if (eff === 'free') {
+    return urls.filter(u => /instagram\.com/i.test(u)).slice(0, 1).join(' ');
+  }
+  return urls.slice(0, 14).join(' ');
+}
+
+async function tlExpireTariffs() {
+  const expired = _tlCache.filter(t => t.tariff && t.tariff !== 'free' && t.tariffUntil && t.tariffUntil <= Date.now());
+  if (!expired.length) return;
+  for (const t of expired) {
+    await updateDoc(doc(db, 'talents', t._id), { tariff: 'free', tariffUntil: 0, tariffPrev: t.tariff });
+    await logAction('edit', '992W: ' + (t.name || t._id), 'тариф ' + t.tariff + ' истёк, стал Free');
+  }
+  await loadTalents();
+  await publishTalents();
+}
+async function compressImage(file, maxSide = 1200, quality = 0.82) {
+  try {
+    const bmp = await createImageBitmap(file);
+    const scale = Math.min(1, maxSide / Math.max(bmp.width, bmp.height));
+    const w = Math.round(bmp.width * scale);
+    const h = Math.round(bmp.height * scale);
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    canvas.getContext('2d').drawImage(bmp, 0, 0, w, h);
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', quality));
+    if (!blob || blob.size >= file.size) return file;
+    return new File([blob], file.name.replace(/\.[^/.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+  } catch (e) {
+    return file;
+  }
+}
+window.saveTalent = async () => {
+  const msg = document.getElementById('talentMsg');
+  const prog = document.getElementById('tlProgress');
+  const id = document.getElementById('tlId').value;
+  const name = document.getElementById('tlName').value.trim();
+  const country = document.getElementById('tlCountry').value;
+  const city = country === 'tj'
+    ? document.getElementById('tlCitySelect').value
+    : document.getElementById('tlCityText').value.trim();
+  const file = document.getElementById('tlPhotoFile').files[0];
+   const photoLinkInput = document.getElementById('tlPhotoLink').value.trim();
+  let photo = photoLinkInput || document.getElementById('tlPhotoUrl').value;
+
+  if (!name) { showMsg(msg, 'Введите имя', 'err'); return; }
+  if (!file && !photo) { showMsg(msg, 'Добавьте фото или ссылку на фото', 'err'); return; }
+  if (!file && photoLinkInput && !/^https?:\/\//i.test(photoLinkInput)) { showMsg(msg, 'Ссылка должна начинаться с http', 'err'); return; }
+  if (!file && /instagram\.com\/(p|reel|tv)\//i.test(photoLinkInput)) { showMsg(msg, 'Это ссылка на пост, а нужна ссылка на само фото (копировать адрес изображения)', 'err'); return; }
+
+  try {
+    if (file) {
+      prog.style.width = '30%';
+                    let smallFile = await compressImage(file);
+           if (/\.jfif$/i.test(smallFile.name) || !smallFile.type) {
+             smallFile = new File([smallFile], smallFile.name.replace(/\.[^/.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+           }
+           const r = await r2Upload(smallFile, 'avatars');
+      photo = r.secure_url || r.url || '';
+    }
+    prog.style.width = '70%';
+    const data = {
+      name,
+      role: document.getElementById('tlRole').value,
+      country,
+      city,
+      verified: document.getElementById('tlVerified').checked,
+          hidden: document.getElementById('tlHidden').checked,
+      tariff: tlFormTariff(),
+      tariffUntil: tlFormUntil(),
+      photo,
+      bio: document.getElementById('tlBio').value.trim(),
+      link: document.getElementById('tlLink').value.trim(),
+      top: document.getElementById('tlTop').checked,
+      youtube: document.getElementById('tlYoutube').value.trim()
+    };
+    if (id) {
+      await updateDoc(doc(db, 'talents', id), data);
+      await logAction('edit', '992W: ' + name);
+    } else {
+      await addDoc(collection(db, 'talents'), { ...data, createdAt: serverTimestamp() });
+      await logAction('upload', '992W: ' + name, 'новая анкета');
+    }
+    prog.style.width = '100%';
+    showMsg(msg, 'Анкета сохранена!', 'ok');
+    setTimeout(() => prog.style.width = '0%', 800);
+    resetTalentForm();
+    await loadTalents();
+    await publishTalents();
+  } catch(e) {
+    showMsg(msg, 'Ошибка: ' + e.message, 'err');
+    prog.style.width = '0%';
+  }
+};
+
+async function loadTalents() {
+  const snap = await getDocs(query(collection(db, 'talents'), orderBy('createdAt', 'desc')));
+  _tlCache = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
+  const countEl = document.getElementById('talentCount');
+  if (countEl) countEl.textContent = '(' + _tlCache.length + ')';
+  document.getElementById('talentsBody').innerHTML = _tlCache.map(t => {
+    const place = t.country && t.country !== 'tj'
+      ? (t.city ? t.city + ', ' : '') + (TL_COUNTRIES[t.country] || t.country)
+      : (t.city || '—');
+    return `<tr>
+           <td><img src="${t.photo || ''}" referrerpolicy="no-referrer" style="width:44px;height:58px;border-radius:6px;object-fit:cover;background:#222"></td>
+      <td><b>${t.name || '—'}</b></td>
+      <td>${TL_ROLES[t.role] || '—'}</td>
+      <td>${place}</td>
+            <td>${tlTariffCell(t)}</td>
+      <td><button class="btn ${t.verified ? 'btn-green' : 'btn-gray'}" onclick="toggleTalentField('${t._id}','verified',${!t.verified})">${t.verified ? '✅ Да' : 'Нет'}</button></td>
+      <td><button class="btn ${t.hidden ? 'btn-gray' : 'btn-green'}" onclick="toggleTalentField('${t._id}','hidden',${!t.hidden})">${t.hidden ? '🚫 Скрыта' : '👁 Видна'}</button></td>
+      <td style="white-space:nowrap">
+
+        <button class="btn btn-yellow" onclick="editTalent('${t._id}')">✏️</button>
+        <button class="btn btn-red" onclick="delTalent('${t._id}')">🗑</button>
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="8" style="color:#555;text-align:center">Анкет пока нет</td></tr>';
+}
+
+window.toggleTalentField = async (id, field, value) => {
+  await updateDoc(doc(db, 'talents', id), { [field]: value });
+  await logAction('edit', '992W: ' + id, field + ': ' + value);
+  await loadTalents();
+  await publishTalents();
+};
+
+window.editTalent = (id) => {
+  const t = _tlCache.find(x => x._id === id);
+  if (!t) return;
+  document.getElementById('tlId').value = id;
+  document.getElementById('tlPhotoUrl').value = t.photo || '';
+  document.getElementById('tlName').value = t.name || '';
+  document.getElementById('tlRole').value = t.role || 'talent';
+  document.getElementById('tlCountry').value = t.country || 'tj';
+  tlCountryChange();
+  if ((t.country || 'tj') === 'tj') document.getElementById('tlCitySelect').value = t.city || TL_TJ_CITIES[0];
+  else document.getElementById('tlCityText').value = t.city || '';
+  document.getElementById('tlBio').value = t.bio || '';
+  document.getElementById('tlLink').value = t.link || '';
+  document.getElementById('tlVerified').checked = !!t.verified;
+  document.getElementById('tlHidden').checked = !!t.hidden;
+  document.getElementById('tlTop').checked = !!t.top;
+  document.getElementById('tlYoutube').value = t.youtube || '';
+  document.getElementById('tlPhotoFile').value = '';
+  const prev = document.getElementById('tlPhotoPreview');
+  if (t.photo) { prev.src = t.photo; prev.style.display = 'block'; } else { prev.style.display = 'none'; }
+  document.getElementById('tlPhotoLink').value = t.photo || '';
+    document.getElementById('tlPhotoLabel').textContent = '📷 Сменить фото';
+  document.getElementById('talentFormTitle').textContent = 'Редактировать: ' + (t.name || '');
+    _tlLoadedTariff = t.tariff || 'free';
+  _tlLoadedUntil = t.tariffUntil || 0;
+  document.getElementById('tlTariff').value = t.tariff || 'free';
+  document.getElementById('tlMonths').value = '1';
+  document.getElementById('tlUntil').value = t.tariffUntil ? tlDateStr(t.tariffUntil) : '';
+  tlShowTariffFields();
+  tlUpdateInfo();
+  document.getElementById('main').scrollTo({ top: 0, behavior: 'smooth' });
+};
+window.copyTalentCode = async (id) => {
+  const t = _tlCache.find(x => x._id === id);
+  if (!t) return;
+  const q = (s) => "'" + String(s || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, ' ') + "'";
+  const line = "    { id: " + q(t._id) + ", name: " + q(t.name) + ", role: " + q(t.role || 'talent') + ", country: " + q(t.country || 'tj') + ", city: " + q(t.city) + ", verified: " + (t.verified ? 'true' : 'false') + ", photo: " + q(t.photo) + ", bio: " + q(t.bio) + ", link: " + q(t.link) + " },";
+  try {
+    await navigator.clipboard.writeText(line);
+    await showAlert('Строка скопирована. Вставьте её в talents.js в список PROFILES.');
+  } catch (e) {
+    await showAlert('Скопируйте строку вручную:\n\n' + line);
+  }
+};
+window.delTalent = async (id) => {
+  if (!await showConfirm('Удалить анкету? Это действие нельзя отменить.')) return;
+  const t = _tlCache.find(x => x._id === id);
+  await deleteDoc(doc(db, 'talents', id));
+  await logAction('delete', '992W: ' + (t?.name || id));
+  await loadTalents();
+  await publishTalents();
+};
+
+async function publishTalents() {
+  const list = _tlCache
+    .filter(t => !t.hidden && t.name && t.photo)
+    .map(t => {
+      const eff = tlEffTariff(t);
+      return {
+        id: t._id,
+        name: t.name,
+        role: t.role || 'talent',
+        country: t.country || 'tj',
+        city: t.city || '',
+           verified: eff !== 'free' ? true : !!t.verified,
+        top: !!t.top,
+        youtube: t.youtube || '',
+        photo: t.photo,
+        bio: t.bio || '',
+        link: tlLinkForTariff(t, eff),
+        tariff: eff,
+        tariffUntil: eff === 'free' ? 0 : t.tariffUntil
+      };
+    });
+  const file = new File([JSON.stringify(list)], 'talents.json', { type: 'application/json' });
+  await r2Upload(file, 'data');
+}
+
+window.publishTalentsNow = async () => {
+  try {
+    await publishTalents();
+    await showAlert('Опубликовано на сайте: ' + _tlCache.filter(t => !t.hidden && t.name && t.photo).length + ' анкет.');
+  } catch (e) {
+    await showAlert('Ошибка публикации: ' + e.message);
+  }
+};
+(function () {
+  const drop = document.getElementById('tlDrop');
+  const input = document.getElementById('tlPhotoFile');
+  if (!drop || !input) return;
+
+  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => {
+    e.preventDefault();
+    drop.style.borderColor = '#c0392b';
+    drop.style.color = '#c0392b';
+  }));
+
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => {
+    e.preventDefault();
+    drop.style.borderColor = '';
+    drop.style.color = '';
+  }));
+
+  drop.addEventListener('drop', e => {
+    const f = e.dataTransfer.files[0];
+    if (!f) return;
+    if (!/^image\//i.test(f.type) && !/\.(jfif|jpe?g|png|webp|gif|heic|avif)$/i.test(f.name)) {
+      showMsg(document.getElementById('talentMsg'), 'Перетащите файл-картинку', 'err');
+      return;
+    }
+    const dt = new DataTransfer();
+    dt.items.add(f);
+    input.files = dt.files;
+    previewTalentPhoto(input);
+  });
+})();
+tlInitForm();
+tlTariffChange();
 // ─── ARTIST QUESTIONS ───
 let allQuestions = [];
 
