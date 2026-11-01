@@ -4218,3 +4218,45 @@ body.transp .viz-tab[data-tab="effects"] {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+/* ===== Мобильная правка: плеер и панель текста не вылезают за экран ===== */
+.viz-progress.viz-hud #seek {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  width: auto !important;
+}
+.viz-progress.viz-hud #timeLabel {
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+}
+.viz-progress.viz-hud .viz-play,
+.viz-progress.viz-hud .viz-loop {
+  flex: 0 0 auto !important;
+}
+
+.viz-ovl-head {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  overflow: visible !important;
+}
+.viz-ovl-head > .viz-btn-primary {
+  flex: 1 1 100% !important;
+}
+.viz-ovl-head > .viz-histbtns {
+  display: flex !important;
+  gap: 6px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+.viz-ovl-head .viz-mini {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+}
+
+@media (max-width: 480px) {
+  .viz-progress.viz-hud #timeLabel {
+    font-size: 11px !important;
+  }
+}
