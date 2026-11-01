@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>992MUZ Visualizer — музыкальный ролик из вашего трека</title>
+  <meta name="description" content="Бесплатный визуализатор: загрузите MP3 или WAV и получите вертикальный ролик с музыкальными волнами. Всё работает в вашем браузере.">
+  <meta name="theme-color" content="#0b0b12">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/css/pages/visualizer.css">
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=JetBrains+Mono:wght@400;600&family=Bebas+Neue&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="viz">
+    <header class="viz-head">
+      <div class="viz-brand">
+        <h1 class="viz-logo" id="logoHome" title="Новый проект"><span class="viz-logo-num">992</span><span class="viz-logo-name">STUDIO</span><span class="viz-ver">V1</span></h1>
+              <p class="viz-sub">PROFESSIONAL</p>
+      </div>
+      <button type="button" class="viz-export-btn" id="exportBtn" disabled>Экспортировать</button>
+      <button type="button" class="viz-gear" id="settingsBtn" aria-label="Настройки">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+    </header>
+
+    <section class="viz-stage">
+      <div class="viz-frame">
+        <canvas id="vizCanvas" width="720" height="1280"></canvas>
+        <div class="viz-empty" id="vizEmpty">
+                    <div class="viz-stars" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="viz-picks">
+            <label class="viz-pick viz-pick-primary" for="audioFile">
+              <span class="viz-pick-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg></span>
+              <span>Трек</span>
+            </label>
+            <label class="viz-pick" for="photoFile">
+              <span class="viz-pick-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-4.5 4 3.5 3-2.5 4 3.5"/></svg></span>
+              <span>Фото</span>
+            </label>
+            <label class="viz-pick" for="videoFile">
+              <span class="viz-pick-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5l6-3v9l-6-3z"/></svg></span>
+              <span>Видео</span>
+            </label>
+          </div>
+                 <small class="viz-pick-hint">Асалому алейкум, с чего начнем?</small>
+                    <button type="button" class="viz-transp-btn" id="transpBtn">Без фона (прозрачный)</button>
+        </div>
+                <input type="file" id="photoFile" accept="image/*" hidden>
+                <input type="file" id="stickerFile" accept="image/*" hidden>
+              <input type="file" id="videoFile" accept="video/*" hidden>
+                <div class="viz-progress viz-hud">
+          <button type="button" class="viz-play" id="playBtn" disabled aria-label="Играть / пауза"></button>
+          <input type="range" id="seek" min="0" max="1000" value="0" disabled>
+          <span id="timeLabel">0:00 / 0:00</span>
+          <button type="button" class="viz-loop active" id="loopBtn" aria-pressed="true" aria-label="Повтор трека"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="viz-controls">
+          <input type="file" id="audioFile" accept=".mp3,.wav,.m4a,.aac,.ogg,.flac,audio/*" hidden>
+      <div class="viz-trackrow">
+        <div class="viz-track" id="trackInfo"></div>
+        <button type="button" class="viz-clip-btn" id="editClipBtn" hidden aria-label="Обрезать фрагмент"></button>
+                <button type="button" class="viz-clip-btn viz-vid-btn" id="videoBtn" hidden aria-label="Видео"></button>
+                        <button type="button" class="viz-clip-btn" id="soundBtn" hidden aria-label="Звук">Звук</button>
+                        <label class="viz-clip-btn viz-add-track" id="addTrackBtn" for="audioFile" hidden>+ Трек</label>
+<button type="button" class="viz-clip-btn viz-add-track" id="addPhotoBtn" hidden>+ Фото</button>
+      </div>
+      <div class="viz-toolbar">
+      <div class="viz-tabs" id="tabBar">
+                <button type="button" class="viz-tab" data-tab="waves"><span class="viz-tab-ico"><svg class="ico-wave" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/></svg><svg class="ico-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></span>Волны</button>
+        <button type="button" class="viz-tab" data-tab="effects"><span class="viz-tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 3l1.9 5.1L18 10l-5.1 1.9L11 17l-1.9-5.1L4 10l5.1-1.9z"/><path d="M19 15v5M16.5 17.5h5"/></svg></span>Эффекты</button>
+        <button type="button" class="viz-tab" data-tab="particles"><span class="viz-tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="8" r="2"/><circle cx="16.5" cy="6" r="1.2"/><circle cx="17" cy="15" r="2.6"/><circle cx="8" cy="17" r="1.3"/></svg></span>Частицы</button>
+        <button type="button" class="viz-tab" data-tab="text"><span class="viz-tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7V5h14v2M12 5v14M9 19h6"/></svg></span>Текст</button>
+        <button type="button" class="viz-tab" data-tab="templates"><span class="viz-tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M3.5 10h17M10 10v10.5"/></svg></span>Шаблоны</button>
+             <button type="button" class="viz-tab" data-tab="layers"><span class="viz-tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M3 12l9 4.5 9-4.5"/><path d="M3 16.5L12 21l9-4.5"/></svg></span>Слои</button>
+      </div>
+        <div class="viz-styles" id="styleBox" hidden>
+        <button type="button" class="viz-chip" data-style="bars"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 14v4M9.5 9v9M14 5v13M18.5 11v7"/></svg><span>Столбики</span></button>
+        <button type="button" class="viz-chip" data-style="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg><span>Круг</span></button>
+        <button type="button" class="viz-chip" data-style="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12c2.2-6 4.4-6 6.6 0s4.4 6 6.6 0 4.4-6 6.6 0"/></svg><span>Линия</span></button>
+        <button type="button" class="viz-chip" data-style="sphere"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><ellipse cx="12" cy="12" rx="3.6" ry="8.5"/><path d="M3.5 12h17"/></svg><span>Сфера</span></button>
+                <button type="button" class="viz-chip" data-style="mountains"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-9 4 6 3-4 6 7z"/></svg><span>Горы</span></button>
+        <button type="button" class="viz-chip" data-style="rings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7.5"/></svg><span>Кольца</span></button>
+        <button type="button" class="viz-chip" data-style="dna"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3c0 6 8 12 8 18M16 3c0 6-8 12-8 18M9.5 8h5M9.5 16h5"/></svg><span>ДНК</span></button>
+        <button type="button" class="viz-chip" data-style="petals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6.5" rx="2.4" ry="4"/><ellipse cx="12" cy="17.5" rx="2.4" ry="4"/><ellipse cx="6.5" cy="12" rx="4" ry="2.4"/><ellipse cx="17.5" cy="12" rx="4" ry="2.4"/></svg><span>Лепестки</span></button>
+        <button type="button" class="viz-chip" data-style="pixels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="13" width="4" height="7" rx="1"/><rect x="10" y="8" width="4" height="12" rx="1"/><rect x="16" y="4" width="4" height="16" rx="1"/></svg><span>Пиксели</span></button>
+        <button type="button" class="viz-chip" data-style="scope"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h3l2-6 3 12 3-9 2 3h7"/></svg><span>Осцилл.</span></button>
+        <button type="button" class="viz-chip" data-style="rain"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v6M12 9v8M17 3v5M7 15v2M17 13v6"/></svg><span>Дождь</span></button>
+        <button type="button" class="viz-chip" data-style="plasma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2.5"/><path d="M12 2l1.5 6M12 22l-1.5-6M2 12l6 1.5M22 12l-6-1.5M5 5l5 4M19 19l-5-4"/></svg><span>Плазма</span></button>
+        <button type="button" class="viz-chip" data-style="ribbon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7c8-3 14 3 6 7s0 7 10 3"/></svg><span>Лента</span></button>
+        <button type="button" class="viz-chip" data-style="blob"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c5 0 8 4 8 8s-3 10-8 10-9-5-8-10S7 3 12 3z"/></svg><span>Капля</span></button>
+      </div>
+      <div class="viz-soon" id="soonBox" hidden></div>
+            <div class="viz-ovl" id="ovlBox" hidden></div>
+                        <div class="viz-ovl" id="partBox" hidden></div>
+                        <div class="viz-ovl" id="effBox" hidden></div>
+                                      <div class="viz-ovl" id="tmplBox" hidden></div>          
+            </div>
+                  <button type="button" class="viz-lib-btn" id="libraryBtn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg>
+        <span>Библиотека 992MUZ</span>
+      </button>
+      
+      <div class="viz-export" id="exportProgress" hidden>
+        <progress id="expBar" max="100" value="0"></progress>
+        <span id="expLabel"></span>
+        <button type="button" class="viz-btn" id="cancelBtn">Отмена</button>
+      </div>
+
+      <p class="viz-status" id="status"></p>
+
+      <div class="viz-result" id="resultBox" hidden>
+        <video id="resultVideo" controls playsinline></video>
+        <button type="button" class="viz-btn viz-btn-primary" id="saveBtn">Сохранить видео</button>
+        <button type="button" class="viz-btn" id="shareBtn" hidden>Поделиться / в Галерею</button>
+                <button type="button" class="viz-btn" id="closeResultBtn">Закрыть</button>
+      </div>
+    </section>
+  </main>
+  <div class="viz-sheet" id="waveBox" hidden>
+    <div class="viz-wave viz-sheet-card">
+      <h2 class="viz-sheet-title">Выберите фрагмент</h2>
+      <div class="viz-wave-head">
+        <div class="viz-wave-left">
+          <button type="button" class="viz-play" id="wavePlay" aria-label="Играть / пауза"></button>
+          <span class="viz-wave-range" id="waveRange"></span>
+        </div>
+        <label class="viz-wave-swap" for="audioFile">Другой трек</label>
+      </div>
+      <canvas id="waveCanvas"></canvas>
+      <p class="viz-wave-hint" id="waveHint"></p>
+            <div class="viz-wave-tools">
+        <button type="button" class="viz-btn" id="bestBtn">Лучший момент</button>
+        <button type="button" class="viz-btn" id="snapBtn" aria-pressed="false">По биту</button>
+      </div>
+            <button type="button" class="viz-btn viz-wave-sound" id="waveSoundBtn">Звук: громкость, затухание, реверб</button>
+      <button type="button" class="viz-btn viz-btn-primary" id="applyBtn">Применить</button>
+    </div>
+  </div>
+    <div class="viz-sheet" id="settingsBox" hidden>
+    <div class="viz-sheet-card viz-settings">
+      <h2 class="viz-sheet-title">Настройки</h2>
+
+      <div class="viz-set-row">
+        <div class="viz-set-label">Длина ролика</div>
+        <div class="viz-seg" id="lengthBox">
+          <button type="button" class="viz-chip" data-len="15">15 сек</button>
+          <button type="button" class="viz-chip" data-len="30">30 сек</button>
+          <button type="button" class="viz-chip active" data-len="60">60 сек</button>
+        </div>
+      </div>
+      <div class="viz-set-row">
+        <div class="viz-set-label">Формат видео</div>
+        <div class="viz-seg" id="formatBox">
+          <button type="button" class="viz-chip active" data-format="9:16">9:16</button>
+          <button type="button" class="viz-chip" data-format="1:1">1:1</button>
+          <button type="button" class="viz-chip" data-format="16:9">16:9</button>
+        </div>
+      </div>
+
+      <button type="button" class="viz-btn viz-btn-primary" id="settingsClose">Готово</button>
+    </div>
+  </div>
+    <div class="viz-sheet" id="libraryBox" hidden>
+    <div class="viz-sheet-card viz-settings">
+      <h2 class="viz-sheet-title">Библиотека 992MUZ</h2>
+      <div class="viz-soon viz-soon-static">Скоро: здесь будут треки с 992MUZ</div>
+      <button type="button" class="viz-btn viz-btn-primary" id="libraryClose">Закрыть</button>
+    </div>
+  </div>
+      <div class="viz-sheet viz-sheet-clear" id="audioBox" hidden>
+    <div class="viz-sheet-card viz-settings">
+      <h2 class="viz-sheet-title">Звук</h2>
+            <div class="viz-seg viz-seg-wrap" id="sndPresets"></div>
+      <div class="viz-vidrow">
+        <button type="button" class="viz-play" id="sndPlay" aria-label="Играть / пауза"></button>
+        <p class="viz-wave-hint">Нажмите ▶ и двигайте ползунки: звук меняется сразу, и такой же попадёт в видео.</p>
+      </div>
+      <label class="viz-sl">
+        <span>Громкость</span>
+        <input type="range" id="sndVol" min="0" max="100" step="1" value="100">
+        <output id="sndVolOut">100%</output>
+      </label>
+      <label class="viz-sl">
+        <span>Плавный старт</span>
+        <input type="range" id="sndFadeIn" min="0" max="3" step="0.1" value="0">
+        <output id="sndFadeInOut">выкл</output>
+      </label>
+      <label class="viz-sl">
+        <span>Затухание</span>
+        <input type="range" id="sndFadeOut" min="0" max="3" step="0.1" value="0">
+        <output id="sndFadeOutOut">выкл</output>
+      </label>
+      <label class="viz-sl">
+        <span>Реверб</span>
+        <input type="range" id="sndReverb" min="0" max="100" step="1" value="0">
+        <output id="sndReverbOut">0%</output>
+      </label>
+            <div class="viz-seg viz-seg-wrap" id="sndEqPresets"></div>
+      <label class="viz-sl">
+        <span>Бас</span>
+        <input type="range" id="sndBass" min="-100" max="100" step="1" value="0">
+        <output id="sndBassOut">0 дБ</output>
+      </label>
+      <label class="viz-sl">
+        <span>Середина</span>
+        <input type="range" id="sndMid" min="-100" max="100" step="1" value="0">
+        <output id="sndMidOut">0 дБ</output>
+      </label>
+      <label class="viz-sl">
+        <span>Верх</span>
+        <input type="range" id="sndTreble" min="-100" max="100" step="1" value="0">
+        <output id="sndTrebleOut">0 дБ</output>
+      </label>
+            <label class="viz-sl">
+        <span>8D ширина</span>
+        <input type="range" id="sndD8" min="0" max="100" step="1" value="0">
+        <output id="sndD8Out">выкл</output>
+      </label>
+      <label class="viz-sl">
+        <span>8D скорость</span>
+        <input type="range" id="sndD8Speed" min="5" max="100" step="1" value="20">
+        <output id="sndD8SpeedOut">0.20 Гц</output>
+      </label>
+      <div class="viz-seg" id="sndEchoDiv"></div>
+      <label class="viz-sl">
+        <span>Эхо по BPM</span>
+        <input type="range" id="sndEcho" min="0" max="100" step="1" value="0">
+        <output id="sndEchoOut">выкл</output>
+      </label>
+      <label class="viz-sl">
+        <span>Повторы</span>
+        <input type="range" id="sndEchoFb" min="0" max="85" step="1" value="40">
+        <output id="sndEchoFbOut">40%</output>
+      </label>
+            <div class="viz-seg viz-seg-wrap" id="sndModMode"></div>
+      <label class="viz-sl">
+        <span>Глубина эффекта</span>
+        <input type="range" id="sndMod" min="0" max="100" step="1" value="50">
+        <output id="sndModOut">50%</output>
+      </label>
+      <label class="viz-sl">
+        <span>Скорость эффекта</span>
+        <input type="range" id="sndModRate" min="10" max="800" step="1" value="80">
+        <output id="sndModRateOut">0.80 Гц</output>
+      </label>
+      <label class="viz-sl">
+        <span>Стерео-ширина</span>
+        <input type="range" id="sndWide" min="0" max="100" step="1" value="0">
+        <output id="sndWideOut">выкл</output>
+      </label>
+      <label class="viz-sl">
+        <span>Лоу-фай</span>
+        <input type="range" id="sndLofi" min="0" max="100" step="1" value="0">
+        <output id="sndLofiOut">выкл</output>
+      </label>
+            <div class="viz-seg viz-seg-wrap" id="sndFilterMode"></div>
+      <label class="viz-sl">
+        <span>Сила фильтра</span>
+        <input type="range" id="sndFilter" min="0" max="100" step="1" value="0">
+        <output id="sndFilterOut">выкл</output>
+      </label>
+      <p class="viz-wave-hint">Старт и затухание меняют и звук, и картинку. Новое значение слышно с начала ролика.</p>
+            <p class="viz-ovl-title">Скачать аудио</p>
+      <div class="viz-seg">
+        <button type="button" class="viz-chip" id="sndExpClip">Фрагмент ролика</button>
+        <button type="button" class="viz-chip" id="sndExpAll">Весь трек</button>
+      </div>
+      <canvas id="sndExpWave" class="viz-expwave"></canvas>
+      <div class="viz-exprow">
+        <span>Начало <b id="sndExpFromOut">0:00.0</b></span>
+        <span>Конец <b id="sndExpToOut">0:00.0</b></span>
+      </div>
+      <p class="viz-wave-hint">Тяните края рамки или саму рамку: выбранный кусок играет сразу. Скачается то, что внутри рамки.</p>
+      <p class="viz-wave-hint" id="sndExpInfo"></p>
+      <div class="viz-seg">
+        <button type="button" class="viz-btn" id="sndExpMp3">Скачать MP3</button>
+        <button type="button" class="viz-btn" id="sndExpWav">Скачать WAV</button>
+      </div>
+            <button type="button" class="viz-btn" id="sndReset">↺ Сбросить звук</button>
+      <button type="button" class="viz-btn viz-btn-primary" id="sndClose">Готово</button>
+    </div>
+  </div>
+    <div class="viz-sheet viz-sheet-clear" id="videoBox" hidden>
+    <div class="viz-sheet-card viz-settings">
+      <h2 class="viz-sheet-title">Видео</h2>
+      <div class="viz-vidrow">
+        <button type="button" class="viz-play" id="vidPlay" aria-label="Играть / пауза"></button>
+        <p class="viz-wave-hint" id="vidInfo"></p>
+      </div>
+      <div class="viz-vtrim">
+        <canvas id="vidStrip"></canvas>
+      </div>
+      <label class="viz-sl" hidden>
+        <span>Начало</span>
+        <input type="range" id="vidStart" min="0" max="0" step="0.1" value="0">
+        <output id="vidStartOut">0:00</output>
+      </label>
+      <label class="viz-sl">
+        <span>Звук видео</span>
+        <input type="range" id="vidVol" min="0" max="100" step="1" value="100">
+        <output id="vidVolOut">100%</output>
+      </label>
+      <label class="viz-sl">
+        <span>Музыка</span>
+        <input type="range" id="musVol" min="0" max="100" step="1" value="100">
+        <output id="musVolOut">100%</output>
+      </label>
+      <button type="button" class="viz-btn" id="vidRemove">Убрать видео</button>
+      <button type="button" class="viz-btn viz-btn-primary" id="vidClose">Готово</button>
+    </div>
+  </div>
+  <div class="viz-sheet" id="newProjBox" hidden>
+    <div class="viz-sheet-card viz-settings">
+      <h2 class="viz-sheet-title">Новый проект?</h2>
+      <p class="viz-wave-hint">Всё сбросится: настройки, текст, стикеры, трек, фото и видео. Сохранённые проекты останутся.</p>
+      <button type="button" class="viz-btn viz-btn-danger" id="newProjOk">Сбросить всё</button>
+      <button type="button" class="viz-btn" id="newProjCancel">Отмена</button>
+    </div>
+  </div>
+    <div class="viz-sheet" id="imgModeBox" hidden>
+    <div class="viz-sheet-card viz-settings">
+      <h2 class="viz-sheet-title">Сохранить как</h2>
+      <button type="button" class="viz-btn" data-imgfmt="png">PNG</button>
+      <button type="button" class="viz-btn" data-imgfmt="jpeg">JPEG</button>
+      <button type="button" class="viz-btn" data-imgfmt="svg">SVG</button>
+            <p class="viz-wave-hint" id="imgModeHint" hidden>Прозрачный фон сохранят PNG и SVG. В JPEG он станет белым.</p>
+      <button type="button" class="viz-btn" id="imgModeCancel">Отмена</button>
+    </div>
+  </div>
+    <div class="viz-sheet" id="photoModeBox" hidden>
+    <div class="viz-sheet-card viz-settings">
+      <h2 class="viz-sheet-title">Что сделать с фото?</h2>
+      <button type="button" class="viz-btn" id="photoModeBg">Заменить фон</button>
+      <p class="viz-wave-hint">Новое фото станет фоном вместо текущего.</p>
+      <button type="button" class="viz-btn" id="photoModeOver">Добавить поверх</button>
+      <p class="viz-wave-hint">Фото появится сверху, как стикер: его можно двигать и менять размер.</p>
+      <button type="button" class="viz-btn" id="photoModeCancel">Отмена</button>
+    </div>
+  </div>
+  <div class="viz-panel" id="wavePanel" hidden>
+    <div class="viz-panel-head">
+      <button type="button" class="viz-play viz-panel-play" id="panelPlay" disabled aria-label="Играть / пауза"></button>
+      <div class="viz-ptabs" id="panelTabs">
+        <button type="button" class="viz-ptab active" data-pane="shape">Форма</button>
+        <button type="button" class="viz-ptab" data-pane="motion">Движение</button>
+                <button type="button" class="viz-ptab" data-pane="3d">3D</button>
+        <button type="button" class="viz-ptab" data-pane="color">Цвет</button>
+        <button type="button" class="viz-ptab" data-pane="bg">Фон</button>
+      </div>
+    </div>
+
+    <div class="viz-panel-body">
+      <div class="viz-pane" data-pane="shape">
+               <div class="viz-seg viz-seg-wrap" id="panelStyles">
+          <button type="button" class="viz-chip" data-style="bars">Столбики</button>
+          <button type="button" class="viz-chip" data-style="circle">Круг</button>
+          <button type="button" class="viz-chip" data-style="line">Линия</button>
+          <button type="button" class="viz-chip" data-style="sphere">Сфера</button>
+                    <button type="button" class="viz-chip" data-style="mountains">Горы</button>
+          <button type="button" class="viz-chip" data-style="rings">Кольца</button>
+          <button type="button" class="viz-chip" data-style="dna">ДНК</button>
+          <button type="button" class="viz-chip" data-style="petals">Лепестки</button>
+          <button type="button" class="viz-chip" data-style="pixels">Пиксели</button>
+          <button type="button" class="viz-chip" data-style="scope">Осцилл.</button>
+          <button type="button" class="viz-chip" data-style="rain">Дождь</button>
+          <button type="button" class="viz-chip" data-style="plasma">Плазма</button>
+          <button type="button" class="viz-chip" data-style="ribbon">Лента</button>
+          <button type="button" class="viz-chip" data-style="blob">Капля</button>
+        </div>
+      </div>
+
+      <div class="viz-pane" data-pane="motion" hidden></div>
+
+      <div class="viz-pane" data-pane="3d" hidden>
+        <div class="viz-seg" id="presets3d">
+          <button type="button" class="viz-chip" data-t3d="0,0">Плоско</button>
+          <button type="button" class="viz-chip" data-t3d="55,0">Пол</button>
+          <button type="button" class="viz-chip" data-t3d="-55,0">Потолок</button>
+          <button type="button" class="viz-chip" data-t3d="0,55">Стена ←</button>
+          <button type="button" class="viz-chip" data-t3d="0,-55">Стена →</button>
+        </div>
+        <p class="viz-wave-hint">Тяните волны по экрану, чтобы крутить их в 3D.</p>
+      </div>
+      <div class="viz-pane" data-pane="color" hidden>
+        <div class="viz-seg" id="colorModes">
+          <button type="button" class="viz-chip active" data-cm="rainbow">Радуга</button>
+          <button type="button" class="viz-chip" data-cm="solid">Один цвет</button>
+          <button type="button" class="viz-chip" data-cm="gradient">Градиент</button>
+        </div>
+        <div class="viz-swatches" id="paletteBox"></div>
+        <div class="viz-colors">
+          <div class="viz-color" id="color1Row" hidden><span>Цвет 1</span><button type="button" class="viz-cbtn" id="color1" data-target="color1" aria-label="Цвет 1"></button></div>
+          <div class="viz-color" id="color2Row" hidden><span>Цвет 2</span><button type="button" class="viz-cbtn" id="color2" data-target="color2" aria-label="Цвет 2"></button></div>
+        </div>
+      </div>
+
+      <div class="viz-pane" data-pane="bg" hidden>
+        <div class="viz-swatches" id="bgBox"></div>
+        <div class="viz-color"><span>Свой цвет</span><button type="button" class="viz-cbtn" id="bgCustom" data-target="bgColor" aria-label="Свой цвет фона"></button></div>
+
+      </div>
+
+      <div class="viz-cpick" id="cpick" hidden>
+        <div class="viz-cpick-sv" id="cpickSv"><i id="cpickSvDot"></i></div>
+        <div class="viz-cpick-hue" id="cpickHue"><i id="cpickHueDot"></i></div>
+        <div class="viz-cpick-row">
+          <span class="viz-cpick-prev" id="cpickPrev"></span>
+          <input type="text" id="cpickHex" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Код цвета">
+          <button type="button" class="viz-btn viz-btn-primary" id="cpickOk">Готово</button>
+        </div>
+      </div>
+    </div>
+
+  
+
+    <div class="viz-panel-foot">
+      <button type="button" class="viz-btn" id="panelReset">Сбросить</button>
+      <button type="button" class="viz-btn viz-btn-primary" id="panelDone">Готово</button>
+    </div>
+  </div>
+  <script type="module" src="/js/pages/visualizer.js"></script>
+</body>
+</html>
