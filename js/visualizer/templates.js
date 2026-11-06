@@ -463,6 +463,7 @@ function injectStyle() {
     '.tpl-cats{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}',
     '.tpl-cats::-webkit-scrollbar{display:none}',
     '.tpl-cats .viz-chip{flex:0 0 auto;padding:5px 11px}',
+      '@media (min-width:1024px){.tpl-cats{display:none}}',
     '.tpl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}',
     '.tpl-card{display:flex;flex-direction:column;padding:0;overflow:hidden;cursor:pointer;color:#c4c4cc;font:inherit;',
     'border:1px solid rgba(255,255,255,.1);border-radius:12px;background:rgba(255,255,255,.04);',
@@ -509,7 +510,7 @@ export function mountTemplatesPanel(root, opts) {
   const shown = [];
   const fonts = {};
   TEMPLATES.forEach(function (tpl) {
-    if (cat !== 'all' && tpl.cat !== cat) return;
+    if (!window.matchMedia('(min-width: 1024px)').matches && cat !== 'all' && tpl.cat !== cat) return;
     tpl.layers.forEach(function (s) { fonts[s.font] = true; });
     const cv = el('canvas', 'tpl-cv');
     cv.width = 480;

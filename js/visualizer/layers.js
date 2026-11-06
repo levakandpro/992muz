@@ -1,7 +1,7 @@
 import { drawBackdrop, drawWaves, setSlideTime, setBgFilter } from '/js/visualizer/waves.js';
 import { drawParticles } from '/js/visualizer/particles.js';
 import { drawEffects, effects } from '/js/visualizer/effects.js';
-
+import { drawOverlay } from '/js/visualizer/overlay.js';
 // Порядок слоёв снизу вверх. Фон всегда самый нижний.
 export const layers = { order: ['waves', 'particles', 'effects'] };
 
@@ -44,10 +44,13 @@ export function drawLayers(ctx, bars, t, style, opts) {
   setSlideTime(t);
     setBgFilter(effects.filter, effects.filterAmt);
   drawBackdrop(ctx, bars, style);
+  const withOverlay = !!(opts && opts.overlay);
+  if (withOverlay) drawOverlay(ctx, bars, t, 0);
   for (let i = 0; i < layers.order.length; i++) {
     const k = layers.order[i];
     if (k === 'waves') drawWaves(ctx, bars, t, style, false);
     else if (k === 'particles') drawParticles(ctx, bars, t);
     else if (k === 'effects' && !(opts && opts.noEffects)) drawEffects(ctx, bars, t);
+    if (withOverlay) drawOverlay(ctx, bars, t, i + 1);
   }
 }

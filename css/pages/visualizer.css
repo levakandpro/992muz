@@ -1523,8 +1523,7 @@ body {
   backdrop-filter: none;
 }
 
-.viz-empty.has-layers:not(.has-photo):not(.has-demo)::before,
-.viz-empty.has-layers:not(.has-photo):not(.has-demo)::after { display: none; }
+
 /* Звёздное небо: три слоя точек плывут вверх с разной скоростью (параллакс) */
 .viz-empty > .viz-stars {
   position: absolute;
@@ -1719,6 +1718,37 @@ body {
 }
 .viz-stars i:nth-child(3)::after { box-shadow: var(--stars-3); border-radius: 50%; }
 
+/* Широкий кадр (YouTube): то же небо повторяется вправо, чтобы звёзды были на всю ширину */
+@media (min-width: 1024px) {
+  .viz-stars i:nth-child(n+4):nth-child(-n+6) { left: 500px; }
+  .viz-stars i:nth-child(n+7):nth-child(-n+9) { left: 1000px; }
+  .viz-stars i:nth-child(n+10):nth-child(-n+12) { left: 1500px; }
+
+  .viz-stars i:nth-child(n+4):nth-child(3n+1) {
+    width: 1px;
+    height: 1px;
+    box-shadow: var(--stars-1);
+    animation: viz-stars-rise 140s linear infinite;
+  }
+  .viz-stars i:nth-child(n+4):nth-child(3n+1)::after { box-shadow: var(--stars-1); }
+
+  .viz-stars i:nth-child(n+4):nth-child(3n+2) {
+    width: 2px;
+    height: 2px;
+    box-shadow: var(--stars-2);
+    animation: viz-stars-rise 90s linear infinite, viz-star-blink 5s ease-in-out infinite;
+  }
+  .viz-stars i:nth-child(n+4):nth-child(3n+2)::after { box-shadow: var(--stars-2); }
+
+  .viz-stars i:nth-child(n+4):nth-child(3n) {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    box-shadow: var(--stars-3);
+    animation: viz-stars-rise 55s linear infinite, viz-star-blink 3.6s ease-in-out -1.8s infinite;
+  }
+  .viz-stars i:nth-child(n+4):nth-child(3n)::after { box-shadow: var(--stars-3); border-radius: 50%; }
+}
 @keyframes viz-stars-rise {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(0, -960px, 0); }
@@ -1730,8 +1760,7 @@ body {
 }
 
 .viz-empty.has-photo .viz-stars,
-.viz-empty.has-demo .viz-stars,
-.viz-empty.has-layers .viz-stars { display: none; }
+.viz-empty.has-demo .viz-stars { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .viz-stars i { animation: none; }
@@ -2644,7 +2673,13 @@ body {
   -webkit-user-select: none;
   user-select: none;
 }
-
+.viz-frame textarea,
+.viz-frame input[type="text"],
+.viz-frame input[type="search"] {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
 /* ===== меню стикера (ПКМ / долгое нажатие) ===== */
 .viz-ctx {
   position: fixed;
@@ -2758,6 +2793,43 @@ body {
 .viz-ctx-pane > * { flex-shrink: 0; }
 .viz-ctx-pane[hidden] { display: none; }
 
+/* ТОЛЬКО КОМПЬЮТЕР: тонкая тёмная прокрутка в меню стикера */
+@media (min-width: 1024px) {
+  .viz-ctx,
+  .viz-ctx-body {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+  }
+
+  .viz-ctx::-webkit-scrollbar,
+  .viz-ctx-body::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .viz-ctx::-webkit-scrollbar-track,
+  .viz-ctx-body::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 6px 0;
+  }
+
+  .viz-ctx::-webkit-scrollbar-thumb,
+  .viz-ctx-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+  }
+
+  .viz-ctx::-webkit-scrollbar-thumb:hover,
+  .viz-ctx-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  .viz-ctx::-webkit-scrollbar-button,
+  .viz-ctx-body::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
 .viz-ctx-color {
   display: flex;
   flex-direction: column;
@@ -3603,6 +3675,77 @@ body {
 
 .viz-stk-tabs { gap: 14px; }
 
+/* ТОЛЬКО КОМПЬЮТЕР: категории шаблонов переносятся на новую строку, ничего не прячется за краем */
+@media (min-width: 1024px) {
+  .viz-ovl .tpl-cats {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+}
+
+/* ТОЛЬКО КОМПЬЮТЕР: шаблоны и стикеры во вкладке «Текст», с отступами и тонкими линиями */
+@media (min-width: 1024px) {
+  #ovlBox .ovl-tpl {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 6px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  #ovlBox .ovl-tpl-host {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* линия под переключателями «Шаблоны / Стикеры» и «Все / Advisory / Иконки» */
+  #ovlBox .ovl-tpl > .viz-stk-tabs,
+  #ovlBox .ovl-tpl-host > .viz-stk-tabs {
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* заголовок группы («Недавние», «Advisory») ближе к своей сетке */
+  #ovlBox .ovl-tpl-host > .viz-ovl-title {
+    margin: 4px 0 -6px;
+  }
+
+  /* панель «Текст» без выбранного текста: сама не скроллится, скроллится только список шаблонов/стикеров */
+  #ovlBox:has(> .ovl-tpl) {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 63px - 59px - 24px);
+    height: calc(100dvh - 63px - 59px - 24px);
+    overflow: hidden;
+  }
+
+  #ovlBox > .ovl-tpl {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-top: 6px;
+  }
+
+  #ovlBox > .ovl-tpl > .ovl-tpl-host {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+  }
+
+  #ovlBox > .ovl-tpl > .ovl-tpl-host::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  #ovlBox > .ovl-tpl > .ovl-tpl-host::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+  }
+}
 .viz-ovl-fold {
   display: flex;
   align-items: center;
@@ -4196,6 +4339,34 @@ body.transp .viz-tab[data-tab="effects"] {
   font-size: 11px;
   white-space: nowrap;
 }
+/* ===== ТОЛЬКО КОМПЬЮТЕР: строка «Длит.» без пустоты и с вводом цифр. Мобильную версию не затрагивает ===== */
+@media (min-width: 1024px) {
+  #effBox .fx-line .viz-sl {
+    grid-template-columns: auto minmax(0, 1fr) 46px;
+    gap: 10px;
+  }
+  #effBox .fx-line .viz-sl output {
+    cursor: text;
+    text-align: right;
+  }
+  #effBox .fx-line .viz-sl .fx-num {
+    width: 46px;
+    box-sizing: border-box;
+    padding: 2px 4px;
+    font: inherit;
+    font-size: 12px;
+    text-align: right;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    outline: none;
+    font-variant-numeric: tabular-nums;
+  }
+  #effBox .fx-line .viz-sl .fx-num:focus {
+    border-color: #fff;
+  }
+}
 .fx-tile {
   display: flex;
   flex-direction: column;
@@ -4259,4 +4430,3184 @@ body.transp .viz-tab[data-tab="effects"] {
   .viz-progress.viz-hud #timeLabel {
     font-size: 11px !important;
   }
+}
+/* ===== ТОЛЬКО КОМПЬЮТЕР (от 1024 px): шапка. Мобильную версию не затрагивает ===== */
+@media (min-width: 1024px) {
+  .viz {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .viz-head {
+    padding: 16px 32px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .viz-stage,
+  .viz-controls {
+    width: 100%;
+    max-width: 612px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+/* ===== ТОЛЬКО КОМПЬЮТЕР: логотип в шапке ===== */
+@media (min-width: 1024px) {
+  .viz-brand {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-template-rows: auto auto;
+    justify-content: start;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* h1 не рисуется как коробка, его части становятся ячейками сетки */
+  .viz-logo {
+    display: contents;
+  }
+
+  .viz-logo-num {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    align-self: center;
+  }
+
+  /* разделитель на всю высоту «992» */
+  .viz-brand::before {
+    content: "";
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: stretch;
+    width: 1px;
+    margin: 3px 12px;
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  .viz-logo-name {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: end;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .viz-logo-name::before {
+    display: none;
+  }
+
+  .viz-ver {
+    grid-column: 4;
+    grid-row: 1;
+    align-self: center;
+    margin-left: 12px;
+    padding: 3px 7px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    background: transparent;
+    box-shadow: none;
+    font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .viz-sub {
+    grid-column: 3;
+    grid-row: 2;
+    align-self: start;
+    margin: 3px 0 0;
+    font-size: 6.5px;
+    letter-spacing: 3px;
+    white-space: nowrap;
+  }
+}
+/* ===== ТОЛЬКО КОМПЬЮТЕР: раскладка как у программы (сцена слева, панель справа) ===== */
+@media (min-width: 1024px) {
+  .viz {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 400px;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 0;
+    max-width: none;
+    padding: 0;
+  }
+
+  .viz-head {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  /* сцена: весь левый экран, холст по центру */
+  .viz-stage,
+  body.fmt-wide .viz-stage {
+    grid-column: 1;
+    grid-row: 2;
+    width: auto;
+    max-width: none;
+    min-height: 0;
+    margin: 0;
+    padding: 24px;
+  }
+
+  /* правая боковая панель */
+  .viz-controls {
+    grid-column: 2;
+    grid-row: 2;
+    width: auto;
+    max-width: none;
+    min-height: 0;
+    margin: 0;
+    padding: 14px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: none;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  }
+
+  /* окна вкладок раскрываются в панели под кнопками, а не всплывают поверх */
+  .viz-controls .viz-styles,
+  .viz-controls .viz-soon,
+  .viz-controls .viz-ovl,
+  .viz-controls .viz-ovl.viz-ovl-fixed {
+    position: static;
+    bottom: auto;
+    max-height: none;
+    height: auto;
+    overflow: visible;
+    box-shadow: none;
+    animation: none;
+  }
+
+  /* панель настроек волн: закреплена справа поверх боковой панели.
+     63px = высота шапки, при необходимости подгони */
+  .viz-panel {
+    left: auto;
+    right: 0;
+    top: 63px;
+    bottom: 0;
+    width: 400px;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding-bottom: 14px;
+    border: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0;
+    background: #16161a;
+    animation: none;
+  }
+}
+/* ===== ТОЛЬКО КОМПЬЮТЕР: «Библиотека» и статус прижаты к низу панели ===== */
+@media (min-width: 1024px) {
+  .viz-controls .viz-lib-btn {
+    margin-top: auto;
+  }
+
+  .viz-controls .viz-status {
+    padding-top: 2px;
+  }
+}
+/* ===== ТОЛЬКО КОМПЬЮТЕР: ряд «Медиа» (Трек / Фото) ===== */
+@media (min-width: 1024px) {
+  .viz-trackrow {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  /* две кнопки на всю ширину, всегда сверху */
+  .viz-trackrow #addTrackBtn,
+  .viz-trackrow #addPhotoBtn {
+    order: -1;
+    flex: 1 1 calc(50% - 4px);
+    width: auto !important;
+    height: 38px !important;
+    padding: 0 12px !important;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+    color: #e8e8ec !important;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .viz-trackrow #addTrackBtn::before,
+  .viz-trackrow #addPhotoBtn::before {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .viz-trackrow #addTrackBtn:hover,
+  .viz-trackrow #addPhotoBtn:hover {
+    border-color: rgba(255, 255, 255, 0.34) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #fff !important;
+  }
+
+  /* название трека: своя строка под кнопками, пустое не занимает места */
+  .viz-trackrow .viz-track {
+    order: 1;
+    flex: 1 1 100%;
+  }
+
+  .viz-trackrow .viz-track:empty {
+    display: none;
+  }
+
+  /* «Обрезать», «Видео», «Звук» идут ниже */
+  .viz-trackrow #editClipBtn,
+  .viz-trackrow #videoBtn,
+  .viz-trackrow #soundBtn {
+    order: 2;
+  }
+}
+/* ===== ТОЛЬКО КОМПЬЮТЕР: профессиональная панель (колонка инструментов слева, рабочая область справа) ===== */
+@media (min-width: 1024px) {
+  .viz-controls {
+    gap: 0;
+    padding: 0;
+  }
+
+  /* ряд «Медиа»: Трек выделен как главное действие, Фото рядом контуром */
+  .viz-trackrow {
+    flex: 0 0 auto;
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* пока в ряду нечего показывать (нет трека и фото), он не занимает места */
+  .viz-trackrow:not(:has(> :not([hidden]):not(:empty))) {
+    display: none;
+  }
+  .viz-trackrow #addTrackBtn,
+  .viz-trackrow #addPhotoBtn {
+    height: 34px !important;
+    font-size: 12px;
+  }
+
+  .viz-trackrow #addTrackBtn {
+    border-color: transparent !important;
+    background: linear-gradient(180deg, #f4f4f6, #b9b9c0) !important;
+    box-shadow: none !important;
+    color: #0b0b0d !important;
+    font-weight: 700;
+  }
+
+  .viz-trackrow #addTrackBtn:hover {
+    background: linear-gradient(180deg, #ffffff, #cfcfd6) !important;
+    color: #0b0b0d !important;
+  }
+
+  /* две колонки: инструменты | рабочая область */
+   .viz-controls .viz-toolbar {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr);
+    align-items: start;
+    flex: 0 0 auto;
+  }
+
+  .viz-controls .viz-lib-btn,
+  .viz-controls .viz-status {
+    flex-shrink: 0;
+  }
+
+  .viz-controls .viz-tabs {
+    grid-column: 1;
+    grid-row: 1 / span 8;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 6px;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.22);
+  }
+
+  .viz-controls .viz-tab {
+    flex: 0 0 auto;
+    height: 62px;
+    padding: 8px 2px;
+    gap: 6px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #8a8a96;
+    font-size: 10.5px;
+    font-weight: 600;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .viz-controls .viz-tab-ico,
+  .viz-controls .viz-tab-ico svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .viz-controls .viz-tab:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #e8e8ec;
+  }
+
+  .viz-controls .viz-tab.active,
+  .viz-controls .viz-tab.on {
+    background: rgba(255, 255, 255, 0.09);
+    color: #fff;
+  }
+
+  /* выбранный инструмент отмечен вертикальной чертой у края колонки */
+  .viz-controls .viz-tab.active::after,
+  .viz-controls .viz-tab.on::after {
+    display: block;
+    left: -6px;
+    top: 16px;
+    bottom: 16px;
+    width: 3px;
+    height: auto;
+    margin: 0;
+    border-radius: 0 3px 3px 0;
+    background: #fff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+  }
+
+  /* рабочая область: открытая вкладка занимает правую колонку без рамок */
+  .viz-controls .viz-toolbar > :not(.viz-tabs) {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    padding: 14px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  /* «Библиотека» и статус внизу, с теми же отступами */
+  .viz-controls .viz-lib-btn {
+    width: calc(100% - 28px);
+    margin: auto 14px 8px;
+  }
+
+  .viz-controls .viz-status {
+    margin: 0 14px 12px;
+  }
+}
+/* ===== ТОЛЬКО КОМПЬЮТЕР: колонка инструментов с линией тянется до самого низа панели ===== */
+@media (min-width: 1024px) {
+  .viz-controls {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto auto auto auto;
+    align-content: stretch;
+  }
+
+  /* ряд «Трек / Фото» сверху на всю ширину */
+  .viz-controls > .viz-trackrow {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* пока видны кнопки «Трек / Фото», ряд не может стать ниже их самих */
+  .viz-controls > .viz-trackrow:has(#addTrackBtn:not([hidden]), #addPhotoBtn:not([hidden])) {
+    min-height: 59px;
+  }
+  /* обёртка не рисуется: колонка и рабочая область становятся ячейками общей сетки */
+  .viz-controls .viz-toolbar {
+    display: contents;
+  }
+
+  /* колонка инструментов: от ряда «Трек / Фото» до самого низа */
+  .viz-controls .viz-toolbar .viz-tabs {
+    grid-column: 1;
+    grid-row: 2 / -1;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* рабочая область: открытая вкладка, высота по содержимому, прижата к верху */
+  .viz-controls .viz-toolbar > :not(.viz-tabs) {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+  }
+  /* нижние блоки живут в правой колонке */
+  .viz-controls > .viz-lib-btn {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .viz-controls > .viz-export {
+    grid-column: 2;
+    grid-row: 4;
+  }
+
+  .viz-controls > .viz-status {
+    grid-column: 2;
+    grid-row: 5;
+  }
+
+  .viz-controls > .viz-result {
+    grid-column: 2;
+    grid-row: 6;
+  }
+}
+/* ===== плашка «Сначала выберите аудио» во вкладке «Волны»: только компьютер ===== */
+.viz-audio-ask {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .viz-audio-ask {
+    display: flex;
+    flex: 0 0 100%;
+    grid-column: 1 / -1;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border: 1px dashed rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .viz-audio-ask[hidden] {
+    display: none;
+  }
+
+  .viz-audio-ask p {
+    flex: 1;
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.3;
+    color: #8a8a96;
+  }
+
+  .viz-audio-ask .viz-btn {
+    flex: none;
+    width: auto;
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+}
+/* ===== фильтры: обёртка и стрелки (на телефоне стрелки скрыты) ===== */
+.fx-rail { position: relative; }
+.fx-arrow { display: none; }
+
+/* ===== ТОЛЬКО КОМПЬЮТЕР: карточки фильтров, стрелки, перетаскивание ===== */
+@media (min-width: 1024px) {
+  .fx-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin-top: -16px;
+    padding: 0 0 3px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    background: rgba(20, 20, 24, 0.92);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s ease, opacity 0.15s ease, transform 0.1s ease;
+  }
+
+  .fx-arrow-l { left: 0; }
+  .fx-arrow-r { right: 0; }
+  .fx-arrow:hover { background: rgba(60, 60, 68, 0.96); }
+  .fx-arrow:active { transform: scale(0.92); }
+
+  .fx-arrow:disabled {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #effBox .fx-track {
+    gap: 10px;
+    padding: 12px 20px 14px;
+    cursor: grab;
+    scroll-snap-type: none;
+  }
+
+  #effBox .fx-track.drag { cursor: grabbing; }
+
+  #effBox .fx-track .fx-card {
+    flex: 0 0 104px;
+    height: 132px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    background: #101014;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  #effBox .fx-track .fx-card:nth-child(even) { border-radius: 16px; }
+
+  /* цвет фильтра заливает всю карточку */
+  #effBox .fx-track .fx-sw,
+  #effBox .fx-track .fx-card:nth-child(even) .fx-sw {
+    position: absolute;
+    inset: 0;
+    height: auto;
+    border-radius: 0;
+    background:
+      radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 46%),
+      linear-gradient(160deg, var(--c, #6b6b76), rgba(0, 0, 0, 0.78) 88%);
+    box-shadow: none;
+    transition: transform 0.3s ease;
+  }
+
+  /* название поверх, на тёмной подложке */
+  #effBox .fx-track .fx-name {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 26px 6px 10px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0));
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+
+  #effBox .fx-track .fx-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  #effBox .fx-track .fx-card:hover .fx-sw { transform: scale(1.1); }
+
+  #effBox .fx-track .fx-card:active { transform: scale(0.97); }
+
+  /* выбранный: кольцо и свечение цвета фильтра */
+  #effBox .fx-track .fx-card.active {
+    border-color: var(--c, #fff);
+    box-shadow: 0 0 0 2px var(--c, #fff), 0 8px 24px rgba(0, 0, 0, 0.55);
+  }
+
+  #effBox .fx-track .fx-card.active .fx-sw { box-shadow: none; }
+}
+/* ===== фильтры с миниатюрой кадра (на телефоне холст скрыт) ===== */
+.fx-pic { display: none; }
+
+@media (min-width: 1024px) {
+  #effBox .fx-track .fx-pic {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+  }
+
+  #effBox .fx-track .fx-pic.on { display: block; }
+
+  #effBox .fx-track .fx-card:hover .fx-pic.on { transform: scale(1.1); }
+
+  /* цветной градиент не нужен, когда есть настоящий кадр */
+  #effBox .fx-track .fx-pic.on ~ .fx-name { text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8); }
+}
+
+/* ===== ТОЛЬКО КОМПЬЮТЕР: формы волн как минималистичные плитки с иконками ===== */
+@property --spot {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes viz-ico-breathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+@media (min-width: 1024px) {
+  .viz-panel #panelStyles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .viz-panel #panelStyles .viz-chip {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 70px;
+    padding: 4px 4px 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    background:
+      radial-gradient(96px circle at var(--mx, 50%) var(--my, 0px), rgba(255, 255, 255, var(--spot)), transparent 70%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
+    box-shadow: none;
+    color: #7f7f8b;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    line-height: 1;
+    white-space: nowrap;
+    transition: --spot 0.25s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  }
+
+  /* иконка: рисуется маской, поэтому берёт цвет текста */
+  .viz-panel #panelStyles .viz-chip::before {
+    content: "";
+    display: block;
+    width: 24px;
+    height: 24px;
+    background: currentColor;
+    -webkit-mask: var(--ico) center / contain no-repeat;
+    mask: var(--ico) center / contain no-repeat;
+    transition: transform 0.25s cubic-bezier(0.3, 1.4, 0.5, 1);
+  }
+
+  /* тонкая светящаяся рамка у выбранной формы */
+  .viz-panel #panelStyles .viz-chip::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(140deg, #ffffff, rgba(255, 255, 255, 0.08) 45%, rgba(255, 255, 255, 0.65));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+
+  .viz-panel #panelStyles .viz-chip:hover {
+    --spot: 0.1;
+    border-color: rgba(255, 255, 255, 0.16);
+    color: #d8d8e0;
+  }
+
+  .viz-panel #panelStyles .viz-chip:hover::before {
+    transform: translateY(-2px) scale(1.08);
+  }
+
+  .viz-panel #panelStyles .viz-chip:active {
+    transform: scale(0.96);
+  }
+
+  .viz-panel #panelStyles .viz-chip.active {
+    --spot: 0.06;
+    border-color: transparent;
+    background:
+      radial-gradient(44px 38px at 50% 36%, rgba(255, 255, 255, 0.2), transparent 72%),
+      radial-gradient(96px circle at var(--mx, 50%) var(--my, 0px), rgba(255, 255, 255, var(--spot)), transparent 70%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.03));
+    color: #ffffff;
+  }
+
+  .viz-panel #panelStyles .viz-chip.active::after {
+    opacity: 1;
+  }
+
+  .viz-panel #panelStyles .viz-chip.active::before {
+    animation: viz-ico-breathe 3.2s ease-in-out infinite;
+  }
+
+  /* две последние формы занимают по половине ряда */
+  .viz-panel #panelStyles .viz-chip:nth-last-child(-n + 2) {
+    grid-column: span 2;
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="bars"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 15v3M8 10v8M12 5v13M16 9v9M20 13v5'/%3E%3C/svg%3E");
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="circle"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Ccircle cx='12' cy='12' r='8.5' stroke-dasharray='2.2 2.6'/%3E%3C/svg%3E");
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="line"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 12h3.5l2-6 3.5 12 3-9 2 5 1.5-2h4'/%3E%3C/svg%3E");
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="sphere"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8.5'/%3E%3Cellipse cx='12' cy='12' rx='8.5' ry='3.2'/%3E%3Cellipse cx='12' cy='12' rx='3.2' ry='8.5'/%3E%3C/svg%3E");
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="mountains"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 19l5.5-9 4 6 2.5-3.5L21 19z'/%3E%3C/svg%3E");
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="rings"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='2.5'/%3E%3Ccircle cx='12' cy='12' r='6'/%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3C/svg%3E");
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="dna"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9s8 4 8 9M9.4 6.3h5.2M9.4 17.7h5.2'/%3E%3C/svg%3E");
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="petals"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cellipse cx='12' cy='6.6' rx='2.6' ry='4.2'/%3E%3Cellipse cx='12' cy='6.6' rx='2.6' ry='4.2' transform='rotate(72 12 12)'/%3E%3Cellipse cx='12' cy='6.6' rx='2.6' ry='4.2' transform='rotate(144 12 12)'/%3E%3Cellipse cx='12' cy='6.6' rx='2.6' ry='4.2' transform='rotate(216 12 12)'/%3E%3Cellipse cx='12' cy='6.6' rx='2.6' ry='4.2' transform='rotate(288 12 12)'/%3E%3C/svg%3E");
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="pixels"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3.5' y='3.5' width='5' height='5' rx='1.2'/%3E%3Crect x='9.5' y='3.5' width='5' height='5' rx='1.2'/%3E%3Crect x='15.5' y='9.5' width='5' height='5' rx='1.2'/%3E%3Crect x='3.5' y='9.5' width='5' height='5' rx='1.2'/%3E%3Crect x='9.5' y='15.5' width='5' height='5' rx='1.2'/%3E%3Crect x='15.5' y='15.5' width='5' height='5' rx='1.2'/%3E%3C/svg%3E");
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="scope"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='3.5'/%3E%3Cpath d='M6 12c1.3-4.5 2.7-4.5 4 0s2.7 4.5 4 0 2.1-3 4-1.5'/%3E%3C/svg%3E");
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="rain"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7.5 3.5l-2 5M13 6l-2 5M18.5 3.5l-2 5M9 14l-2 5M16 14.5l-2 5'/%3E%3C/svg%3E");
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="plasma"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7.5c3-3.5 6 3.5 9 0s6 3.5 9 0M3 12.5c3-3.5 6 3.5 9 0s6 3.5 9 0M3 17.5c3-3.5 6 3.5 9 0s6 3.5 9 0'/%3E%3C/svg%3E");
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="ribbon"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9c5-5 8 5 18 0M3 15c5-5 8 5 18 0'/%3E%3C/svg%3E");
+  }
+
+  .viz-panel #panelStyles .viz-chip[data-style="blob"] {
+    --ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5c4 0 8 3.2 8 8 0 4.8-3.6 9-8.4 9-4.4 0-7.6-3.4-7.6-7.6 0-4.4 3.2-9.4 8-9.4z'/%3E%3C/svg%3E");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .viz-panel #panelStyles .viz-chip.active::before { animation: none; }
+  }
+}
+
+/* ===== ТОЛЬКО КОМПЬЮТЕР: вкладка «Эффекты» — фильтры сеткой, остальное в окне настроек ===== */
+.fx-desk { display: none; }
+
+@media (min-width: 1024px) {
+  #effBox .fx-desk { display: flex; }
+
+  /* обычный вид вкладки: только фильтры */
+  #effBox:not(.fx-open) .fx-s,
+  #effBox .fx-d-hide { display: none !important; }
+
+  /* окно настроек: только ползунки и переходы */
+  #effBox.fx-open .fx-f { display: none !important; }
+  #effBox.fx-open[data-set="fx"] .fx-s-tr,
+  #effBox.fx-open[data-set="tr"] .fx-s-fx { display: none !important; }
+
+  /* фильтры сеткой 3 в ряд вместо ленты */
+  #effBox .fx-rail { position: static; }
+  #effBox .fx-arrow { display: none; }
+
+  #effBox .fx-track {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    padding: 4px 0 6px;
+    overflow: visible;
+    cursor: default;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  #effBox .fx-track .fx-card {
+    flex: none;
+    width: auto;
+    height: auto;
+    aspect-ratio: 156 / 198;
+    border-radius: 14px;
+  }
+
+  #effBox .fx-track .fx-card:nth-child(even) { border-radius: 14px; }
+
+  #effBox .fx-track .fx-name {
+    font-size: 12.5px;
+    padding: 30px 6px 9px;
+  }
+
+  /* кнопка «Настройки эффектов» */
+  #effBox .fx-gear {
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 6px;
+    padding: 11px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #e8e8ee;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+
+  #effBox .fx-gear:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  #effBox .fx-gear:active { transform: scale(0.98); }
+
+  /* окно настроек: справа поверх боковой панели, как у волн */
+  #effBox.fx-open {
+    position: fixed;
+    top: 63px;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    z-index: 35;
+    width: 400px;
+    max-height: none;
+    margin: 0;
+    padding: 12px 14px 14px;
+    gap: 10px;
+    overflow: hidden;
+    border: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0;
+    background: #16161a;
+    box-shadow: none;
+    animation: none;
+  }
+
+  #effBox.fx-open .viz-pane {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    gap: 10px;
+    padding-right: 2px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  }
+
+  #effBox .viz-panel-foot .viz-btn {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+}
+
+/* ===== ТОЛЬКО КОМПЬЮТЕР: у активной вкладки «Эффекты» иконка превращается в кнопку настроек ===== */
+.viz-tab-ico .ico-fxgear { display: none; }
+
+@media (min-width: 1024px) {
+  .viz-tab.active .ico-fx { display: none; }
+  .viz-tab.active .ico-fxgear { display: block; }
+}
+
+/* ===== ТОЛЬКО КОМПЬЮТЕР: окно настроек эффектов — на всю высоту, переходы сеткой ===== */
+@media (min-width: 1024px) {
+  #effBox.fx-open {
+    bottom: auto;
+    height: calc(100vh - 63px);
+    height: calc(100dvh - 63px);
+  }
+
+  #effBox.fx-open .fx-tiles {
+    grid-template-rows: none;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-columns: auto;
+    overflow: visible;
+    padding: 2px 0 6px;
+  }
+
+  #effBox.fx-open .fx-tile {
+    min-height: 52px;
+    font-size: 11px;
+  }
+}
+
+/* ===== ТОЛЬКО КОМПЬЮТЕР: вкладка «Слои» — полочки, стопка с рельсой глубины ===== */
+@media (min-width: 1024px) {
+  #ovlBox .lz-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 2px 2px 0;
+  }
+
+  #ovlBox .lz-top-t { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  #ovlBox .lz-top-t b { font-size: 16px; font-weight: 800; letter-spacing: 0.2px; color: #fff; }
+  #ovlBox .lz-top-t span { font-size: 11px; color: #8a8a96; }
+
+  #ovlBox .lz-top .viz-histbtns .viz-mini {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 10px;
+    font-size: 16px;
+  }
+
+  /* полка */
+  #ovlBox .lz-sec {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  #ovlBox .lz-sec-head { display: flex; align-items: center; gap: 8px; }
+
+  #ovlBox .lz-sec-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: #8a8a96;
+  }
+
+  #ovlBox .lz-sec-title::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background: linear-gradient(135deg, #ff8a2b, #ff3c8e);
+    transform: rotate(45deg);
+  }
+
+  #ovlBox .lz-sec-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
+  }
+
+  #ovlBox .lz-sec-note { font-size: 10.5px; color: #6f6f7a; white-space: nowrap; }
+
+  #ovlBox .lz-badge {
+    min-width: 22px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  #ovlBox .lz-rows { display: flex; flex-direction: column; gap: 8px; }
+
+  /* на компьютере панель сбоку и холст не закрывает, кнопка «Свернуть» не нужна */
+  #ovlBox > .viz-mini.viz-ovl-fold { display: none; }
+  /* карточка строки */
+  #ovlBox .lz-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    padding: 8px 10px 8px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #e8e8ec;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+
+  #ovlBox button.lz-row { cursor: pointer; }
+  #ovlBox button.lz-row:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(255, 255, 255, 0.22); }
+  #ovlBox button.lz-row:active { transform: scale(0.99); }
+  #ovlBox .lz-row.on { border-color: rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.07); }
+
+  #ovlBox .lz-ico { display: inline-grid; place-items: center; flex: 0 0 auto; }
+  #ovlBox .lz-ico svg { display: block; width: 18px; height: 18px; }
+
+  #ovlBox .lz-tile {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+    color: #9a9aa4;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  #ovlBox .lz-tile.sm { width: 28px; height: 28px; border-radius: 8px; }
+  #ovlBox .lz-tile.sm svg { width: 15px; height: 15px; }
+
+  #ovlBox .lz-row.on .lz-tile {
+    background: #fff;
+    color: #0b0b0d;
+    box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+  }
+
+  #ovlBox .lz-name { flex: 0 0 auto; }
+
+  #ovlBox .lz-stat {
+    flex: 1;
+    min-width: 0;
+    margin-left: auto;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #8a8a96;
+    font-size: 11px;
+    font-weight: 500;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #ovlBox .lz-row.on .lz-stat { background: rgba(255, 255, 255, 0.14); color: #fff; }
+
+  /* стопка: рельса глубины слева, кнопки порядка справа */
+  #ovlBox .lz-stack {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-left: 18px;
+  }
+
+  #ovlBox .lz-stack::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 18px;
+    bottom: 18px;
+    width: 2px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #ff8a2b, #ff3c8e 65%, rgba(255, 60, 142, 0.15));
+  }
+
+  #ovlBox .lz-srow { position: relative; display: flex; align-items: center; gap: 6px; }
+
+  #ovlBox .lz-srow::before {
+    content: '';
+    position: absolute;
+    left: -18px;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    box-sizing: border-box;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    background: #16161a;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  #ovlBox .lz-srow.on::before {
+    border-color: #fff;
+    background: #fff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+  }
+
+  #ovlBox .lz-move { display: flex; flex-direction: column; gap: 3px; flex: 0 0 auto; }
+
+  #ovlBox .lz-srow > .lz-lrow { flex: 1 1 auto; min-width: 0; }
+  #ovlBox .lz-srow[draggable='true'] { cursor: grab; }
+  #ovlBox .lz-srow.dragging { opacity: 0.4; }
+
+  #ovlBox .lz-srow.drop-up::after,
+  #ovlBox .lz-srow.drop-down::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 3px;
+    background: #fff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+  }
+
+  #ovlBox .lz-srow.drop-up::after { top: -5px; }
+  #ovlBox .lz-srow.drop-down::after { bottom: -5px; }
+  #ovlBox .lz-mbtn {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 24px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #c4c4cc;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  }
+
+  #ovlBox .lz-mbtn svg { width: 13px; height: 13px; }
+  #ovlBox .lz-mbtn:hover:not(:disabled) { background: #fff; color: #0b0b0d; }
+  #ovlBox .lz-mbtn:active:not(:disabled) { transform: scale(0.9); }
+  #ovlBox .lz-mbtn:disabled { opacity: 0.22; cursor: default; }
+
+  /* список текста и стикеров */
+  #ovlBox .lz-list { display: flex; flex-direction: column; gap: 6px; }
+
+  #ovlBox .lz-lrow {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px 4px 3px 4px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  #ovlBox .lz-lrow:hover { background: rgba(255, 255, 255, 0.07); }
+
+  #ovlBox .lz-lrow.active {
+    border-color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.11);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
+  }
+
+  #ovlBox .lz-lrow.active .lz-tile { background: #fff; color: #0b0b0d; }
+  #ovlBox .lz-lrow.off .lz-name { opacity: 0.4; text-decoration: line-through; }
+
+  #ovlBox .lz-lpick {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 2px 4px 2px 2px;
+    border: 0;
+    background: transparent;
+    color: #e8e8ec;
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  #ovlBox .lz-lpick .lz-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  #ovlBox .lz-lbtn {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.28);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  }
+
+  #ovlBox .lz-lbtn.on { color: #fff; }
+  #ovlBox .lz-lbtn:hover { background: rgba(255, 255, 255, 0.1); }
+  #ovlBox .lz-lbtn:active { transform: scale(0.9); }
+  #ovlBox .lz-lbtn svg { width: 15px; height: 15px; }
+
+  #ovlBox .lz-hint { margin: 0; font-size: 11px; line-height: 1.45; color: #8a8a96; }
+
+  /* пустое состояние */
+  #ovlBox .lz-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 18px 12px 14px;
+    border: 1px dashed rgba(255, 255, 255, 0.16);
+    border-radius: 14px;
+    text-align: center;
+  }
+
+  #ovlBox .lz-empty-ico {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 4px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #9a9aa4;
+  }
+
+  #ovlBox .lz-empty-ico svg { width: 22px; height: 22px; }
+  #ovlBox .lz-empty b { font-size: 13px; color: #fff; }
+  #ovlBox .lz-empty > span { font-size: 11.5px; line-height: 1.4; color: #8a8a96; }
+  #ovlBox .lz-empty-btns { display: flex; gap: 8px; margin-top: 8px; }
+
+  #ovlBox .lz-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+
+  #ovlBox .lz-ghost:hover { background: rgba(255, 255, 255, 0.14); }
+  #ovlBox .lz-ghost:active { transform: scale(0.97); }
+  #ovlBox .lz-ghost svg { width: 16px; height: 16px; }
+
+  /* действия над выбранным слоем */
+  #ovlBox .lz-acts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+
+  #ovlBox .lz-act {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 4px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #e8e8ec;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  }
+
+  #ovlBox .lz-act svg { width: 18px; height: 18px; }
+  #ovlBox .lz-act:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.3); }
+  #ovlBox .lz-act:active { transform: scale(0.96); }
+  #ovlBox .lz-act.danger:hover { background: rgba(255, 90, 90, 0.14); border-color: rgba(255, 90, 90, 0.5); color: #ff7b7b; }
+}
+
+/* ===== ТОЛЬКО КОМПЬЮТЕР: окно «Настройки» как профессиональный диалог ===== */
+@keyframes viz-modal-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (min-width: 1024px) {
+  #settingsBox {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  /* карточка: две колонки, слева настройки, справа проекты */
+  #settingsBox .viz-sheet-card {
+    display: grid;
+    grid-template-columns: 330px minmax(0, 1fr);
+    column-gap: 32px;
+    row-gap: 14px;
+    align-content: start;
+    width: min(980px, calc(100vw - 80px));
+    max-height: min(88dvh, 740px) !important;
+    overflow: hidden !important;
+    padding: 26px 30px 26px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 22px;
+    background:
+      radial-gradient(520px 260px at 100% 0%, rgba(124, 58, 237, 0.14), transparent 70%),
+      radial-gradient(420px 240px at 0% 100%, rgba(255, 60, 142, 0.08), transparent 70%),
+      rgba(20, 20, 24, 0.98);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    animation: viz-modal-in 0.22s ease;
+  }
+
+  #settingsBox .viz-grip { display: none; }
+
+  /* заголовок на всю ширину с тонкой линией */
+  #settingsBox .viz-sheet-title {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    font-size: 21px;
+    letter-spacing: 0.2px;
+  }
+
+  /* кнопка «?» в углу и всплывающая справка */
+  #settingsBox #presetHelpBtnPlaceholder { display: none; }
+  #settingsBox .viz-sheet-card > button[aria-label="Где хранятся проекты"] {
+    top: 24px !important;
+    right: 30px !important;
+    width: 28px !important;
+    height: 28px !important;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  #settingsBox .viz-sheet-card > button[aria-label="Где хранятся проекты"]:hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+  }
+
+  #presetNote {
+    position: absolute !important;
+    top: 62px;
+    right: 30px;
+    z-index: 6;
+    width: 400px;
+    background: #1b1b20 !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  }
+
+  /* подписи секций */
+  #settingsBox .viz-set-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: #8a8a96;
+  }
+
+  #settingsBox .viz-set-label::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background: linear-gradient(135deg, #ff8a2b, #ff3c8e);
+    transform: rotate(45deg);
+  }
+
+  /* левая колонка: параметры ролика */
+  #settingsBox .viz-set-row:has(> #lengthBox) { grid-column: 1; grid-row: 2; }
+  #settingsBox .viz-set-row:has(> #formatBox) { grid-column: 1; grid-row: 3; }
+
+  #settingsBox .viz-seg .viz-chip {
+    height: 36px;
+    padding: 0 8px;
+    border-radius: 10px;
+    font-size: 13px;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+  #settingsBox .viz-seg .viz-chip:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+  #settingsBox .viz-seg .viz-chip:active { transform: scale(0.97); }
+  #settingsBox .viz-seg .viz-chip.active {
+    border-color: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
+  }
+
+  /* блок проектов раскладывается прямо по сетке карточки */
+  #presetBox { display: contents; }
+
+  #presetBox > .viz-ovl-search { grid-column: 1; grid-row: 4; height: 38px; border-radius: 10px; }
+  #presetBox > .viz-btn-primary { grid-column: 1; grid-row: 5; }
+  #presetBox > .viz-seg { grid-column: 1; grid-row: 6; }
+  #presetBox > .viz-chip { grid-column: 1; grid-row: 7; height: 36px; border-radius: 10px; font-size: 12.5px; }
+  #presetBox > .viz-wave-hint { grid-column: 1; grid-row: 8; margin: 0; line-height: 1.45; }
+  #settingsClose { grid-column: 1; grid-row: 9; align-self: end; }
+
+  /* правая колонка: заголовок и галерея проектов */
+  #presetBox > .viz-set-label { grid-column: 2; grid-row: 2; align-self: end; }
+
+  #presetBox > .viz-layers {
+    display: grid !important;
+    grid-column: 2;
+    grid-row: 3 / span 7;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+    gap: 14px 12px !important;
+    align-content: start;
+    align-items: start;
+    height: 0;
+    min-height: 100%;
+    max-height: none !important;
+    padding: 14px;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+  }
+
+  #presetBox > .viz-layers::-webkit-scrollbar { width: 6px; }
+  #presetBox > .viz-layers::-webkit-scrollbar-track { background: transparent; margin: 8px 0; }
+  #presetBox > .viz-layers::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.28); border-radius: 999px; }
+  #presetBox > .viz-layers::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.5); }
+
+  /* пустая галерея: иконка и подпись строго по центру */
+  #presetBox > .viz-layers:empty {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center !important;
+    justify-content: center;
+    gap: 16px !important;
+    border-style: dashed;
+    border-color: rgba(255, 255, 255, 0.14);
+    background:
+      radial-gradient(260px 160px at 50% 42%, rgba(124, 58, 237, 0.1), transparent 70%),
+      rgba(255, 255, 255, 0.03);
+  }
+  #presetBox > .viz-layers:empty::after {
+    content: '';
+    order: -1;
+    flex: 0 0 auto;
+    width: 58px;
+    height: 58px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a9a9b8' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z'/%3E%3Cpath d='M12 11.5v5M9.5 14h5'/%3E%3C/svg%3E") center / 26px no-repeat,
+      rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+  #presetBox > .viz-layers:empty::before {
+    content: 'Пока нет сохранённых проектов\A Введите название слева и нажмите «Сохранить в браузере»';
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 300px;
+    white-space: pre-line;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #8a8a96;
+  }
+
+  /* карточки проектов: подъём при наведении */
+  #presetBox > .viz-layers > div { transition: transform 0.15s ease; }
+  #presetBox > .viz-layers > div:hover { transform: translateY(-3px); }
+}
+
+/* ===== вкладка «Стикеры»: на телефоне скрыта ===== */
+.viz-tab-stk { display: none; }
+
+/* ТОЛЬКО КОМПЬЮТЕР */
+@media (min-width: 1024px) {
+  .viz-tab-stk { display: flex; }
+
+  #stkBox:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: calc(100vh - 63px - 59px - 24px);
+    height: calc(100dvh - 63px - 59px - 24px);
+    overflow: hidden;
+  }
+
+  #stkBox .stk-scroll {
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+  }
+
+  #stkBox .stk-scroll > * { flex-shrink: 0; }
+  #stkBox .stk-scroll::-webkit-scrollbar { width: 6px; }
+  #stkBox .stk-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.28); border-radius: 999px; }
+
+  #stkBox > .viz-stk-tabs { padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+  #stkBox .stk-scroll > .viz-ovl-title { margin: 4px 0 -2px; }
+  #stkBox .viz-ovl-grid { grid-template-columns: repeat(4, 1fr); }
+}
+/* ===== подпись внизу сцены: на телефоне скрыта ===== */
+.viz-credit { display: none; }
+
+/* ТОЛЬКО КОМПЬЮТЕР: тонкая подпись в поле под кадром, места не занимает */
+@media (min-width: 1024px) {
+  .viz-stage { position: relative; }
+
+  .viz-credit {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 5px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 14px;
+    font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 8.5px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .viz-credit-b {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .viz-credit i {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.22);
+  }
+}
+
+/* ===== окно «Сохранить как»: на телефоне описания скрыты ===== */
+.imgf-tag, .imgf-d { display: none; }
+
+/* ТОЛЬКО КОМПЬЮТЕР: профессиональный диалог экспорта картинки */
+@media (min-width: 1024px) {
+  #imgModeBox {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  #imgModeBox .viz-sheet-card {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    width: min(580px, calc(100vw - 80px));
+    padding: 26px 28px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 22px;
+    background:
+      radial-gradient(420px 220px at 100% 0%, rgba(124, 58, 237, 0.16), transparent 70%),
+      radial-gradient(360px 200px at 0% 100%, rgba(255, 60, 142, 0.09), transparent 70%),
+      rgba(20, 20, 24, 0.98);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    animation: viz-modal-in 0.22s ease;
+  }
+
+  #imgModeBox .viz-grip { display: none; }
+
+  #imgModeBox .viz-sheet-title {
+    grid-column: 1 / -1;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    font-size: 21px;
+    letter-spacing: 0.2px;
+  }
+
+  #imgModeBox .viz-sheet-title::after {
+    content: 'Выберите формат файла';
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: #8a8a96;
+  }
+
+  /* карточки форматов */
+  #imgModeBox [data-imgfmt] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 6px;
+    padding: 24px 12px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025));
+    transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  #imgModeBox [data-imgfmt]:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.5);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.05));
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  #imgModeBox [data-imgfmt]:active { transform: scale(0.97); }
+
+  #imgModeBox .imgf-n {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #fff;
+  }
+
+  #imgModeBox .imgf-d {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+    color: #9a9aa4;
+  }
+
+  #imgModeBox .imgf-tag {
+    display: block;
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff8a2b, #ff3c8e);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #fff;
+    transform: translateX(-50%);
+  }
+
+  #imgModeBox .viz-wave-hint {
+    grid-column: 1 / -1;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  #imgModeCancel {
+    grid-column: 1 / -1;
+    height: 38px;
+    padding: 0;
+    border-radius: 10px;
+    background: transparent;
+    font-size: 13px;
+    color: #b8b8c0;
+  }
+
+  #imgModeCancel:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+  }
+}
+
+/* ===== ТОЛЬКО КОМПЬЮТЕР: окно «Новый проект?» по центру, с иконкой и свечением ===== */
+@keyframes viz-np-ring {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+@media (min-width: 1024px) {
+  #newProjBox {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.72);
+  }
+
+  #newProjBox .viz-sheet-card {
+    align-items: center;
+    gap: 12px;
+    width: min(440px, calc(100vw - 80px));
+    padding: 38px 34px 26px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    background:
+      radial-gradient(360px 200px at 50% 0%, rgba(255, 59, 92, 0.2), transparent 70%),
+      radial-gradient(300px 180px at 100% 100%, rgba(124, 58, 237, 0.12), transparent 70%),
+      rgba(20, 20, 24, 0.98);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 59, 92, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+    text-align: center;
+    animation: viz-modal-in 0.22s ease;
+  }
+
+  #newProjBox .viz-grip { display: none; }
+
+  /* иконка сверху: красная плитка с пульсирующим кольцом */
+  #newProjBox .viz-sheet-title {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+  }
+
+  #newProjBox .viz-sheet-title::before {
+    content: "";
+    display: block;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12a8 8 0 1 0 2.6-5.9'/%3E%3Cpath d='M4 4v4.5h4.5'/%3E%3C/svg%3E") center / 30px no-repeat,
+      linear-gradient(145deg, #ff6b86, #e0334f);
+    box-shadow: 0 10px 30px rgba(255, 59, 92, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+
+  #newProjBox .viz-sheet-title::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 64px;
+    height: 64px;
+    margin-left: -32px;
+    border: 2px solid rgba(255, 90, 120, 0.7);
+    border-radius: 20px;
+    pointer-events: none;
+    animation: viz-np-ring 2.4s ease-out infinite;
+  }
+
+  #newProjBox .viz-wave-hint {
+    max-width: 330px;
+    margin: 0 0 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #9a9aa4;
+  }
+
+  #newProjBox .viz-btn {
+    width: 100%;
+    height: 46px;
+    padding: 0;
+    border-radius: 13px;
+    font-size: 14px;
+    transition: transform 0.1s ease, box-shadow 0.2s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+
+  #newProjBox .viz-btn-danger:hover {
+    box-shadow: 0 0 28px rgba(255, 59, 92, 0.6), 0 8px 24px rgba(0, 0, 0, 0.45);
+    transform: translateY(-1px);
+  }
+
+  #newProjBox .viz-btn:active { transform: scale(0.98); }
+
+  /* «Отмена» спокойная, с подсказкой клавиши */
+  #newProjCancel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: transparent;
+    color: #b8b8c0;
+  }
+
+  #newProjCancel:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+  }
+
+  #newProjCancel::after {
+    content: "Esc";
+    padding: 2px 7px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #8a8a96;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #newProjBox .viz-sheet-title::after { animation: none; opacity: 0; }
+  }
+}
+
+/* ===== ТОЛЬКО КОМПЬЮТЕР: окно «О версии» (клик по V1) ===== */
+@keyframes viz-ver-shine {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@media (min-width: 1024px) {
+  .viz-ver {
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  .viz-ver:hover {
+    border-color: rgba(255, 255, 255, 0.55);
+    color: #fff;
+    box-shadow: 0 0 14px rgba(200, 160, 255, 0.45);
+  }
+
+  #verBox {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.72);
+  }
+
+  #verBox .viz-sheet-card.ver-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: min(560px, calc(100vw - 80px));
+    max-height: min(90dvh, 780px);
+    padding: 30px 32px 24px;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    background:
+      radial-gradient(420px 220px at 0% 0%, rgba(124, 58, 237, 0.2), transparent 70%),
+      radial-gradient(380px 220px at 100% 100%, rgba(255, 60, 142, 0.12), transparent 70%),
+      rgba(20, 20, 24, 0.98);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+    animation: viz-modal-in 0.22s ease;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+  }
+
+  #verBox .ver-card::-webkit-scrollbar { width: 6px; }
+  #verBox .ver-card::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.28); border-radius: 999px; }
+  #verBox .viz-grip { display: none; }
+
+  #verBox .ver-card > * { position: relative; flex-shrink: 0; }
+
+  #verBox .ver-top {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #verBox .ver-badge {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 10px;
+    padding: 5px 12px 5px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  #verBox .ver-badge b {
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff8a2b, #ff3c8e);
+    font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #fff;
+  }
+
+  #verBox .ver-badge span {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #b8b8c0;
+  }
+
+  #verBox .viz-sheet-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+  }
+
+  #verBox .ver-lead {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #a4a4ae;
+  }
+
+  #verBox .ver-sec {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #verBox .ver-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: #8a8a96;
+  }
+
+  #verBox .ver-label::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background: linear-gradient(135deg, #ff8a2b, #ff3c8e);
+    transform: rotate(45deg);
+  }
+
+  #verBox .ver-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
+  }
+
+  #verBox .ver-label-hot { color: #ffb48a; }
+
+  #verBox .ver-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  #verBox .ver-chips span {
+    padding: 5px 11px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 12px;
+    font-weight: 600;
+    color: #d4d4da;
+  }
+
+  #verBox .ver-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  #verBox .ver-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px 9px 9px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.04);
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  #verBox .ver-item:hover {
+    transform: translateX(3px);
+    border-color: rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  #verBox .ver-item i {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    font-style: normal;
+    font-size: 17px;
+  }
+
+  #verBox .ver-item div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  #verBox .ver-item b {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f2f2f4;
+  }
+
+  #verBox .ver-item div span {
+    font-size: 11.5px;
+    line-height: 1.35;
+    color: #8a8a96;
+  }
+
+  #verBox .ver-item em {
+    flex: 0 0 auto;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(255, 138, 43, 0.14);
+    font-style: normal;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffb48a;
+  }
+
+  /* плашка про бесплатные месяцы: рамка с бегущим бликом */
+  #verBox .ver-promo {
+    position: relative;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background:
+      linear-gradient(rgba(24, 24, 28, 0.96), rgba(24, 24, 28, 0.96)) padding-box,
+      linear-gradient(110deg, #ff8a2b, #ff3c8e, #7c3aed, #ff8a2b) border-box;
+    background-size: 100% 100%, 200% 100%;
+    border: 1.5px solid transparent;
+    animation: viz-ver-shine 5s linear infinite;
+  }
+
+  #verBox .ver-promo-t {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    color: #fff;
+  }
+
+  #verBox .ver-promo p {
+    margin: 4px 0 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: #b8b8c0;
+  }
+
+  /* кнопка Instagram */
+  #verBox .ver-ig {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #f58529, #dd2a7b 50%, #8134af);
+    box-shadow: 0 10px 28px rgba(221, 42, 123, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.12s ease, box-shadow 0.2s ease;
+  }
+
+  #verBox .ver-ig small {
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.8;
+  }
+
+  #verBox .ver-ig:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px rgba(221, 42, 123, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  #verBox .ver-ig:active { transform: scale(0.98); }
+
+  /* «Закрыть» с подсказкой клавиши */
+  #verBox #verClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 42px;
+    padding: 0;
+    border-radius: 12px;
+    background: transparent;
+    font-size: 13px;
+    color: #b8b8c0;
+  }
+
+  #verBox #verClose:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+  }
+
+  #verBox .ver-esc {
+    padding: 2px 7px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #8a8a96;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #verBox .ver-promo { animation: none; }
+  }
+}
+
+/* ===== библиотека 992MUZ: на телефоне скрыта, остаётся заглушка ===== */
+.lib-search, .lib-list, .lib-msg { display: none; }
+
+/* ТОЛЬКО КОМПЬЮТЕР */
+@media (min-width: 1024px) {
+  #libraryBox {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.72);
+  }
+
+  #libraryBox .viz-sheet-card {
+    width: min(520px, calc(100vw - 80px));
+    max-height: min(84dvh, 640px);
+    padding: 28px 28px 22px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 22px;
+    background:
+      radial-gradient(420px 220px at 0% 0%, rgba(124, 58, 237, 0.16), transparent 70%),
+      rgba(20, 20, 24, 0.98);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    animation: viz-modal-in 0.22s ease;
+  }
+
+  #libraryBox .viz-grip { display: none; }
+  #libraryBox .viz-soon-static { display: none; }
+
+  #libraryBox .lib-search {
+    display: block;
+    width: 100%;
+    height: 40px;
+    padding: 0 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 11px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 14px;
+  }
+
+  #libraryBox .lib-search:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  #libraryBox .lib-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 120px;
+    max-height: 380px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+  }
+
+  #libraryBox .lib-list.busy { opacity: 0.45; pointer-events: none; }
+
+  #libraryBox .lib-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "n t" "a t";
+    align-items: center;
+    column-gap: 12px;
+    flex: 0 0 auto;
+    padding: 9px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+  }
+
+  #libraryBox .lib-row:hover {
+    transform: translateX(3px);
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  #libraryBox .lib-name {
+    grid-area: n;
+    overflow: hidden;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #f2f2f4;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  #libraryBox .lib-art {
+    grid-area: a;
+    overflow: hidden;
+    font-size: 11.5px;
+    color: #8a8a96;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  #libraryBox .lib-row em {
+    grid-area: t;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    font-style: normal;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  #libraryBox .lib-row:hover em { background: #fff; color: #0b0b0d; }
+
+  #libraryBox .lib-msg {
+    display: block;
+    margin: 0;
+    min-height: 16px;
+    font-size: 12px;
+    color: #9a9aa4;
+  }
+}
+
+/* ===== Окно «Выберите фрагмент»: кнопки закрытия видны только на десктопе ===== */
+.viz-wave-x,
+#waveCancelBtn {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  #waveBox {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.72);
+  }
+
+  #waveBox .viz-sheet-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr);
+    column-gap: 12px;
+    row-gap: 16px;
+    align-content: start;
+    width: min(680px, calc(100vw - 80px));
+    max-height: min(92dvh, 720px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 28px 30px 26px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    background:
+      radial-gradient(460px 240px at 100% 0%, rgba(124, 58, 237, 0.18), transparent 70%),
+      radial-gradient(380px 220px at 0% 100%, rgba(255, 60, 142, 0.1), transparent 70%),
+      rgba(20, 20, 24, 0.98);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    animation: viz-modal-in 0.22s ease;
+  }
+
+  #waveBox .viz-grip { display: none; }
+
+  #waveBox .viz-sheet-card > :not(.viz-wave-x) {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+
+  /* заголовок с тонкой линией и цветным акцентом */
+  #waveBox .viz-sheet-title {
+    position: relative;
+    padding: 0 52px 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    font-size: 22px;
+    letter-spacing: 0.2px;
+  }
+
+
+  /* крестик */
+  #waveBox .viz-wave-x {
+    position: absolute;
+    top: 22px;
+    right: 26px;
+    display: block;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: #d4d4dc;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.2s ease;
+  }
+
+  #waveBox .viz-wave-x::before,
+  #waveBox .viz-wave-x::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 2px;
+    margin: -1px 0 0 -7px;
+    border-radius: 2px;
+    background: currentColor;
+  }
+
+  #waveBox .viz-wave-x::before { transform: rotate(45deg); }
+  #waveBox .viz-wave-x::after { transform: rotate(-45deg); }
+
+  #waveBox .viz-wave-x:hover {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    transform: rotate(90deg);
+  }
+
+  /* плеер и время */
+  #waveBox .viz-wave-head { gap: 14px; }
+  #waveBox .viz-wave-left { gap: 14px; }
+
+  #waveBox .viz-play {
+    width: 46px;
+    height: 46px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 0 4px rgba(255, 255, 255, 0.06);
+    transition: transform 0.12s ease, box-shadow 0.15s ease;
+  }
+
+  #waveBox .viz-play:hover:not(:disabled) {
+    transform: scale(1.07);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 0 6px rgba(255, 255, 255, 0.1);
+  }
+
+  #waveBox .viz-play::before {
+    width: 14px;
+    height: 16px;
+  }
+
+  #waveBox .viz-wave-range {
+    padding: 7px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  #waveBox .viz-wave-swap {
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    color: #d0d0d8;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  #waveBox .viz-wave-swap:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+  }
+
+  /* звуковая волна */
+  #waveBox #waveCanvas {
+    box-sizing: border-box;
+    height: 150px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)),
+      rgba(0, 0, 0, 0.35);
+    box-shadow: inset 0 2px 14px rgba(0, 0, 0, 0.5);
+  }
+
+  #waveBox .viz-wave-hint {
+    margin-top: -6px;
+    text-align: center;
+    font-size: 12.5px;
+    letter-spacing: 0.2px;
+  }
+
+  /* «Лучший момент» и «По биту» */
+  #waveBox .viz-wave-tools {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  #waveBox .viz-wave-tools .viz-btn {
+    padding: 12px 16px;
+    font-size: 14.5px;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+  }
+
+  #waveBox .viz-wave-tools .viz-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.28);
+    transform: translateY(-1px);
+  }
+
+  #waveBox .viz-wave-tools .viz-btn.active:hover {
+    background: rgba(200, 160, 255, 0.24);
+    border-color: rgba(200, 160, 255, 0.7);
+  }
+
+  /* кнопка «Звук» */
+  #waveBox .viz-wave-sound {
+    padding: 12px 16px;
+    border-style: dashed;
+    border-color: rgba(255, 255, 255, 0.18);
+    background: transparent;
+    box-shadow: none;
+    color: #c9c9d2;
+    font-size: 13.5px;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  #waveBox .viz-wave-sound:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+  }
+
+  /* нижний ряд: «Отмена» и «Применить» */
+  #waveBox #waveCancelBtn {
+    display: block;
+    grid-column: 1;
+    padding: 14px 18px;
+    background: transparent;
+    box-shadow: none;
+    color: #c4c4cc;
+    font-size: 15px;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  #waveBox #waveCancelBtn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+  }
+
+  #waveBox #applyBtn {
+    grid-column: 2;
+    padding: 14px 18px;
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 0 10px 30px rgba(180, 170, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    transition: transform 0.12s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  }
+
+  #waveBox #applyBtn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+    box-shadow: 0 14px 36px rgba(180, 170, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+
+  #waveBox #applyBtn:active {
+    transform: translateY(0) scale(0.99);
+  }
+
+  #waveBox button:focus-visible,
+  #waveBox label:focus-visible {
+    outline: 2px solid rgba(167, 139, 250, 0.85);
+    outline-offset: 2px;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  #waveBox .viz-sheet-card { animation: none; }
+  #waveBox .viz-wave-x:hover { transform: none; }
+}
+
+/* ===== «Выберите фрагмент»: тонкая линия под заголовком (только десктоп) ===== */
+@media (min-width: 1024px) {
+  #waveBox .viz-sheet-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    width: auto;
+    height: 1px;
+    border-radius: 0;
+    background: linear-gradient(90deg, rgba(167, 139, 250, 0), rgba(167, 139, 250, 0.95) 22%, rgba(255, 60, 142, 0.95) 62%, rgba(255, 60, 142, 0));
+    background-size: auto;
+    background-position: 0 0;
+    transform-origin: center;
+    animation: viz-wave-draw 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  #waveBox .viz-sheet-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    z-index: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #ffffff 70%, transparent);
+    background-size: 22% 100%;
+    background-repeat: no-repeat;
+    background-position: -34% 0;
+    filter: drop-shadow(0 0 4px rgba(255, 60, 142, 0.95));
+    animation: viz-wave-comet 6s ease-in-out 1s infinite;
+    pointer-events: none;
+  }
+}
+
+@keyframes viz-wave-draw {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 1; }
+}
+
+@keyframes viz-wave-comet {
+  0% { background-position: -34% 0; }
+  55%, 100% { background-position: 134% 0; }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  #waveBox .viz-sheet-title::after { animation: none; }
+  #waveBox .viz-sheet-title::before { display: none; }
+}
+
+/* ===== «Выберите фрагмент»: меню «Другой трек» (на телефоне скрыто) ===== */
+.wave-src { display: none; }
+
+@media (min-width: 1024px) {
+  #waveBox .viz-wave-head { position: relative; }
+
+  #waveBox .viz-wave-swap {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+  }
+
+  #waveBox .viz-wave-swap::after {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 0.2s ease;
+  }
+
+  #waveBox .viz-wave-swap.open {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+  }
+
+  #waveBox .viz-wave-swap.open::after {
+    transform: translateY(1px) rotate(-135deg);
+  }
+
+  #waveBox .wave-src {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 292px;
+    padding: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 16px;
+    background: #1b1b20;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    animation: viz-modal-in 0.16s ease;
+  }
+
+  #waveBox .wave-src[hidden] { display: none; }
+
+  #waveBox .wave-src-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 11px;
+    background: transparent;
+    color: #f2f2f4;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+
+  #waveBox .wave-src-item:hover { background: rgba(255, 255, 255, 0.09); }
+  #waveBox .wave-src-item:active { transform: scale(0.98); }
+
+  #waveBox .wave-src-ico {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+    color: #d4d4dc;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  #waveBox .wave-src-ico svg { display: block; width: 19px; height: 19px; }
+
+  #waveBox .wave-src-item:hover .wave-src-ico {
+    background: #ffffff;
+    color: #0b0b0d;
+  }
+
+  #waveBox .wave-src-txt {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  #waveBox .wave-src-txt b {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #f2f2f4;
+  }
+
+  #waveBox .wave-src-txt small {
+    font-size: 11.5px;
+    color: #8a8a96;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  #waveBox .wave-src { animation: none; }
+}
+
+/* ===== панель «Звук»: обёртки для веб-версии. На телефоне они невидимы ===== */
+#audioBox .snd-head,
+#audioBox .snd-body,
+#audioBox .snd-foot,
+#audioBox .snd-sec { display: contents; }
+#audioBox .snd-sec-title,
+#audioBox .snd-note,
+#audioBox .snd-x { display: none; }
+
+@media (min-width: 1024px) {
+  #audioBox {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+  }
+
+  #audioBox .viz-sheet-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: min(1000px, calc(100vw - 80px));
+    max-height: min(90dvh, 880px);
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 26px;
+    background:
+      radial-gradient(520px 260px at 100% 0%, rgba(124, 58, 237, 0.2), transparent 70%),
+      radial-gradient(420px 240px at 0% 100%, rgba(255, 60, 142, 0.1), transparent 70%),
+      rgba(18, 18, 22, 0.99);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    animation: viz-modal-in 0.22s ease;
+  }
+
+  #audioBox .viz-grip { display: none; }
+
+  /* шапка */
+  #audioBox .snd-head {
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    padding: 24px 30px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  #audioBox .snd-head .viz-sheet-title {
+    font-size: 22px;
+    letter-spacing: 0.2px;
+  }
+
+  #audioBox .snd-x {
+    position: absolute;
+    top: 20px;
+    right: 26px;
+    display: block;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: #d4d4dc;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.2s ease;
+  }
+
+  #audioBox .snd-x::before,
+  #audioBox .snd-x::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 2px;
+    margin: -1px 0 0 -7px;
+    border-radius: 2px;
+    background: currentColor;
+  }
+
+  #audioBox .snd-x::before { transform: rotate(45deg); }
+  #audioBox .snd-x::after { transform: rotate(-45deg); }
+
+  #audioBox .snd-x:hover {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    transform: rotate(90deg);
+  }
+
+  /* середина: карточки в две колонки, прокрутка только здесь */
+  #audioBox .snd-body {
+    display: grid;
+    flex: 1 1 auto;
+    min-height: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    align-content: start;
+    padding: 20px 30px 22px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+  }
+
+  #audioBox .snd-body::-webkit-scrollbar { width: 8px; }
+  #audioBox .snd-body::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+  #audioBox .snd-body::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.32); }
+
+  /* карточка раздела */
+  #audioBox .snd-sec {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+    padding: 18px 20px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  #audioBox .snd-sec:hover { border-color: rgba(255, 255, 255, 0.14); }
+
+  #audioBox .snd-a { --a: #c4b5fd; grid-column: 1 / -1; }
+  #audioBox .snd-b { --a: #5eead4; }
+  #audioBox .snd-c { --a: #fbbf24; }
+  #audioBox .snd-d { --a: #a78bfa; }
+  #audioBox .snd-e { --a: #60a5fa; }
+  #audioBox .snd-f { --a: #f472b6; }
+  #audioBox .snd-g { --a: #fb923c; }
+  #audioBox .snd-dl { --a: #f8c300; grid-column: 1 / -1; }
+
+  #audioBox .snd-sec-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    color: #b9b9c6;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  #audioBox .snd-sec-title::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--a, #fff);
+    box-shadow: 0 0 12px var(--a, #fff);
+  }
+
+  #audioBox .snd-note {
+    display: block;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.42);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  /* плеер сверху карточки «Пресеты» */
+  #audioBox .snd-a .snd-sec-title { order: -1; }
+  #audioBox .snd-a .viz-vidrow {
+    order: -2;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  #audioBox .snd-a .viz-vidrow .viz-wave-hint {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  #audioBox .viz-play {
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 0 4px rgba(255, 255, 255, 0.06);
+    transition: transform 0.12s ease, box-shadow 0.15s ease;
+  }
+
+  #audioBox .viz-play:hover:not(:disabled) {
+    transform: scale(1.07);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 0 6px rgba(255, 255, 255, 0.1);
+  }
+
+  #audioBox .viz-play::before {
+    width: 15px;
+    height: 17px;
+  }
+
+  /* кнопки выбора: аккуратные «таблетки» с цветом раздела */
+  #audioBox .viz-seg { flex-wrap: wrap; gap: 8px; }
+
+  #audioBox .viz-seg > .viz-chip {
+    flex: 0 0 auto;
+    padding: 8px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #c9c9d2;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  }
+
+  #audioBox .viz-seg > .viz-chip:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+
+  #audioBox .viz-seg > .viz-chip:active { transform: scale(0.96); }
+
+  #audioBox .viz-seg > .viz-chip.active {
+    border-color: var(--a, #fff);
+    background: rgba(255, 255, 255, 0.14);
+    background: color-mix(in srgb, var(--a, #fff) 22%, transparent);
+    box-shadow: 0 0 16px -4px var(--a, #fff);
+    color: #fff;
+  }
+
+  /* ползунки: подпись и значение сверху, дорожка на всю ширину */
+  #audioBox .viz-sl {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "l o" "s s";
+    row-gap: 7px;
+    column-gap: 12px;
+    font-size: 13px;
+  }
+
+  #audioBox .viz-sl > span {
+    grid-area: l;
+    color: #dcdce4;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  #audioBox .viz-sl > output {
+    grid-area: o;
+    min-width: 58px;
+    padding: 2px 9px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.07);
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  #audioBox .viz-sl > input[type="range"] {
+    grid-area: s;
+    height: 22px;
+  }
+
+  #audioBox .viz-sl input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(to right, var(--a, #fff) 0, var(--a, #fff) var(--p, 0%), rgba(255, 255, 255, 0.14) var(--p, 0%), rgba(255, 255, 255, 0.14) 100%);
+  }
+
+  #audioBox .viz-sl input[type="range"]::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+    margin-top: -6px;
+    border: 2px solid #fff;
+    background: #16161a;
+    box-shadow: 0 0 0 0 transparent;
+    transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.15s ease;
+  }
+
+  #audioBox .viz-sl input[type="range"]:hover::-webkit-slider-thumb {
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.1);
+  }
+
+  #audioBox .viz-sl input[type="range"]::-moz-range-track {
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  #audioBox .viz-sl input[type="range"]::-moz-range-progress {
+    height: 4px;
+    border-radius: 4px;
+    background: var(--a, #fff);
+  }
+
+  #audioBox .viz-sl input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #fff;
+    background: #16161a;
+  }
+
+  /* эквалайзер: заливка идёт от середины, на нуле видна засечка */
+  #audioBox .snd-c .viz-sl input[type="range"]::-webkit-slider-runnable-track {
+    background:
+      linear-gradient(to right, transparent calc(50% - 1px), rgba(255, 255, 255, 0.55) calc(50% - 1px), rgba(255, 255, 255, 0.55) calc(50% + 1px), transparent calc(50% + 1px)),
+      linear-gradient(to right, rgba(255, 255, 255, 0.14) 0, rgba(255, 255, 255, 0.14) min(var(--p, 50%), 50%), var(--a) min(var(--p, 50%), 50%), var(--a) max(var(--p, 50%), 50%), rgba(255, 255, 255, 0.14) max(var(--p, 50%), 50%), rgba(255, 255, 255, 0.14) 100%);
+  }
+
+  /* скачивание */
+  #audioBox .snd-dl .viz-ovl-title { display: none; }
+
+  #audioBox .snd-dl .viz-expwave {
+    height: 120px;
+    border-radius: 14px;
+  }
+
+  #audioBox .snd-dl .viz-wave-hint {
+    font-size: 12.5px;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  #audioBox .snd-dl .viz-wave-hint:empty { display: none; }
+
+  #audioBox .snd-dl .viz-seg > .viz-btn {
+    flex: 1 1 0;
+    width: auto;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+
+  #audioBox .snd-dl .viz-seg > .viz-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.13);
+    border-color: rgba(255, 255, 255, 0.32);
+  }
+
+  #audioBox .snd-dl .viz-seg > .viz-btn:active:not(:disabled) { transform: scale(0.98); }
+  #audioBox .snd-dl .viz-seg > .viz-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  #audioBox .snd-foot-hint {
+    grid-column: 1 / -1;
+    margin: -2px 0;
+    text-align: center;
+    font-size: 12.5px;
+  }
+
+  /* подвал: всегда на виду */
+  #audioBox .snd-foot {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 30px 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(0, 0, 0, 0.22);
+  }
+
+  #audioBox .snd-foot .viz-btn {
+    width: auto;
+    padding: 12px 26px;
+    border-radius: 14px;
+    font-size: 14px;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+
+  #audioBox .snd-foot .viz-btn:not(.viz-btn-primary):hover { background: rgba(255, 255, 255, 0.13); border-color: rgba(255, 255, 255, 0.32); }
+  #audioBox .snd-foot .viz-btn:active { transform: scale(0.98); }
+  #audioBox .snd-foot .viz-btn-primary:hover { filter: brightness(1.08); }
+  #audioBox .snd-foot .viz-btn-primary { min-width: 200px; }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  #audioBox .viz-sheet-card { animation: none; }
+}
+
+/* ===== библиотека: прослушивание и перемотка перед выбором (только компьютер) ===== */
+@media (min-width: 1024px) {
+  #libraryBox .lib-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "p n t" "p a t" "k k k";
+    column-gap: 12px;
+    padding: 9px 12px 9px 9px;
+    user-select: none;
+  }
+
+  #libraryBox .lib-row.active {
+    transform: none;
+    border-color: rgba(196, 181, 253, 0.55);
+    background: rgba(124, 58, 237, 0.14);
+  }
+
+  #libraryBox .lib-play {
+    grid-area: p;
+    position: relative;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #f4f4f6, #b9b9c0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: transform 0.12s ease;
+  }
+
+  #libraryBox .lib-play:hover { transform: scale(1.08); }
+
+  #libraryBox .lib-play::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 11px;
+    height: 13px;
+    background: #0b0b0d;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+    transform: translateX(1.5px);
+  }
+
+  #libraryBox .lib-row.playing .lib-play::before {
+    clip-path: none;
+    background: linear-gradient(90deg, #0b0b0d 0 34%, transparent 34% 66%, #0b0b0d 66% 100%);
+    transform: none;
+  }
+
+  #libraryBox .lib-row.loading .lib-play { animation: lib-pulse 0.9s ease-in-out infinite; }
+
+  #libraryBox .lib-take {
+    grid-area: t;
+    padding: 6px 14px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  }
+
+  #libraryBox .lib-take:hover,
+  #libraryBox .lib-row.active .lib-take {
+    background: #fff;
+    color: #0b0b0d;
+  }
+
+  #libraryBox .lib-take:active { transform: scale(0.95); }
+
+  #libraryBox .lib-seek {
+    grid-area: k;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    margin-top: 9px;
+    cursor: default;
+  }
+
+  #libraryBox .lib-row.active .lib-seek { display: flex; }
+
+  #libraryBox .lib-seek span {
+    min-width: 32px;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: #9a9aa4;
+  }
+
+  #libraryBox .lib-seek span:last-child { text-align: right; }
+
+  #libraryBox .lib-seek input[type="range"] {
+    flex: 1;
+    min-width: 0;
+    height: 18px;
+    margin: 0;
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  #libraryBox .lib-seek input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(to right, #c4b5fd 0, #c4b5fd var(--p, 0%), rgba(255, 255, 255, 0.16) var(--p, 0%), rgba(255, 255, 255, 0.16) 100%);
+  }
+
+  #libraryBox .lib-seek input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    width: 14px;
+    height: 14px;
+    margin-top: -5px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: #16161a;
+    transition: transform 0.12s ease;
+  }
+
+  #libraryBox .lib-seek input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.2); }
+
+  #libraryBox .lib-seek input[type="range"]::-moz-range-track {
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  #libraryBox .lib-seek input[type="range"]::-moz-range-progress {
+    height: 4px;
+    border-radius: 4px;
+    background: #c4b5fd;
+  }
+
+  #libraryBox .lib-seek input[type="range"]::-moz-range-thumb {
+    box-sizing: border-box;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: #16161a;
+  }
+}
+
+@keyframes lib-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
 }

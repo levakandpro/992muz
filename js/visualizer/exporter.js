@@ -504,8 +504,7 @@ export async function exportVideo({ buffer, duration, offset = 0, canvas, ctx, s
         await seekVideo(video.el, Math.min(video.start + t, Math.max(0, video.el.duration - 0.05)));
       }
       spectrumToBars(spectrumAt(t), bars);
-      drawLayers(ctx, bars, t, style);
-      drawOverlay(ctx, bars, t);
+      drawLayers(ctx, bars, t, style, { overlay: true });
       drawFrameExtras(ctx, t, duration, true);
 
       const frame = new VideoFrame(canvas, {

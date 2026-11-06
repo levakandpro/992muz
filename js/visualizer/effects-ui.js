@@ -1,5 +1,5 @@
 import { effects, setEffects, EFFECT_DEFAULTS, resetEffectSettings } from '/js/visualizer/effects.js';
-import { BG_FILTERS } from '/js/visualizer/waves.js';
+import { BG_FILTERS, getBackground, slideshow, drawFilterSample } from '/js/visualizer/waves.js';
 
 // Панель вкладки «Эффекты». Строится один раз, дальше только обновляет значения.
 
@@ -35,14 +35,37 @@ const refs = [];
 const filterChips = [];
 const modeChips = [];
 let fxShow = null;
-
+let fxBox = null;
+let fxOpenFn = null;
+let fxCloseFn = null;
+export function openEffectsSettings() {
+  if (fxOpenFn) fxOpenFn();
+}
+export function closeEffectsSettings() {
+  if (fxCloseFn) fxCloseFn();
+}
+export function effectsSettingsOpen() {
+  return !!fxBox && fxBox.classList.contains('fx-open');
+}
 function fill(input) {
   const min = Number(input.min);
   const max = Number(input.max);
   const p = max > min ? ((Number(input.value) - min) / (max - min)) * 100 : 0;
   input.style.setProperty('--p', p + '%');
 }
-
+// Перерисовывает миниатюры фильтров по текущему фото, видео или слайд-шоу (только на компьютере).
+function refreshThumbs() {
+  if (!window.matchMedia('(min-width: 1024px)').matches) return;
+  const src = slideshow.on && slideshow.list.length > 1 ? slideshow.list[0] : getBackground();
+  filterChips.forEach((c) => {
+    if (!c.cv) return;
+    let ok = false;
+    if (src) {
+      try { ok = drawFilterSample(c.cv.getContext('2d'), src, c.id, c.cv.width, c.cv.height); } catch (e) { ok = false; }
+    }
+    c.cv.classList.toggle('on', ok);
+  });
+}
 function syncAll() {
   refs.forEach((r) => {
     r.input.value = String(effects[r.def.k]);
@@ -133,6 +156,7 @@ function transBlock(title, modeKey, durKey, change, outro, preview) {
    seg.className = 'fx-tiles';
   seg.addEventListener('wheel', (e) => {
     if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+    if (seg.scrollWidth <= seg.clientWidth + 1) return;
     seg.scrollLeft += e.deltaY;
     e.preventDefault();
   }, { passive: false });
@@ -173,7 +197,45 @@ function transBlock(title, modeKey, durKey, change, outro, preview) {
     out.textContent = sec(effects[durKey]);
     change();
   });
+  const editNum = () => {
+    if (!window.matchMedia('(min-width: 1024px)').matches) return false;
+    if (row.querySelector('.fx-num')) return true;
+    const num = document.createElement('input');
+    num.type = 'text';
+    num.inputMode = 'decimal';
+    num.className = 'fx-num';
+    num.value = effects[durKey] > 0 ? effects[durKey].toFixed(1) : '0';
+    let done = false;
+    const finish = (apply) => {
+      if (done) return;
+      done = true;
+      const v = parseFloat(num.value.replace(',', '.'));
+      num.replaceWith(out);
+      if (apply && isFinite(v)) {
+        setEffects({ [durKey]: Math.min(3, Math.max(0, Math.round(v * 10) / 10)) });
+        syncAll();
+        change();
+        if (effects[durKey] > 0) preview(outro);
+      }
+    };
+    num.addEventListener('input', () => {
+      num.value = num.value.replace(/[^0-9.,]/g, '');
+    });
+    num.addEventListener('keydown', (e) => {
+      e.stopPropagation();
+      if (e.key === 'Enter') finish(true);
+      else if (e.key === 'Escape') finish(false);
+    });
+    num.addEventListener('keyup', (e) => e.stopPropagation());
+    num.addEventListener('blur', () => finish(true));
+    out.replaceWith(num);
+    num.focus();
+    num.select();
+    return true;
+  };
+  out.addEventListener('dblclick', editNum);
   input.addEventListener('dblclick', () => {
+    if (editNum()) return;
     setEffects({ [durKey]: 0 });
     syncAll();
     change();
@@ -207,6 +269,7 @@ function transBlock(title, modeKey, durKey, change, outro, preview) {
 export function mountEffectsPanel(box, handlers = {}) {
   if (box.dataset.mounted) {
     syncAll();
+    refreshThumbs();
     return;
   }
   box.dataset.mounted = '1';
@@ -234,7 +297,20 @@ export function mountEffectsPanel(box, handlers = {}) {
   fTabs.className = 'fx-tabs';
   const fTrack = document.createElement('div');
   fTrack.className = 'fx-track';
-  fRow.append(fTabs, fTrack);
+  const fRail = document.createElement('div');
+  fRail.className = 'fx-rail';
+  const fPrev = document.createElement('button');
+  fPrev.type = 'button';
+  fPrev.className = 'fx-arrow fx-arrow-l';
+  fPrev.textContent = '‹';
+  fPrev.setAttribute('aria-label', 'Назад');
+  const fNext = document.createElement('button');
+  fNext.type = 'button';
+  fNext.className = 'fx-arrow fx-arrow-r';
+  fNext.textContent = '›';
+  fNext.setAttribute('aria-label', 'Вперёд');
+  fRail.append(fTrack, fPrev, fNext);
+  fRow.append(fTabs, fRail);
   const fTabBtns = [];
   let fGroup = '';
   BG_FILTERS.forEach((f) => {
@@ -258,14 +334,18 @@ export function mountEffectsPanel(box, handlers = {}) {
     const nm = document.createElement('b');
     nm.className = 'fx-name';
     nm.textContent = f.name;
-    btn.append(sw, nm);
+    const cv = document.createElement('canvas');
+    cv.className = 'fx-pic';
+    cv.width = 156;
+    cv.height = 198;
+    btn.append(sw, cv, nm);
     btn.addEventListener('click', () => {
       setEffects({ filter: f.id });
       syncAll();
       change();
     });
     fTrack.append(btn);
-    filterChips.push({ id: f.id, btn, g: fGroup });
+    filterChips.push({ id: f.id, btn, g: fGroup, cv });
   });
 
   // Показывает одну группу. card — карточка, которую нужно поставить в центр ленты.
@@ -291,6 +371,61 @@ export function mountEffectsPanel(box, handlers = {}) {
     fTrack.scrollLeft = next;
     e.preventDefault();
   }, { passive: false });
+    // Стрелки: серые у края, где листать уже некуда
+  const railSync = () => {
+    const max = fTrack.scrollWidth - fTrack.clientWidth;
+    fPrev.disabled = fTrack.scrollLeft <= 2;
+    fNext.disabled = fTrack.scrollLeft >= max - 2;
+  };
+  const baseShow = fxShow;
+  fxShow = (g, card) => {
+    baseShow(g, card);
+    requestAnimationFrame(railSync);
+  };
+  fTrack.addEventListener('scroll', railSync);
+  window.addEventListener('resize', railSync);
+  requestAnimationFrame(railSync);
+  fPrev.addEventListener('click', () => {
+    fTrack.scrollBy({ left: -fTrack.clientWidth * 0.8, behavior: 'smooth' });
+  });
+  fNext.addEventListener('click', () => {
+    fTrack.scrollBy({ left: fTrack.clientWidth * 0.8, behavior: 'smooth' });
+  });
+
+  // Перетаскивание мышью (на телефоне работает обычный свайп)
+  let dragX = 0;
+  let dragLeft = 0;
+  let dragOn = false;
+  let dragMoved = false;
+  fTrack.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    if (fTrack.scrollWidth <= fTrack.clientWidth + 1) return;
+    dragOn = true;
+    dragMoved = false;
+    dragX = e.clientX;
+    dragLeft = fTrack.scrollLeft;
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (!dragOn) return;
+    const dx = e.clientX - dragX;
+    if (!dragMoved && Math.abs(dx) > 5) {
+      dragMoved = true;
+      fTrack.classList.add('drag');
+    }
+    if (dragMoved) fTrack.scrollLeft = dragLeft - dx;
+  });
+  window.addEventListener('pointerup', () => {
+    if (!dragOn) return;
+    dragOn = false;
+    fTrack.classList.remove('drag');
+  });
+  // после перетаскивания клик не должен выбирать фильтр под курсором
+  fTrack.addEventListener('click', (e) => {
+    if (!dragMoved) return;
+    e.stopPropagation();
+    e.preventDefault();
+    dragMoved = false;
+  }, true);
   const fRowAmt = document.createElement('label');
   fRowAmt.className = 'viz-sl';
   const fName = document.createElement('span');
@@ -326,10 +461,13 @@ export function mountEffectsPanel(box, handlers = {}) {
   const sep = document.createElement('div');
   sep.className = 'viz-hr';
 
+  [fTitle, fRow, fRowAmt, fHint].forEach((el) => el.classList.add('fx-f'));
+  sep.classList.add('fx-d-hide');
+  [eTitle, hint].forEach((el) => el.classList.add('fx-s', 'fx-s-fx'));
   pane.append(fTitle, fRow, fRowAmt, fHint, sep, eTitle, hint);
   ITEMS.forEach((def) => {
     const row = document.createElement('label');
-    row.className = 'viz-sl';
+    row.className = 'viz-sl fx-s fx-s-fx';
     const name = document.createElement('span');
     name.textContent = def.label;
     const input = document.createElement('input');
@@ -381,8 +519,63 @@ export function mountEffectsPanel(box, handlers = {}) {
     sideBtns.push({ side: s[0], btn: b });
   });
   showSide('in');
+  transSep.classList.add('fx-d-hide');
+  [transTitle, sideSeg, inBlock, outBlock].forEach((el) => el.classList.add('fx-s', 'fx-s-tr'));
   pane.append(transSep, transTitle, sideSeg, inBlock, outBlock);
 
-  box.append(pane);
+  // ----- только компьютер: окно настроек эффектов (как у волн) -----
+  const desk = () => window.matchMedia('(min-width: 1024px)').matches;
+  box.dataset.set = 'fx';
+
+  const setTabs = document.createElement('div');
+  setTabs.className = 'viz-ptabs fx-s fx-desk';
+  const setTabBtns = [];
+  const setSide = (k) => {
+    box.dataset.set = k;
+    setTabBtns.forEach((x) => x.btn.classList.toggle('active', x.k === k));
+    pane.scrollTop = 0;
+  };
+  [['fx', 'Эффекты'], ['tr', 'Начало и конец']].forEach((s) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'viz-ptab';
+    b.textContent = s[1];
+    b.addEventListener('click', () => setSide(s[0]));
+    setTabs.append(b);
+    setTabBtns.push({ k: s[0], btn: b });
+  });
+  setSide('fx');
+
+  const foot = document.createElement('div');
+  foot.className = 'viz-panel-foot fx-s fx-desk';
+  const footReset = document.createElement('button');
+  footReset.type = 'button';
+  footReset.className = 'viz-btn';
+  footReset.textContent = 'Сбросить';
+  footReset.addEventListener('click', () => {
+    resetEffectSettings();
+    syncAll();
+    change();
+  });
+  const footDone = document.createElement('button');
+  footDone.type = 'button';
+  footDone.className = 'viz-btn viz-btn-primary';
+  footDone.textContent = 'Готово';
+  foot.append(footReset, footDone);
+
+  fxBox = box;
+  fxOpenFn = () => {
+    if (!desk()) return;
+    box.classList.add('fx-open');
+    setSide('fx');
+    syncAll();
+  };
+  fxCloseFn = () => {
+    box.classList.remove('fx-open');
+  };
+  footDone.addEventListener('click', () => fxCloseFn());
+
+  box.append(setTabs, pane, foot);
   syncAll();
+  refreshThumbs();
 }

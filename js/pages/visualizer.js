@@ -5,7 +5,7 @@ import { createWavePicker } from '/js/visualizer/wavepicker.js';
 import { wave, setWave, resetWave, WAVE_DEFAULTS, setTransparent, STYLES, getBackground, slideshow, setSlides, setSlideOpts } from '/js/visualizer/waves.js';
 import { drawParticles, particles, PARTICLE_TYPES, PARTICLE_DEFAULTS, setParticles } from '/js/visualizer/particles.js';
 import { mountParticlesPanel } from '/js/visualizer/particles-ui.js';
-import { mountEffectsPanel, ITEMS as EFFECT_ITEMS } from '/js/visualizer/effects-ui.js';
+import { mountEffectsPanel, ITEMS as EFFECT_ITEMS, openEffectsSettings, closeEffectsSettings, effectsSettingsOpen } from '/js/visualizer/effects-ui.js';
 import { effects, EFFECT_DEFAULTS, drawEffects, drawFrameExtras, setEffects } from '/js/visualizer/effects.js';
 import { analyzeBeats, setBeatGrid } from '/js/visualizer/beats.js';
 import { audioFx, setAudioFx, createReverb, createLimiter, createEq, createEcho, createSpatial, createFilter, createLofi, createMod, createWide, AUDIO_FX_DEFAULTS } from '/js/visualizer/audio-fx.js';
@@ -30,9 +30,8 @@ function previewTransition(kind) {
 }
 
 function drawWaves(c, b, t, style) {
-  drawLayers(c, b, t, style, { noEffects: transparentMode });
   setForceShow(!playing && !exporting && (openTab === 'text' || openTab === 'layers'));
-  drawOverlay(c, b, t);
+  drawLayers(c, b, t, style, { noEffects: transparentMode, overlay: true });
   if (transparentMode) return;
   if (trPreview) {
     const total = duration > 0 ? duration : 10;
@@ -87,12 +86,14 @@ const tabBar = document.getElementById('tabBar');
 const soonBox = document.getElementById('soonBox');
 const partBox = document.getElementById('partBox');
 const tmplBox = document.getElementById('tmplBox');
+const stkBox = document.getElementById('stkBox');
 const effBox = document.getElementById('effBox');
 const TAB_NAMES = {
   effects: 'Эффекты',
   particles: 'Частицы',
   text: 'Текст',
   templates: 'Шаблоны',
+  stickers: 'Стикеры',
   layers: 'Слои'
 };
 const settingsBtn = document.getElementById('settingsBtn');
@@ -112,6 +113,12 @@ settingsClose.addEventListener('click', () => {
 
 settingsBox.addEventListener('pointerdown', (e) => {
   if (e.target === settingsBox) settingsBox.hidden = true;
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape' || settingsBox.hidden) return;
+  if (!window.matchMedia('(min-width: 1024px)').matches) return;
+  settingsBox.hidden = true;
 });
 
 lengthBox.addEventListener('click', (e) => {
@@ -157,10 +164,268 @@ libraryClose.addEventListener('click', () => {
 libraryBox.addEventListener('pointerdown', (e) => {
   if (e.target === libraryBox) libraryBox.hidden = true;
 });
+
+// ---------- ТОЛЬКО КОМПЬЮТЕР: библиотека 992MUZ (треки из Firestore, файлы из R2) ----------
+const LIB_COLLECTION = 'tracks';
+let libTracks = null;
+let libLoading = false;
+
+const libSearch = document.createElement('input');
+libSearch.type = 'text';
+libSearch.className = 'lib-search';
+libSearch.placeholder = 'Поиск: название или артист';
+libSearch.spellcheck = false;
+libSearch.autocomplete = 'off';
+
+const libList = document.createElement('div');
+libList.className = 'lib-list';
+
+const libMsg = document.createElement('p');
+libMsg.className = 'lib-msg';
+
+libraryClose.before(libSearch, libList, libMsg);
+
+let libAudio = null;
+let libCur = null;
+let libSeeking = false;
+
+const libFmt = (s) => {
+  const v = isFinite(s) && s > 0 ? s : 0;
+  const m = Math.floor(v / 60);
+  const r = Math.floor(v % 60);
+  return m + ':' + (r < 10 ? '0' : '') + r;
+};
+
+function libFill(el) {
+  el.style.setProperty('--p', Number(el.value) / 10 + '%');
+}
+
+function libRowOf(t) {
+  return Array.from(libList.children).find((r) => r._track === t) || null;
+}
+
+function libPaint() {
+  Array.from(libList.children).forEach((r) => {
+    const on = !!libCur && r._track === libCur;
+    r.classList.toggle('active', on);
+    r.classList.toggle('playing', on && !!libAudio && !libAudio.paused);
+    if (!on) r.classList.remove('loading');
+  });
+}
+
+function libSync() {
+  const row = libCur ? libRowOf(libCur) : null;
+  if (!row || !libAudio) return;
+  const d = libAudio.duration;
+  const c = libAudio.currentTime;
+  const ok = isFinite(d) && d > 0;
+  row._dur.textContent = ok ? libFmt(d) : '--:--';
+  if (!libSeeking) {
+    row._cur.textContent = libFmt(c);
+    row._seek.value = String(ok ? Math.round((c / d) * 1000) : 0);
+    libFill(row._seek);
+  }
+}
+
+function libStop() {
+  if (libAudio) {
+    libAudio.pause();
+    libAudio.removeAttribute('src');
+    libAudio.load();
+  }
+  libCur = null;
+  libSeeking = false;
+  libPaint();
+}
+
+function libToggle(t) {
+  if (!libAudio) {
+    libAudio = new Audio();
+    libAudio.preload = 'auto';
+    libAudio.addEventListener('timeupdate', libSync);
+    libAudio.addEventListener('loadedmetadata', libSync);
+    libAudio.addEventListener('durationchange', libSync);
+    libAudio.addEventListener('play', libPaint);
+    libAudio.addEventListener('pause', libPaint);
+    libAudio.addEventListener('waiting', () => {
+      const r = libCur ? libRowOf(libCur) : null;
+      if (r) r.classList.add('loading');
+    });
+    libAudio.addEventListener('playing', () => {
+      const r = libCur ? libRowOf(libCur) : null;
+      if (r) r.classList.remove('loading');
+      libPaint();
+    });
+    libAudio.addEventListener('ended', () => {
+      libAudio.currentTime = 0;
+      libPaint();
+      libSync();
+    });
+    libAudio.addEventListener('error', () => {
+      if (!libCur) return;
+      libMsg.textContent = 'Не удалось воспроизвести «' + libCur.title + '».';
+      libCur = null;
+      libPaint();
+    });
+  }
+  libMsg.textContent = '';
+  if (libCur === t) {
+    if (libAudio.paused) libAudio.play().catch(() => {});
+    else libAudio.pause();
+    return;
+  }
+  libCur = t;
+  libSeeking = false;
+  libAudio.src = t.url;
+  libPaint();
+  const row = libRowOf(t);
+  if (row) {
+    row.classList.add('loading');
+    row._cur.textContent = '0:00';
+    row._dur.textContent = '--:--';
+    row._seek.value = '0';
+    libFill(row._seek);
+  }
+  libAudio.play().catch(() => {});
+}
+
+// Закрыли библиотеку (крестик, фон, «Взять»): прослушивание останавливается.
+new MutationObserver(() => {
+  if (libraryBox.hidden) libStop();
+}).observe(libraryBox, { attributes: true, attributeFilter: ['hidden'] });
+
+function libRender() {
+  const q = libSearch.value.trim().toLowerCase();
+  libList.textContent = '';
+  const list = (libTracks || []).filter((t) => !q || (t.title + ' ' + t.artist).toLowerCase().indexOf(q) >= 0);
+  if (libTracks) libMsg.textContent = list.length ? '' : 'Ничего не найдено.';
+  list.forEach((t) => {
+    const row = document.createElement('div');
+    row.className = 'lib-row';
+    row._track = t;
+
+    const play = document.createElement('button');
+    play.type = 'button';
+    play.className = 'lib-play';
+    play.setAttribute('aria-label', 'Слушать «' + t.title + '»');
+
+    const name = document.createElement('span');
+    name.className = 'lib-name';
+    name.textContent = t.title;
+    const art = document.createElement('span');
+    art.className = 'lib-art';
+    art.textContent = t.artist || 'Без артиста';
+
+    const take = document.createElement('button');
+    take.type = 'button';
+    take.className = 'lib-take';
+    take.textContent = 'Взять';
+
+    const seekBox = document.createElement('div');
+    seekBox.className = 'lib-seek';
+    const cur = document.createElement('span');
+    cur.textContent = '0:00';
+    const seek = document.createElement('input');
+    seek.type = 'range';
+    seek.min = '0';
+    seek.max = '1000';
+    seek.step = '1';
+    seek.value = '0';
+    libFill(seek);
+    const dur = document.createElement('span');
+    dur.textContent = '--:--';
+    seekBox.append(cur, seek, dur);
+
+    row._cur = cur;
+    row._dur = dur;
+    row._seek = seek;
+
+    seek.addEventListener('input', () => {
+      libSeeking = true;
+      libFill(seek);
+      const d = libAudio ? libAudio.duration : 0;
+      if (isFinite(d) && d > 0) cur.textContent = libFmt((Number(seek.value) / 1000) * d);
+    });
+    seek.addEventListener('change', () => {
+      const d = libAudio ? libAudio.duration : 0;
+      if (libCur === t && isFinite(d) && d > 0) libAudio.currentTime = (Number(seek.value) / 1000) * d;
+      libSeeking = false;
+    });
+
+    take.addEventListener('click', (e) => {
+      e.stopPropagation();
+      libPick(t);
+    });
+    row.addEventListener('click', (e) => {
+      if (e.target.closest('.lib-take, .lib-seek')) return;
+      libToggle(t);
+    });
+
+    row.append(play, name, art, take, seekBox);
+    libList.append(row);
+  });
+  libPaint();
+  libSync();
+}
+async function libLoad() {
+  if (libTracks || libLoading) return;
+  libLoading = true;
+  libMsg.textContent = 'Загружаю список…';
+  try {
+    const { db } = await import('/js/config/firebase.js');
+    const fs = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const snap = await fs.getDocs(fs.query(fs.collection(db, LIB_COLLECTION), fs.limit(300)));
+    const out = [];
+    snap.forEach((d) => {
+      const x = d.data();
+      if (!x || !x.trackUrl) return;
+      const ts = x.addedAt && x.addedAt.toMillis ? x.addedAt.toMillis() : (Date.parse(x.uploadedAt) || 0);
+      out.push({ title: String(x.title || 'Без названия'), artist: String(x.artist || ''), url: x.trackUrl, format: x.format || 'mp3', ts: ts });
+    });
+    out.sort((a, b) => b.ts - a.ts);
+    libTracks = out;
+    libMsg.textContent = '';
+    libRender();
+  } catch (e) {
+    console.error(e);
+    libMsg.textContent = 'Не удалось загрузить список. Проверьте интернет и правила чтения Firestore.';
+  } finally {
+    libLoading = false;
+  }
+}
+
+async function libPick(t) {
+  if (exporting || libList.classList.contains('busy')) return;
+  libList.classList.add('busy');
+  libMsg.textContent = 'Скачиваю «' + t.title + '»…';
+  try {
+    const res = await fetch(t.url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const blob = await res.blob();
+    const base = ((t.artist ? t.artist + ' - ' : '') + t.title).replace(/[\\/:*?"<>|]+/g, '').trim() || 'track';
+    const file = new File([blob], base + '.' + t.format, { type: blob.type || 'audio/mpeg' });
+    libraryBox.hidden = true;
+    libMsg.textContent = '';
+    loadFile(file);
+  } catch (e) {
+    console.error(e);
+    libMsg.textContent = 'Не удалось скачать трек. Скорее всего, у cdn.992muz.ru не включён CORS.';
+  } finally {
+    libList.classList.remove('busy');
+  }
+}
+
+libSearch.addEventListener('input', libRender);
+
+libraryBtn.addEventListener('click', () => {
+  if (!window.matchMedia('(min-width: 1024px)').matches) return;
+  libLoad();
+});
 let tmplMode = 'templates';
 
 function renderTmplTab() {
   tmplBox.textContent = '';
+  if (window.matchMedia('(min-width: 1024px)').matches) return;
   const seg = ovlEl('div', 'viz-seg viz-stk-tabs');
   [['templates', 'Шаблоны'], ['stickers', 'Стикеры']].forEach((t) => {
     const b = ovlEl('button', 'viz-sub' + (tmplMode === t[0] ? ' active' : ''), t[1]);
@@ -187,29 +452,44 @@ function renderTmplTab() {
     }
   });
 }
+// ТОЛЬКО КОМПЬЮТЕР: вкладка «Стикеры». Верх (кнопка и категории) стоит на месте, прокручивается только список.
+function renderStkTab() {
+  stkBox.textContent = '';
+  const tmp = ovlEl('div');
+  ovlRenderStickerPicker(tmp, renderStkTab);
+  const kids = Array.from(tmp.children);
+  const list = ovlEl('div', 'stk-scroll');
+  kids.forEach((k, i) => (i < 2 && kids.length > 2 ? stkBox : list).append(k));
+  stkBox.append(list);
+}
 let openTab = null;
 
 function showTab(id) {
+  if (id !== 'effects') closeEffectsSettings();
     libraryBtn.hidden = !!id;
    const wasPart = openTab === 'particles' || openTab === 'effects';
   openTab = id;
   tabBar.querySelectorAll('.viz-tab').forEach((t) => t.classList.toggle('active', t.dataset.tab === id));
   document.getElementById('styleBox').hidden = id !== 'waves';
+  if (id === 'waves') syncAudioAsk();
     if (!playing && !exporting) drawIdle(startOffset);
   const ovl = id === 'text' || id === 'layers';
   const part = id === 'particles';
   const tmpl = id === 'templates';
   const eff = id === 'effects';
-  soonBox.hidden = !id || id === 'waves' || ovl || part || tmpl || eff;
-  if (id && id !== 'waves' && !ovl && !part && !tmpl && !eff) soonBox.textContent = `${TAB_NAMES[id]} — скоро`;
+  const stk = id === 'stickers';
+  soonBox.hidden = !id || id === 'waves' || ovl || part || tmpl || eff || stk;
+  if (id && id !== 'waves' && !ovl && !part && !tmpl && !eff && !stk) soonBox.textContent = `${TAB_NAMES[id]} — скоро`;
   partBox.hidden = !part;
   tmplBox.hidden = !tmpl;
   effBox.hidden = !eff;
+  stkBox.hidden = !stk;
   if (eff) {
     mountEffectsPanel(effBox, { onChange: startPartPreview, onPreview: previewTransition });
     startPartPreview();
   }
   if (tmpl) renderTmplTab();
+  if (stk) renderStkTab();
   if (part) {
     mountParticlesPanel(partBox, { onChange: startPartPreview });
     startPartPreview();
@@ -243,6 +523,16 @@ tabBar.addEventListener('click', (e) => {
   const tab = e.target.closest('.viz-tab');
   if (!tab) return;
   const id = tab.dataset.tab;
+  if (id === 'effects' && window.matchMedia('(min-width: 1024px)').matches) {
+    if (effectsSettingsOpen()) {
+      closeEffectsSettings();
+      return;
+    }
+    if (openTab === 'effects') {
+      openEffectsSettings();
+      return;
+    }
+  }
   if (id === 'waves' && wavePanelOpen) {
     closeWavePanel();
     return;
@@ -258,6 +548,8 @@ tabBar.addEventListener('click', (e) => {
 });
 document.addEventListener('pointerdown', (e) => {
   if (!openTab) return;
+  if (window.matchMedia('(min-width: 1024px)').matches) return;
+  if (effectsSettingsOpen()) return;
   if (e.target.closest('.viz-toolbar')) return;
     if ((openTab === 'text' || openTab === 'layers') && e.target.closest('.viz-frame')) return;
   showTab(null);
@@ -351,7 +643,7 @@ photoInput.addEventListener('change', () => {
     if (!playing) drawIdle(startOffset);
     emptyEl.classList.add('has-photo');
     renderOvl();
-    setStatus('Фото добавлено. Теперь добавьте трек.', true);
+    setStatus('');
   };
   img.onerror = () => {
     URL.revokeObjectURL(url);
@@ -884,7 +1176,13 @@ function mediaReady() {
   return !!buffer || hasVideo();
 }
 
+function syncAudioAsk() {
+  const ask = document.getElementById('audioAsk');
+  if (ask) ask.hidden = mediaReady();
+}
+
 function syncReady() {
+  syncAudioAsk();
   const ok = mediaReady() && !exporting;
   playBtn.disabled = !ok;
   exportBtn.disabled = !(exportReady() && !exporting);
@@ -1865,6 +2163,7 @@ sndClose.addEventListener('click', () => {
   audioBox.hidden = true;
 });
 
+document.getElementById('sndX').addEventListener('click', () => sndClose.click());
 audioBox.addEventListener('pointerdown', (e) => {
   if (e.target === audioBox) audioBox.hidden = true;
 });
@@ -1972,6 +2271,7 @@ function applyFormat(id) {
   canvas.height = VIZ_H;
   frameEl.style.setProperty('--fw', String(VIZ_W));
   frameEl.style.setProperty('--fh', String(VIZ_H));
+  document.body.classList.toggle('fmt-wide', VIZ_W > VIZ_H);
   if (!playing) drawIdle(startOffset);
 }
 
@@ -2000,6 +2300,9 @@ let rafId = 0;
 
 const bars = new Float32Array(BAR_COUNT);
 const styleBox = document.getElementById('styleBox');
+styleBox.addEventListener('click', (e) => {
+  if (e.target.closest('#audioAskBtn')) fileInput.click();
+});
 let currentStyle = 'none';
 
 styleBox.addEventListener('click', (e) => {
@@ -2318,6 +2621,91 @@ applyBtn.addEventListener('click', () => {
   editClipBtn.textContent = `${fmt(clipStart)} – ${fmt(clipStart + duration)}`;
   setStatus('Фрагмент выбран. Нажмите ▶ на экране.', true);
 });
+// ---------- отмена выбора фрагмента (десктоп) ----------
+let waveOpenStart = 0;
+new MutationObserver(() => {
+  if (!waveBox.hidden) waveOpenStart = clipStart;
+}).observe(waveBox, { attributes: true, attributeFilter: ['hidden'] });
+
+function cancelWaveSheet() {
+  if (waveBox.hidden) return;
+  stopPlayback(true);
+  if (buffer) {
+    clipStart = picker.setStart(waveOpenStart);
+    showClipRange();
+    editClipBtn.hidden = false;
+    editClipBtn.textContent = `${fmt(clipStart)} – ${fmt(clipStart + duration)}`;
+    setStatus('Фрагмент выбран. Нажмите ▶ на экране.', true);
+  }
+  waveBox.hidden = true;
+}
+
+document.getElementById('waveCancelBtn').addEventListener('click', cancelWaveSheet);
+document.getElementById('waveCloseBtn').addEventListener('click', cancelWaveSheet);
+
+waveBox.addEventListener('pointerdown', (e) => {
+  if (e.target !== waveBox) return;
+  if (!window.matchMedia('(min-width: 1024px)').matches) return;
+  cancelWaveSheet();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape' || waveBox.hidden) return;
+  if (!window.matchMedia('(min-width: 1024px)').matches) return;
+  cancelWaveSheet();
+});
+// ---------- ТОЛЬКО КОМПЬЮТЕР: «Другой трек» → выбор источника ----------
+const waveSwap = document.querySelector('#waveBox .viz-wave-swap');
+const waveHeadRow = document.querySelector('#waveBox .viz-wave-head');
+const waveSrcMenu = document.createElement('div');
+waveSrcMenu.className = 'wave-src';
+waveSrcMenu.hidden = true;
+waveSrcMenu.innerHTML =
+  '<button type="button" class="wave-src-item" data-src="file">' +
+    '<span class="wave-src-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7.5 8.5L12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></span>' +
+    '<span class="wave-src-txt"><b>Со своего устройства</b><small>MP3, WAV, M4A и другие</small></span>' +
+  '</button>' +
+  '<button type="button" class="wave-src-item" data-src="lib">' +
+    '<span class="wave-src-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></span>' +
+    '<span class="wave-src-txt"><b>Из библиотеки 992MUZ</b><small>Треки, загруженные на сайт</small></span>' +
+  '</button>';
+waveHeadRow.append(waveSrcMenu);
+
+function closeWaveSrc() {
+  waveSrcMenu.hidden = true;
+  waveSwap.classList.remove('open');
+}
+
+waveSwap.addEventListener('click', (e) => {
+  if (!window.matchMedia('(min-width: 1024px)').matches) return;
+  e.preventDefault();
+  waveSrcMenu.hidden = !waveSrcMenu.hidden;
+  waveSwap.classList.toggle('open', !waveSrcMenu.hidden);
+});
+
+waveSrcMenu.addEventListener('click', (e) => {
+  const item = e.target.closest('[data-src]');
+  if (!item) return;
+  closeWaveSrc();
+  if (item.dataset.src === 'file') document.getElementById('audioFile').click();
+  else libraryBtn.click();
+});
+
+document.addEventListener('pointerdown', (e) => {
+  if (waveSrcMenu.hidden) return;
+  if (e.target.closest('.wave-src') || e.target.closest('.viz-wave-swap')) return;
+  closeWaveSrc();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape' || waveSrcMenu.hidden) return;
+  e.stopPropagation();
+  closeWaveSrc();
+}, true);
+
+new MutationObserver(() => {
+  if (waveBox.hidden) closeWaveSrc();
+}).observe(waveBox, { attributes: true, attributeFilter: ['hidden'] });
 editClipBtn.addEventListener('click', () => {
   if (exporting) return;
   if (!buffer) {
@@ -2452,6 +2840,12 @@ document.getElementById('imgModeCancel').addEventListener('click', () => {
 
 imgModeBox.addEventListener('pointerdown', (e) => {
   if (e.target === imgModeBox) imgModeBox.hidden = true;
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape' || imgModeBox.hidden) return;
+  if (!window.matchMedia('(min-width: 1024px)').matches) return;
+  imgModeBox.hidden = true;
 });
 exportBtn.addEventListener('click', async () => {
   if (!exportReady() || exporting) return;
@@ -2891,6 +3285,15 @@ panelStyles.addEventListener('click', (e) => {
   redrawWave();
 });
 
+if (window.matchMedia('(min-width: 1024px)').matches) {
+  panelStyles.addEventListener('pointermove', (e) => {
+    const chip = e.target.closest('.viz-chip');
+    if (!chip) return;
+    const r = chip.getBoundingClientRect();
+    chip.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    chip.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  });
+}
 colorModes.addEventListener('click', (e) => {
   const chip = e.target.closest('.viz-chip');
   if (!chip) return;
@@ -4803,6 +5206,38 @@ function ovlPaneLong(l) {
   );
   return pane;
 }
+let ovlTplOpen = false;
+
+// ТОЛЬКО КОМПЬЮТЕР: шаблоны и стикеры живут во вкладке «Текст», под кнопкой «Добавить текст».
+function ovlTemplatesBlock(root, collapsible) {
+  const open = !collapsible || ovlTplOpen;
+  if (collapsible) {
+    const fold = ovlEl('button', 'viz-ovl-fold' + (open ? ' open' : ''), 'Шаблоны');
+    fold.type = 'button';
+    fold.addEventListener('click', () => {
+      ovlTplOpen = !ovlTplOpen;
+      renderOvl();
+    });
+    root.append(fold);
+  }
+  if (!open) return;
+  const box = ovlEl('div', 'ovl-tpl');
+  root.append(box);
+  const fill = () => {
+    box.textContent = '';
+    const host = ovlEl('div', 'ovl-tpl-host');
+    box.append(host);
+    mountTemplatesPanel(host, {
+      ready: ovlReady,
+      canApply: () => !exporting,
+      onApply: () => {
+        buzz();
+        renderOvl();
+      }
+    });
+  };
+  fill();
+}
 function ovlRenderText(root) {
   if (!ovlReady()) {
     root.append(ovlEl('p', 'viz-ovl-title', 'Сначала добавьте фото или трек, потом можно добавлять текст.'));
@@ -4819,8 +5254,8 @@ function ovlRenderText(root) {
   root.append(head);
 
   const l = getSelected();
+  if (window.matchMedia('(min-width: 1024px)').matches) ovlTemplatesBlock(root, !!l && l.type === 'text');
   if (!l || l.type !== 'text') return;
-
   const ta = ovlEl('textarea', 'viz-ovl-text');
   ta.rows = 1;
   ta.value = l.text;
@@ -4976,9 +5411,445 @@ function ovlProjectRows() {
   });
   return box;
 }
+// ===== вкладка «Слои» для компьютера: полочки с разделителями =====
+const lzSvg = (d) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+const LZ_SVG = {
+  track: lzSvg('<path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>'),
+  bg: lzSvg('<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-4.5 4 3.5 3-2.5 4 3.5"/>'),
+  effects: lzSvg('<path d="M11 3l1.9 5.1L18 10l-5.1 1.9L11 17l-1.9-5.1L4 10l5.1-1.9z"/><path d="M19 15v5M16.5 17.5h5"/>'),
+  particles: lzSvg('<circle cx="7" cy="8" r="1.7"/><circle cx="16" cy="6" r="1.1"/><circle cx="17" cy="15" r="2.2"/><circle cx="8" cy="17" r="1.2"/>'),
+  waves: lzSvg('<path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/>'),
+  text: lzSvg('<path d="M5 7V5h14v2M12 5v14M9 19h6"/>'),
+  image: lzSvg('<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M4 17l5-4.5 4 3.5 3-2.5 4 3.5"/>'),
+  up: lzSvg('<path d="M12 19V5M6 11l6-6 6 6"/>'),
+  down: lzSvg('<path d="M12 5v14M6 13l6 6 6-6"/>'),
+  copy: lzSvg('<rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>'),
+  trash: lzSvg('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/>'),
+  sliders: lzSvg('<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>'),
+  plus: lzSvg('<path d="M12 5v14M5 12h14"/>'),
+  stack: lzSvg('<path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M3 12l9 4.5 9-4.5M3 16.5L12 21l9-4.5"/>')
+};
+
+function lzIco(name, cls) {
+  const s = ovlEl('span', 'lz-ico' + (cls ? ' ' + cls : ''));
+  s.innerHTML = LZ_SVG[name] || '';
+  return s;
+}
+
+function lzSection(title, note, extra) {
+  const sec = ovlEl('section', 'lz-sec');
+  const head = ovlEl('div', 'lz-sec-head');
+  head.append(ovlEl('span', 'lz-sec-title', title), ovlEl('span', 'lz-sec-line'));
+  if (note != null && note !== '') head.append(ovlEl('span', 'lz-sec-note', note));
+  if (extra) head.append(extra);
+  sec.append(head);
+  return sec;
+}
+
+function lzRow(icon, name, status, on, tap) {
+  const r = ovlEl(tap ? 'button' : 'div', 'lz-row' + (on ? ' on' : '') + (tap ? ' tap' : ''));
+  if (tap) {
+    r.type = 'button';
+    r.addEventListener('click', tap);
+  }
+  r.append(lzIco(icon, 'lz-tile'), ovlEl('span', 'lz-name', name), ovlEl('span', 'lz-stat', status));
+  return r;
+}
+
+function lzStackRow(key, icon, name, status, on, tap) {
+  const order = getLayerOrder();
+  const idx = order.indexOf(key);
+  const wrap = ovlEl('div', 'lz-srow' + (on ? ' on' : ''));
+  const mv = ovlEl('div', 'lz-move');
+  [['up', 1, 'Выше'], ['down', -1, 'Ниже']].forEach((d) => {
+    const b = ovlEl('button', 'lz-mbtn');
+    b.type = 'button';
+    b.title = d[2];
+    b.setAttribute('aria-label', d[2]);
+    b.innerHTML = LZ_SVG[d[0]];
+    b.disabled = idx + d[1] < 0 || idx + d[1] >= order.length;
+    b.addEventListener('click', () => {
+      if (moveLayerKey(key, d[1])) {
+        buzz();
+        touch();
+        renderOvl();
+      }
+    });
+    mv.append(b);
+  });
+  wrap.append(lzRow(icon, name, status, on, tap), mv);
+  return wrap;
+}
+
+function lzLayerRows() {
+  const all = getLayers();
+  const box = ovlEl('div', 'lz-list');
+  for (let i = all.length - 1; i >= 0; i--) {
+    const l = all[i];
+    const row = ovlEl('div', 'lz-lrow' + (getSelected() === l ? ' active' : '') + (l.hidden ? ' off' : ''));
+    const name = l.type === 'text' ? (String(l.text).trim().slice(0, 14) || 'Текст') : 'Стикер ' + (i + 1);
+    const pick = ovlEl('button', 'lz-lpick');
+    pick.type = 'button';
+    pick.append(lzIco(l.type === 'text' ? 'text' : 'image', 'lz-tile sm'), ovlEl('span', 'lz-name', name));
+    pick.addEventListener('click', () => ovlSelect(l.id));
+
+    const mkBtn = (on, html, title, fn) => {
+      const b = ovlEl('button', 'lz-lbtn' + (on ? ' on' : ''));
+      b.type = 'button';
+      b.innerHTML = html;
+      b.title = title;
+      b.setAttribute('aria-label', title);
+      b.addEventListener('click', fn);
+      return b;
+    };
+    const eye = mkBtn(!l.hidden, ICON_EYE, l.hidden ? 'Показать' : 'Скрыть', () => {
+      l.hidden = !l.hidden;
+      buzz();
+      touch();
+      renderOvl();
+    });
+    const lock = mkBtn(!!l.locked, ICON_LOCK, l.locked ? 'Открепить' : 'Закрепить', () => {
+      l.locked = !l.locked;
+      buzz();
+      touch();
+      renderOvl();
+    });
+    row.append(pick, eye);
+    if (l.group) {
+      const glue = mkBtn(!l.gOpen, l.gOpen ? ICON_UNLOCK : ICON_LOCK, l.gOpen ? 'Части свободны. Нажми, чтобы склеить шаблон' : 'Шаблон склеен. Нажми, чтобы разделить на части', () => {
+        setGroupOpen(l.group, !l.gOpen);
+        buzz();
+        renderOvl();
+      });
+      row.append(glue);
+    }
+    row.append(lock);
+    box.append(row);
+  }
+  return box;
+}
+// ===== общая стопка: волны, частицы, эффекты, текст и стикеры вперемешку =====
+let lzDrag = null;
+
+// Снизу вверх. У текста и стикера vz = сколько визуальных слоёв лежит под ним (0..3).
+function lzUnified() {
+  const vis = getLayerOrder();
+  const out = [];
+  for (let s = 0; s <= vis.length; s++) {
+    getLayers().forEach((l) => {
+      const z = Math.min(vis.length, Math.max(0, l.vz == null ? vis.length : l.vz));
+      if (z === s) out.push({ kind: 'ovl', l: l });
+    });
+    if (s < vis.length) out.push({ kind: 'vis', key: vis[s] });
+  }
+  return out;
+}
+
+function lzSame(a, b) {
+  return a.kind === b.kind && (a.kind === 'vis' ? a.key === b.key : a.l === b.l);
+}
+
+function lzSkip(it) {
+  return it.kind === 'vis' && transparentMode && it.key !== 'particles';
+}
+
+function lzApply(list) {
+  const vis = [];
+  const ovl = [];
+  list.forEach((it) => {
+    if (it.kind === 'vis') {
+      vis.push(it.key);
+    } else {
+      it.l.vz = vis.length;
+      ovl.push(it.l);
+    }
+  });
+  setLayerOrder(vis.join(','));
+  const arr = getLayers();
+  arr.splice(0, arr.length);
+  ovl.forEach((l) => arr.push(l));
+  touch();
+}
+
+// dir = 1: выше (ближе к зрителю), dir = -1: ниже.
+function lzMove(item, dir) {
+  const full = lzUnified();
+  const i = full.findIndex((x) => lzSame(x, item));
+  if (i < 0) return false;
+  let j = i + dir;
+  while (j >= 0 && j < full.length && lzSkip(full[j])) j += dir;
+  if (j < 0 || j >= full.length) return false;
+  const it = full.splice(i, 1)[0];
+  full.splice(j, 0, it);
+  lzApply(full);
+  return true;
+}
+
+// above = true: положить выше строки target, false: ниже неё.
+function lzDrop(item, target, above) {
+  const full = lzUnified();
+  const it = full.find((x) => lzSame(x, item));
+  if (!it) return;
+  const rest = full.filter((x) => x !== it);
+  const k = rest.findIndex((x) => lzSame(x, target));
+  if (k < 0) return;
+  rest.splice(above ? k + 1 : k, 0, it);
+  lzApply(rest);
+}
+
+function lzUniRow(it, canUp, canDown, openTabBy) {
+  let wrap;
+  if (it.kind === 'vis') {
+    const key = it.key;
+    let name = '';
+    let status = '';
+    let on = false;
+    let tap = null;
+    if (key === 'waves') {
+      const st = STYLES.find((s) => s.id === currentStyle);
+      name = 'Волны';
+      status = st ? st.name : 'выкл';
+      on = !!st;
+      tap = () => { showTab(null); openWavePanel(); };
+    } else if (key === 'particles') {
+      const pt = PARTICLE_TYPES.find((p) => p.id === particles.type);
+      name = 'Частицы';
+      status = pt ? pt.name : 'выкл';
+      on = !!pt;
+      tap = openTabBy('particles');
+    } else {
+      const act = EFFECT_ITEMS.filter((d) => d.k !== 'sens' && effects[d.k] !== EFFECT_DEFAULTS[d.k]);
+      let txt = 'выкл';
+      if (act.length) txt = act.slice(0, 3).map((d) => d.label).join(', ') + (act.length > 3 ? ' +' + (act.length - 3) : '');
+      name = 'Эффекты';
+      status = txt;
+      on = act.length > 0;
+      tap = openTabBy('effects');
+    }
+    wrap = ovlEl('div', 'lz-srow' + (on ? ' on' : ''));
+    const vrow = lzRow(key, name, status, on, null);
+    const gear = ovlEl('button', 'lz-lbtn on');
+    gear.type = 'button';
+    gear.title = 'Настройки слоя';
+    gear.setAttribute('aria-label', 'Настройки слоя');
+    gear.innerHTML = LZ_SVG.sliders;
+    gear.addEventListener('click', tap);
+    vrow.append(gear);
+    wrap.append(vrow);
+  } else {
+    const l = it.l;
+    const picked = getSelected() === l;
+    wrap = ovlEl('div', 'lz-srow' + (picked ? ' on' : ''));
+    const row = ovlEl('div', 'lz-lrow' + (picked ? ' active' : '') + (l.hidden ? ' off' : ''));
+    const name = l.type === 'text' ? (String(l.text).trim().slice(0, 14) || 'Текст') : 'Стикер ' + (getLayers().indexOf(l) + 1);
+    const pick = ovlEl('button', 'lz-lpick');
+    pick.type = 'button';
+    pick.append(lzIco(l.type === 'text' ? 'text' : 'image', 'lz-tile sm'), ovlEl('span', 'lz-name', name));
+    pick.addEventListener('click', () => ovlSelect(l.id));
+
+    const mkBtn = (on, html, title, fn) => {
+      const b = ovlEl('button', 'lz-lbtn' + (on ? ' on' : ''));
+      b.type = 'button';
+      b.innerHTML = html;
+      b.title = title;
+      b.setAttribute('aria-label', title);
+      b.addEventListener('click', fn);
+      return b;
+    };
+    const eye = mkBtn(!l.hidden, ICON_EYE, l.hidden ? 'Показать' : 'Скрыть', () => {
+      l.hidden = !l.hidden;
+      buzz();
+      touch();
+      renderOvl();
+    });
+    const lock = mkBtn(!!l.locked, ICON_LOCK, l.locked ? 'Открепить' : 'Закрепить', () => {
+      l.locked = !l.locked;
+      buzz();
+      touch();
+      renderOvl();
+    });
+    row.append(pick, eye);
+    if (l.group) {
+      const glue = mkBtn(!l.gOpen, l.gOpen ? ICON_UNLOCK : ICON_LOCK, l.gOpen ? 'Части свободны. Нажми, чтобы склеить шаблон' : 'Шаблон склеен. Нажми, чтобы разделить на части', () => {
+        setGroupOpen(l.group, !l.gOpen);
+        buzz();
+        renderOvl();
+      });
+      row.append(glue);
+    }
+    row.append(lock);
+    wrap.append(row);
+  }
+
+  const mv = ovlEl('div', 'lz-move');
+  [['up', 1, 'Выше', canUp], ['down', -1, 'Ниже', canDown]].forEach((d) => {
+    const b = ovlEl('button', 'lz-mbtn');
+    b.type = 'button';
+    b.title = d[2];
+    b.setAttribute('aria-label', d[2]);
+    b.innerHTML = LZ_SVG[d[0]];
+    b.disabled = !d[3];
+    b.addEventListener('click', () => {
+      if (lzMove(it, d[1])) {
+        buzz();
+        renderOvl();
+      }
+    });
+    mv.append(b);
+  });
+  wrap.append(mv);
+
+  // перетаскивание мышью
+  wrap.draggable = true;
+  wrap.addEventListener('dragstart', (e) => {
+    lzDrag = it;
+    wrap.classList.add('dragging');
+    try {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', 'layer');
+    } catch (err) {}
+  });
+  wrap.addEventListener('dragend', () => {
+    lzDrag = null;
+    wrap.classList.remove('dragging');
+  });
+  wrap.addEventListener('dragover', (e) => {
+    if (!lzDrag || lzSame(lzDrag, it)) return;
+    e.preventDefault();
+    const r = wrap.getBoundingClientRect();
+    const up = e.clientY < r.top + r.height / 2;
+    wrap.classList.toggle('drop-up', up);
+    wrap.classList.toggle('drop-down', !up);
+  });
+  wrap.addEventListener('dragleave', () => {
+    wrap.classList.remove('drop-up', 'drop-down');
+  });
+  wrap.addEventListener('drop', (e) => {
+    if (!lzDrag) return;
+    e.preventDefault();
+    const r = wrap.getBoundingClientRect();
+    const up = e.clientY < r.top + r.height / 2;
+    const src = lzDrag;
+    lzDrag = null;
+    wrap.classList.remove('drop-up', 'drop-down');
+    if (lzSame(src, it)) return;
+    lzDrop(src, it, up);
+    buzz();
+    renderOvl();
+  });
+  return wrap;
+}
+function ovlRenderLayersDesk(root) {
+  const all = getLayers();
+  const l = getSelected();
+  const openTabBy = (id) => () => tabBar.querySelector('[data-tab="' + id + '"]').click();
+
+  // шапка
+  const top = ovlEl('div', 'lz-top');
+  const ttl = ovlEl('div', 'lz-top-t');
+  ttl.append(ovlEl('b', '', 'Слои'), ovlEl('span', '', 'Порядок, видимость и состав проекта'));
+  top.append(ttl, ovlHistBtns());
+  root.append(top);
+
+  // полка 1: исходники
+  const src = lzSection('Исходники', '');
+  const srcBox = ovlEl('div', 'lz-rows');
+  srcBox.append(lzRow('track', 'Трек', buffer ? (trackInfo.textContent || 'загружен') : 'не добавлен', !!buffer, buffer ? null : () => fileInput.click()));
+  let bg = 'стандартный';
+  if (transparentMode) bg = 'прозрачный';
+  else if (hasVideo()) bg = 'видео';
+  else if (photoUrl) bg = slideshow.on ? 'слайд-шоу · ' + slideshow.list.length : 'фото';
+  srcBox.append(lzRow('bg', 'Фон', bg, transparentMode || hasVideo() || !!photoUrl, (photoUrl && !hasVideo()) ? () => openSlideSheet() : null));
+  src.append(srcBox);
+  root.append(src);
+
+   // полка 2: общая стопка, верхняя строка лежит поверх остальных
+  const stackSec = lzSection('Порядок слоёв', 'тяните или стрелки');
+  const stack = ovlEl('div', 'lz-stack');
+  const rows = lzUnified().filter((x) => !lzSkip(x)).reverse();
+  rows.forEach((it, i) => {
+    stack.append(lzUniRow(it, i > 0, i < rows.length - 1, openTabBy));
+  });
+  stackSec.append(stack);
+  if (!all.length) {
+    const empty = ovlEl('div', 'lz-empty');
+    empty.append(lzIco('stack', 'lz-empty-ico'));
+    empty.append(ovlEl('b', '', 'Текста и стикеров пока нет'));
+    empty.append(ovlEl('span', '', 'Добавьте текст или стикер, и они появятся в этом списке.'));
+    const btns = ovlEl('div', 'lz-empty-btns');
+    [['text', 'Текст', 'text'], ['image', 'Шаблоны', 'text']].forEach((d) => {
+      const b = ovlEl('button', 'lz-ghost');
+      b.type = 'button';
+      b.append(lzIco(d[0]), ovlEl('span', '', d[1]));
+      b.addEventListener('click', openTabBy(d[2]));
+      btns.append(b);
+    });
+    empty.append(btns);
+    stackSec.append(empty);
+    root.append(stackSec);
+    return;
+  }
+  if (!l) stackSec.append(ovlEl('p', 'lz-hint', 'Нажмите на слой в списке или на холсте, чтобы изменить его. Верхний слой лежит поверх нижних.'));
+  root.append(stackSec);
+  if (!l) return;
+
+  // полка 4: выбранный слой
+  let gear = null;
+  if (l.type === 'image') {
+    gear = ovlEl('button', 'lz-lbtn on');
+    gear.type = 'button';
+    gear.title = 'Настроить стикер';
+    gear.setAttribute('aria-label', 'Настроить стикер');
+    gear.innerHTML = LZ_SVG.sliders;
+    gear.addEventListener('click', () => openCtxMenu(l, Math.max(8, window.innerWidth - 310), 80));
+  }
+  const sel = lzSection('Выбранный слой', l.type === 'text' ? 'Текст' : 'Стикер', gear);
+  const acts = ovlEl('div', 'lz-acts');
+  [
+    ['copy', 'Дубль', () => duplicateLayer(l.id), ''],
+    ['trash', 'Удалить', () => {
+      groupMembers(l).slice().forEach((m) => removeLayer(m.id));
+      ovlCollapsed = false;
+    }, ' danger']
+  ].forEach((d) => {
+    const b = ovlEl('button', 'lz-act' + d[3]);
+    b.type = 'button';
+    b.append(lzIco(d[0]), ovlEl('span', '', d[1]));
+    b.addEventListener('click', () => {
+      d[2]();
+      buzz();
+      renderOvl();
+    });
+    acts.append(b);
+  });
+  sel.append(acts);
+  if (l.type === 'image') {
+    const timeBtn = ovlEl('button', 'viz-ovl-fold' + (ovlTimeOpen ? ' open' : ''), 'Время показа');
+    timeBtn.type = 'button';
+    timeBtn.addEventListener('click', () => {
+      ovlTimeOpen = !ovlTimeOpen;
+      renderOvl();
+    });
+    sel.append(ovlPaneAnim(l, true), timeBtn);
+    if (ovlTimeOpen) sel.append(ovlPaneTime(l));
+  } else {
+    const edit = ovlEl('button', 'viz-btn', 'Править текст');
+    edit.type = 'button';
+    edit.addEventListener('click', () => {
+      ovlCollapsed = false;
+      showTab('text');
+    });
+    sel.append(edit);
+  }
+  root.append(sel);
+}
 function ovlRenderLayersTab(root) {
   if (!ovlReady()) {
     root.append(ovlEl('p', 'viz-ovl-title', 'Сначала добавьте фото или трек, потом можно работать со слоями.'));
+    return;
+  }
+  if (window.matchMedia('(min-width: 1024px)').matches) {
+    ovlRenderLayersDesk(root);
     return;
   }
   const all = getLayers();
@@ -5731,7 +6602,7 @@ function lpCancel() {
 frameEl.addEventListener('pointerdown', (e) => {
   if (exporting || wavePanelOpen) return;
   if (e.pointerType === 'mouse' && e.button !== 0) return;
-  if (e.target.closest('.viz-hud, button, input, label')) return;
+  if (e.target.closest('.viz-hud, button, input, textarea, label')) return;
     ovlPtrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
   try { frameEl.setPointerCapture(e.pointerId); } catch (err) {}
   if (ovlPtrs.size === 2) {
@@ -6231,7 +7102,7 @@ function openCtxMenu(l, cx, cy, keep) {
   body.append(pc, pf, pv, pl);
 
   const tabs = ovlEl('div', 'viz-ctx-tabs');
-  [['color', 'Цвет'], ['fx', 'Эффекты'], ['view', 'Вид'], ['layers', 'Слои']].forEach((t) => {
+  [['color', 'Цвет'], ['fx', 'Эффекты'], ['view', 'Вид'], ['layers', window.matchMedia('(min-width: 1024px)').matches ? 'Анимация' : 'Слои']].forEach((t) => {
     const b = ovlEl('button', 'viz-chip' + (ctxTab === t[0] ? ' active' : ''), t[1]);
     b.type = 'button';
     b.addEventListener('click', () => {
@@ -6464,12 +7335,8 @@ function openCtxMenu(l, cx, cy, keep) {
     animRow.append(b);
   });
 
+  if (!window.matchMedia('(min-width: 1024px)').matches) pl.append(info, rowO1, rowO2, listHost, hr());
   pl.append(
-    info,
-    rowO1,
-    rowO2,
-    listHost,
-    hr(),
     ovlEl('p', 'viz-ovl-title', 'Появление'),
     ctxChoice(l, 'inAnim', [['Нет', 'none'], ['Плавно', 'fade'], ['Снизу', 'up'], ['Сверху', 'down'], ['Слева', 'left'], ['Справа', 'right'], ['Зум', 'zoom']], 'none'),
     ovlSlider('Длительность', 0.1, 2, 0.05, val('inDur', 0.6), (v) => v.toFixed(2) + ' с', set('inDur')),
@@ -6553,6 +7420,7 @@ window.addEventListener('pointerdown', rememberPt, true);
 window.addEventListener('pointermove', rememberPt, true);
 
 window.addEventListener('contextmenu', (e) => {
+    if (e.target && e.target.closest && e.target.closest('textarea, input, [contenteditable="true"], .viz-ovl')) return;
   const bad = e.clientX <= 2 && e.clientY <= 2 && lastPt.t && Date.now() - lastPt.t < 15000;
   const cx = bad ? lastPt.x : e.clientX;
   const cy = bad ? lastPt.y : e.clientY;
@@ -6563,7 +7431,15 @@ window.addEventListener('contextmenu', (e) => {
   if (exporting || wavePanelOpen) return;
   const p = ovlPoint({ clientX: cx, clientY: cy });
   const hit = hitTest(ctx, p.x, p.y);
-  if (!hit || hit.type !== 'image') return;
+  if (!hit) return;
+  if (hit.type !== 'image') {
+    lpCancel();
+    ovlDrag = null;
+    ovlCollapsed = false;
+    select(hit.id);
+    showTab('text');
+    return;
+  }
   lpCancel();
   ovlDrag = null;
   ovlSelect(hit.id);
@@ -6708,6 +7584,7 @@ async function applyProject(p) {
 
 const presetBox = document.createElement('div');
 presetBox.className = 'viz-set-row';
+presetBox.id = 'presetBox';
 
 const presetTitle = document.createElement('div');
 presetTitle.className = 'viz-set-label';
@@ -6767,6 +7644,7 @@ presetHelp.setAttribute('aria-label', 'Где хранятся проекты');
 presetHelp.style.cssText = 'position: absolute; top: 30px; right: 16px; width: 26px; height: 26px; padding: 0; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; background: rgba(255, 255, 255, 0.08); color: #e8e8ec; font-size: 14px; font-weight: 700; line-height: 1; cursor: pointer;';
 
 const presetNote = document.createElement('div');
+presetNote.id = 'presetNote';
 presetNote.hidden = true;
 presetNote.style.cssText = 'padding: 12px 14px; border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 12px; background: rgba(255, 255, 255, 0.06); font-size: 12px; line-height: 1.5; color: #d4d4da;';
 presetNote.innerHTML =
@@ -7371,6 +8249,76 @@ document.getElementById('logoHome').addEventListener('click', () => {
 
 document.getElementById('newProjCancel').addEventListener('click', closeNewProj);
 
+// ---------- ТОЛЬКО КОМПЬЮТЕР: окно «О версии» по клику на V1 ----------
+const verBox = document.createElement('div');
+verBox.className = 'viz-sheet';
+verBox.id = 'verBox';
+verBox.hidden = true;
+verBox.innerHTML =
+  '<div class="viz-sheet-card ver-card">' +
+    '<div class="ver-glow" aria-hidden="true"></div>' +
+    '<div class="ver-top">' +
+      '<div class="ver-badge"><b>V1</b><span>Текущая версия</span></div>' +
+      '<h2 class="viz-sheet-title">992 Studio</h2>' +
+      '<p class="ver-lead">Профессиональный визуализатор прямо в браузере. Загрузите трек, соберите ролик и скачайте в MP4.</p>' +
+    '</div>' +
+
+    '<div class="ver-sec">' +
+      '<div class="ver-label">Что уже есть в V1</div>' +
+      '<div class="ver-chips">' +
+        '<span>14 стилей волн</span><span>Частицы</span><span>Эффекты и фильтры</span>' +
+        '<span>Текст и шаблоны</span><span>Стикеры</span><span>Слои</span>' +
+        '<span>Звук и эхо по BPM</span><span>MP4 / MP3 / WAV</span>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="ver-sec">' +
+      '<div class="ver-label ver-label-hot">Скоро в V2</div>' +
+      '<div class="ver-list">' +
+        '<div class="ver-item"><i>🎚</i><div><b>Профессиональная обработка звука</b><span>Многополосный эквалайзер, компрессор, лимитер</span></div><em>скоро</em></div>' +
+        '<div class="ver-item"><i>🧩</i><div><b>Плагины</b><span>Подключаемые эффекты и свои пресеты</span></div><em>скоро</em></div>' +
+        '<div class="ver-item"><i>🎛</i><div><b>Мастеринг одним нажатием</b><span>Громкость, баланс и чистота звучания для релиза</span></div><em>скоро</em></div>' +
+        '<div class="ver-item"><i>✨</i><div><b>ИИ-помощник</b><span>Авто-ролик под бит, подбор цветов и текста</span></div><em>скоро</em></div>' +
+        '<div class="ver-item"><i>➕</i><div><b>И многое другое</b><span>Список будет расти, следите за новостями</span></div><em>скоро</em></div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="ver-promo">' +
+      '<div class="ver-promo-t">Первые 5 месяцев бесплатно</div>' +
+      '<p>Для всех подписчиков 992MUZ. Сообщим об обновлении в Instagram, следите за новостями.</p>' +
+    '</div>' +
+
+    '<a class="ver-ig" href="https://www.instagram.com/992muz/" target="_blank" rel="noopener noreferrer">' +
+      '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>' +
+      '<span>Подписаться в Instagram</span><small>@992muz</small>' +
+    '</a>' +
+
+    '<button type="button" class="viz-btn" id="verClose">Закрыть<span class="ver-esc">Esc</span></button>' +
+  '</div>';
+document.body.append(verBox);
+
+const verBadge = document.querySelector('.viz-ver');
+
+function closeVer() {
+  verBox.hidden = true;
+}
+
+verBadge.addEventListener('click', (e) => {
+  if (!window.matchMedia('(min-width: 1024px)').matches) return;
+  e.stopPropagation();
+  if (exporting) return;
+  verBox.hidden = false;
+});
+
+document.getElementById('verClose').addEventListener('click', closeVer);
+
+verBox.addEventListener('pointerdown', (e) => {
+  if (e.target === verBox) closeVer();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !verBox.hidden) closeVer();
+});
 newProjBox.addEventListener('click', (e) => {
   if (e.target === newProjBox) closeNewProj();
 });
@@ -7409,10 +8357,15 @@ document.addEventListener('visibilitychange', () => {
 window.addEventListener('pagehide', autoSave);
 
 (async () => {
+  const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+  if (isDesktop) {
+    const wideChip = formatBox.querySelector('[data-format="16:9"]');
+    if (wideChip) wideChip.click();
+  }
   try {
     const raw = localStorage.getItem(AUTO_KEY);
     if (raw) {
-      const p = JSON.parse(raw);
+      if (isDesktop && p && typeof p === 'object') p.format = '16:9';
       if (await applyProject(p)) {
         autoLast = raw;
         if ((p.style && p.style !== 'none') || (Array.isArray(p.layers) && p.layers.length)) {

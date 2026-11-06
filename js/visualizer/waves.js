@@ -288,6 +288,41 @@ function drawBgTone(ctx, w, h) {
   ctx.fillRect(0, 0, w, h);
   ctx.restore();
 }
+// Рисует миниатюру кадра с фильтром id на полную силу (для карточек в панели «Эффекты»).
+export function drawFilterSample(g, src, id, w, h) {
+  const iw = src.videoWidth || src.naturalWidth || src.width;
+  const ih = src.videoHeight || src.naturalHeight || src.height;
+  if (!iw || !ih) return false;
+  const def = BG_FILTERS.find((x) => x.id === id);
+  g.save();
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.globalAlpha = 1;
+  g.globalCompositeOperation = 'source-over';
+  g.clearRect(0, 0, w, h);
+  if (def && def.f && 'filter' in g) {
+    const f = def.f;
+    g.filter = 'brightness(' + (f.brightness === undefined ? 1 : f.brightness) + ') contrast(' + (f.contrast === undefined ? 1 : f.contrast) + ') saturate(' + (f.saturate === undefined ? 1 : f.saturate) + ') sepia(' + (f.sepia || 0) + ') grayscale(' + (f.gray || 0) + ') hue-rotate(' + (f.hue || 0) + 'deg)';
+  }
+  const k = Math.max(w / iw, h / ih);
+  try {
+    g.drawImage(src, (w - iw * k) / 2, (h - ih * k) / 2, iw * k, ih * k);
+  } catch (e) {
+    g.restore();
+    return false;
+  }
+  g.filter = 'none';
+  if (def && def.t) {
+    const gr = g.createLinearGradient(0, 0, 0, h);
+    gr.addColorStop(0, def.t.c1);
+    gr.addColorStop(1, def.t.c2 || def.t.c1);
+    g.globalCompositeOperation = def.t.mode;
+    g.globalAlpha = Math.min(1, def.t.a);
+    g.fillStyle = gr;
+    g.fillRect(0, 0, w, h);
+  }
+  g.restore();
+  return true;
+}
 function drawBackground(ctx, bars, dim) {
     if (transparentBg) {
     ctx.clearRect(0, 0, VIZ_W, VIZ_H);

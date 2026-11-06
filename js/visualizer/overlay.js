@@ -1490,11 +1490,12 @@ function tiltEnd(main, l, W, H, bw, bh) {
     warpColsAt(main, tiltCv, ay, F, cx, cy, rx0, rx1, ry0, ry1);
   }
 }
-export function drawOverlay(ctx, bars, time) {
+export function drawOverlay(ctx, bars, time, slot) {
   const W = ctx.canvas.width;
   const H = ctx.canvas.height;
   layers.forEach(function (l) {
     if (l.hidden) return;
+    if (slot != null && Math.min(3, Math.max(0, l.vz == null ? 3 : l.vz)) !== slot) return;
     const ta = timeAlpha(l, time || 0);
     if (ta <= 0 && !forceShow) return;
     ctx.save();
