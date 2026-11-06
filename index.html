@@ -2186,10 +2186,7 @@ function closeHomeAboutFilm(e, force){
   </div>
 </section>
 
-<!-- КОММЕНТАРИИ ГЛАВНОЙ СТРАНИЦЫ -->
-<section class="section" id="home-comments-section">
-  <div id="homeCommentsList"></div>
-</section>
+
 
 </div>
 <style>
@@ -4559,10 +4556,6 @@ document.addEventListener('keydown', function(e){
   })();
 </script>
 <script type="module" src="js/auth/session.js"></script>
-<script type="module">
-  import { initComments } from './js/components/comments-section.js';
-  initComments('home_page', 'homeCommentsList');
-</script>
 <style>
   .pwa-update-banner{
     position:fixed;left:12px;right:12px;bottom:74px;z-index:9998;
