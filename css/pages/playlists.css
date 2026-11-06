@@ -336,8 +336,7 @@
   box-shadow: 0 6px 20px rgba(139,26,47,0.45);
 }
 
-.pl-modal-like-btn,
-.pl-modal-comment-btn {
+.pl-modal-like-btn {
   width: 42px;
   height: 42px;
   border-radius: 50%;
@@ -350,13 +349,11 @@
   transition: all 0.15s;
 }
 
-.pl-modal-like-btn:hover,
-.pl-modal-comment-btn:hover { background: var(--accent-light); }
+.pl-modal-like-btn:hover { background: var(--accent-light); }
 
 .pl-modal-like-btn.liked { background: var(--accent-light); }
 
-.pl-modal-like-btn img,
-.pl-modal-comment-btn img {
+.pl-modal-like-btn img {
   width: 18px;
   height: 18px;
 }
@@ -395,104 +392,13 @@
 
 .pl-modal-tracks .new-track-row { padding: 10px 28px; }
 
-/* ── COMMENTS PANEL (справа от модала) ── */
-.pl-comments-panel {
-  position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
-  left: calc(50% + 360px);
-  width: 340px;
-  max-height: 88vh;
-  background: var(--bg2);
-  border-radius: 20px;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.25);
-  display: none;
-  flex-direction: column;
-  z-index: 9999;
-  overflow: hidden;
-}
-.pl-comments-panel.open {
-  display: flex;
-  animation: panel-unfold 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-@keyframes panel-unfold {
-  0% {
-    opacity: 0;
-    transform: translateY(-50%) translateX(-40px) scaleX(0.3) scaleY(0.85);
-    transform-origin: left center;
-  }
-  60% {
-    opacity: 1;
-    transform: translateY(-50%) translateX(6px) scaleX(1.03) scaleY(1.01);
-    transform-origin: left center;
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(-50%) translateX(0) scaleX(1) scaleY(1);
-    transform-origin: left center;
-  }
-}
-
-.pl-comments-panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 20px 14px;
-  border-bottom: 1px solid var(--bg3);
-  flex-shrink: 0;
-}
-
-.pl-comments-panel-title {
-  font-family: 'Rem', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.pl-comments-panel-close {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--bg3);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text2);
-  transition: all 0.15s;
-}
-
-.pl-comments-panel-close:hover {
-  background: var(--accent);
-  color: #fff;
-}
-
-.pl-comments-panel-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0 20px 16px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--bg3) transparent;
-}
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1200px) {
   .pl-grid { grid-template-columns: repeat(4, 1fr); }
-  .pl-comments-panel { left: calc(50% + 320px); width: 300px; }
 }
 @media (max-width: 900px) {
   .pl-grid { grid-template-columns: repeat(3, 1fr); }
-  .pl-comments-panel {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) !important;
-    width: 92%;
-    max-height: 80vh;
-    z-index: 99999;
-  }
 }
 @media (max-width: 640px) {
   .pl-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -552,7 +458,6 @@
   }
   .pl-modal-play-all img { width: 13px; height: 13px; }
   .pl-modal-like-btn,
-  .pl-modal-comment-btn,
   .pl-modal-more-toggle {
     width: 34px;
     height: 34px;

@@ -1,6 +1,6 @@
 // js/pages/playlists.js
 
-import { initComments } from '../components/comments-section.js';
+
 import { db } from '../config/firebase.js';
 import { collection, query, where, orderBy, getDocs, updateDoc, doc, limit, setDoc, deleteDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { auth } from '../config/firebase.js';
@@ -32,7 +32,6 @@ const PLAYLISTS = [
   { id: 20, firebaseKey: 'deep-house',   title: 'Дип хаус',       desc: 'Глубина звука. Бесконечный груув.',             cover: 'assets/icons/deep.jfif', tag: 'Deep House'  },
  { id: 21, firebaseKey: 'narodnye',     title: 'Народные',       desc: 'Дедовские мелодии, живые как горы.',            cover: 'assets/icons/nar.jfif',      tag: 'Фольклор'    },
 ];
-let _commentsOpenId = null;
 let currentAudio = null;
 let currentRow = null;
 
@@ -241,12 +240,6 @@ function applyModalColor(r, g, b) {
 // ── OPEN PLAYLIST ──
 window.openPlaylist = async function(id) {
   window._currentPlaylistId = id;
-
-  const panel = document.getElementById('plCommentsPanel');
-  if (panel) panel.classList.remove('open');
-  _commentsOpenId = null;
-  const container = document.getElementById('plCommentsContainer');
-  if (container) container.innerHTML = '';
 
   const pl = PLAYLISTS.find(p => p.id === id);
   if (!pl) return;
@@ -489,9 +482,6 @@ window.closePlaylist = function() {
   if (plModalBoxClose) plModalBoxClose.classList.remove('pl-modal-box-expanded');
   const plMoreBtnClose = document.getElementById('plModalMoreToggle');
   if (plMoreBtnClose) plMoreBtnClose.classList.remove('open');
-  const panel = document.getElementById('plCommentsPanel');
-  if (panel) panel.classList.remove('open');
-  _commentsOpenId = null;
   // если плейлист открыт как превью-оверлей с главной (внутри iframe) — сообщаем родительской странице закрыть обёртку
   if (window.parent && window.parent !== window && new URLSearchParams(window.location.search).get('pl')) {
     window.parent.postMessage({ type: 'closePlStripModal' }, '*');
@@ -539,25 +529,7 @@ window.toggleLike = async function(btn) {
   }
 };
 
-window.openComments = function() {
-  const panel = document.getElementById('plCommentsPanel');
-  const container = document.getElementById('plCommentsContainer');
-  const currentId = window._currentPlaylistId;
-  if (panel.classList.contains('open') && _commentsOpenId === currentId) {
-    panel.classList.remove('open');
-    _commentsOpenId = null;
-    return;
-  }
-  container.innerHTML = '';
-  initComments('playlist_' + currentId, 'plCommentsContainer');
-  panel.classList.add('open');
-  _commentsOpenId = currentId;
-};
 
-window.closeCommentPanel = function() {
-  document.getElementById('plCommentsPanel').classList.remove('open');
-  _commentsOpenId = null;
-};
 
 // ── РЕЖИМ ВОСПРОИЗВЕДЕНИЯ ──
 let _currentMode = 'normal';

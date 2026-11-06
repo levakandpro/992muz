@@ -526,13 +526,7 @@ body {
     }
     .sp-empty svg { width: 36px; height: 36px; margin: 0 auto 10px; opacity: 0.3; display: block; }
 
-    /* CSS vars bridge for comments */
-    .artist-drawer, .side-panel, body {
-      --pr-text: #111111; --pr-text2: #555555; --pr-text3: #999999;
-      --pr-bg: #f2f2f2; --pr-bg2: #ffffff; --pr-bg3: #e5e5e5;
-      --pr-border: rgba(0,0,0,0.07); --pr-accent: #cc0000;
-      --pr-input-bg: #f2f2f2; --pr-input-border: #e5e5e5;
-    }
+
 
     /* SCROLL TOP */
 .scroll-top-btn {
@@ -781,12 +775,7 @@ body {
               </svg>
               <span class="count" id="drawerLikeCount" style="color:rgba(255,255,255,0.8);">0</span>
             </button>
-            <button class="mini-btn" id="btnComments" style="color:#fff;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
-              <span class="count" id="drawerCommentCount" style="color:rgba(255,255,255,0.8);">0</span>
-            </button>
+
             <button class="mini-btn" id="drawerShareBtn" style="color:#fff;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
@@ -1022,7 +1011,6 @@ photo: data.avatarUrl || 'assets/images/kartochki/vert.png',
     videos: data.videosCount || 0,
     totalPlays: data.totalPlays || 0, // требует поддержки этого поля при апдейте плеев на бэкенде
     likes: data.likes || 0,
-    comments: data.comments || 0,
     shares: data.shares || 0,
 verified: data.verified || false,
     newBlood: data.newBlood || false,
@@ -1131,7 +1119,6 @@ const DEMO_ARTISTS = [
     tracks: 8,
     videos: 5,
     likes: 924,
-    comments: 47,
     verified: true,
 photo: 'assets/images/kartochki/vert.png',
     photoInner: 'assets/images/kartochki/kvadr.jpg',
@@ -1856,7 +1843,6 @@ function openDrawer(artist, opts) {
   document.getElementById('drawerLikeCount').textContent = fmtNum(artist.likes);
   document.getElementById('drawerTracksCount').textContent = artist.tracks || 0;
   document.getElementById('drawerVideosCount').textContent = artist.videos || 0;
-document.getElementById('drawerCommentCount').textContent = artist.comments || 0;
   updateArtistNameTooltip(artist);
   renderBio(artist.bio || '');
 
@@ -1897,12 +1883,11 @@ function openSidePanel(type) {
   const body  = document.getElementById('sidePanelBody');
 
   // highlight active button
-['btnTracks','btnVideos','btnComments','drawerAnalyticsBtn'].forEach(id => {
+['btnTracks','btnVideos','drawerAnalyticsBtn'].forEach(id => {
     document.getElementById(id).classList.remove('active-panel');
   });
   if (type === 'tracks')     document.getElementById('btnTracks').classList.add('active-panel');
   if (type === 'videos')     document.getElementById('btnVideos').classList.add('active-panel');
-  if (type === 'comments')   document.getElementById('btnComments').classList.add('active-panel');
   if (type === 'analytics')  document.getElementById('drawerAnalyticsBtn').classList.add('active-panel');
 
 document.getElementById('spRepeatControls').style.display = type === 'tracks' ? 'flex' : 'none';
@@ -1913,16 +1898,7 @@ document.getElementById('spRepeatControls').style.display = type === 'tracks' ? 
   } else if (type === 'videos') {
     title.textContent = 'Видео';
     renderSideVideos(body);
-} else if (type === 'comments') {
-    title.textContent = 'Комментарии';
-    body.innerHTML = '<div style="text-align:center;padding:40px 0;color:#999;font-size:13px;">Загрузка...</div>';
-    if (currentArtist) {
-      import('./js/components/comments-section.js').then(({ initComments }) => {
-        body.innerHTML = '';
-        initComments(currentArtist.id, 'sidePanelBody');
-      });
-    }
-  } else if (type === 'analytics') {
+} else if (type === 'analytics') {
     title.textContent = 'Аналитика';
     renderSideAnalytics(body);
   }
@@ -1942,7 +1918,7 @@ function closeSidePanel() {
   sidePanel.classList.remove('open');
   sidePanel.style.display = 'none';
   currentPanel = null;
-  ['btnTracks','btnVideos','btnComments','drawerAnalyticsBtn'].forEach(id => {
+  ['btnTracks','btnVideos','drawerAnalyticsBtn'].forEach(id => {
     document.getElementById(id).classList.remove('active-panel');
   });
 }
@@ -2394,10 +2370,7 @@ document.getElementById('btnVideos').addEventListener('click', () => {
   if (currentPanel === 'videos') { closeSidePanel(); return; }
   openSidePanel('videos');
 });
-document.getElementById('btnComments').addEventListener('click', () => {
-  if (currentPanel === 'comments') { closeSidePanel(); return; }
-  openSidePanel('comments');
-});
+
 document.getElementById('drawerAnalyticsBtn').addEventListener('click', () => {
   if (currentPanel === 'analytics') { closeSidePanel(); return; }
   openSidePanel('analytics');
