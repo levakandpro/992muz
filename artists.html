@@ -41,6 +41,53 @@ body {
     }
     .page-header .sub { font-size: 14px; color: var(--text2); margin-top: 4px; }
 
+    /* HEADER: каталог + живой счётчик артистов */
+    .page-header{
+      display:flex; align-items:center; gap:14px 22px; flex-wrap:wrap;
+      padding:26px 0 20px;
+    }
+    .page-header::after{
+      content:""; flex:0 0 100%; height:1px; margin-top:8px;
+      background:linear-gradient(90deg,rgba(139,26,47,.55),rgba(139,26,47,.14) 45%,transparent);
+    }
+    .ah-h1{
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    }
+    .ah-chip{
+      display:inline-flex; align-items:center; gap:9px; padding:9px 16px;
+      border-radius:100px; background:linear-gradient(135deg,#1e1322,#0e0a13);
+      color:#f5d98a; font-size:11px; font-weight:800; letter-spacing:.16em;
+      box-shadow:0 10px 24px rgba(30,8,20,.28),inset 0 0 0 1px rgba(255,255,255,.07);
+    }
+    .ah-dot{
+      width:7px; height:7px; border-radius:50%; background:#ff6a85;
+      animation:ahPulse 1.8s ease-out infinite;
+    }
+    @keyframes ahPulse{
+      0%{ box-shadow:0 0 0 0 rgba(255,106,133,.7); }
+      100%{ box-shadow:0 0 0 9px rgba(255,106,133,0); }
+    }
+    #artistsCountLabel{ display:flex; align-items:center; gap:14px; margin:0; }
+    .ah-num{
+      font-family:'Rem',sans-serif; font-size:clamp(44px,6vw,68px); font-weight:900;
+      line-height:1; letter-spacing:-.04em; font-variant-numeric:tabular-nums;
+      background:linear-gradient(100deg,#8B1A2F 0%,#c2243f 45%,#d4a843 100%);
+      -webkit-background-clip:text; background-clip:text;
+      -webkit-text-fill-color:transparent; color:transparent;
+    }
+    .ah-text{ display:flex; flex-direction:column; gap:3px; }
+    .ah-text b{
+      font-size:14px; font-weight:800; letter-spacing:.14em;
+      text-transform:uppercase; color:var(--text);
+    }
+    .ah-text span{ font-size:12px; font-weight:500; letter-spacing:.08em; color:var(--text3); }
+    @media (max-width:540px){
+      .page-header{ padding:18px 0 14px; gap:12px 16px; }
+      .ah-chip{ padding:7px 13px; font-size:10px; }
+    }
+    @media (prefers-reduced-motion:reduce){ .ah-dot{ animation:none; } }
+
 /* ARTISTS FILTER BAR */
     .artists-filter-bar {
       display: flex;
@@ -628,7 +675,7 @@ body {
 </script>
 <div class="wrap">
 <div class="page-header">
-    <div class="section-label">Каталог</div>
+    <div class="ah-chip"><span class="ah-dot"></span>КАТАЛОГ</div>
     <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
            <h1>Артисты <span style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">таджикского рэпа - рэпи точики, tajrap, tj rap</span></h1>
 
@@ -1690,7 +1737,25 @@ const canLoadMoreFromServer = !noMoreArtists && !searchQuery && !verifiedOnly &&
 }
 
 function updateArtistsCountLabel(n) {
-  document.getElementById('artistsCountLabel').innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;margin-top:6px;"><span style="width:20px;height:1px;background:#8B1A2F;display:inline-block;"></span><span style="font-size:12px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#8B1A2F;">${n} на платформе</span><span style="width:20px;height:1px;background:#8B1A2F;display:inline-block;"></span></span>`;
+  const el = document.getElementById('artistsCountLabel');
+  if (!el) return;
+  if (el.dataset.n === String(n) && el.querySelector('.ah-num')) return;
+  el.dataset.n = String(n);
+  el.innerHTML = '<span class="ah-num">0</span><span class="ah-text"><b>артистов</b><span>на платформе</span></span>';
+  const numEl = el.querySelector('.ah-num');
+  const target = Number(n) || 0;
+  if (!target || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    numEl.textContent = target;
+    return;
+  }
+  const t0 = performance.now();
+  const dur = 900;
+  function tick(now) {
+    const p = Math.min(1, (now - t0) / dur);
+    numEl.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 }
 function setupArtistNameMarquee(card) {
   const wrap = card.querySelector('.artist-card-name-wrap');
