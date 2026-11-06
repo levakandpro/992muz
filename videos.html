@@ -51,9 +51,9 @@
         searchWrap.style.cssText = 'position:relative;';
         searchWrap.innerHTML = `
           <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:0.4;pointer-events:none;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input id="vidSearch" type="text" placeholder="Поиск видео..." style="width:220px;padding:8px 32px 8px 34px;border-radius:100px;border:1px solid var(--bg3);background:var(--bg);font-size:13px;font-family:'Inter',sans-serif;color:var(--text);outline:none;transition:border-color 0.2s,width 0.2s;" onfocus="this.style.borderColor='var(--accent)';this.style.width='280px'" onblur="this.style.borderColor='var(--bg3)';this.style.width='220px'">
+          <input id="vidSearch" type="text" placeholder="Поиск видео..." style="width:220px;padding:8px 66px 8px 34px;border-radius:100px;border:1px solid var(--bg3);background:var(--bg);font-size:13px;font-family:'Inter',sans-serif;color:var(--text);outline:none;transition:border-color 0.2s,width 0.2s;" onfocus="this.style.borderColor='var(--accent)';this.style.width='280px'" onblur="this.style.borderColor='var(--bg3)';this.style.width='220px'">
           <button id="vidSearchClear" onclick="clearSearch()" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;line-height:1;">×</button>
-          <div id="vidSearchInfo" style="position:absolute;top:calc(100% + 6px);left:0;font-size:11px;color:var(--text3);white-space:nowrap;display:none;"></div>
+                  <div id="vidSearchInfo" title="Найдено видео" style="position:absolute;right:34px;top:50%;transform:translateY(-50%);min-width:18px;padding:2px 7px;border-radius:100px;background:var(--accent-light);color:var(--accent);font-size:11px;font-weight:700;line-height:1.4;text-align:center;pointer-events:none;display:none;"></div>
         `;
         actions.parentNode.insertBefore(searchWrap, actions);
         initVidSearch();
@@ -628,7 +628,7 @@ function initVidSearch() {
       card.style.display = match ? '' : 'none';
       if (match) found++;
     });
-    vidSearchInfo.textContent = q ? `Найдено: ${found}` : '';
+    vidSearchInfo.textContent = q ? String(found) : '';
   });
 }
 window.clearSearch = function() {
