@@ -88,6 +88,52 @@ body {
     }
     @media (prefers-reduced-motion:reduce){ .ah-dot{ animation:none; } }
 
+/* КНОПКА: КАРТОЧКА АРТИСТА */
+    .ah-cta{
+      position:relative; margin-left:auto; display:inline-flex; align-items:center; gap:14px;
+      padding:10px 14px 10px 10px; border-radius:100px; overflow:hidden;
+      text-decoration:none; color:#fff;
+      background:linear-gradient(135deg,#3a0f1c 0%,#1a0f1f 55%,#0e0a13 100%);
+      box-shadow:0 14px 32px rgba(40,8,22,.35),inset 0 0 0 1px rgba(212,168,67,.35);
+      transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .ah-cta:hover{
+      transform:translateY(-3px);
+      box-shadow:0 20px 44px rgba(60,10,28,.5),inset 0 0 0 1px rgba(212,168,67,.7);
+    }
+    .ah-cta::after{
+      content:""; position:absolute; top:0; bottom:0; left:-60%; width:40%;
+      background:linear-gradient(100deg,transparent,rgba(255,255,255,.14),transparent);
+      transform:skewX(-20deg); transition:left .8s ease; pointer-events:none;
+    }
+    .ah-cta:hover::after{ left:130%; }
+    .ah-cta-ico{
+      width:44px; height:44px; border-radius:50%; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,#c2243f,#8B1A2F);
+      box-shadow:0 6px 16px rgba(139,26,47,.55);
+      transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+    }
+    .ah-cta-ico svg{
+      width:19px; height:19px; fill:none; stroke:#fff; stroke-width:2;
+      stroke-linecap:round; stroke-linejoin:round;
+    }
+    .ah-cta:hover .ah-cta-ico{ transform:rotate(-12deg) scale(1.08); }
+    .ah-cta-text{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+    .ah-cta-text small{ font-size:10px; font-weight:800; letter-spacing:.16em; color:#f5d98a; }
+    .ah-cta-text b{ font-size:14px; font-weight:700; color:#fff; white-space:nowrap; }
+    .ah-cta-arrow{
+      width:18px; height:18px; flex-shrink:0; fill:none; stroke:#f5d98a; stroke-width:2.5;
+      stroke-linecap:round; stroke-linejoin:round; transition:transform .3s ease;
+    }
+    .ah-cta:hover .ah-cta-arrow{ transform:translateX(5px); }
+    @media (max-width:760px){
+      .ah-cta{ margin-left:0; width:100%; box-sizing:border-box; }
+      .ah-cta-text b{ white-space:normal; font-size:13px; }
+      .ah-cta-arrow{ margin-left:auto; }
+    }
+
 /* ARTISTS FILTER BAR */
     .artists-filter-bar {
       display: flex;
@@ -691,6 +737,16 @@ body {
 <style>
 @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}}
 </style>
+<a class="ah-cta" href="https://t.me/producer992muz" target="_blank" rel="noopener" aria-label="Вы музыкант? Откройте свою карточку артиста: напишите нам в Telegram">
+  <span class="ah-cta-ico">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+  </span>
+  <span class="ah-cta-text">
+    <small>ВЫ МУЗЫКАНТ?</small>
+    <b>Откройте свою карточку артиста</b>
+  </span>
+  <svg class="ah-cta-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+</a>
 </div>
   <p style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
     Эксклюзивно на 992MUZ представлены и продвигаются Таджикские артисты и рэперы: Abada (Абада), Mastiffelty, Mister XЭ, Zeper, Сэм Саламов, Khalifa, M AMIR, M One, Master Ismail, Boboi Nabot, Mr Slim, SWS, Sector 4, Dejavu, Нигина Амонкулова, Манижа Давлатова, Далерхонзода, МИНО, Баха 84 (Bakha 84), Stypa, Shnaps a.k.a Rohati, mc Era, Вьюга Альянс, ZION, Parviz Muhammadi, Ayzik, Navik, Corleone, Ryder, 0 Грамм (0 gramm), Шикорчи, Baron, XZ Avlod, Shom mc (Шон мс), Hasan Madudov, Muboriz Usmonov (Мубориз Умонов), Usmon, SOR, Парвина Шукрулоева, C One, Шахбози Акобир, Нигора Холова, Сирочиддин Фозилов, Фарангис Дунё, L One, Lione kepasso, гр. Минарет, Зикриоллох Хакимов, Master Labas, Casher West Side, Massani Tj, mc Fira (Fira Rastaman), Harry Ray, Klaus, True Sound, Rain 104, Дилшод Тохири, Din Maeztro, Jaman Connection, Dj Emrejan, Далер Назаров, Aphrodita melodia.
