@@ -1547,8 +1547,8 @@ window.editArtist = async (id) => {
   const a = snap.data();
   document.getElementById('cfAppId').value = id;
   document.getElementById('cfNickname').value = a.nickname || '';
- document.getElementById('cfNickname').disabled = !!(a.nicknameLocked || a.nickname);
-  document.getElementById('cfNicknameHint').style.display = (a.nicknameLocked || a.nickname) ? 'block' : 'none';
+document.getElementById('cfNickname').disabled = false;
+document.getElementById('cfNicknameHint').style.display = 'none';
   document.getElementById('cfBio').value = a.cardBio || '';
   document.getElementById('cfAvatarFile').value = '';
   const cfPrev = document.getElementById('cfAvatarPreview');
@@ -1575,11 +1575,7 @@ window.saveCardFromAdmin = async () => {
   const appId = document.getElementById('cfAppId').value;
   const bio = document.getElementById('cfBio').value.trim();
 
-  const existingSnap = await getDoc(doc(db,'artistApplications',appId));
-  const alreadyLocked = existingSnap.exists() && existingSnap.data().nicknameLocked;
-  const nickname = alreadyLocked
-    ? (existingSnap.data().nickname || '')
-    : document.getElementById('cfNickname').value.trim();
+  const nickname = document.getElementById('cfNickname').value.trim();
  if (!nickname) { await showAlert('Введите псевдоним'); return; }
 
   const avatarFile = document.getElementById('cfAvatarFile').files[0];
