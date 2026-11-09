@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"></noscript>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&display=swap">
 <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/pages/home.css">
   <script type="application/ld+json">
@@ -306,7 +306,6 @@
       <span style="font-weight:600;font-size:9.5px;letter-spacing:.15px;opacity:.85;white-space:nowrap;line-height:1.25;color:var(--text2,#555);">платформа таджикской<br>хип-хоп индустрии</span>
       </a>
       <ul class="navbar-nav">
-      <ul class="navbar-nav">
         <li><a href="/" class="active">Главная</a></li>
         <li><a href="/artists">Артисты</a></li>
         <li><a href="/videos">Видео</a></li>
@@ -344,7 +343,11 @@
         </button>
       </div>
     </div>
-
+    <div class="navbar-mobile-stats" id="navbarMobileStats">
+      <span><b id="nfsFansMobile">—</b> фанатов</span>
+      <span class="nfs-sep">·</span>
+      <span><b id="nfsArtistsMobile">—</b> артистов</span>
+    </div>
   </div>
 </nav>
 <div class="wrap" style="padding-top:20px; padding-bottom:100px;">
@@ -2674,6 +2677,299 @@ html.low-power .rec-card::before{ animation:none !important; }
   </div>
 </section>
 
+<!-- ===== ЛЮДИ 992MUZ: смена фото артистов ===== -->
+<section class="crew" id="crew" aria-label="Команда и артисты 992MUZ">
+  <div class="crew__stage">
+
+    <div class="crew__ghost" id="crewGhost" aria-hidden="true"></div>
+    <div class="crew__photos" id="crewPhotos"></div>
+  </div>
+
+  <div class="crew__info">
+    <p class="crew__count"><b id="crewNum">01</b> / <span id="crewTotal">16</span></p>
+    <h2 class="crew__name" id="crewName" aria-live="polite"></h2>
+    <p class="crew__role" id="crewRole"></p>
+    <p class="crew__role crew__role--2" id="crewRole2"></p>
+    <ul class="crew__list" id="crewList"></ul>
+  </div>
+</section>
+
+<style>
+.crew{
+  --c-accent:#8B1A2F; --c-text:#111; --c-dim:#888;
+  position:relative; display:grid; grid-template-columns:minmax(260px,1fr) minmax(300px,1fr);
+  max-width:100%; min-height:460px; margin:28px 0 40px;
+  background:#fff;
+  border:1px solid rgba(0,0,0,.06);
+  border-radius:28px; overflow:hidden; color:var(--c-text);
+  box-shadow:0 10px 40px rgba(0,0,0,.07);
+}
+.crew__stage{position:relative; min-height:420px}
+
+.crew__ghost{
+  position:absolute; inset:auto 0 8% -4%; font-weight:900; font-size:clamp(90px,16vw,230px); line-height:.8;
+  font-family:'Rem',sans-serif; text-transform:uppercase; letter-spacing:-.04em; white-space:nowrap; color:transparent;
+  -webkit-text-stroke:1px rgba(139,26,47,.14); pointer-events:none; user-select:none;
+}
+.crew__photos{position:absolute; inset:0}
+.crew__photo{
+  position:absolute; left:0; bottom:0; height:100%; max-width:100%; width:auto; object-fit:contain; object-position:left bottom;
+  transform:translateX(-60px) scale(1.06); transform-origin:left bottom; opacity:0; filter:blur(10px) brightness(1.4);
+  clip-path:inset(0 100% 0 0);
+  transition:opacity .5s ease, transform 1s cubic-bezier(.16,1,.3,1), filter .8s ease, clip-path .9s cubic-bezier(.77,0,.18,1);
+  pointer-events:none; will-change:transform, clip-path;
+}
+.crew__photo.is-on{opacity:1; transform:none; filter:none; clip-path:inset(0 0 0 0); z-index:2}
+.crew__photo.is-off{opacity:0; transform:translateX(50px) scale(.97); filter:blur(8px); clip-path:inset(0 0 0 100%); z-index:1; transition:opacity .5s ease, transform .6s ease-in, filter .5s ease, clip-path .6s cubic-bezier(.77,0,.18,1)}
+.crew__stage, .crew__photo{-webkit-user-select:none; user-select:none; -webkit-touch-callout:none; -webkit-user-drag:none}
+.crew__info{position:relative; display:flex; flex-direction:column; justify-content:center; padding:40px 40px 40px 8px; min-width:0}
+.crew__count{margin:0 0 14px; font-size:13px; color:var(--c-dim)}
+.crew__count b{color:var(--c-accent); font-weight:700}
+.crew__name{
+  margin:0; font-family:'Rem',sans-serif; font-weight:900; text-transform:uppercase; color:#111;
+  font-size:clamp(28px,4.4vw,62px); line-height:.95; letter-spacing:-.01em; overflow-wrap:anywhere;
+}
+.crew__name .crew__w{display:inline-block; overflow:hidden; vertical-align:top; padding:.06em .04em .1em; margin:-.06em -.04em -.1em}
+.crew__name .crew__l{display:inline-block; opacity:0; transform:translateY(115%) rotate(10deg); transform-origin:left bottom; filter:blur(6px); animation:crewLetter .75s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes crewLetter{to{opacity:1; transform:none; filter:blur(0)}}
+.crew__sweep{display:none !important}
+.crew__sweep.go{animation:crewSweep .9s cubic-bezier(.77,0,.18,1)}
+@keyframes crewSweep{0%{opacity:1; transform:translateX(-120%) skewX(-18deg)} 100%{opacity:1; transform:translateX(320%) skewX(-18deg)}}
+
+.crew__ghost.swap{animation:crewGhost .9s cubic-bezier(.16,1,.3,1)}
+@keyframes crewGhost{from{opacity:0; transform:translateX(-90px)} to{opacity:1; transform:none}}
+
+.crew__timer{position:absolute; left:0; bottom:0; width:100%; height:3px; z-index:4; pointer-events:none; transform-origin:left; transform:scaleX(0); background:linear-gradient(90deg,#8B1A2F,#c2243f)}
+.crew__timer.run{animation:crewTimer var(--dur,5000ms) linear forwards}
+@keyframes crewTimer{from{transform:scaleX(0)} to{transform:scaleX(1)}}
+
+@media (prefers-reduced-motion:reduce){ .crew__sweep{display:none} .crew__ghost.swap{animation:none} }
+.crew__role{margin:12px 0 0; font-family:'Unbounded',sans-serif; font-size:clamp(15px,1.7vw,24px); font-weight:800; line-height:1.2; letter-spacing:.02em; text-transform:uppercase; color:var(--c-accent)}
+.crew__role--2{margin-top:4px; font-size:clamp(16px,1.7vw,22px); text-transform:uppercase; color:var(--c-dim); font-weight:500}
+.crew__role:empty{display:none}
+@keyframes crewIn{to{opacity:1; transform:none}}
+
+.crew__list{display:none}
+.crew__list button{
+  position:relative; overflow:hidden; font:inherit; font-size:12.5px; font-weight:600; color:#666;
+  background:#f0f1f6; border:0; border-radius:999px; padding:8px 14px; cursor:pointer;
+  transition:background .2s, color .2s;
+}
+.crew__list button:hover{color:#111; background:#e6e7ee}
+.crew__list button:focus-visible{outline:2px solid var(--c-accent); outline-offset:2px}
+.crew__list button.is-on{color:var(--c-accent); background:rgba(139,26,47,.1)}
+.crew__list button i{position:absolute; left:0; bottom:0; height:3px; width:0; background:var(--c-accent)}
+.crew__list button.is-on i{animation:crewBar var(--dur,5000ms) linear forwards}
+.crew.is-paused .crew__list button.is-on i{animation-play-state:paused}
+@keyframes crewBar{to{width:100%}}
+
+@media (max-width:720px){
+  .crew{grid-template-columns:1fr; border-radius:22px}
+  .crew__stage{min-height:340px}
+  .crew__info{padding:8px 22px 28px}
+}
+html.low-power .crew__photo{filter:none}
+@media (prefers-reduced-motion:reduce){
+  .crew__photo,.crew__name span{transition:none; animation:none; opacity:1; transform:none; filter:none}
+  .crew__photo:not(.is-on){opacity:0}
+  .crew__photo.is-on{transform:none}
+}
+</style>
+
+<script>
+(function(){
+  var PATH = 'assets/';
+  var DURATION = 5000;
+
+  var CREW = [
+    {file:'Sibastian TeeJay (producer Levakand pro).png', name:'Sibastian TeeJay', role:'Продюсер · LEVAKAND PRO', role2:'Основатель 992MUZ'},
+    {file:'RYDER.png',                 name:'Ryder',              role:'Артист года'},
+    {file:'BARON.png',                 name:'Baron',              role:'XZ AVLOD'},
+    {file:'M One Master Ismail.png',   name:'M.One',              role:'Артист', role2:'Master Ismail'},    {file:'M One Master Ismail.png',   name:'M.One',              role:'Артист года', role2:'Master Ismail'},    {file:'Shnaps a.k.a Rohati.png',   name:'Shnaps',             role:'a.k.a Rohati'},
+    {file:'MISTER ХЭ (Levakand Family).png', name:'Mister ХЭ',    role:'Levakand Family'},
+       {file:'Shahbozi Akobir (ex Republic Rap).png', name:'SHAHBOZI AKOBIR', role:'ex Republic Rap'},
+    {file:'JAVLON (Underground PRO).png', name:'Javlon',          role:'Underground PRO'},
+    {file:'CASHER (West Side).png',    name:'Casher',             role:'West Side'},
+    {file:'ABADA (Harry Ray).png',     name:'Abada',              role:'Harry Ray', left:'40px'},
+       {file:'BAKHA 84.png',              name:'Bakha 84',           role:'BK RECORDS'},
+    {file:'CORLEONE .png',             name:'Corleone',           role:'Сольный артист'},
+      {file:'Jaman Connection).png',     name:'Jaman Connection',   role:'Группа года'},
+      {file:'Mastiffelty.png',           name:'Mastiffelty',        role:'Артист года'},
+      {file:'MC ERA.png',                name:'MC ERA',             role:'Золотой МС 2010'},
+    {file:'БОБОИ НАБОТ.png',           name:'Бобои Набот',        role:'SWS - Sector 4'},
+    {file:'KLIFF (CENTRIONE).png',     name:'Kliff',              role:'Centrione'},
+    {file:'HASAN MADUDOV (HM RECORDS).png', name:'Hasan Madudov', role:'HM Records'},
+    {file:'MR SLIM (SWS SECTOR 4 - CHORTUTI - MALIM.png', name:'Mr Slim', role:'SWS Sector 4', role2:'Chortuti - Malim'}
+  ];
+
+  var root = document.getElementById('crew');
+  var photos = document.getElementById('crewPhotos');
+  var list = document.getElementById('crewList');
+  var nameEl = document.getElementById('crewName');
+  var r1 = document.getElementById('crewRole');
+  var r2 = document.getElementById('crewRole2');
+  var ghost = document.getElementById('crewGhost');
+  var num = document.getElementById('crewNum');
+  if (!root) return;
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+  document.getElementById('crewTotal').textContent = pad(CREW.length);
+  root.style.setProperty('--dur', DURATION + 'ms');
+
+  var imgs = [], btns = [], cur = -1, timer = null;
+  var order = [], pos = 0;
+
+  // новый случайный порядок; первый артист не повторяет последнего показанного
+  function newOrder(){
+    order = CREW.map(function(_, k){ return k; });
+    for (var k = order.length - 1; k > 0; k--) {
+      var j = Math.floor(Math.random() * (k + 1));
+      var tmp = order[k]; order[k] = order[j]; order[j] = tmp;
+    }
+    if (order.length > 1 && order[0] === cur) {
+      var t2 = order[0]; order[0] = order[1]; order[1] = t2;
+    }
+    pos = 0;
+  }
+  function nextIndex(){
+    if (pos >= order.length) newOrder();
+    return order[pos++];
+  }
+  newOrder();
+  // обрезает прозрачные поля вокруг человека, чтобы он стоял по центру
+  function trimTransparent(src, target){
+    var probe = new Image();
+    probe.onload = function(){
+      try {
+        var w = probe.naturalWidth, h = probe.naturalHeight;
+        var c = document.createElement('canvas'); c.width = w; c.height = h;
+        var ctx = c.getContext('2d'); ctx.drawImage(probe, 0, 0);
+        var d = ctx.getImageData(0, 0, w, h).data;
+        var minX = w, minY = h, maxX = -1, maxY = -1;
+        for (var yy = 0; yy < h; yy += 2) {
+          for (var xx = 0; xx < w; xx += 2) {
+            if (d[(yy * w + xx) * 4 + 3] > 20) {
+              if (xx < minX) minX = xx;
+              if (xx > maxX) maxX = xx;
+              if (yy < minY) minY = yy;
+              if (yy > maxY) maxY = yy;
+            }
+          }
+        }
+        if (maxX < 0) return;
+        var cw = maxX - minX + 1, ch = maxY - minY + 1;
+        var out = document.createElement('canvas'); out.width = cw; out.height = ch;
+        out.getContext('2d').drawImage(probe, minX, minY, cw, ch, 0, 0, cw, ch);
+        out.toBlob(function(b){ if (b) target.src = URL.createObjectURL(b); });
+      } catch (e) {}
+    };
+    probe.src = src;
+  }
+  CREW.forEach(function(p, i){
+    var img = new Image();
+    img.className = 'crew__photo';
+    img.alt = p.name;
+    if (p.left) img.style.left = p.left;
+    img.decoding = 'async';
+    img.draggable = false;
+    var imgSrc = PATH + encodeURIComponent(p.file);
+    img.src = imgSrc;
+    trimTransparent(imgSrc, img);
+    photos.appendChild(img);
+    imgs.push(img);
+
+    var li = document.createElement('li');
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = p.name;
+    b.appendChild(document.createElement('i'));
+    b.addEventListener('click', function(){ show(i); });
+    li.appendChild(b); list.appendChild(li); btns.push(b);
+  });
+
+  var stage = photos.parentNode;
+  var sweep = document.createElement('div');
+  sweep.className = 'crew__sweep';
+  stage.appendChild(sweep);
+  var timerBar = document.createElement('div');
+  timerBar.className = 'crew__timer';
+  root.appendChild(timerBar);
+
+  var SCR = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789#%&';
+  function scramble(el, text){
+    clearInterval(el._t);
+    if (!text){ el.textContent = ''; return; }
+    var frame = 0, total = 16;
+    el._t = setInterval(function(){
+      frame++;
+      var reveal = Math.floor(text.length * frame / total), out = '';
+      for (var k = 0; k < text.length; k++){
+        out += (k < reveal || text.charAt(k) === ' ') ? text.charAt(k) : SCR.charAt(Math.floor(Math.random() * SCR.length));
+      }
+      el.textContent = out;
+      if (frame >= total){ clearInterval(el._t); el.textContent = text; }
+    }, 40);
+  }
+  function restart(el, cls){ el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+
+  function show(i){
+    if (i === cur) return;
+    var p = CREW[i];
+    if (cur > -1){
+      var old = imgs[cur];
+      old.classList.remove('is-on');
+      old.classList.add('is-off');
+      setTimeout(function(){ old.classList.remove('is-off'); }, 1000);
+      btns[cur].classList.remove('is-on');
+    }
+    imgs[i].classList.remove('is-off');
+    imgs[i].classList.add('is-on');
+    btns[i].classList.remove('is-on'); void btns[i].offsetWidth; btns[i].classList.add('is-on');
+    cur = i;
+
+    num.textContent = pad(i + 1);
+    scramble(r1, p.role || '');
+    scramble(r2, p.role2 || '');
+    ghost.textContent = p.name.split(' ')[0];
+    restart(ghost, 'swap');
+    restart(sweep, 'go');
+    restart(timerBar, 'run');
+
+    nameEl.textContent = '';
+    var li = 0;
+    p.name.split(' ').forEach(function(w){
+      var wrap = document.createElement('span');
+      wrap.className = 'crew__w';
+      w.split('').forEach(function(ch){
+        var s = document.createElement('span');
+        s.className = 'crew__l';
+        s.textContent = ch;
+        s.style.animationDelay = (250 + li * 40) + 'ms';
+        li++;
+        wrap.appendChild(s);
+      });
+      nameEl.appendChild(wrap); nameEl.appendChild(document.createTextNode(' '));
+    });
+    schedule();
+  }
+  function schedule(){
+    clearTimeout(timer);
+    timer = setTimeout(function(){
+      show(nextIndex());
+    }, DURATION);
+  }
+    root.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  root.addEventListener('dragstart', function(e){ e.preventDefault(); });
+  root.addEventListener('mouseenter', function(){ root.classList.add('is-paused'); });
+  root.addEventListener('mouseleave', function(){ root.classList.remove('is-paused'); });
+  document.addEventListener('visibilitychange', function(){
+    root.classList.toggle('is-paused', document.hidden);
+  });
+
+  show(nextIndex());
+})();
+</script>
+
 
 
 </div>
@@ -2928,17 +3224,17 @@ html.low-power .rec-card::before{ animation:none !important; }
       <button class="modal-close" onclick="closeModal('modal-terms')">×</button>
     </div>
     <div class="modal-body" style="max-height: 400px; overflow-y: auto; font-size: 13px; line-height: 1.6; color: var(--text);">
-      <h4 style="color:#fff; margin-top:0;">1. ОБЩИЕ ПОЛОЖЕНИЯ</h4>
+      <h4 style="color:var(--text); margin-top:0;">1. ОБЩИЕ ПОЛОЖЕНИЯ</h4>
       <p>1.1. Настоящее Пользовательское соглашение (далее - Соглашение) регулирует отношения между Администрацией музыкальной платформы 992MUZ (далее - Сайт/Платформа) и Пользователем Платформы.</p>
       <p>1.2. Документ является публичной офертой в соответствии со ст. 469 Гражданского кодекса Республики Таджикистан. Использование Сайта означает полное согласие с условиями.</p>
       
-      <h4 style="color:#fff;">2. ПРАВА И ОБЯЗАННОСТИ СТОРОН</h4>
+          <h4 style="color:var(--text);">2. ПРАВА И ОБЯЗАННОСТИ СТОРОН</h4>
       <p>2.1. Администрация имеет право модерировать, удалять контент (треки, клипы, комментарии в чате) без объяснения причин, а также блокировать нарушителей правил по IP/Device ID.</p>
       <p>2.2. Пользователь имеет право прослушивать аудиоматериалы исключительно в ознакомительных и личных некоммерческих целях.</p>
       <p>2.3. При загрузке треков (включая рэп, поп, эстраду или рингтоны) Пользователь гарантирует, что обладает полным пакетом авторских и смежных прав на аудиоматериал и обложки.</p>
       <p>2.4. В чате и комментариях строго запрещены: нецензурная лексика, разжигание межнациональной, региональной или религиозной розни, спам и оскорбления.</p>
 
-      <h4 style="color:#fff;">3. ОГРАНИЧЕНИЕ ОТВЕТСТВЕННОСТИ</h4>
+          <h4 style="color:var(--text);">3. ОГРАНИЧЕНИЕ ОТВЕТСТВЕННОСТИ</h4>
       <p>3.1. Платформа предоставляется по принципу «как есть» (as is). Администрация не несет ответственности за технические сбои или содержание материалов, загружаемых пользователями.</p>
       <p>3.2. На Сайте может присутствовать контент, содержащий взрослые темы (18+). Ответственность за контроль доступа несовершеннолетних лежит на их законных представителях.</p>
     </div>
@@ -2956,7 +3252,7 @@ html.low-power .rec-card::before{ animation:none !important; }
       <p>Настоящая политика составлена в соответствии с Законом Республики Таджикистан «О защите персональных данных».</p>
       <p>1.1. Мы обрабатываем следующие данные пользователей: имя/псевдоним, адрес электронной почты (при регистрации), историю прослушиваний, лайков, а также технические маркеры (IP-адрес, файлы cookies, Device Fingerprint для защиты чата от нарушителей).</p>
       
-      <h4 style="color:var(--text);">3. ЗАЩИТА И УДАЛЕНИЕ</h4>
+      <h4 style="color:var(--text);">2. ЦЕЛИ ОБРАБОТКИ</h4>
       <p>2.1. Идентификация пользователей, обеспечение работы Личного кабинета и профилей артистов.</p>
       <p>2.2. Персонализация музыкальных рекомендаций, ведение статистики прослушиваний треков еженедельного чарта «Топ 50».</p>
 
@@ -2985,7 +3281,7 @@ html.low-power .rec-card::before{ animation:none !important; }
         <li>3. Контактные данные для оперативной связи.</li>
       </ul>
       
-      <p>Направляйте заявки на e-mail: <b style="color:#fff;">levakandproduction@gmail.com</b> с темой письма <b>«DMCA / Авторские права»</b>. Администрация обязуется рассмотреть заявление и заблокировать/удалить спорный контент в течение 24–72 часов.</p>
+      <p>Направляйте заявки на e-mail:<b style="color:var(--text);">levakandproduction@gmail.com</b> с темой письма <b>«DMCA / Авторские права»</b>. Администрация обязуется рассмотреть заявление и заблокировать/удалить спорный контент в течение 24–72 часов.</p>
     </div>
   </div>
 </div>
