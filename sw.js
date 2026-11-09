@@ -58,7 +58,7 @@ self.addEventListener('fetch', (event) => {
 
 if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(async () => {
+      fetch(event.request, { cache: 'no-store' }).catch(async () => {
         const cachedOffline = await caches.match(OFFLINE_URL);
         return cachedOffline || new Response(
           '<h1>Нет соединения</h1><p>Проверьте интернет и обновите страницу.</p>',
