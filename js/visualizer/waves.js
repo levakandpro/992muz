@@ -68,7 +68,21 @@ export const STYLES = [
   { id: 'rain', name: 'Дождь' },
   { id: 'plasma', name: 'Плазма' },
   { id: 'ribbon', name: 'Лента' },
-  { id: 'blob', name: 'Капля' }
+  { id: 'blob', name: 'Капля' },
+  { id: 'floor', name: 'Пол' },
+  { id: 'hang', name: 'Сверху' },
+  { id: 'side', name: 'Сбоку' },
+  { id: 'hair', name: 'Нити' },
+  { id: 'dots', name: 'Точки' },
+  { id: 'zigzag', name: 'Зигзаг' },
+  { id: 'steps', name: 'Ступени' },
+  { id: 'mirror', name: 'Зеркало' },
+  { id: 'rows', name: 'Ряды' },
+  { id: 'flat', name: 'Прямая' },
+  { id: 'spec', name: 'Спектр' },
+  { id: 'sine', name: 'Синус' },
+  { id: 'spiral', name: 'Спираль' },
+  { id: 'star', name: 'Звезда' }
 ];
 
 function fillBar(ctx, x, y, w, h, r) {
@@ -1092,6 +1106,412 @@ function drawBlob(ctx, bars, time, energy) {
     ctx.stroke();
   }
 }
+// ---------- новые стили: прямые линии и другие ----------
+
+// Значение спектра в точке u (0..1) с плавным переходом между столбиками.
+function barAt(bars, u) {
+  const f = Math.min(BAR_COUNT - 1, Math.max(0, u * (BAR_COUNT - 1)));
+  const i = Math.floor(f);
+  const j = Math.min(BAR_COUNT - 1, i + 1);
+  return Math.min(1.3, bars[i] + (bars[j] - bars[i]) * (f - i));
+}
+
+// Градиент слева направо для обводки линий.
+function sideGrad(ctx, x0, x1, time, a, light) {
+  const g = ctx.createLinearGradient(x0, 0, x1, 0);
+  g.addColorStop(0, tint(0, time, a, light));
+  g.addColorStop(0.5, tint(0.5, time, a, light));
+  g.addColorStop(1, tint(1, time, a, light));
+  return g;
+}
+
+// Пол: столбики стоят на прямой линии внизу.
+function drawFloor(ctx, bars, time) {
+  const w = VIZ_W;
+  const h = VIZ_H;
+  const base = h * 0.76;
+  const margin = 40;
+  const gap = 5;
+  const bw = (w - margin * 2 - gap * (BAR_COUNT - 1)) / BAR_COUNT;
+
+  for (let i = 0; i < BAR_COUNT; i++) {
+    const bh = Math.max(6, Math.min(base - 30, bars[i] * h * 0.5));
+    const tw = bw * wave.thick;
+    const x = margin + i * (bw + gap) + (bw - tw) / 2;
+    ctx.fillStyle = colorAt(i, BAR_COUNT, time);
+    fillBar(ctx, x, base - bh, tw, bh, Math.min(tw / 2, 6));
+  }
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+  ctx.fillRect(margin, base + 8, w - margin * 2, 3);
+}
+
+// Сверху: столбики свисают с прямой линии вверху.
+function drawHang(ctx, bars, time) {
+  const w = VIZ_W;
+  const h = VIZ_H;
+  const top = h * 0.24;
+  const margin = 40;
+  const gap = 5;
+  const bw = (w - margin * 2 - gap * (BAR_COUNT - 1)) / BAR_COUNT;
+
+  for (let i = 0; i < BAR_COUNT; i++) {
+    const bh = Math.max(6, Math.min(h - top - 30, bars[i] * h * 0.5));
+    const tw = bw * wave.thick;
+    const x = margin + i * (bw + gap) + (bw - tw) / 2;
+    ctx.fillStyle = colorAt(i, BAR_COUNT, time);
+    fillBar(ctx, x, top, tw, bh, Math.min(tw / 2, 6));
+  }
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+  ctx.fillRect(margin, top - 11, w - margin * 2, 3);
+}
+
+// Сбоку: полосы растут от левого края вправо.
+function drawSide(ctx, bars, time) {
+  const w = VIZ_W;
+  const h = VIZ_H;
+  const rows = 32;
+  const marginY = h * 0.16;
+  const gap = 6;
+  const left = 36;
+  const rh = (h - marginY * 2 - gap * (rows - 1)) / rows;
+
+  for (let r = 0; r < rows; r++) {
+    const b = bars[Math.min(BAR_COUNT - 1, Math.floor((r / rows) * BAR_COUNT))];
+    const bw = Math.max(8, Math.min(w - left * 2, b * w * 0.85));
+    const th = Math.max(2, rh * wave.thick);
+    const y = marginY + r * (rh + gap) + (rh - th) / 2;
+    ctx.fillStyle = colorAt(r, rows, time);
+    fillBar(ctx, left, y, bw, th, th / 2);
+  }
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+  ctx.fillRect(left - 12, marginY, 3, h - marginY * 2);
+}
+
+// Нити: много тонких прямых линий, симметрично вверх и вниз.
+function drawHair(ctx, bars, time) {
+  const w = VIZ_W;
+  const h = VIZ_H;
+  const cy = h / 2;
+  const margin = 36;
+  const n = 96;
+  const step = (w - margin * 2) / (n - 1);
+
+  ctx.lineCap = 'round';
+  ctx.lineWidth = Math.max(1, 2 * wave.thick);
+  for (let j = 0; j < n; j++) {
+    const idx = j >> 1;
+    const v = (4 + Math.min(1.3, bars[idx]) * h * 0.3) * (j % 2 === 0 ? 1 : 0.8);
+    const x = margin + j * step;
+    ctx.strokeStyle = colorAt(idx, BAR_COUNT, time);
+    ctx.beginPath();
+    ctx.moveTo(x, cy - v);
+    ctx.lineTo(x, cy + v);
+    ctx.stroke();
+  }
+}
+
+// Точки: ряд точек разъезжается от прямой по громкости.
+function drawDots(ctx, bars, time) {
+  const w = VIZ_W;
+  const h = VIZ_H;
+  const cy = h / 2;
+  const margin = 44;
+  const step = (w - margin * 2) / (BAR_COUNT - 1);
+
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+  for (let i = 0; i < BAR_COUNT; i++) {
+    const b = Math.min(1.3, bars[i]);
+    const v = b * h * 0.3;
+    const x = margin + i * step;
+    ctx.beginPath();
+    ctx.moveTo(x, cy - v);
+    ctx.lineTo(x, cy + v);
+    ctx.stroke();
+  }
+  for (let i = 0; i < BAR_COUNT; i++) {
+    const b = Math.min(1.3, bars[i]);
+    const v = b * h * 0.3;
+    const r = (4 + b * 6) * wave.thick;
+    const x = margin + i * step;
+    ctx.fillStyle = colorAt(i, BAR_COUNT, time);
+    ctx.beginPath();
+    ctx.arc(x, cy - v, r, 0, TAU);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x, cy + v, r, 0, TAU);
+    ctx.fill();
+  }
+}
+
+// Зигзаг: острая ломаная линия, как на кардиограмме.
+function drawZigzag(ctx, bars, time) {
+  const w = VIZ_W;
+  const h = VIZ_H;
+  const cy = h / 2;
+  const margin = 30;
+  const n = BAR_COUNT;
+  const step = (w - margin * 2) / (n - 1);
+
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  for (let j = 0; j < n; j++) {
+    const taper = Math.pow(Math.max(0, Math.sin((Math.PI * j) / (n - 1))), 0.5);
+    const v = (3 + barAt(bars, j / (n - 1)) * h * 0.3) * taper;
+    const x = margin + j * step;
+    const y = cy + (j % 2 === 0 ? -v : v);
+    if (j === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.lineWidth = 4 * wave.thick;
+  ctx.strokeStyle = sideGrad(ctx, margin, w - margin, time, 0.95, 66);
+  ctx.stroke();
+}
+
+// Ступени: линия идёт прямыми ступенями вверх и вниз от середины.
+function drawSteps(ctx, bars, time) {
+  const w = VIZ_W;
+  const h = VIZ_H;
+  const cy = h / 2;
+  const margin = 40;
+  const step = (w - margin * 2) / BAR_COUNT;
+
+  for (let i = 0; i < BAR_COUNT; i++) {
+    const v = 6 + Math.min(1.3, bars[i]) * h * 0.3;
+    ctx.fillStyle = tint(i / (BAR_COUNT - 1), time, 0.14, 60);
+    ctx.fillRect(margin + i * step, cy - v, step, v * 2);
+  }
+  ctx.lineJoin = 'miter';
+  ctx.lineWidth = 4 * wave.thick;
+  ctx.strokeStyle = sideGrad(ctx, margin, w - margin, time, 0.95, 68);
+  for (let s = -1; s <= 1; s += 2) {
+    ctx.beginPath();
+    for (let i = 0; i < BAR_COUNT; i++) {
+      const y = cy + s * (6 + Math.min(1.3, bars[i]) * h * 0.3);
+      const x = margin + i * step;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+      ctx.lineTo(x + step, y);
+    }
+    ctx.stroke();
+  }
+}
+
+// Зеркало: бас в центре, столбики симметрично расходятся влево и вправо.
+function drawMirror(ctx, bars, time) {
+  const w = VIZ_W;
+  const h = VIZ_H;
+  const cy = h / 2;
+  const margin = 40;
+  const gap = 4;
+  const total = BAR_COUNT * 2;
+  const bw = (w - margin * 2 - gap * (total - 1)) / total;
+
+  for (let j = 0; j < total; j++) {
+    const idx = j < BAR_COUNT ? BAR_COUNT - 1 - j : j - BAR_COUNT;
+    const bh = Math.max(5, Math.min(1.3, bars[idx]) * h * 0.34);
+    const tw = bw * wave.thick;
+    const x = margin + j * (bw + gap) + (bw - tw) / 2;
+    ctx.fillStyle = colorAt(idx, BAR_COUNT, time);
+    fillBar(ctx, x, cy - bh, tw, bh * 2, tw / 2);
+  }
+}
+
+// Ряды: стопка прямых линий, которые вздрагивают под музыку.
+function drawRows(ctx, bars, time) {
+  const w = VIZ_W;
+  const h = VIZ_H;
+  const rows = 14;
+  const margin = 50;
+  const top = h * 0.24;
+  const bottom = h * 0.76;
+  const N = 64;
+
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 2.5 * wave.thick;
+  for (let r = 0; r < rows; r++) {
+    const f = r / (rows - 1);
+    const y0 = top + f * (bottom - top);
+    const pts = [];
+    for (let i = 0; i <= N; i++) {
+      const u = i / N;
+      const taper = Math.pow(Math.max(0, Math.sin(Math.PI * u)), 1.2);
+      const k = 0.5 + 0.5 * Math.sin(u * TAU * 3 + time * 1.4 + r * 0.9);
+      pts.push({ x: margin + u * (w - margin * 2), y: y0 - barAt(bars, u) * (0.35 + 0.65 * k) * h * 0.12 * taper });
+    }
+    ctx.strokeStyle = tint(f, time, 0.9, 64);
+    ctx.beginPath();
+    smoothPath(ctx, pts, false);
+    ctx.stroke();
+  }
+}
+
+// Прямая: одна ровная линия, её толщина и яркость «играют» по частотам.
+function drawFlat(ctx, bars, time) {
+  const w = VIZ_W;
+  const cy = VIZ_H / 2;
+  const margin = 36;
+  const step = (w - margin * 2) / BAR_COUNT;
+
+  ctx.lineCap = 'butt';
+  for (let i = 0; i < BAR_COUNT; i++) {
+    const b = Math.min(1.3, bars[i]);
+    ctx.lineWidth = (3 + b * 38) * wave.thick;
+    ctx.strokeStyle = tint(i / (BAR_COUNT - 1), time, 0.35 + Math.min(1, b) * 0.65, 55 + b * 20);
+    ctx.beginPath();
+    ctx.moveTo(margin + i * step, cy);
+    ctx.lineTo(margin + (i + 1) * step + 0.5, cy);
+    ctx.stroke();
+  }
+}
+
+// Спектр: плавная закрашенная гора от нижней линии.
+function drawSpec(ctx, bars, time) {
+  const w = VIZ_W;
+  const h = VIZ_H;
+  const base = h * 0.76;
+  const margin = 30;
+  const step = (w - margin * 2) / (BAR_COUNT - 1);
+  const pts = [];
+
+  for (let i = 0; i < BAR_COUNT; i++) {
+    pts.push({ x: margin + i * step, y: base - (6 + Math.min(1.3, bars[i]) * h * 0.45) });
+  }
+  const fill = ctx.createLinearGradient(0, base - h * 0.5, 0, base);
+  fill.addColorStop(0, tint(0.5, time, 0.6, 62));
+  fill.addColorStop(1, tint(0.5, time, 0.03, 62));
+
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(margin, base);
+  smoothPath(ctx, pts, true);
+  ctx.lineTo(w - margin, base);
+  ctx.closePath();
+  ctx.fillStyle = fill;
+  ctx.fill();
+
+  ctx.lineWidth = 4 * wave.thick;
+  ctx.strokeStyle = sideGrad(ctx, margin, w - margin, time, 0.95, 68);
+  ctx.beginPath();
+  smoothPath(ctx, pts, false);
+  ctx.stroke();
+
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+  ctx.fillRect(margin, base + 8, w - margin * 2, 3);
+}
+
+// Синус: три плавные волны, которые качаются сильнее под громкую музыку.
+function drawSine(ctx, bars, time, energy) {
+  const w = VIZ_W;
+  const h = VIZ_H;
+  const cy = h / 2;
+  const margin = 20;
+  const N = 120;
+  const cfg = [
+    { k: 2, amp: 1, sp: 1, lw: 6, a: 0.95, t: 0 },
+    { k: 3, amp: 0.65, sp: -1.3, lw: 4, a: 0.6, t: 1.5 },
+    { k: 1.5, amp: 0.45, sp: 0.7, lw: 3, a: 0.4, t: 3 }
+  ];
+
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  for (const L of cfg) {
+    const pts = [];
+    for (let i = 0; i <= N; i++) {
+      const u = i / N;
+      const taper = Math.pow(Math.max(0, Math.sin(Math.PI * u)), 0.6);
+      const amp = (10 + (barAt(bars, u) * 0.7 + energy * 0.6) * h * 0.22 * L.amp) * taper;
+      pts.push({ x: margin + u * (w - margin * 2), y: cy + Math.sin(u * TAU * L.k + time * 2 * L.sp) * amp });
+    }
+    ctx.lineWidth = L.lw * wave.thick;
+    ctx.strokeStyle = sideGrad(ctx, margin, w - margin, time + L.t, L.a, 66);
+    ctx.beginPath();
+    smoothPath(ctx, pts, false);
+    ctx.stroke();
+  }
+}
+
+// Спираль: линия закручивается от центра, витки дрожат под музыку.
+function drawSpiral(ctx, bars, time, energy) {
+  const cx = VIZ_W / 2;
+  const cy = VIZ_H / 2 - 30;
+  const N = 420;
+  const turns = 4;
+  const R = Math.min(VIZ_W, VIZ_H) * 0.34;
+  let px = cx;
+  let py = cy;
+
+  ctx.lineCap = 'round';
+  for (let i = 0; i <= N; i++) {
+    const u = i / N;
+    const a = -Math.PI / 2 + u * turns * TAU + time * 0.4;
+    const b = barAt(bars, u);
+    const r = 14 + u * R + b * 80 + energy * 20 * u;
+    const x = cx + Math.cos(a) * r;
+    const y = cy + Math.sin(a) * r;
+    if (i > 0) {
+      ctx.lineWidth = (3 + b * 12) * wave.thick;
+      ctx.strokeStyle = tint(u, time, 0.9, 62);
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    }
+    px = x;
+    py = y;
+  }
+}
+
+// Звезда: острые лучи вокруг центра, длина лучей зависит от частоты.
+function drawStar(ctx, bars, time, energy) {
+  const cx = VIZ_W / 2;
+  const cy = VIZ_H / 2 - 30;
+  const total = BAR_COUNT * 2;
+  const base = 80 + energy * 30;
+  const half = (Math.PI / total) * Math.min(1, 0.85 * wave.thick);
+
+  ctx.lineJoin = 'round';
+  for (let j = 0; j < total; j++) {
+    const idx = j < BAR_COUNT ? j : total - 1 - j;
+    const a = -Math.PI / 2 + (j / total) * TAU + time * 0.1;
+    const r = base + 14 + Math.min(1.3, bars[idx]) * 240;
+    ctx.fillStyle = colorAt(idx, BAR_COUNT, time);
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(a - half) * base, cy + Math.sin(a - half) * base);
+    ctx.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
+    ctx.lineTo(cx + Math.cos(a + half) * base, cy + Math.sin(a + half) * base);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  ctx.beginPath();
+  ctx.arc(cx, cy, base - 4, 0, TAU);
+  ctx.fillStyle = `rgba(255, 255, 255, ${0.06 + energy * 0.12})`;
+  ctx.fill();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+  ctx.stroke();
+}
+
+const NEW_DRAW = {
+  floor: drawFloor,
+  hang: drawHang,
+  side: drawSide,
+  hair: drawHair,
+  dots: drawDots,
+  zigzag: drawZigzag,
+  steps: drawSteps,
+  mirror: drawMirror,
+  rows: drawRows,
+  flat: drawFlat,
+  spec: drawSpec,
+  sine: drawSine,
+  spiral: drawSpiral,
+  star: drawStar
+};
 let layer = null;
 let layerCtx = null;
 let tmp = null;
@@ -1233,7 +1653,8 @@ export function drawWaves(ctx, srcBars, time, style = 'bars', withBackground = t
   else if (style === 'rain') drawRain(ctx, bars, time);
   else if (style === 'plasma') drawPlasma(ctx, bars, time, energy);
   else if (style === 'ribbon') drawRibbon(ctx, bars, time);
-  else if (style === 'blob') drawBlob(ctx, bars, time, energy);
+   else if (style === 'blob') drawBlob(ctx, bars, time, energy);
+  else if (NEW_DRAW[style]) NEW_DRAW[style](ctx, bars, time, energy);
   else drawBars(ctx, bars, time);
 
   endWave(ctx);

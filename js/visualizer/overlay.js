@@ -96,13 +96,13 @@ export function setForceShow(v) { forceShow = !!v; }
 
 // Рисует переданные слои один раз на чужом холсте (для превью шаблонов),
 // не трогая настоящие слои и историю изменений.
-export function renderPreview(ctx, list, time) {
+export function renderPreview(ctx, list, time, animate) {
   const keep = layers.slice();
   const keepSel = selectedId;
   const keepForce = forceShow;
   layers.length = 0;
   for (let i = 0; i < list.length; i++) layers.push(list[i]);
-  forceShow = true;
+  forceShow = !animate;
   try {
     drawOverlay(ctx, null, time || 0);
   } finally {
@@ -1340,6 +1340,13 @@ function prepImage(img, w, h, l) {
   }
   return imCv;
 }
+// Плавный подъём с перелётом (как «Overshoot» в After Effects): 0 → ~1.1 → 1.
+function backOut(x) {
+  const c1 = 1.70158;
+  const c3 = c1 + 1;
+  const v = x - 1;
+  return 1 + c3 * v * v * v + c1 * v * v;
+}
 function applyMotion(ctx, l, W, H, time) {
   const t = time || 0;
   let dx = 0;
@@ -1359,6 +1366,28 @@ function applyMotion(ctx, l, W, H, time) {
     else if (inMode === 'left') dx = -rest * W * 0.4;
     else if (inMode === 'right') dx = rest * W * 0.4;
     else if (inMode === 'zoom') k = 1 - rest * 0.8;
+        else if (inMode === 'pop') {
+      k = Math.max(0.001, backOut(raw));
+      al = Math.min(1, raw * 5);
+    } else if (inMode === 'rise') {
+      dy = (1 - backOut(raw)) * H * 0.07;
+      al = Math.min(1, raw * 3);
+    }
+    else if (inMode === 'spin') {
+      rot -= rest * Math.PI * 4;
+      k = 1 - rest * 0.92;
+    }
+  }
+
+  const outMode = l.outAnim || 'none';
+  if (outMode !== 'none' && !forceShow && (l.tEnd || 0) > 0) {
+    const odur = Math.max(0.05, l.outDur == null ? 0.6 : l.outDur);
+    const go = Math.pow(Math.min(1, Math.max(0, (t - (l.tEnd - odur)) / odur)), 3);
+    al *= 1 - go;
+    if (outMode === 'spin') {
+      rot += go * Math.PI * 4;
+      k *= 1 - go * 0.92;
+    } else if (outMode === 'zoom') k *= 1 - go * 0.8;
   }
 
   const loop = l.loop || 'none';

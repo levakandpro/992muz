@@ -73,7 +73,7 @@ export function createWavePicker(canvas, handlers = {}) {
       ctx.fillRect(x + (colW - barW) / 2, mid - bh / 2, barW, bh);
     }
 
-    if (movable()) {
+     if (peaks) {
       const lw = Math.max(2, Math.round(w / 260));
       ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
       ctx.fillRect(x0, 0, x1 - x0, h);
@@ -95,7 +95,6 @@ export function createWavePicker(canvas, handlers = {}) {
     const f = (ev.clientX - r.left) / Math.max(1, r.width);
     return Math.min(1, Math.max(0, f)) * total;
   }
-
    function moveTo(start) {
     const max = Math.max(0, total - clipLen);
     let s = start;
@@ -104,23 +103,61 @@ export function createWavePicker(canvas, handlers = {}) {
     draw();
     if (handlers.onChange) handlers.onChange(clipStart);
   }
+
+  // Тянем левый или правый край рамки: длина фрагмента меняется как угодно.
+  function edgeAt(ev) {
+    const r = canvas.getBoundingClientRect();
+    const px = ev.clientX - r.left;
+    const x0 = (clipStart / total) * r.width;
+    const x1 = ((clipStart + clipLen) / total) * r.width;
+    const hit = Math.min(14, Math.max(4, (x1 - x0) / 3));
+    if (Math.abs(px - x0) <= hit) return 'left';
+    if (Math.abs(px - x1) <= hit) return 'right';
+    return null;
+  }
+
+  function resizeTo(edge, t) {
+    const minLen = Math.min(1, total);
+    const end = clipStart + clipLen;
+    if (edge === 'left') {
+      const s = Math.min(end - minLen, Math.max(0, t));
+      clipStart = s;
+      clipLen = end - s;
+    } else {
+      const e = Math.max(clipStart + minLen, Math.min(total, t));
+      clipLen = e - clipStart;
+    }
+    draw();
+    if (handlers.onResize) handlers.onResize(clipLen);
+    if (handlers.onChange) handlers.onChange(clipStart);
+  }
+
   canvas.addEventListener('pointerdown', (ev) => {
-    if (!movable()) return;
+    if (!peaks) return;
     if (handlers.canDrag && !handlers.canDrag()) return;
+    const edge = edgeAt(ev);
+    if (!edge && !movable()) return;
     const t = secAt(ev);
-    const inside = t >= clipStart && t <= clipStart + clipLen;
-    drag = { grab: inside ? t - clipStart : clipLen / 2 };
+    if (edge) {
+      drag = { edge };
+    } else {
+      const inside = t >= clipStart && t <= clipStart + clipLen;
+      drag = { grab: inside ? t - clipStart : clipLen / 2 };
+    }
     try { canvas.setPointerCapture(ev.pointerId); } catch (e) {}
     if (handlers.onDragStart) handlers.onDragStart();
-    moveTo(t - drag.grab);
+    if (!edge) moveTo(t - drag.grab);
     ev.preventDefault();
   });
 
   canvas.addEventListener('pointermove', (ev) => {
-    if (!drag) return;
-    moveTo(secAt(ev) - drag.grab);
+    if (!drag) {
+      canvas.style.cursor = peaks && edgeAt(ev) ? 'ew-resize' : '';
+      return;
+    }
+    if (drag.edge) resizeTo(drag.edge, secAt(ev));
+    else moveTo(secAt(ev) - drag.grab);
   });
-
   function endDrag() {
     if (!drag) return;
     drag = null;

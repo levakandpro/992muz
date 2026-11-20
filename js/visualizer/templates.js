@@ -1,5 +1,5 @@
-import { FONTS, addText, loadFont, select, touch, renderPreview } from '/js/visualizer/overlay.js';
-
+import { FONTS, addText, addSticker, loadFont, select, touch, renderPreview } from '/js/visualizer/overlay.js';
+import { VIZ_W, VIZ_H } from '/js/visualizer/waves.js';
 // Шаблоны текста для вкладки «Шаблоны».
 // Шаблон — это несколько текстовых слоёв, собранных в одну композицию:
 // главное слово, подписи, тонкие линии, свечение, тень и т.д.
@@ -18,11 +18,7 @@ const SAMPLE_TEXT = '992';
 
 export const TEMPLATE_CATS = [
   { id: 'all', name: 'Все' },
-  { id: 'lux', name: 'Люкс' },
-  { id: 'light', name: 'Свет' },
-  { id: 'vol', name: 'Объём' },
-  { id: 'plate', name: 'Плашки' },
-  { id: 'music', name: 'Музыка' }
+  { id: 'p992', name: '992' }
 ];
 
 // ---------- мелкие заготовки для композиций ----------
@@ -46,8 +42,127 @@ function rule(y, w, color, alpha) {
     }
   };
 }
+// ---------- карточки «Подписаться на Instagram» ----------
+const KARTOCHKI = '/assets/images/kartochki/';
+const IG_AVATAR = KARTOCHKI + 'vert.png';
+const IG_CURSOR = KARTOCHKI + 'cursor.svg';
+const IG_CLICK = 2.8; // секунда, на которой «нажимается» кнопка
 
+// Плашка без текста: w и h — доля ширины кадра.
+function igPlate(y, w, h, set) {
+  return {
+    font: 'Oswald', text: ' ', y: y, size: 0.02,
+    set: Object.assign({
+      shadow: false, lineH: 0.1,
+      plate: true, plateShape: 'rect', plateRadius: 2.5, plateAlpha: 1,
+      platePadX: w / 0.04, platePadY: h / 0.04 - 0.05
+    }, set)
+  };
+}
+
+function igCard(id, name, dark) {
+  const bg = dark ? '#18181c' : '#ffffff';
+  const fg = dark ? '#ffffff' : '#14141a';
+  const doneBg = dark ? '#3a3a42' : '#efefef';
+  const pop = function (at, dur) { return { inAnim: 'pop', inDur: dur || 0.6, tStart: at }; };
+  const rise = function (at) { return { inAnim: 'rise', inDur: 0.6, tStart: at }; };
+  return {
+      id: id, name: name, cat: 'p992', fit: true,
+    layers: [
+      igPlate(0.75, 0.875, 0.21, Object.assign({ plateColor: '#833ab4', plateColor2: '#fcb045', plateGrad: true, plateGradAngle: 0, plateRadius: 2.8 }, pop(0.2, 0.7))),
+      igPlate(0.75, 0.86, 0.195, Object.assign({ plateColor: bg, plateRadius: 2.5 }, pop(0.3, 0.7))),
+      {
+        img: IG_AVATAR, x: 0.17, y: 0.75, size: 0.14,
+        set: Object.assign({ shape: 'circle', outlineOn: true, outlineColor: '#e1306c', outlineW: 0.006 }, pop(0.55, 0.65))
+      },
+      {
+        font: 'Unbounded', text: 'Instagram', x: 0.43, y: 0.7365, size: 0.042,
+        set: Object.assign({ bold: true, shadow: false, gradient: true, color: '#833ab4', gradColor2: '#fcb045', gradAngle: 0 }, rise(0.75))
+      },
+      {
+        font: 'Unbounded', text: '@992muz', x: 0.43, y: 0.7655, size: 0.044,
+        set: Object.assign({ bold: true, shadow: false, color: fg }, rise(0.9))
+      },
+      {
+        font: 'Oswald', text: 'ПОДПИСАТЬСЯ', x: 0.775, y: 0.75, size: 0.028,
+        set: Object.assign({
+          bold: true, caps: true, letterSp: 0.05, color: '#ffffff', shadow: false,
+          plate: true, plateColor: '#0095f6', plateAlpha: 1, plateShape: 'pill', platePadX: 0.7, platePadY: 0.5,
+          tEnd: IG_CLICK + 0.15
+        }, pop(1.1, 0.6))
+      },
+      {
+        later: true,
+        font: 'Oswald', text: 'ВЫ ПОДПИСАНЫ', x: 0.775, y: 0.75, size: 0.028,
+        set: Object.assign({
+          bold: true, caps: true, letterSp: 0.05, color: fg, shadow: false,
+          plate: true, plateColor: doneBg, plateAlpha: 1, plateShape: 'pill', platePadX: 0.7, platePadY: 0.5
+        }, pop(IG_CLICK, 0.4))
+      },
+      {
+        img: IG_CURSOR, x: 0.82, y: 0.775, size: 0.07,
+        set: Object.assign({ tEnd: 4.4, fadeOut: 0.3, shOn: true, shAlpha: 0.5, shBlur: 0.01, shDist: 0.008 }, rise(1.7))
+      }
+    ]
+  };
+}
 export const TEMPLATES = [
+    igCard('ig-card-light', 'Instagram светлая', false),
+  igCard('ig-card-dark', 'Instagram тёмная', true),
+    {
+    id: 'ig-pro', name: 'Instagram PRO', cat: 'old',
+    layers: [
+      {
+        font: 'Oswald', text: 'FOLLOW ON INSTAGRAM', y: 0.65, size: 0.03,
+        set: {
+          bold: true, caps: true, letterSp: 0.6, color: '#ffffff',
+          shadow: true, shadowColor: '#000000', shadowAlpha: 0.6, shadowBlur: 0.25, shadowDist: 0.03,
+          inAnim: 'down', inDur: 0.7, outAnim: 'zoom', outDur: 0.5,
+          tStart: 1, tEnd: 7.4
+        }
+      },
+      {
+        font: 'Unbounded', text: '@992muz', y: 0.72, size: 0.08,
+        set: {
+          bold: true, color: '#ffffff', letterSp: 0.04, shadow: false,
+          plate: true, plateColor: '#ffb347', plateColor2: '#c2188f', plateGrad: true, plateGradAngle: 0, plateAlpha: 1,
+          plateShape: 'pill', platePadX: 0.9, platePadY: 0.45,
+          plateBorder: true, plateBorderColor: '#ffffff', plateBorderW: 0.012,
+          plateShadow: true, plateShadowColor: '#ff3d9a', plateShadowAlpha: 0.8, plateShadowBlur: 0.7, plateShadowDist: 0.1,
+          inAnim: 'spin', inDur: 1.2, outAnim: 'spin', outDur: 0.8,
+          tStart: 1.3, tEnd: 8, loop: 'sway', loopSpeed: 0.7
+        }
+      },
+      {
+        font: 'Oswald', text: 'ПОДПИСАТЬСЯ', y: 0.8, size: 0.04,
+        set: {
+          bold: true, caps: true, letterSp: 0.3, color: '#16161d', shadow: false,
+          plate: true, plateColor: '#ffffff', plateAlpha: 1, plateShape: 'pill', platePadX: 0.8, platePadY: 0.3,
+          plateShadow: true, plateShadowColor: '#ffffff', plateShadowAlpha: 0.35, plateShadowBlur: 0.6, plateShadowDist: 0,
+          anim: 'pulse', animPower: 0.25,
+          inAnim: 'up', inDur: 0.7, outAnim: 'zoom', outDur: 0.5,
+          tStart: 2.1, tEnd: 7.7
+        }
+      }
+    ]
+  },
+    {
+          id: 'ig-992muz', name: 'Instagram @992muz', cat: 'old',
+    layers: [
+      {
+        font: 'Unbounded', text: '@992muz', y: 0.72, size: 0.075,
+        set: {
+          bold: true, color: '#ffffff', letterSp: 0.04, shadow: false,
+          plate: true, plateColor: '#ff9a3c', plateColor2: '#c2188f', plateGrad: true, plateGradAngle: 0,
+          plateShape: 'pill', platePadX: 0.9, platePadY: 0.45, plateAlpha: 1,
+          plateBorder: true, plateBorderColor: '#ffffff', plateBorderW: 0.01,
+          plateShadow: true, plateShadowColor: '#ff3d9a', plateShadowAlpha: 0.7, plateShadowBlur: 0.6, plateShadowDist: 0.1,
+          inAnim: 'spin', inDur: 1.1, outAnim: 'spin', outDur: 0.8,
+          tStart: 1, tEnd: 8, loop: 'sway', loopSpeed: 0.7
+        }
+      }
+    ]
+  },
   // ===== ЛЮКС =====
   {
     id: 'gold', name: 'Золото', cat: 'lux',
@@ -356,7 +471,20 @@ function ensureLatin(font) {
   const probe = '800 40px ' + font.family;
   return document.fonts.load(probe, '0123456789ABCDEFNEWOPRSTUY').catch(function () {});
 }
-
+// Шаблон нарисован для 9:16. В другом формате пересчитываем размер и положение,
+// чтобы буквы не раздувались и строки не слипались.
+function fitPos(tpl, spec) {
+  const x0 = spec.x == null ? 0.5 : spec.x;
+  if (!tpl.fit) return { x: x0, y: spec.y, size: spec.size };
+  const r = VIZ_H / VIZ_W;
+  const f = r >= 1.7 ? 1 : r >= 0.99 ? 0.85 : 0.5;
+  const anchor = r >= 1.7 ? 0.75 : r >= 0.99 ? 0.78 : 0.82;
+  return {
+    x: 0.5 + (x0 - 0.5) * f,
+    y: anchor + (spec.y - 0.75) * 1.778 * f / r,
+    size: spec.size * f
+  };
+}
 let groupSeq = 0;
 
 export function applyTemplate(tpl) {
@@ -364,10 +492,18 @@ export function applyTemplate(tpl) {
   // У шаблона из нескольких частей общий номер группы. gOpen: false = части склеены.
   const gid = tpl.layers.length > 1 ? ++groupSeq : 0;
   tpl.layers.forEach(function (spec) {
+        const pos = fitPos(tpl, spec);
+        if (spec.img) {
+      addSticker(spec.img).then(function (l) {
+        if (!l) return;
+              Object.assign(l, spec.set || {}, { x: pos.x, y: pos.y, size: pos.size, group: gid, gOpen: false });
+        touch();
+      });
+      return;
+    }
     const font = pickFont(spec.font);
     const l = addText(font);
-    Object.assign(l, spec.set || {}, { text: specText(spec), x: spec.x == null ? 0.5 : spec.x, y: spec.y, size: spec.size, group: gid, gOpen: false });
-    if (spec.main && !first) first = l;
+        Object.assign(l, spec.set || {}, { text: specText(spec), x: spec.x == null ? 0.5 : spec.x, y: spec.y, size: spec.size, group: gid, gOpen: false });
     ensureLatin(font).then(function () { loadFont(font); });
   });
   if (first) select(first.id);
@@ -394,6 +530,21 @@ const PV_REAL_H = 1280;
 let pvSeq = 0;
 const pvIds = {};
 
+const imgCache = {};
+
+function previewImg(url) {
+  let im = imgCache[url];
+  if (!im) {
+    im = new Image();
+    im.promise = new Promise(function (resolve) {
+      im.onload = resolve;
+      im.onerror = resolve;
+    });
+    im.src = url;
+    imgCache[url] = im;
+  }
+  return im;
+}
 function paintBackdrop(g, W, H) {
   g.setTransform(1, 0, 0, 1, 0, 0);
   g.globalAlpha = 1;
@@ -417,7 +568,7 @@ function paintBackdrop(g, W, H) {
   g.fillRect(0, 0, W, H);
 }
 
-function previewLayers(tpl, W, H) {
+function previewLayers(tpl, W, H, demo) {
   let lo = 1;
   let hi = 0;
   tpl.layers.forEach(function (s) {
@@ -429,8 +580,23 @@ function previewLayers(tpl, W, H) {
   return tpl.layers.map(function (spec, i) {
     const key = tpl.id + ':' + i;
     if (!pvIds[key]) pvIds[key] = -(++pvSeq);
+        if (spec.later && !demo) return null;
+    if (spec.img) {
+      const im = previewImg(spec.img);
+      if (!im.naturalWidth) return null;
+      const io = Object.assign({ opacity: 1 }, spec.set || {}, {
+        id: pvIds[key],
+        type: 'image',
+        img: im,
+        x: spec.x == null ? 0.5 : spec.x,
+        y: 0.5 + (spec.y - mid) * k,
+        size: spec.size
+      });
+      if (demo && io.tEnd > 0) io.tEnd = Math.min(io.tEnd, (io.tStart || 0) + 3.6);
+      return io;
+    }
     const font = pickFont(spec.font);
-    return Object.assign({}, TEXT_BASE, spec.set || {}, {
+    const o = Object.assign({}, TEXT_BASE, spec.set || {}, {
       id: pvIds[key],
       font: font.family,
       fontLabel: font.label,
@@ -439,9 +605,11 @@ function previewLayers(tpl, W, H) {
       y: 0.5 + (spec.y - mid) * k,
       size: spec.size
     });
-  });
+    // В показе на карточке плашка держится недолго, чтобы быстро дойти до ухода.
+    if (demo && o.tEnd > 0) o.tEnd = Math.min(o.tEnd, (o.tStart || 0) + 3.6);
+    return o;
+  }).filter(Boolean);
 }
-
 export function drawTemplatePreview(canvas, tpl) {
   const g = canvas.getContext('2d');
   const W = canvas.width;
@@ -449,7 +617,37 @@ export function drawTemplatePreview(canvas, tpl) {
   paintBackdrop(g, W, H);
   renderPreview(g, previewLayers(tpl, W, H), 0);
 }
-
+// Показ анимации шаблона на карточке, пока курсор над ней. Возвращает функцию остановки.
+function startCardDemo(cv, tpl) {
+  const W = cv.width;
+  const H = cv.height;
+  const g = cv.getContext('2d');
+  let a = Infinity;
+  let b = 0;
+  tpl.layers.forEach(function (s) {
+    const set = s.set || {};
+    a = Math.min(a, set.tStart || 0);
+    if (set.tEnd > 0) b = Math.max(b, Math.min(set.tEnd, (set.tStart || 0) + 3.6));
+  });
+  if (!isFinite(a)) a = 0;
+  const list = previewLayers(tpl, W, H, true);
+  const from = Math.max(0, a - 0.3);
+  const len = b > 0 ? b - from + 0.9 : 3;
+  const t0 = performance.now();
+  let raf = 0;
+  const frame = function (now) {
+    if (!cv.isConnected) return;
+    const t = from + (((now - t0) / 1000) % len);
+    paintBackdrop(g, W, H);
+    renderPreview(g, list, t, true);
+    raf = requestAnimationFrame(frame);
+  };
+  raf = requestAnimationFrame(frame);
+  return function () {
+    cancelAnimationFrame(raf);
+    drawTemplatePreview(cv, tpl);
+  };
+}
 // ---------- панель вкладки «Шаблоны» ----------
 
 let cat = 'all';
@@ -509,9 +707,13 @@ export function mountTemplatesPanel(root, opts) {
   const grid = el('div', 'tpl-grid');
   const shown = [];
   const fonts = {};
-  TEMPLATES.forEach(function (tpl) {
+    const images = [];
+  TEMPLATES.filter(function (t) { return t.cat === 'p992'; }).forEach(function (tpl) {
     if (!window.matchMedia('(min-width: 1024px)').matches && cat !== 'all' && tpl.cat !== cat) return;
-    tpl.layers.forEach(function (s) { fonts[s.font] = true; });
+    tpl.layers.forEach(function (s) {
+      if (s.img) images.push(previewImg(s.img).promise);
+      else fonts[s.font] = true;
+    });
     const cv = el('canvas', 'tpl-cv');
     cv.width = 480;
     cv.height = 290;
@@ -519,6 +721,16 @@ export function mountTemplatesPanel(root, opts) {
     card.type = 'button';
     card.title = tpl.name;
     card.append(cv, el('div', 'tpl-name', tpl.name));
+        let stopDemo = null;
+    card.addEventListener('mouseenter', function () {
+      if (!stopDemo) stopDemo = startCardDemo(cv, tpl);
+    });
+    card.addEventListener('mouseleave', function () {
+      if (stopDemo) {
+        stopDemo();
+        stopDemo = null;
+      }
+    });
     card.addEventListener('click', function () {
       if (opts.canApply && !opts.canApply()) return;
       applyTemplate(tpl);
@@ -539,5 +751,5 @@ export function mountTemplatesPanel(root, opts) {
   Promise.all(Object.keys(fonts).map(function (label) {
     const f = pickFont(label);
     return Promise.all([ensureLatin(f), loadFont(f)]);
-  })).then(paint);
+  }).concat(images)).then(paint);
 }

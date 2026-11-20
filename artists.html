@@ -7,7 +7,7 @@
   <title>Таджикские артисты и рэперы - рэпи точики | 992MUZ</title>
   <meta name="description" content="Каталог таджикских артистов и рэперов на 992MUZ. Профили, треки и клипы исполнителей таджикского рэпа — рэпи точики, tajrap, tj rap.">
   <meta name="keywords" content="таджикские артисты, таджикские рэперы, рэпи точики, репи точики, tajrap, tj rap, tajik rap артисты, музыканты таджикистана">
-  <link rel="canonical" href="https://992muz.ru/artists.html">
+  <link rel="canonical" href="https://992muz.ru/artists">
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/pages/home.css">
   <link rel="manifest" href="site.webmanifest">
@@ -1729,7 +1729,7 @@ function buildArtistCardHTML(artist) {
       </div>
       <div class="artist-card-body">
          <div style="display:flex;align-items:center;gap:8px;">
-<div class="artist-card-name-wrap"><div class="artist-card-name">${artist.name}</div></div>
+<div class="artist-card-name-wrap"><div class="artist-card-name"><a href="/artist/${encodeURIComponent(artist.slug || slugify(artist.name) || artist.id)}" onclick="event.preventDefault()" style="color:inherit;text-decoration:none;">${artist.name}</a></div></div>
         </div>
       </div>`;
 }
@@ -1936,6 +1936,52 @@ async function subscribeArtistDetails(artist) {
     console.warn('videos load error for', artist.id, err);
   }
 }
+// ===== SEO: заголовок, описание, canonical и разметка под конкретного артиста =====
+const SEO_DEFAULT = {
+  title: document.title,
+  desc: document.querySelector('meta[name="description"]')?.getAttribute('content') || '',
+  canonical: document.querySelector('link[rel="canonical"]')?.getAttribute('href') || ''
+};
+
+function setSeoTag(selector, attr, value) {
+  const el = document.querySelector(selector);
+  if (el) el.setAttribute(attr, value);
+}
+
+function applyArtistSeo(artist) {
+  const slug = artist.slug || slugify(artist.name) || artist.id;
+  const url = 'https://992muz.ru/artist/' + encodeURIComponent(slug);
+  const bio = (artist.bio || '').replace(/\s+/g, ' ').trim();
+  document.title = artist.name + ' — таджикский артист, треки и клипы | 992MUZ';
+  setSeoTag('meta[name="description"]', 'content', (bio ? bio.slice(0, 150) + '… ' : '') + 'Слушайте треки и смотрите клипы ' + artist.name + ' на 992MUZ.');
+  setSeoTag('link[rel="canonical"]', 'href', url);
+
+  const ld = {
+    '@context': 'https://schema.org',
+    '@type': 'MusicGroup',
+    name: artist.name,
+    url: url,
+    image: artist.photo,
+    description: bio ? bio.slice(0, 300) : undefined,
+    genre: artist.genre || undefined,
+    sameAs: Object.values(artist.socials || {}).filter(u => /^https?:/.test(u))
+  };
+  let s = document.getElementById('artistSchema');
+  if (!s) {
+    s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.id = 'artistSchema';
+    document.head.appendChild(s);
+  }
+  s.textContent = JSON.stringify(ld);
+}
+
+function resetArtistSeo() {
+  document.title = SEO_DEFAULT.title;
+  setSeoTag('meta[name="description"]', 'content', SEO_DEFAULT.desc);
+  setSeoTag('link[rel="canonical"]', 'href', SEO_DEFAULT.canonical);
+  document.getElementById('artistSchema')?.remove();
+}
 function openDrawer(artist, opts) {
   opts = opts || {};
   currentArtist = artist;
@@ -1947,6 +1993,7 @@ function openDrawer(artist, opts) {
   } else {
     history.pushState({ artistId: artist.id }, '', artistPath);
   }
+    applyArtistSeo(artist);
   document.getElementById('drawerPhoto').src = optimizeImg(artist.photoInner || artist.photo, 800);
   document.getElementById('drawerName').textContent = artist.name;
   document.getElementById('drawerVerified').style.display = artist.verified ? '' : 'none';
@@ -1985,12 +2032,13 @@ document.body.style.overflow = 'hidden';
 function closeDrawer(opts) {
   opts = opts || {};
   if (!opts.fromPopstate) {
-    history.pushState({}, '', '/artists.html');
+    history.pushState({}, '', '/artists');
   }
   overlay.classList.remove('open');
   drawer.classList.remove('open');
   closeSidePanel();
   unsubscribeArtistDetails();
+    resetArtistSeo();
   document.body.style.overflow = '';
   drawerOpen = false;
 }

@@ -8,7 +8,8 @@ import { audioFx, createReverb, createLimiter, createEq, createEcho, createSpati
 const FPS = 30;
 const SAMPLE_RATE = 48000;
 const CHANNELS = 2;
-const VIDEO_BITRATE = 4000000;
+const VIDEO_BITRATE = 12000000;
+const EXPORT_SCALE = 1.5;
 const AUDIO_BITRATE = 128000;
 const KEYFRAME_EVERY = FPS * 2;
 
@@ -19,7 +20,7 @@ const SMOOTHING = 0.6;
 const MIN_DB = -100;
 const MAX_DB = -30;
 
-const VIDEO_CODECS = ['avc1.640028', 'avc1.4d0028', 'avc1.42001f', 'avc1.42E01F'];
+const VIDEO_CODECS = ['avc1.640029', 'avc1.640028', 'avc1.4d0029', 'avc1.4d0028', 'avc1.42001f', 'avc1.42E01F'];
 const AUDIO_CODEC = 'mp4a.40.2';
 
 // ---------- проверка возможностей браузера ----------
@@ -46,8 +47,8 @@ export async function checkExportSupport() {
     try {
       const res = await VideoEncoder.isConfigSupported({
         codec,
-        width: VIZ_W,
-        height: VIZ_H,
+        width: Math.round(VIZ_W * EXPORT_SCALE),
+        height: Math.round(VIZ_H * EXPORT_SCALE),
         bitrate: VIDEO_BITRATE,
         framerate: FPS
       });
@@ -60,7 +61,7 @@ export async function checkExportSupport() {
   if (!videoCodec) {
     return {
       ok: false,
-           reason: `Это устройство не поддерживает H.264 в нужном разрешении (${VIZ_W}×${VIZ_H}). Файл не создан, чтобы не получить повреждённое видео.`
+              reason: `Это устройство не поддерживает H.264 в нужном разрешении (${Math.round(VIZ_W * EXPORT_SCALE)}×${Math.round(VIZ_H * EXPORT_SCALE)}). Файл не создан, чтобы не получить повреждённое видео.`
     };
   }
 
@@ -427,7 +428,7 @@ export async function exportVideo({ buffer, duration, offset = 0, canvas, ctx, s
     const target = new ArrayBufferTarget();
     const muxer = new Muxer({
       target,
-      video: { codec: 'avc', width: VIZ_W, height: VIZ_H, frameRate: FPS },
+         video: { codec: 'avc', width: Math.round(VIZ_W * EXPORT_SCALE), height: Math.round(VIZ_H * EXPORT_SCALE), frameRate: FPS },
       audio: { codec: 'aac', numberOfChannels: CHANNELS, sampleRate: SAMPLE_RATE },
       fastStart: 'in-memory',
       firstTimestampBehavior: 'offset'
@@ -483,11 +484,17 @@ export async function exportVideo({ buffer, duration, offset = 0, canvas, ctx, s
     });
     videoEncoder.configure({
       codec: support.videoCodec,
-      width: VIZ_W,
-      height: VIZ_H,
+      width: Math.round(VIZ_W * EXPORT_SCALE),
+      height: Math.round(VIZ_H * EXPORT_SCALE),
       bitrate: VIDEO_BITRATE,
       framerate: FPS
     });
+    const outCanvas = document.createElement('canvas');
+    outCanvas.width = Math.round(VIZ_W * EXPORT_SCALE);
+    outCanvas.height = Math.round(VIZ_H * EXPORT_SCALE);
+    const outCtx = outCanvas.getContext('2d');
+    outCtx.imageSmoothingEnabled = true;
+    outCtx.imageSmoothingQuality = 'high';
     if (video && video.el) video.el.pause();
     const bars = new Float32Array(BAR_COUNT);
         resetParticles();
@@ -507,7 +514,8 @@ export async function exportVideo({ buffer, duration, offset = 0, canvas, ctx, s
       drawLayers(ctx, bars, t, style, { overlay: true });
       drawFrameExtras(ctx, t, duration, true);
 
-      const frame = new VideoFrame(canvas, {
+      outCtx.drawImage(canvas, 0, 0, outCanvas.width, outCanvas.height);
+      const frame = new VideoFrame(outCanvas, {
         timestamp: Math.round((i * 1e6) / FPS),
         duration: frameDuration
       });

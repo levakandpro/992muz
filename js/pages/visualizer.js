@@ -47,7 +47,7 @@ function drawWaves(c, b, t, style) {
 }
 const MAX_SECONDS = 60;
 const MAX_FILE_MB = 80;
-let clipSeconds = 60;
+let clipSeconds = 3600;
 let transparentMode = false;
 const canvas = document.getElementById('vizCanvas');
 const ctx = canvas.getContext('2d');
@@ -92,7 +92,7 @@ const TAB_NAMES = {
   effects: 'Эффекты',
   particles: 'Частицы',
   text: 'Текст',
-  templates: 'Шаблоны',
+  templates: '992',
   stickers: 'Стикеры',
   layers: 'Слои'
 };
@@ -422,10 +422,50 @@ libraryBtn.addEventListener('click', () => {
   libLoad();
 });
 let tmplMode = 'templates';
+let tplDemoRaf = 0;
 
+function playTplDemo() {
+  if (exporting) return;
+  cancelAnimationFrame(tplDemoRaf);
+  if (mediaReady()) {
+    stopPlayback(true);
+    startOffset = 0;
+    startPlayback();
+    return;
+  }
+  // Только фото, трека нет: гоняем таймер 10 секунд и рисуем кадры с анимацией.
+  const t0 = performance.now();
+  const step = (now) => {
+    const t = (now - t0) / 1000;
+    if (t > 10 || openTab !== 'templates' || exporting) {
+      tplDemoRaf = 0;
+      drawIdle(0);
+      return;
+    }
+    fillDemoBars(t);
+    drawWaves(ctx, bars, t, 'none');
+    tplDemoRaf = requestAnimationFrame(step);
+  };
+  tplDemoRaf = requestAnimationFrame(step);
+}
 function renderTmplTab() {
   tmplBox.textContent = '';
-  if (window.matchMedia('(min-width: 1024px)').matches) return;
+  if (window.matchMedia('(min-width: 1024px)').matches) {
+    const demoBtn = ovlEl('button', 'viz-btn viz-btn-primary', '▶ Показать анимацию');
+    demoBtn.type = 'button';
+    demoBtn.addEventListener('click', playTplDemo);
+    const deskHost = ovlEl('div');
+    tmplBox.append(demoBtn, deskHost);
+    mountTemplatesPanel(deskHost, {
+      ready: ovlReady,
+      canApply: () => !exporting,
+      onApply: () => {
+        buzz();
+        playTplDemo();
+      }
+    });
+    return;
+  }
   const seg = ovlEl('div', 'viz-seg viz-stk-tabs');
   [['templates', 'Шаблоны'], ['stickers', 'Стикеры']].forEach((t) => {
     const b = ovlEl('button', 'viz-sub' + (tmplMode === t[0] ? ' active' : ''), t[1]);
@@ -567,11 +607,16 @@ const picker = createWavePicker(document.getElementById('waveCanvas'), {
     resumeAfterDrag = playing;
     stopPlayback(true);
   },
+    onResize(len) {
+    duration = len;
+    clipSeconds = len;
+  },
   onChange(start) {
     clipStart = start;
     showClipRange();
   },
   onDragEnd() {
+    updateUi(0);
     if (resumeAfterDrag) startPlayback();
     resumeAfterDrag = false;
   }
@@ -581,9 +626,19 @@ function showClipRange() {
   const movable = !!buffer && buffer.duration > duration + 0.05;
   waveRange.textContent = buffer ? `${fmt(clipStart)} – ${fmt(clipStart + duration)}` : '';
   waveHint.textContent = movable
-    ? 'Потяните рамку, чтобы выбрать фрагмент трека'
-    : 'Трек короче выбранной длины — будет использован целиком';
+    ? 'Потяните рамку или её края, чтобы выбрать фрагмент'
+    : 'Потяните левый или правый край рамки, чтобы выбрать длину';
+  document.querySelectorAll('#waveLenBox .viz-chip').forEach((c) => {
+    c.classList.toggle('active', Number(c.dataset.len) === clipSeconds);
+  });
 }
+
+document.getElementById('waveLenBox').addEventListener('click', (e) => {
+  const chip = e.target.closest('.viz-chip');
+  if (!chip || exporting) return;
+  const main = lengthBox.querySelector('.viz-chip[data-len="' + chip.dataset.len + '"]');
+  if (main) main.click();
+});
 const photoInput = document.getElementById('photoFile');
 let photoUrl = null;
 
@@ -2304,12 +2359,21 @@ styleBox.addEventListener('click', (e) => {
   if (e.target.closest('#audioAskBtn')) fileInput.click();
 });
 let currentStyle = 'none';
-
+let noneChosen = false;
 styleBox.addEventListener('click', (e) => {
   const chip = e.target.closest('.viz-chip');
   if (!chip || exporting) return;
   currentStyle = chip.dataset.style;
   styleBox.querySelectorAll('.viz-chip').forEach((c) => c.classList.toggle('active', c === chip));
+    noneChosen = currentStyle === 'none';
+  if (noneChosen && !mediaReady()) {
+    stopDemo();
+    emptyEl.classList.remove('has-demo');
+    const hint0 = emptyEl.querySelector('.viz-pick-hint');
+    if (hint0) hint0.textContent = 'Асалому алейкум, с чего начнем?';
+    drawIdle(startOffset);
+    return;
+  }
   if (mediaReady()) {
     if (!playing) drawIdle(startOffset);
   } else {
@@ -3241,8 +3305,8 @@ function syncPanel() {
 
 function openWavePanel() {
   if (exporting) return;
-  if (currentStyle === 'none') {
-    const first = styleBox.querySelector('.viz-chip');
+  if (currentStyle === 'none' && !noneChosen) {
+    const first = styleBox.querySelector('.viz-chip:not([data-style="none"])');
     if (first) first.click();
   }
   wavePanelOpen = true;
@@ -5254,7 +5318,7 @@ function ovlRenderText(root) {
   root.append(head);
 
   const l = getSelected();
-  if (window.matchMedia('(min-width: 1024px)').matches) ovlTemplatesBlock(root, !!l && l.type === 'text');
+  // шаблоны на компьютере живут во вкладке «Шаблоны», здесь их нет
   if (!l || l.type !== 'text') return;
   const ta = ovlEl('textarea', 'viz-ovl-text');
   ta.rows = 1;
@@ -7560,7 +7624,7 @@ async function applyProject(p) {
     const chip = Array.from(formatBox.children).find((c) => c.dataset.format === p.format);
     if (chip) chip.click();
   }
-  if ([15, 30, 60].includes(p.len) && p.len !== clipSeconds) {
+  if ([15, 30, 60, 180, 3600].includes(p.len) && p.len !== clipSeconds) {
     const chip = Array.from(lengthBox.children).find((c) => Number(c.dataset.len) === p.len);
     if (chip) chip.click();
   }
@@ -8203,7 +8267,7 @@ function defaultProject() {
     order: ['waves', 'particles', 'effects'],
     slide: { every: 2, mode: 'fade' },
     format: '9:16',
-    len: 60,
+    len: 3600,
     layers: []
   };
 }
